@@ -18,7 +18,7 @@ export default function Page() {
       alignItems="center"
       justifyContent="center"
     >
-      <Heading>Jogar {timer.getRemaining()}</Heading>
+      <Heading>Jogar</Heading>
       <Grid
         gridTemplateColumns={'200px 200px'}
         gridTemplateRows="200px 200px"
