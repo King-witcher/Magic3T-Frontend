@@ -33,4 +33,9 @@ export class Timer {
       return result >= 0 ? result : 0
     }
   }
+
+  reset(remainingMs: number) {
+    this.remainingAt = null
+    this.remainingMs = remainingMs
+  }
 }

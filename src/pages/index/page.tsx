@@ -1,12 +1,17 @@
 import { GameMode, useQueue } from '@/contexts/QueueContext'
-import { Timer } from '@/lib/Timer'
 import { Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Page() {
   const { enqueue, dequeue, queueMode } = useQueue()
+  const navigate = useNavigate()
 
   function handleEnqueue() {
-    enqueue(GameMode.Casual, () => {})
+    enqueue(GameMode.Casual, handleFindMatch)
+  }
+
+  function handleFindMatch(token: string) {
+    navigate(`game/${token}`) // Usar rediret em loader e actions
   }
 
   return (
