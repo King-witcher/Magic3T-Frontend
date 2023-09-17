@@ -1,6 +1,13 @@
-import { Flex, Grid, Heading } from '@chakra-ui/react'
+import { GameMode, useQueue } from '@/contexts/QueueContext'
+import { Flex, Grid, Heading, Spinner, Stack, VStack } from '@chakra-ui/react'
 
 export default function Page() {
+  const { enqueue, dequeue, queueMode } = useQueue()
+
+  function handleEnqueue() {
+    enqueue(GameMode.Casual, () => {})
+  }
+
   return (
     <Flex
       w="100%"
@@ -23,13 +30,18 @@ export default function Page() {
             bg="gray.100"
             rounded="10px"
             cursor="pointer"
+            fontSize="20px"
             userSelect="none"
             _hover={{
               bg: 'pink.200',
             }}
             key={number}
+            onClick={queueMode ? dequeue : handleEnqueue}
           >
-            Game Mode
+            <Flex flexDir="column" alignItems="center" gap="10px">
+              Quick Match
+              {queueMode && <Spinner />}
+            </Flex>
           </Flex>
         ))}
       </Grid>
