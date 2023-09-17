@@ -2,9 +2,6 @@ import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { Timer } from '@/lib/Timer'
 import { Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
 
-const timer = new Timer(10)
-timer.start()
-
 export default function Page() {
   const { enqueue, dequeue, queueMode } = useQueue()
 
