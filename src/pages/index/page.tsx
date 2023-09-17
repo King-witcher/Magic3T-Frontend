@@ -1,5 +1,9 @@
 import { GameMode, useQueue } from '@/contexts/QueueContext'
-import { Flex, Grid, Heading, Spinner, Stack, VStack } from '@chakra-ui/react'
+import { Timer } from '@/lib/Timer'
+import { Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
+
+const timer = new Timer(10)
+timer.start()
 
 export default function Page() {
   const { enqueue, dequeue, queueMode } = useQueue()
@@ -17,7 +21,7 @@ export default function Page() {
       alignItems="center"
       justifyContent="center"
     >
-      <Heading>Jogar</Heading>
+      <Heading>Jogar {timer.getRemaining()}</Heading>
       <Grid
         gridTemplateColumns={'200px 200px'}
         gridTemplateRows="200px 200px"
