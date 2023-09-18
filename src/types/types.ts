@@ -14,4 +14,5 @@ export type GameState = {
   gameStatus: GameStatus
   playerTimeLeft: number
   oponentTimeLeft: number
+  turn: boolean
 }
