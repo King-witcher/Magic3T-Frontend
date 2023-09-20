@@ -24,81 +24,32 @@ export default function Page() {
       justifyContent="center"
     >
       <Heading>Jogar</Heading>
-      <Grid
+      {/* <Grid
         gridTemplateColumns={'200px 200px'}
         gridTemplateRows="200px 200px"
         gap="10px"
+      > */}
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        bg="gray.100"
+        rounded="10px"
+        cursor="pointer"
+        fontSize="20px"
+        userSelect="none"
+        w="200px"
+        h="200px"
+        _hover={{
+          bg: 'pink.200',
+        }}
+        onClick={queueMode ? dequeue : handleEnqueue}
       >
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          _hover={{
-            bg: 'pink.200',
-          }}
-          onClick={queueMode ? dequeue : handleEnqueue}
-        >
-          <Flex flexDir="column" alignItems="center" gap="10px">
-            Quick Match
-            {queueMode && <Spinner />}
-          </Flex>
+        <Flex flexDir="column" alignItems="center" gap="10px">
+          Partida rápida
+          {queueMode && <Spinner />}
         </Flex>
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          _hover={{
-            bg: 'pink.200',
-          }}
-          onClick={queueMode ? dequeue : undefined}
-        >
-          <Flex flexDir="column" alignItems="center" gap="10px">
-            Normal Match
-          </Flex>
-        </Flex>
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          _hover={{
-            bg: 'pink.200',
-          }}
-          onClick={queueMode ? dequeue : undefined}
-        >
-          <Flex flexDir="column" alignItems="center" gap="10px">
-            Ranked Match
-          </Flex>
-        </Flex>
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          _hover={{
-            bg: 'pink.200',
-          }}
-          onClick={queueMode ? dequeue : undefined}
-        >
-          <Flex flexDir="column" alignItems="center" gap="10px">
-            Custom Match
-          </Flex>
-        </Flex>
-      </Grid>
+      </Flex>
+      {/* </Grid> */}
     </Flex>
   )
 }
