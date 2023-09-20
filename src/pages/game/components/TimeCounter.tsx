@@ -7,13 +7,15 @@ interface Props {
 
 function format(timer: Timer): string {
   const time = timer.getRemaining()
+  const timeSecs = (time / 1000) % 60
+  const timeMins = time / 60_000
 
   if (time > 10_000) {
-    return `${(time / 60_000).toFixed()}:${((time / 1000) % 60)
+    return `${Math.floor(timeMins)}:${Math.floor(timeSecs)
       .toFixed()
       .padStart(2, '0')}`
   } else {
-    return `${(time / 1000).toFixed(1)}`
+    return `${timeSecs.toFixed(1)}`
   }
 }
 
