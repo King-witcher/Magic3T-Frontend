@@ -26,7 +26,6 @@ export function QueueProvider({ children }: QueueContextProps) {
     queueMode: GameMode,
     callback: (gameId: string) => void
   ) {
-    console.log(socketRef.current)
     if (socketRef.current) return
     const socket = (socketRef.current = io(
       `${import.meta.env.VITE_API_URL}/queue`

@@ -16,6 +16,7 @@ export default function ChoiceComponent({ choice, ...rest }: Props) {
       bg="gray.200"
       rounded="10px"
       fontWeight="bold"
+      userSelect="none"
       {...rest}
     >
       {choice}
