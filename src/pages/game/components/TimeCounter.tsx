@@ -9,7 +9,9 @@ function format(timer: Timer): string {
   const time = timer.getRemaining()
 
   if (time > 10_000) {
-    return `${(time / 60_000).toFixed()}:${((time / 1000) % 60).toFixed()}`
+    return `${(time / 60_000).toFixed()}:${((time / 1000) % 60)
+      .toFixed()
+      .padStart(2, '0')}`
   } else {
     return `${(time / 1000).toFixed(1)}`
   }
