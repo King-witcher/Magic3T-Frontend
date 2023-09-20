@@ -3,9 +3,10 @@ import { Flex, FlexProps } from '@chakra-ui/react'
 
 interface Props extends FlexProps {
   choice: Choice
+  highlight?: boolean
 }
 
-export default function ChoiceComponent({ choice, ...rest }: Props) {
+export default function ChoiceComponent({ choice, highlight, ...rest }: Props) {
   return (
     <Flex
       key={choice}
@@ -13,7 +14,7 @@ export default function ChoiceComponent({ choice, ...rest }: Props) {
       h="50px"
       alignItems="center"
       justifyContent="center"
-      bg="gray.200"
+      bg={highlight ? 'green.200' : 'gray.200'}
       rounded="10px"
       fontWeight="bold"
       userSelect="none"

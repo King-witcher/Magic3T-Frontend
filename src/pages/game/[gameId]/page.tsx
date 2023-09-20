@@ -20,6 +20,7 @@ export default function GamePage() {
     oponentTimer,
     turn,
     gameStatus,
+    triple,
   } = useGameConnector()
 
   const playerTurn = turn === 'player'
@@ -66,7 +67,11 @@ export default function GamePage() {
     <VStack h="100%" justifyContent="space-around">
       <Flex flex="1" w="100%" justifyContent="flex-end">
         <Flex alignItems="center" h="fit-content" gap="30px" margin="10px">
-          <ChoiceCollection choices={oponentChoices} flexDir="row-reverse" />
+          <ChoiceCollection
+            choices={oponentChoices}
+            triple={triple}
+            flexDir="row-reverse"
+          />
           <VStack>
             <Flex
               rounded="100%"
@@ -155,7 +160,7 @@ export default function GamePage() {
             </Flex>
             <Text fontWeight="bold">Você</Text>
           </VStack>
-          <ChoiceCollection choices={playerChoices} />
+          <ChoiceCollection choices={playerChoices} triple={triple} />
         </Flex>
       </Flex>
     </VStack>

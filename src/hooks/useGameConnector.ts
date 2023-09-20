@@ -11,6 +11,9 @@ export function useGameConnector() {
   const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
   const [gameStatus, setGameStatus] = useState(GameStatus.Undefined)
   const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
+  const [triple, setTriple] = useState<[Choice | 0, Choice | 0, Choice | 0]>([
+    0, 0, 0,
+  ])
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   function resetGameState() {
@@ -41,22 +44,22 @@ export function useGameConnector() {
   }
 
   function handleServerGameState(stateString: string) {
-    const gameState = JSON.parse(stateString) as GameState
-    setGameStatus(gameState.gameStatus)
+    const incomingGameState = JSON.parse(stateString) as GameState
+    setGameStatus(incomingGameState.gameStatus)
 
     // Atualiza as choices se forem diferentes
-    if (!compareArrays(gameState.oponentChoices, oponentChoices))
-      setOponentChoices(gameState.oponentChoices)
+    if (!compareArrays(incomingGameState.oponentChoices, oponentChoices))
+      setOponentChoices(incomingGameState.oponentChoices)
 
-    if (!compareArrays(gameState.playerChoices, playerChoices))
-      setPlayerChoices(gameState.playerChoices)
+    if (!compareArrays(incomingGameState.playerChoices, playerChoices))
+      setPlayerChoices(incomingGameState.playerChoices)
 
     // Atualiza a informação sobre turno
-    if (gameState.turn) {
+    if (incomingGameState.turn) {
       setTurn('player')
       playerTimer.start()
       oponentTimer.pause()
-    } else if (gameState.gameStatus === GameStatus.Ongoing) {
+    } else if (incomingGameState.gameStatus === GameStatus.Ongoing) {
       setTurn('oponent')
       playerTimer.pause()
       oponentTimer.start()
@@ -66,9 +69,25 @@ export function useGameConnector() {
       oponentTimer.pause()
     }
 
+    // Define o terno de números vencedor.
+    function getTriple(
+      numbers: Choice[]
+    ): [Choice | 0, Choice | 0, Choice | 0] {
+      for (let i = 0; i < numbers.length - 2; i++)
+        for (let j = 1; j < numbers.length - 1; j++)
+          for (let k = 2; k < numbers.length; k++)
+            if (numbers[i] + numbers[j] + numbers[k] === 15)
+              return [numbers[i], numbers[j], numbers[k]]
+      return [0, 0, 0]
+    }
+    if (incomingGameState.gameStatus === GameStatus.Victory)
+      setTriple(getTriple(incomingGameState.playerChoices))
+    else if (incomingGameState.gameStatus === GameStatus.Defeat)
+      setTriple(getTriple(incomingGameState.oponentChoices))
+
     // Sincroniza os timers
-    playerTimer.setRemaining(gameState.playerTimeLeft)
-    oponentTimer.setRemaining(gameState.oponentTimeLeft)
+    playerTimer.setRemaining(incomingGameState.playerTimeLeft)
+    oponentTimer.setRemaining(incomingGameState.oponentTimeLeft)
   }
 
   function connectGame(token: string) {
@@ -108,6 +127,7 @@ export function useGameConnector() {
     availableChoices,
     gameStatus,
     turn,
+    triple,
 
     /** Se conecta a um jogo a partir de um token. */
     connectGame,
