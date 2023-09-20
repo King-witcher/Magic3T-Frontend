@@ -1,7 +1,11 @@
 import { Box, Flex, Link, Stack, Tag } from '@chakra-ui/react'
 import { Outlet, Link as RouterLink } from 'react-router-dom'
+import { useServiceStatus } from './contexts/ServiceStatusContext'
+import { ServicesOffline } from './pages/services-offline'
 
 export default function Layout() {
+  const { serverOnline } = useServiceStatus()
+
   return (
     <Stack alignItems="center" h="100dvh" gap="0">
       <Flex
@@ -27,7 +31,7 @@ export default function Layout() {
       </Flex>
       <Box flex="1" boxSizing="border-box" padding="10px" w="100%">
         <Box pos="relative" rounded="10px" h="100%" bg="white" p="10px">
-          <Outlet />
+          {serverOnline ? <Outlet /> : <ServicesOffline />}
         </Box>
       </Box>
     </Stack>

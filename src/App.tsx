@@ -3,14 +3,17 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { router } from '@/router'
 import { theme } from './theme'
 import { QueueProvider } from './contexts/QueueContext'
+import { ServiceStatusProvider } from './contexts/ServiceStatusContext'
 
 function App() {
   return (
-    <QueueProvider>
-      <ChakraProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ChakraProvider>
-    </QueueProvider>
+    <ServiceStatusProvider>
+      <QueueProvider>
+        <ChakraProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ChakraProvider>
+      </QueueProvider>
+    </ServiceStatusProvider>
   )
 }
 
