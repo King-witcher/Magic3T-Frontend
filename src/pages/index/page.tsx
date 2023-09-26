@@ -48,9 +48,19 @@ export default function Page() {
         }}
         onClick={queueMode ? dequeue : handleEnqueue}
       >
-        <Flex flexDir="column" alignItems="center" gap="10px">
-          Partida rápida
-          {queueMode && <Spinner />}
+        <Flex
+          flexDir="column"
+          alignItems="center"
+          gap="10px"
+          fontSize="20px"
+          textAlign="center"
+        >
+          {!queueMode && 'Partida rápida'}
+          {queueMode && (
+            <>
+              Procurando outro jogador... <Spinner />
+            </>
+          )}
         </Flex>
       </Flex>
       {/* </Grid> */}
