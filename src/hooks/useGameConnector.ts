@@ -39,6 +39,10 @@ export function useGameConnector() {
 
   function makeChoice(choice: Choice) {
     socket?.emit('choice', choice)
+    setPlayerChoices(choices => [...choices, choice])
+    setTurn('oponent')
+    playerTimer.pause()
+    oponentTimer.start()
   }
 
   function handleServerDisconnect() {
