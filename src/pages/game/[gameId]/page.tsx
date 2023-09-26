@@ -6,6 +6,7 @@ import ChoiceCollection from '../components/ChoiceCollection'
 import { TimeCounter } from '../components/TimeCounter'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
+import PlayerDeck from '../components/PlayerDeck'
 
 export default function GamePage() {
   const { gameId } = useParams()
@@ -16,12 +17,9 @@ export default function GamePage() {
     makeChoice,
     availableChoices,
     playerChoices,
-    playerTimer,
     oponentChoices,
-    oponentTimer,
     turn,
     gameStatus,
-    triple,
   } = useGame()
 
   const playerTurn = turn === 'player'
@@ -68,38 +66,13 @@ export default function GamePage() {
 
   return (
     <VStack h="100%" justifyContent="space-around">
-      <Flex flex="1" w="100%" justifyContent="flex-end">
-        <Flex alignItems="center" h="fit-content" gap="30px" margin="10px">
-          <ChoiceCollection
-            choices={oponentChoices}
-            triple={triple}
-            flexDir="row-reverse"
-          />
-          <VStack>
-            <Flex
-              rounded="100%"
-              bg="red.500"
-              w="70px"
-              h="70px"
-              alignItems="center"
-              justifyContent="center"
-              fontWeight="bold"
-              color="white"
-            >
-              <TimeCounter timer={oponentTimer} />
-            </Flex>
-            <Text fontWeight="bold">Anônimo</Text>
-          </VStack>
-        </Flex>
-      </Flex>
+      <PlayerDeck player="opponent" />
       <Grid
         width="fit-content"
         gridTemplateColumns="repeat(3, 1fr)"
         gap="10px"
         h="fit-content"
         pos="relative"
-        opacity={gameStatus === GameStatus.Defeat ? '0' : '1'}
-        transition="opacity 300ms linear"
       >
         {availableChoices.map((choice) => (
           <ChoiceComponent
@@ -107,6 +80,8 @@ export default function GamePage() {
             key={choice}
             onClick={playerTurn ? () => makeChoice(choice) : undefined}
             cursor={playerTurn ? 'pointer' : 'auto'}
+            opacity={gameStatus === GameStatus.Defeat ? '0' : '1'}
+            transition="opacity 300ms linear"
             _hover={
               playerTurn
                 ? {
@@ -129,7 +104,26 @@ export default function GamePage() {
         >
           Sua vez!
         </Text>
-        {playerChoices.length === 0 && oponentChoices.length === 0 && (
+        {playerChoices.length === 0 &&
+          oponentChoices.length === 0 &&
+          gameStatus === GameStatus.Ongoing && (
+            <Text
+              width="400px"
+              textAlign="center"
+              userSelect="none"
+              opacity={playerTurn ? '0' : '1'}
+              transition="opacity 200ms"
+              pos="absolute"
+              bottom="-10px"
+              left="50%"
+              transform="translate(-50%, 100%)"
+              fontWeight="semibold"
+              color="gray.500"
+            >
+              Aguarde a vez do oponente.
+            </Text>
+          )}
+        {gameStatus === GameStatus.Victory && (
           <Text
             width="400px"
             textAlign="center"
@@ -141,32 +135,47 @@ export default function GamePage() {
             left="50%"
             transform="translate(-50%, 100%)"
             fontWeight="semibold"
-            color="gray.500"
+            color="green.500"
           >
-            Aguarde a vez do oponente.
+            Você venceu!
+          </Text>
+        )}
+        {gameStatus === GameStatus.Defeat && (
+          <Text
+            width="400px"
+            textAlign="center"
+            userSelect="none"
+            opacity={playerTurn ? '0' : '1'}
+            transition="opacity 200ms"
+            pos="absolute"
+            bottom="-10px"
+            left="50%"
+            transform="translate(-50%, 100%)"
+            fontWeight="semibold"
+            color="red.600"
+          >
+            Você perdeu.
+          </Text>
+        )}
+        {gameStatus === GameStatus.Draw && (
+          <Text
+            width="400px"
+            textAlign="center"
+            userSelect="none"
+            opacity={playerTurn ? '0' : '1'}
+            transition="opacity 200ms"
+            pos="absolute"
+            bottom="-10px"
+            left="50%"
+            transform="translate(-50%, 100%)"
+            fontWeight="semibold"
+            color="gray.600"
+          >
+            Empate
           </Text>
         )}
       </Grid>
-      <Flex flex="1" w="100%" justifyContent="flex-start" alignItems="flex-end">
-        <Flex alignItems="center" h="fit-content" gap="30px" margin="10px">
-          <VStack>
-            <Flex
-              rounded="100%"
-              bg="green.500"
-              w="70px"
-              h="70px"
-              alignItems="center"
-              justifyContent="center"
-              fontWeight="bold"
-              color="white"
-            >
-              <TimeCounter timer={playerTimer} />
-            </Flex>
-            <Text fontWeight="bold">Você</Text>
-          </VStack>
-          <ChoiceCollection choices={playerChoices} triple={triple} />
-        </Flex>
-      </Flex>
+      <PlayerDeck player="current" />
     </VStack>
   )
 }
