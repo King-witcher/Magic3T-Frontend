@@ -27,12 +27,10 @@ export function useGameConnector() {
   }
 
   function getEventfulSocket(matchId: string, playerKey: string) {
+    console.log(matchId)
     const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
-      auth: { playerKey },
-      query: { matchId },
+      auth: { matchId, playerKey },
     })
-
-    console.log('matchId', matchId)
 
     return socket
       .on('gameState', handleServerGameState)

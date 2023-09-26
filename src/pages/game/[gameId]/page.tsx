@@ -99,6 +99,7 @@ export default function GamePage() {
         {availableChoices.map((choice) => (
           <ChoiceComponent
             choice={choice}
+            key={choice}
             onClick={playerTurn ? () => makeChoice(choice) : undefined}
             cursor={playerTurn ? 'pointer' : 'auto'}
             _hover={
