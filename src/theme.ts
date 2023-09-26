@@ -12,6 +12,21 @@ export const theme = extendTheme({
   components: {
     Button: {
       variants: {},
+      baseStyle: {
+        borderRadius: '10px',
+        padding: '10px',
+        boxSizing: '10px',
+      }
     },
+    ModalContent: {
+      baseStyle: {
+        ronded: '10px',
+      }
+    },
+    ModalFooter: {
+      baseStyle: {
+        gap: '10px',
+      }
+    }
   },
 })

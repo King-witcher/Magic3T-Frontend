@@ -11,6 +11,7 @@ export default function GamePage() {
   const { gameId } = useParams()
   const toast = useToast()
   const {
+    disconnect,
     connectGame,
     makeChoice,
     availableChoices,
@@ -59,7 +60,11 @@ export default function GamePage() {
     }
   }, [gameStatus])
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    return () => {
+      disconnect()
+    }
+  }, [])
 
   return (
     <VStack h="100%" justifyContent="space-around">
