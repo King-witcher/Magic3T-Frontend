@@ -9,7 +9,7 @@ interface Props extends FlexProps {
 
 export default function ChoiceCollection({ choices, triple, ...rest }: Props) {
   return (
-    <Flex gap="10px" {...rest}>
+    <Flex gap="10px" flexWrap="wrap" {...rest}>
       {choices.map((choice) => (
         <ChoiceComponent
           key={choice}

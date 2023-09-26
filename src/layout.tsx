@@ -5,6 +5,7 @@ import {
   Link,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -74,18 +75,17 @@ export default function Layout() {
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent rounded="10px" padding="20px" minH="200px">
-          <ModalHeader m="0" p="0">
-            Abandonar partida?
-          </ModalHeader>
-          <ModalBody p="0" m="0" display="flex" flex="1" alignItems="center">
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader>Abandonar partida?</ModalHeader>
+          <ModalBody>
             Sair da tela de partida será considerado como rendição e você
             perderá a partida atual.
           </ModalBody>
-          <ModalFooter gap="10px" m="0" p="0">
-            <Button onClick={onClose}>Cancel</Button>
+          <ModalFooter>
+            <Button onClick={onClose}>Cancelar</Button>
             <Button colorScheme="red" onClick={handleModalOkclick}>
-              OK
+              Render
             </Button>
           </ModalFooter>
         </ModalContent>

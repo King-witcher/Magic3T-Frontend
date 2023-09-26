@@ -1,4 +1,5 @@
 import { extendTheme } from '@chakra-ui/react'
+import { modalTheme } from './modal'
 
 export const theme = extendTheme({
   styles: {
@@ -18,15 +19,6 @@ export const theme = extendTheme({
         boxSizing: '10px',
       }
     },
-    ModalContent: {
-      baseStyle: {
-        ronded: '10px',
-      }
-    },
-    ModalFooter: {
-      baseStyle: {
-        gap: '10px',
-      }
-    }
+    Modal: modalTheme
   },
 })
