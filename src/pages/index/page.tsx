@@ -1,8 +1,10 @@
+import { useGame } from '@/contexts/GameContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Page() {
+  const { connectGame } = useGame()
   const { enqueue, dequeue, queueMode } = useQueue()
   const navigate = useNavigate()
 
@@ -10,8 +12,10 @@ export default function Page() {
     enqueue(GameMode.Casual, handleFindMatch)
   }
 
-  function handleFindMatch(token: string) {
-    navigate(`game/${token}`) // Usar rediret em loader e actions
+  function handleFindMatch(payload: { matchId: string; playerKey: string }) {
+    console.log(payload.matchId, payload.playerKey)
+    connectGame(payload.matchId, payload.playerKey)
+    navigate(`game/${payload.matchId}`) // Usar rediret em loader e actions
   }
 
   return (

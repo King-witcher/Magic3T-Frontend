@@ -1,8 +1,9 @@
 import { Timer } from '@/lib/Timer'
 import { compareArrays } from '@/lib/utils'
 import { Choice, GameState, GameStatus } from '@/types/types'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { io } from 'socket.io-client'
+
 export function useGameConnector() {
   const playerTimer = useMemo(() => new Timer(0), [])
   const oponentTimer = useMemo(() => new Timer(0), [])
@@ -25,10 +26,13 @@ export function useGameConnector() {
     setTurn(null)
   }
 
-  function getEventfulSocket(token: string) {
-    const socket = io(`${import.meta.env.VITE_API_URL}/game`, {
-      auth: { token },
+  function getEventfulSocket(matchId: string, playerKey: string) {
+    const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
+      auth: { playerKey },
+      query: { matchId },
     })
+
+    console.log('matchId', matchId)
 
     return socket
       .on('gameState', handleServerGameState)
@@ -90,11 +94,11 @@ export function useGameConnector() {
     oponentTimer.setRemaining(incomingGameState.oponentTimeLeft)
   }
 
-  function connectGame(token: string) {
+  function connectGame(matchId: string, playerKey: string) {
     if (socket) socket.disconnect()
 
     resetGameState()
-    const newSocket = getEventfulSocket(token)
+    const newSocket = getEventfulSocket(matchId, playerKey)
     setSocket(newSocket)
     newSocket.emit('ready', {})
   }

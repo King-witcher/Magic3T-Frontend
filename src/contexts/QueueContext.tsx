@@ -6,7 +6,10 @@ export enum GameMode {
   Casual = 'casual',
 }
 interface QueueContextData {
-  enqueue(queuType: GameMode, callback: (gameId: string) => void): void
+  enqueue(
+    queuType: GameMode,
+    callback: (payload: { matchId: string; playerKey: string }) => void
+  ): void
   dequeue(): void
   /**Para qual modo se está na fila; caso não esteja, null. */
   queueMode: GameMode | null
@@ -23,8 +26,8 @@ export function QueueProvider({ children }: QueueContextProps) {
   const [queueMode, setQueueMode] = useState<GameMode | null>(null)
 
   async function enqueue(
-    queueMode: GameMode,
-    callback: (gameId: string) => void
+    queueMode: Parameters<QueueContextData['enqueue']>[0],
+    callback: Parameters<QueueContextData['enqueue']>[1]
   ) {
     if (socketRef.current) return
     const socket = (socketRef.current = io(
@@ -39,8 +42,6 @@ export function QueueProvider({ children }: QueueContextProps) {
 
     setQueueMode(queueMode)
   }
-
-  function handleMatchFound(callback: (gameId: string) => void) {}
 
   async function dequeue() {
     if (!socketRef.current) return

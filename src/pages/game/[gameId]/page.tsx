@@ -1,11 +1,11 @@
-import { useGameConnector } from '@/hooks/useGameConnector'
-import { Box, Flex, Grid, VStack, Text, useToast } from '@chakra-ui/react'
+import { Flex, Grid, VStack, Text, useToast } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import ChoiceComponent from '../components/ChoiceComponent'
 import ChoiceCollection from '../components/ChoiceCollection'
 import { TimeCounter } from '../components/TimeCounter'
 import { GameStatus } from '@/types/types'
+import { useGame } from '@/contexts/GameContext'
 
 export default function GamePage() {
   const { gameId } = useParams()
@@ -21,7 +21,7 @@ export default function GamePage() {
     turn,
     gameStatus,
     triple,
-  } = useGameConnector()
+  } = useGame()
 
   const playerTurn = turn === 'player'
 
@@ -59,9 +59,7 @@ export default function GamePage() {
     }
   }, [gameStatus])
 
-  useEffect(() => {
-    if (gameId) connectGame(gameId)
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <VStack h="100%" justifyContent="space-around">

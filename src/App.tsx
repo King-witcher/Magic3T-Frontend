@@ -4,15 +4,21 @@ import { router } from '@/router'
 import { theme } from './theme'
 import { QueueProvider } from './contexts/QueueContext'
 import { ServiceStatusProvider } from './contexts/ServiceStatusContext'
+import { AuthProvider } from './contexts/AuthContext'
+import { GameProvider } from './contexts/GameContext'
 
 function App() {
   return (
     <ServiceStatusProvider>
-      <QueueProvider>
-        <ChakraProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ChakraProvider>
-      </QueueProvider>
+      <AuthProvider>
+        <GameProvider>
+          <QueueProvider>
+            <ChakraProvider theme={theme}>
+              <RouterProvider router={router} />
+            </ChakraProvider>
+          </QueueProvider>
+        </GameProvider>
+      </AuthProvider>
     </ServiceStatusProvider>
   )
 }
