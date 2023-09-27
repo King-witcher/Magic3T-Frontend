@@ -12,6 +12,8 @@ import {
 } from 'react'
 import { io } from 'socket.io-client'
 
+type Message = { sender: string; content: string; timestamp: number }
+
 interface GameData {
   playerChoices: Choice[]
   playerTimer: Timer
@@ -23,9 +25,11 @@ interface GameData {
   triple: [Choice | 0, Choice | 0, Choice | 0]
   matchId: string | null
   playerKey: string | null
+  messages: Message[]
 
   connectGame(matchId: string, playerKey: string): void
   makeChoice(choice: Choice): void
+  sendMessage(message: string): void
   disconnect(): void
 }
 
@@ -45,6 +49,7 @@ export function GameProvider({ children }: Props) {
   const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
   const [matchId, setMatchId] = useState<string | null>(null)
   const [playerKey, setPlayerKey] = useState<string | null>(null)
+  const [messages, setMessages] = useState<Message[]>([])
   const [triple, setTriple] = useState<[Choice | 0, Choice | 0, Choice | 0]>([
     0, 0, 0,
   ])
@@ -68,14 +73,18 @@ export function GameProvider({ children }: Props) {
     return socket
       .on('gameState', handleServerGameState)
       .on('disconnect', handleServerDisconnect)
+      .on('message', handleReceiveMessage)
   }
 
-  function makeChoice(choice: Choice) {
-    socket?.emit('choice', choice)
-    setPlayerChoices((choices) => [...choices, choice])
-    setTurn('oponent')
-    playerTimer.pause()
-    oponentTimer.start()
+  function handleReceiveMessage(message: string) {
+    setMessages((messages) => [
+      ...messages,
+      {
+        timestamp: Date.now(),
+        content: message,
+        sender: 'Anônimo',
+      },
+    ])
   }
 
   function handleServerDisconnect() {
@@ -129,6 +138,26 @@ export function GameProvider({ children }: Props) {
     oponentTimer.setRemaining(incomingGameState.oponentTimeLeft)
   }
 
+  function makeChoice(choice: Choice) {
+    socket?.emit('choice', choice)
+    setPlayerChoices((choices) => [...choices, choice])
+    setTurn('oponent')
+    playerTimer.pause()
+    oponentTimer.start()
+  }
+
+  function sendMessage(message: string) {
+    setMessages((messages) => [
+      ...messages,
+      {
+        timestamp: Date.now(),
+        content: message,
+        sender: 'Você',
+      },
+    ])
+    socket?.emit('message', message)
+  }
+
   function connectGame(matchId: string, playerKey: string) {
     if (socket) socket.disconnect()
 
@@ -152,6 +181,7 @@ export function GameProvider({ children }: Props) {
     setPlayerChoices([])
     setTurn(null)
     setTriple([0, 0, 0])
+    setMessages([])
   }
 
   const availableChoices = useMemo(() => {
@@ -187,11 +217,13 @@ export function GameProvider({ children }: Props) {
         triple,
         matchId,
         playerKey,
+        messages,
 
         /** Se conecta a um jogo a partir de um token. */
         connectGame,
         makeChoice,
         disconnect,
+        sendMessage,
       }}
     >
       {children}

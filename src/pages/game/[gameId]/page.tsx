@@ -20,6 +20,7 @@ export default function GamePage() {
     oponentChoices,
     turn,
     gameStatus,
+    messages,
   } = useGame()
 
   const playerTurn = turn === 'player'
@@ -57,6 +58,19 @@ export default function GamePage() {
         break
     }
   }, [gameStatus])
+
+  useEffect(() => {
+    if (messages.length) {
+      const { sender, content, timestamp } = messages[messages.length - 1]
+      toast({
+        title: `${sender} diz:`,
+        description: content,
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }, [messages])
 
   useEffect(() => {
     return () => {
