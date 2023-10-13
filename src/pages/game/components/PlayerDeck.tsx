@@ -70,6 +70,7 @@ export default function PlayerDeck({ player }: Props) {
         <VStack>
           <Popover
             initialFocusRef={popoverFocusElement}
+            variant="messageBox"
             //returnFocusOnClose={false}
             isOpen={isOpen}
             onClose={onClose}
