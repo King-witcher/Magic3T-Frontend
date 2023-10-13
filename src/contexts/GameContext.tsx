@@ -5,6 +5,7 @@ import { Choice, GameState, GameStatus } from '@/types/types'
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -55,17 +56,23 @@ export function GameProvider({ children }: Props) {
   ])
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
-  function resetGameState() {
+  const resetGameState = useCallback(() => {
     setPlayerChoices([])
     setOponentChoices([])
     setGameStatus(GameStatus.Undefined)
     playerTimer.reset(0)
     oponentTimer.reset(0)
     setTurn(null)
-  }
+  }, [
+    setPlayerChoices,
+    setOponentChoices,
+    setGameStatus,
+    playerTimer,
+    oponentTimer,
+    setTurn,
+  ])
 
   function getEventfulSocket(matchId: string, playerKey: string) {
-    console.log(matchId)
     const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
       auth: { matchId, playerKey },
     })
@@ -86,6 +93,17 @@ export function GameProvider({ children }: Props) {
       },
     ])
   }
+
+  const makeChoice = useCallback(
+    (choice: Choice) => {
+      socket?.emit('choice', choice)
+      setPlayerChoices((choices) => [...choices, choice])
+      setTurn('oponent')
+      playerTimer.pause()
+      oponentTimer.start()
+    },
+    [setPlayerChoices, setTurn, playerTimer, oponentTimer]
+  )
 
   function handleServerDisconnect() {
     setSocket(null)
@@ -138,14 +156,6 @@ export function GameProvider({ children }: Props) {
     oponentTimer.setRemaining(incomingGameState.oponentTimeLeft)
   }
 
-  function makeChoice(choice: Choice) {
-    socket?.emit('choice', choice)
-    setPlayerChoices((choices) => [...choices, choice])
-    setTurn('oponent')
-    playerTimer.pause()
-    oponentTimer.start()
-  }
-
   function sendMessage(message: string) {
     setMessages((messages) => [
       ...messages,
@@ -158,18 +168,21 @@ export function GameProvider({ children }: Props) {
     socket?.emit('message', message)
   }
 
-  function connectGame(matchId: string, playerKey: string) {
-    if (socket) socket.disconnect()
+  const connectGame = useCallback(
+    (matchId: string, playerKey: string) => {
+      if (socket) socket.disconnect()
 
-    resetGameState()
-    const newSocket = getEventfulSocket(matchId, playerKey)
+      resetGameState()
+      const newSocket = getEventfulSocket(matchId, playerKey)
 
-    setMatchId(matchId)
-    setPlayerKey(playerKey)
-    setSocket(newSocket)
+      setMatchId(matchId)
+      setPlayerKey(playerKey)
+      setSocket(newSocket)
 
-    newSocket.emit('ready', {})
-  }
+      newSocket.emit('ready', {})
+    },
+    [setMatchId, setPlayerKey, setSocket]
+  )
 
   function disconnect() {
     socket?.disconnect()

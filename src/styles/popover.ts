@@ -3,8 +3,7 @@ import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(popoverAnatomy.keys)
 
-const baseStyle = definePartsStyle({
-
+const messageBox = definePartsStyle({
   content: {
     borderRadius: '10px',
     margin: '0 20px',
@@ -34,4 +33,36 @@ const baseStyle = definePartsStyle({
     right: '10px',
   }
 })
-export const popoverTheme = defineMultiStyleConfig({ baseStyle })
+
+const baseStyle = definePartsStyle({
+  content: {
+    bg: 'white',
+    color: 'black',
+    m: 0,
+    p: '10px',
+    boxShadow: '0 0 10px 0 #00000030',
+    borderRadius: '10px',
+    _focusVisible: {
+      boxShadow: 'auto',
+    }
+  },
+  body: {
+    m: 0,
+    p: 0,
+    _focus: {
+      boxShadow: 'none',
+    }
+  },
+  popper: {
+    _focus: {
+      boxShadow: 'none',
+    }
+  }
+})
+
+export const popoverTheme = defineMultiStyleConfig({
+  baseStyle,
+  variants: {
+    messageBox
+  }
+})
