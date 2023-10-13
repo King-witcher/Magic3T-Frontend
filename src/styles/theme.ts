@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 import { modalTheme } from './modal'
+import { popoverTheme } from './popover'
 
 export const theme = extendTheme({
   styles: {
@@ -19,6 +20,7 @@ export const theme = extendTheme({
         boxSizing: '10px',
       }
     },
-    Modal: modalTheme
+    Modal: modalTheme,
+    Popover: popoverTheme,
   },
 })

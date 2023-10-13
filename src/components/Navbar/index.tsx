@@ -1,9 +1,19 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { GameStatus } from '@/types/types'
-import { Box, Button, Flex, Tag, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Popover,
+  PopoverTrigger,
+  Tag,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import LeaveModal from './LeaveModal'
+import LeaveModal from './components/LeaveModal'
+import ProfilePopover from './components/ProfilePopopver'
+import ProfileCard from './components/ProfileCard'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -43,7 +53,12 @@ export default function Navbar() {
         </Tag>
       </Box>
       {user ? (
-        <Tag onClick={signOut}>{user.displayName}</Tag>
+        <Popover>
+          <PopoverTrigger>
+            <ProfileCard />
+          </PopoverTrigger>
+          <ProfilePopover />
+        </Popover>
       ) : (
         <Button onClick={signIn}>Login</Button>
       )}
