@@ -3,6 +3,7 @@ import { Avatar, Flex, FlexProps, Text, forwardRef } from '@chakra-ui/react'
 
 const ProfileCard = forwardRef(function ProfileCard(props: FlexProps, ref) {
   const { user } = useAuth()
+  console.log('rendered')
   return (
     <Flex
       ref={ref}

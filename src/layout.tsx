@@ -5,14 +5,12 @@ import { ServicesOffline } from './pages/services-offline'
 import Navbar from './components/Navbar'
 
 export default function Layout() {
-  const { serverOnline } = useServiceStatus()
-
   return (
     <Stack alignItems="center" h="100dvh" gap="0">
       <Navbar />
       <Box flex="1" boxSizing="border-box" padding="10px" w="100%">
         <Box pos="relative" rounded="10px" h="100%" bg="white" p="10px">
-          {serverOnline ? <Outlet /> : <ServicesOffline />}
+          <Outlet />
         </Box>
       </Box>
     </Stack>

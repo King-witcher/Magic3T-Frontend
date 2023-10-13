@@ -9,6 +9,7 @@ import {
   ModalOverlay,
   ModalProps,
 } from '@chakra-ui/react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function LeaveModal({
@@ -17,10 +18,10 @@ export default function LeaveModal({
 }: Omit<ModalProps, 'children'>) {
   const navigate = useNavigate()
 
-  function handleModalOkclick() {
+  const handleModalOkclick = useCallback(() => {
     navigate('/')
     onClose()
-  }
+  }, [navigate, onClose])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

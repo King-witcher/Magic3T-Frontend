@@ -3,6 +3,7 @@ import { Api, SessionRequests } from '@/services/api'
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -52,13 +53,13 @@ export function AuthProvider({ children }: Props) {
     }
   }
 
-  async function signIn() {
-    const credential = await signInWithPopup(auth, provider)
-  }
+  const signIn = useCallback(async () => {
+    await signInWithPopup(auth, provider)
+  }, [])
 
-  async function signOut() {
-    firebaseSignOut(auth)
-  }
+  const signOut = useCallback(async () => {
+    await firebaseSignOut(auth)
+  }, [auth])
 
   useEffect(() => {
     validateSessionToken()
