@@ -2,6 +2,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { modalTheme } from './modal'
 import { popoverTheme } from './popover'
 import { tooltipTheme } from './tooltip'
+import { buttonTheme } from './button'
 
 export const theme = extendTheme({
   styles: {
@@ -12,15 +13,11 @@ export const theme = extendTheme({
       },
     },
   },
+  config: {
+    initialColorMode: 'light',
+  },
   components: {
-    Button: {
-      variants: {},
-      baseStyle: {
-        borderRadius: '10px',
-        padding: '10px',
-        boxSizing: '10px',
-      }
-    },
+    Button: buttonTheme,
     Modal: modalTheme,
     Popover: popoverTheme,
     Tooltip: tooltipTheme,

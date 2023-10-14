@@ -12,7 +12,11 @@ const ProfileCard = forwardRef(function ProfileCard(props: FlexProps, ref) {
       gap="15px"
       p="5px"
       h="40px"
-      pr="25px"
+      w={{
+        base: '40px',
+        sm: 'fit-content',
+      }}
+      pr={{ base: 'auto', md: '25px' }}
       userSelect="none"
       cursor="pointer"
       bg="whiteAlpha.300"
@@ -23,7 +27,7 @@ const ProfileCard = forwardRef(function ProfileCard(props: FlexProps, ref) {
       {...props}
     >
       <Avatar src={user?.photoURL || undefined} size="sm" />
-      <Text>{user?.displayName}</Text>
+      <Text hideBelow="md">{user?.displayName}</Text>
     </Flex>
   )
 })

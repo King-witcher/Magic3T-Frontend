@@ -19,6 +19,7 @@ import ProfilePopover from './components/ProfilePopopver'
 import ProfileCard from './components/ProfileCard'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
+import InfoArea from './components/InfoArea'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -45,7 +46,7 @@ export default function Navbar() {
       gap="10px"
       justifyContent="space-between"
     >
-      <Flex alignItems="center" gap="5px">
+      <Flex alignItems="center" gap={['0px', '5px']}>
         <Box
           p="10px"
           rounded="10px"
@@ -60,7 +61,10 @@ export default function Navbar() {
           </Tag>
         </Box>
         {serverOnline === undefined && (
-          <Tooltip label="O servidor principal foi desligado quando inativo para reduzir custos, mas já está sendo religado. Aguarde por cerca de 2 a 3 minutos até que tudo estja no ar novamente!">
+          <Tooltip
+            hideBelow="md"
+            label="O servidor principal foi desligado quando inativo para reduzir custos, mas já está sendo religado. Aguarde por cerca de 2 a 3 minutos até que tudo estja no ar novamente!"
+          >
             <Flex
               gap="5px"
               alignItems="center"
@@ -70,7 +74,7 @@ export default function Navbar() {
               userSelect="none"
             >
               <Spinner size="sm" />
-              <Text color="red.100" fontSize="12px">
+              <Text color="red.100" fontSize="12px" hideBelow="sm">
                 Aguardando servidor principal...
               </Text>
             </Flex>
@@ -93,7 +97,9 @@ export default function Navbar() {
           <ProfilePopover />
         </Popover>
       ) : (
-        <Button onClick={signIn}>Login</Button>
+        <Button variant="signIn" onClick={signIn}>
+          Entrar
+        </Button>
       )}
       <LeaveModal onClose={onClose} isOpen={isOpen} />
     </Flex>
