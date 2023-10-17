@@ -1,4 +1,3 @@
-import { useGameConnector } from '@/hooks/useGameConnector'
 import { Timer } from '@/lib/Timer'
 import { compareArrays } from '@/lib/utils'
 import { Choice, GameState, GameStatus } from '@/types/types'
