@@ -29,9 +29,10 @@ interface GameData {
   messages: Message[]
   oponentProfile: Profile | null
 
-  connectGame(matchId: string, playerKey: string): void
+  connectGame(matchId: string): Promise<void>
   makeChoice(choice: Choice): void
   sendMessage(message: string): void
+  forfeit(): Promise<void>
   disconnect(): void
 }
 
@@ -62,7 +63,7 @@ export function GameProvider({ children }: Props) {
     0, 0, 0,
   ])
   const [oponentProfile, setOponentProfile] = useState<Profile | null>(null)
-  const { token } = useAuth()
+  const { getToken, user } = useAuth()
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {
@@ -75,20 +76,25 @@ export function GameProvider({ children }: Props) {
     setTurn(null)
   }, [playerTimer, oponentTimer])
 
-  function getEventfulSocket(matchId: string, playerKey: string) {
-    const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
-      auth: { matchId, token },
-    })
-
-    return socket
-      .on('gameState', handleServerGameState)
-      .on('disconnect', handleServerDisconnect)
-      .on('message', handleReceiveMessage)
-      .on('oponentProfile', setOponentProfile)
-      .on('connect', () => {
-        socket.emit('getOponentProfile')
+  const getEventfulSocket = useCallback(
+    async (matchId: string) => {
+      const token = await user?.getIdToken()
+      if (!token) throw new Error('No Id Token')
+      const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
+        auth: { matchId, token },
       })
-  }
+
+      return socket
+        .on('gameState', handleServerGameState)
+        .on('disconnect', handleServerDisconnect)
+        .on('message', handleReceiveMessage)
+        .on('oponentProfile', setOponentProfile)
+        .on('connect', () => {
+          socket.emit('getOponentProfile')
+        })
+    },
+    [user]
+  )
 
   const handleReceiveMessage = useCallback(
     (message: string) => {
@@ -178,20 +184,31 @@ export function GameProvider({ children }: Props) {
     socket?.emit('message', message)
   }
 
+  const forfeit = useCallback(async () => {
+    await socket?.emitWithAck('forfeit')
+  }, [socket])
+
   const connectGame = useCallback(
-    (matchId: string, playerKey: string) => {
+    async (matchId: string) => {
       if (socket) socket.disconnect()
 
       resetGameState()
-      const newSocket = getEventfulSocket(matchId, playerKey)
+      const newSocket = await getEventfulSocket(matchId)
 
       setMatchId(matchId)
       setPlayerKey(playerKey)
       setSocket(newSocket)
 
-      newSocket.emit('ready', {})
+      newSocket.emitWithAck('ready', {})
     },
-    [setMatchId, setPlayerKey, setSocket, socket]
+    [
+      setMatchId,
+      setPlayerKey,
+      setSocket,
+      getEventfulSocket,
+      resetGameState,
+      socket,
+    ]
   )
 
   function disconnect() {
@@ -248,6 +265,7 @@ export function GameProvider({ children }: Props) {
         makeChoice,
         disconnect,
         sendMessage,
+        forfeit,
       }}
     >
       {children}

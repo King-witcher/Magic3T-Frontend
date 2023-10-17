@@ -36,9 +36,6 @@ export default function GamePage() {
           status: 'success',
           duration: 5000,
           isClosable: true,
-          onCloseComplete() {
-            navigate('/')
-          },
         })
         break
 
@@ -48,9 +45,6 @@ export default function GamePage() {
           status: 'error',
           duration: 5000,
           isClosable: true,
-          onCloseComplete() {
-            navigate('/')
-          },
         })
         break
 
@@ -60,9 +54,6 @@ export default function GamePage() {
           status: 'info',
           duration: 5000,
           isClosable: true,
-          onCloseComplete() {
-            navigate('/')
-          },
         })
         break
 
@@ -80,6 +71,10 @@ export default function GamePage() {
         status: 'info',
         duration: 5000,
         isClosable: true,
+        containerStyle: {
+          maxW: '100%',
+          p: '20px',
+        },
       })
     }
   }, [messages])

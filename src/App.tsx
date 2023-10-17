@@ -5,7 +5,7 @@ import { QueueProvider } from './contexts/QueueContext'
 import { ServiceStatusProvider } from './contexts/ServiceStatusContext'
 import { AuthProvider } from './contexts/AuthContext'
 import { GameProvider } from './contexts/GameContext'
-import { theme } from './styles/theme'
+import { chakraTheme } from './styles/chakraTheme'
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <AuthProvider>
         <GameProvider>
           <QueueProvider>
-            <ChakraProvider theme={theme}>
+            <ChakraProvider theme={chakraTheme}>
               <RouterProvider router={router} />
             </ChakraProvider>
           </QueueProvider>

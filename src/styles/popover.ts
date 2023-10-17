@@ -8,14 +8,16 @@ const messageBox = definePartsStyle({
     borderRadius: '10px',
     margin: '0 20px',
     padding: 0,
-    boxShadow: 'none',
+    border: 'none',
+    boxShadow: '0 0 30px 10px #00000030',
   },
   arrow: {
     bg: 'pink.400',
+    border: 'none',
   },
   header: {
     margin: 0,
-    padding: '10px',
+    padding: '10px 20px',
   },
   body: {
     margin: 0,
@@ -27,6 +29,7 @@ const messageBox = definePartsStyle({
   },
   popper: {
     borderRadius: '10px',
+    border: 'none',
   },
   closeButton: {
     top: '10px',

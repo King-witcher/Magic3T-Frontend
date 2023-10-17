@@ -3,8 +3,11 @@ import { modalTheme } from './modal'
 import { popoverTheme } from './popover'
 import { tooltipTheme } from './tooltip'
 import { buttonTheme } from './button'
+import { menuTheme } from './menu'
+import { inputTheme } from './input'
+import { textareaTheme } from './textarea'
 
-export const theme = extendTheme({
+export const chakraTheme = extendTheme({
   styles: {
     global: {
       body: {
@@ -21,5 +24,8 @@ export const theme = extendTheme({
     Modal: modalTheme,
     Popover: popoverTheme,
     Tooltip: tooltipTheme,
+    Menu: menuTheme,
+    Input: inputTheme,
+    Textarea: textareaTheme,
   },
 })

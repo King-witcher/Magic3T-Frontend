@@ -36,7 +36,7 @@ export default function LeaveModal({
         <ModalFooter>
           <Button onClick={onClose}>Cancelar</Button>
           <Button colorScheme="red" onClick={handleModalOkclick}>
-            Render
+            Abandonar
           </Button>
         </ModalFooter>
       </ModalContent>

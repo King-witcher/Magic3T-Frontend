@@ -1,7 +1,9 @@
+import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { Center, Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Page() {
@@ -9,13 +11,14 @@ export default function Page() {
   const { enqueue, dequeue, queueMode } = useQueue()
   const navigate = useNavigate()
   const { serverOnline } = useServiceStatus()
+  const { user } = useAuth()
 
-  function handleEnqueue() {
+  const handleEnqueue = useCallback(() => {
     enqueue(GameMode.Casual, handleFindMatch)
-  }
+  }, [enqueue])
 
-  function handleFindMatch(payload: { matchId: string; playerKey: string }) {
-    connectGame(payload.matchId, payload.playerKey)
+  async function handleFindMatch(payload: { matchId: string }) {
+    await connectGame(payload.matchId)
     navigate(`game/${payload.matchId}`) // Usar rediret em loader e actions
   }
 
