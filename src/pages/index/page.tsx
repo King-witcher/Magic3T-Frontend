@@ -22,7 +22,7 @@ export default function Page() {
     navigate(`game/${payload.matchId}`) // Usar rediret em loader e actions
   }
 
-  if (serverOnline)
+  if (serverOnline && user)
     return (
       <Flex
         w="100%"
@@ -71,7 +71,13 @@ export default function Page() {
         </Flex>
       </Flex>
     )
-  else if (serverOnline === undefined)
+  else if (!user) {
+    return (
+      <Center w="100%" h="100%" fontSize="20px">
+        Você precisa estar logado para procurar partidas.
+      </Center>
+    )
+  } else if (serverOnline === undefined)
     return (
       <Center w="100%" h="100%" fontSize="20px">
         Aguardando servidor principal

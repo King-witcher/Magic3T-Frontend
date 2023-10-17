@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom'
 import Layout from '@/layout'
 import Index from '@/pages/index/page'
 import GamePage from './pages/game/[gameId]/page'
-import { Login } from './pages/login/page'
 import ProfilePage from './pages/profile/page'
 
 export const router = createBrowserRouter([
@@ -14,10 +13,6 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Index />,
-      },
-      {
-        path: '/login',
-        element: <Login />,
       },
       {
         path: '/profile',

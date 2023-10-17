@@ -1,7 +1,5 @@
-import { Box, Flex, Stack, Text } from '@chakra-ui/react'
+import { Box, Stack, Text } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
-import { useServiceStatus } from './contexts/ServiceStatusContext'
-import { ServicesOffline } from './pages/services-offline'
 import Navbar from './components/Navbar'
 
 export default function Layout() {
