@@ -12,6 +12,7 @@ import {
   useState,
 } from 'react'
 import { io } from 'socket.io-client'
+import { useAuth } from './AuthContext'
 
 type Message = { sender: string; content: string; timestamp: number }
 
@@ -27,11 +28,18 @@ interface GameData {
   matchId: string | null
   playerKey: string | null
   messages: Message[]
+  oponentProfile: Profile | null
 
   connectGame(matchId: string, playerKey: string): void
   makeChoice(choice: Choice): void
   sendMessage(message: string): void
   disconnect(): void
+}
+
+interface Profile {
+  name: string
+  uid: string
+  rating: number
 }
 
 interface Props {
@@ -46,7 +54,7 @@ export function GameProvider({ children }: Props) {
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
   const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
   const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
-  const [gameStatus, setGameStatus] = useState(GameStatus.Undefined)
+  const [gameStatus, setGameStatus] = useState(GameStatus.Waiting)
   const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
   const [matchId, setMatchId] = useState<string | null>(null)
   const [playerKey, setPlayerKey] = useState<string | null>(null)
@@ -54,45 +62,48 @@ export function GameProvider({ children }: Props) {
   const [triple, setTriple] = useState<[Choice | 0, Choice | 0, Choice | 0]>([
     0, 0, 0,
   ])
+  const [oponentProfile, setOponentProfile] = useState<Profile | null>(null)
+  const { token } = useAuth()
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {
     setPlayerChoices([])
     setOponentChoices([])
-    setGameStatus(GameStatus.Undefined)
+    setGameStatus(GameStatus.Waiting)
+    setOponentProfile(null)
     playerTimer.reset(0)
     oponentTimer.reset(0)
     setTurn(null)
-  }, [
-    setPlayerChoices,
-    setOponentChoices,
-    setGameStatus,
-    playerTimer,
-    oponentTimer,
-    setTurn,
-  ])
+  }, [playerTimer, oponentTimer])
 
   function getEventfulSocket(matchId: string, playerKey: string) {
     const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
-      auth: { matchId, playerKey },
+      auth: { matchId, token },
     })
 
     return socket
       .on('gameState', handleServerGameState)
       .on('disconnect', handleServerDisconnect)
       .on('message', handleReceiveMessage)
+      .on('oponentProfile', setOponentProfile)
+      .on('connect', () => {
+        socket.emit('getOponentProfile')
+      })
   }
 
-  function handleReceiveMessage(message: string) {
-    setMessages((messages) => [
-      ...messages,
-      {
-        timestamp: Date.now(),
-        content: message,
-        sender: 'Anônimo',
-      },
-    ])
-  }
+  const handleReceiveMessage = useCallback(
+    (message: string) => {
+      setMessages((messages) => [
+        ...messages,
+        {
+          timestamp: Date.now(),
+          content: message,
+          sender: oponentProfile?.name || 'Anônimo',
+        },
+      ])
+    },
+    [oponentProfile]
+  )
 
   const makeChoice = useCallback(
     (choice: Choice) => {
@@ -102,7 +113,7 @@ export function GameProvider({ children }: Props) {
       playerTimer.pause()
       oponentTimer.start()
     },
-    [setPlayerChoices, setTurn, playerTimer, oponentTimer]
+    [setPlayerChoices, setTurn, playerTimer, oponentTimer, socket]
   )
 
   function handleServerDisconnect() {
@@ -111,7 +122,7 @@ export function GameProvider({ children }: Props) {
 
   function handleServerGameState(stateString: string) {
     const incomingGameState = JSON.parse(stateString) as GameState
-    setGameStatus(incomingGameState.gameStatus)
+    setGameStatus(incomingGameState.status)
 
     // Atualiza as choices se forem diferentes
     if (!compareArrays(incomingGameState.oponentChoices, oponentChoices))
@@ -125,7 +136,7 @@ export function GameProvider({ children }: Props) {
       setTurn('player')
       playerTimer.start()
       oponentTimer.pause()
-    } else if (incomingGameState.gameStatus === GameStatus.Ongoing) {
+    } else if (incomingGameState.status === GameStatus.Playing) {
       setTurn('oponent')
       playerTimer.pause()
       oponentTimer.start()
@@ -146,9 +157,9 @@ export function GameProvider({ children }: Props) {
               return [numbers[i], numbers[j], numbers[k]]
       return [0, 0, 0]
     }
-    if (incomingGameState.gameStatus === GameStatus.Victory)
+    if (incomingGameState.status === GameStatus.Victory)
       setTriple(getTriple(incomingGameState.playerChoices))
-    else if (incomingGameState.gameStatus === GameStatus.Defeat)
+    else if (incomingGameState.status === GameStatus.Defeat)
       setTriple(getTriple(incomingGameState.oponentChoices))
 
     // Sincroniza os timers
@@ -181,13 +192,13 @@ export function GameProvider({ children }: Props) {
 
       newSocket.emit('ready', {})
     },
-    [setMatchId, setPlayerKey, setSocket]
+    [setMatchId, setPlayerKey, setSocket, socket]
   )
 
   function disconnect() {
     socket?.disconnect()
     setSocket(null)
-    setGameStatus(GameStatus.Undefined)
+    setGameStatus(GameStatus.Waiting)
     setMatchId(null)
     setPlayerKey(null)
     setOponentChoices([])
@@ -231,6 +242,7 @@ export function GameProvider({ children }: Props) {
         matchId,
         playerKey,
         messages,
+        oponentProfile,
 
         /** Se conecta a um jogo a partir de um token. */
         connectGame,

@@ -1,13 +1,13 @@
-import { useGameConnector } from '@/hooks/useGameConnector'
 import {
   ReactNode,
   createContext,
   useCallback,
   useContext,
-  useRef,
+  useEffect,
   useState,
 } from 'react'
 import { io } from 'socket.io-client'
+import { useAuth } from './AuthContext'
 
 export enum GameMode {
   Casual = 'casual',
@@ -29,36 +29,50 @@ interface QueueContextProps {
 const QueueContext = createContext<QueueContextData>({} as QueueContextData)
 
 export function QueueProvider({ children }: QueueContextProps) {
-  const socketRef = useRef<ReturnType<typeof io>>()
+  const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueMode, setQueueMode] = useState<GameMode | null>(null)
+  const { user } = useAuth()
 
   const enqueue = useCallback(
     async (
       queueMode: Parameters<QueueContextData['enqueue']>[0],
       callback: Parameters<QueueContextData['enqueue']>[1]
     ) => {
-      if (socketRef.current) return
-      const socket = (socketRef.current = io(
-        `${import.meta.env.VITE_API_URL}/queue`
-      ))
-      socket.on('matchFound', callback)
-      socket.on('disconnect', () => {
-        socketRef.current = undefined
+      if (socket) return
+
+      const token = await user?.getIdToken()
+      const newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
+        auth: {
+          token,
+        },
+      })
+      setSocket(newSocket)
+      newSocket.on('connect', () => {
+        newSocket.emit('enqueue')
+      })
+      newSocket.on('matchFound', callback)
+      newSocket.on('disconnect', () => {
+        setSocket(undefined)
         setQueueMode(null)
       })
-      socket.emit('enqueue')
 
       setQueueMode(queueMode)
     },
-    [setQueueMode]
+    [socket, user]
   )
 
   const dequeue = useCallback(() => {
-    if (!socketRef.current) return
-    socketRef.current.disconnect()
-    socketRef.current = undefined
+    if (!socket) return
+    socket.disconnect()
+    setSocket(undefined)
     setQueueMode(null)
-  }, [setQueueMode])
+  }, [socket])
+
+  useEffect(() => {
+    socket?.disconnect()
+    setSocket(undefined)
+    setQueueMode(null)
+  }, [user])
 
   return (
     <QueueContext.Provider value={{ enqueue, dequeue, queueMode }}>

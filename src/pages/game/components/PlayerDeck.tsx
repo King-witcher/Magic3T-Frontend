@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -22,6 +23,7 @@ interface Props {
 export default function PlayerDeck({ player }: Props) {
   const [message, setMessage] = useState('')
   const { isOpen, onClose, onOpen, onToggle } = useDisclosure()
+  const { user } = useAuth()
 
   const {
     playerChoices,
@@ -29,6 +31,7 @@ export default function PlayerDeck({ player }: Props) {
     playerTimer,
     oponentTimer,
     triple,
+    oponentProfile,
     sendMessage,
   } = useGame()
   const popoverFocusElement = useRef(null)
@@ -115,7 +118,11 @@ export default function PlayerDeck({ player }: Props) {
               </PopoverBody>
             </PopoverContent>
           </Popover>
-          <Text fontWeight="bold">{currentPlayer ? 'Você' : 'Anônimo'}</Text>
+          <Text fontWeight="bold">
+            {currentPlayer
+              ? user?.displayName || 'Você'
+              : oponentProfile?.name || 'Anônimo'}
+          </Text>
         </VStack>
         <ChoiceCollection
           choices={choices}

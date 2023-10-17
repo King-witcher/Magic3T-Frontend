@@ -29,7 +29,7 @@ export default function Navbar() {
   const { serverOnline } = useServiceStatus()
 
   const handleLogoClick = useCallback(() => {
-    if (gameStatus === GameStatus.Ongoing) {
+    if (gameStatus === GameStatus.Playing) {
       onOpen()
     } else navigate('/')
   }, [gameStatus])
@@ -55,7 +55,7 @@ export default function Navbar() {
           _hover={{ bg: 'whiteAlpha.200' }}
           onClick={handleLogoClick}
         >
-          Magic3t
+          Magic3T
           <Tag ml="0.5rem" bgColor="whiteAlpha.400" color="white">
             alpha
           </Tag>

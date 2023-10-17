@@ -1,6 +1,6 @@
 import { Flex, Grid, VStack, Text, useToast } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ChoiceComponent from '../components/ChoiceComponent'
 import ChoiceCollection from '../components/ChoiceCollection'
 import { TimeCounter } from '../components/TimeCounter'
@@ -21,7 +21,10 @@ export default function GamePage() {
     turn,
     gameStatus,
     messages,
+    oponentProfile,
   } = useGame()
+
+  const navigate = useNavigate()
 
   const playerTurn = turn === 'player'
 
@@ -33,6 +36,9 @@ export default function GamePage() {
           status: 'success',
           duration: 5000,
           isClosable: true,
+          onCloseComplete() {
+            navigate('/')
+          },
         })
         break
 
@@ -42,6 +48,9 @@ export default function GamePage() {
           status: 'error',
           duration: 5000,
           isClosable: true,
+          onCloseComplete() {
+            navigate('/')
+          },
         })
         break
 
@@ -51,6 +60,9 @@ export default function GamePage() {
           status: 'info',
           duration: 5000,
           isClosable: true,
+          onCloseComplete() {
+            navigate('/')
+          },
         })
         break
 
@@ -107,7 +119,7 @@ export default function GamePage() {
         ))}
         <Text
           userSelect="none"
-          opacity={playerTurn ? '1' : '0'}
+          opacity={playerTurn && gameStatus === GameStatus.Playing ? '1' : '0'}
           transition="opacity 200ms"
           pos="absolute"
           bottom="-10px"
@@ -120,7 +132,7 @@ export default function GamePage() {
         </Text>
         {playerChoices.length === 0 &&
           oponentChoices.length === 0 &&
-          gameStatus === GameStatus.Ongoing && (
+          gameStatus === GameStatus.Playing && (
             <Text
               width="400px"
               textAlign="center"

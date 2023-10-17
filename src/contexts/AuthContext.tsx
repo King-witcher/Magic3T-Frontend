@@ -68,6 +68,7 @@ export function AuthProvider({ children }: Props) {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setUser(user)
+      user?.getIdToken().then((token) => setToken(token))
     })
   })
 
