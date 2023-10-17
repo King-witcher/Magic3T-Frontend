@@ -32,7 +32,7 @@ export default function PlayerDeck({ player }: Props) {
   const { user } = useAuth()
 
   const easterEgg = user?.displayName?.includes('Bianca Vieira')
-    ? 'Bianca, eu te amo c:'
+    ? 'oi bia c:'
     : user?.displayName?.includes('Marileia Almeida')
     ? 'Te amo, mãe <3'
     : 'Sem easter eggs por ora.'
