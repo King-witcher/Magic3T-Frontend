@@ -57,9 +57,7 @@ export function AuthProvider({ children }: Props) {
   }, [user])
 
   useEffect(() => {
-    console.log('render here')
     return onAuthStateChanged(auth, (user) => {
-      console.log('setting user', user)
       setUser(user)
     })
   }, [])
