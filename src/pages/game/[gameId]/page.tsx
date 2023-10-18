@@ -7,9 +7,11 @@ import { TimeCounter } from '../components/TimeCounter'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
 import PlayerDeck from '../components/PlayerDeck'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function GamePage() {
   const { gameId } = useParams()
+  const { user } = useAuth()
   const toast = useToast()
   const {
     disconnect,
@@ -32,7 +34,9 @@ export default function GamePage() {
     switch (gameStatus) {
       case GameStatus.Victory:
         toast({
-          title: 'Você venceu a partida!',
+          title: user?.displayName?.includes('Bianca Vieira')
+            ? 'Nha burmor toda fofinha vencedora c:'
+            : 'Você venceu a partida!',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -42,6 +46,9 @@ export default function GamePage() {
       case GameStatus.Defeat:
         toast({
           title: 'Você perdeu.',
+          description: user?.displayName?.includes('Bianca Vieira')
+            ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
+            : '',
           status: 'error',
           duration: 5000,
           isClosable: true,
@@ -51,6 +58,9 @@ export default function GamePage() {
       case GameStatus.Draw:
         toast({
           title: 'A partida acabou em empate.',
+          description: user?.displayName?.includes('Bianca Vieira')
+            ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
+            : '',
           status: 'info',
           duration: 5000,
           isClosable: true,

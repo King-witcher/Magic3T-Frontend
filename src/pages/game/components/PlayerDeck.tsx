@@ -15,8 +15,6 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverHeader,
-  PopoverTrigger,
-  Textarea,
   useDisclosure,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
