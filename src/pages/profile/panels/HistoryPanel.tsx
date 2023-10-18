@@ -1,18 +1,35 @@
 import { firestore } from '@/services/firebase'
-import { Center, Flex, Spinner, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import { useCallback, useEffect, useState } from 'react'
 import { MatchRegistry } from './MatchRegistry'
-import { collection, getDocs, or, query, where } from 'firebase/firestore/lite'
+import {
+  collection,
+  getDocs,
+  or,
+  query,
+  where,
+  orderBy,
+} from 'firebase/firestore/lite'
+import { formatTime } from '@/lib/utils'
+import HistoryMatch from '../components/HistoryMatch'
 
 interface Props {
   user: User
 }
 
 const rowColors = {
-  victory: 'green.300',
+  victory: 'green.200',
   draw: 'gray.200',
-  defeat: 'red.300',
+  defeat: 'red.200',
 }
 
 export default function HistoryPanel({ user }: Props) {
@@ -22,7 +39,11 @@ export default function HistoryPanel({ user }: Props) {
     const col = collection(firestore, 'matches')
     const q = query(
       col,
-      or(where('black.uid', '==', user.uid), where('white.uid', '==', user.uid))
+      or(
+        where('black.uid', '==', user.uid),
+        where('white.uid', '==', user.uid)
+      ),
+      orderBy('timestamp', 'desc')
     )
     const snapshot = await getDocs(q)
     const result: MatchRegistry[] = []
@@ -40,31 +61,9 @@ export default function HistoryPanel({ user }: Props) {
   if (matches !== 'loading')
     return (
       <Stack>
-        {matches.map((match, index) => {
-          const result =
-            match.winner === 'none'
-              ? 'draw'
-              : match[match.winner].uid === user.uid
-              ? 'victory'
-              : 'defeat'
-
-          return (
-            <Flex
-              alignItems="center"
-              h="60px"
-              px="20px"
-              borderRadius="10px"
-              bg={rowColors[result]}
-              color="black"
-              justifyContent="space-between"
-              userSelect="none"
-            >
-              <Text fontWeight="600">{match.white.name}</Text>
-              <Text>vs</Text>
-              <Text fontWeight="600">{match.black.name}</Text>
-            </Flex>
-          )
-        })}
+        {matches.map((match, index) => (
+          <HistoryMatch key={index} match={match} />
+        ))}
       </Stack>
     )
   else
