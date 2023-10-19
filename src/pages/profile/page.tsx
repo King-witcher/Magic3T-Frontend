@@ -13,8 +13,8 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import ProfilePanel from './panels/ProfilePanel'
-import HistoryPanel from './panels/HistoryPanel'
+import ProfileTab from './tabs/ProfileTab'
+import HistoryTab from './tabs/HistoryTab'
 
 export default function ProfilePage() {
   const { user } = useAuth()
@@ -32,10 +32,10 @@ export default function ProfilePage() {
         <TabIndicator />
         <TabPanels>
           <TabPanel>
-            <ProfilePanel user={user} />
+            <ProfileTab user={user} />
           </TabPanel>
           <TabPanel>
-            <HistoryPanel user={user} />
+            <HistoryTab user={user} />
           </TabPanel>
         </TabPanels>
       </Tabs>

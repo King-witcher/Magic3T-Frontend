@@ -1,5 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext'
-import { MatchRegistry } from '../panels/MatchRegistry'
+import { MatchRegistry } from '../tabs/MatchRegistry'
 import { formatTime } from '@/lib/utils'
 import { Box, Center, Divider, Flex, Stack, Text } from '@chakra-ui/react'
 import { useMemo } from 'react'

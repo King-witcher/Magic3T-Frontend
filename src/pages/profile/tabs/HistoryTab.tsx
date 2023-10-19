@@ -26,13 +26,7 @@ interface Props {
   user: User
 }
 
-const rowColors = {
-  victory: 'green.200',
-  draw: 'gray.200',
-  defeat: 'red.200',
-}
-
-export default function HistoryPanel({ user }: Props) {
+export default function HistoryTab({ user }: Props) {
   const [matches, setMatches] = useState<MatchRegistry[] | 'loading'>('loading')
 
   const fetchDocs = useCallback(async () => {

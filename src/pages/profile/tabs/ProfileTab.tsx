@@ -14,7 +14,7 @@ interface Props {
   user: User
 }
 
-export default function ProfilePanel({ user }: Props) {
+export default function ProfileTab({ user }: Props) {
   return (
     <Center h="100%">
       <VStack
