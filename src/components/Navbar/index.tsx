@@ -8,9 +8,6 @@ import {
   Flex,
   Menu,
   MenuButton,
-  MenuGroup,
-  Popover,
-  PopoverTrigger,
   Skeleton,
   Spinner,
   Tag,
@@ -23,7 +20,6 @@ import LeaveModal from './components/LeaveModal'
 import ProfilePopover from './components/ProfilePopopver'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
-import InfoArea from './components/InfoArea'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -97,7 +93,12 @@ export default function Navbar() {
         {user ? (
           <Menu>
             <MenuButton>
-              <Avatar src={user.photoURL || undefined} w="40px" h="40px" />
+              <Avatar
+                src={user.photoURL || undefined}
+                w="40px"
+                h="40px"
+                bg="whiteAlpha.300"
+              />
             </MenuButton>
             <ProfilePopover />
           </Menu>
