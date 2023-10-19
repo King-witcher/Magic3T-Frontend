@@ -19,8 +19,9 @@ const baseStyle = definePartsStyle({
   body: {
     margin: '20px 0',
     padding: '10px',
-    alignItems: 'center',
+    justifyContent: 'center',
     display: 'flex',
+    flexDir: 'column',
   },
   footer: {
     margin: 0,
