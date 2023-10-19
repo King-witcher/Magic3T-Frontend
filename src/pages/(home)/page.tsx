@@ -2,7 +2,14 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { Center, Flex, Heading, Spinner } from '@chakra-ui/react'
+import {
+  Center,
+  Flex,
+  Heading,
+  Spinner,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,52 +31,63 @@ export default function Home() {
 
   if (serverOnline && user)
     return (
-      <Flex
-        w="100%"
-        h="100%"
-        flexDir="column"
-        gap="20px"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Heading>Jogar</Heading>
-        {/* <Grid
-        gridTemplateColumns={'200px 200px'}
-        gridTemplateRows="200px 200px"
-        gap="10px"
-      > */}
+      <VStack h="100%" gap="15px" justifyContent="center">
+        <Heading fontFamily="nunito variable">PvP</Heading>
         <Flex
           alignItems="center"
           justifyContent="center"
           bg="gray.100"
+          transition="background 80ms linear"
           rounded="10px"
           cursor="pointer"
           fontSize="20px"
           userSelect="none"
           w="200px"
-          h="200px"
+          fontWeight={700}
+          h="80px"
           _hover={{
             bg: 'pink.200',
           }}
           onClick={queueMode ? dequeue : handleEnqueue}
         >
           <Flex
-            flexDir="column"
             alignItems="center"
             gap="10px"
             fontSize="20px"
             textAlign="center"
           >
-            {!queueMode && 'Partida rápida'}
-            {queueMode && (
-              <>
-                Procurando outro jogador... <Spinner />
-              </>
-            )}
+            {queueMode && <Spinner thickness="4px" />}Casual
           </Flex>
-          {/* </Grid> */}
         </Flex>
-      </Flex>
+        <Tooltip label="Aguarde!">
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            bg="gray.100"
+            transition="background 80ms linear"
+            rounded="10px"
+            cursor="not-allowed"
+            fontSize="20px"
+            userSelect="none"
+            w="200px"
+            fontWeight={700}
+            h="80px"
+            opacity="0.5"
+            // _hover={{
+            //   bg: 'pink.200',
+            // }}
+          >
+            <Flex
+              alignItems="center"
+              gap="10px"
+              fontSize="20px"
+              textAlign="center"
+            >
+              Ranqueada
+            </Flex>
+          </Flex>
+        </Tooltip>
+      </VStack>
     )
   else if (!user) {
     return (

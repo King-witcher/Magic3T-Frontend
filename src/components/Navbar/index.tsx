@@ -20,6 +20,7 @@ import LeaveModal from './components/LeaveModal'
 import ProfilePopover from './components/ProfilePopopver'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
+import { useQueue } from '@/contexts/QueueContext'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -27,6 +28,7 @@ export default function Navbar() {
   const { isLoading, user, signIn } = useAuth()
   const { gameStatus } = useGame()
   const { serverOnline } = useServiceStatus()
+  const { queueMode } = useQueue()
 
   const handleLogoClick = useCallback(() => {
     if (gameStatus === GameStatus.Playing) {
@@ -69,13 +71,38 @@ export default function Navbar() {
               gap="5px"
               alignItems="center"
               bg="whiteAlpha.300"
-              p="5px"
+              p="5px 10px"
               borderRadius="10px"
               userSelect="none"
             >
-              <Spinner size="sm" />
+              <Spinner size="xs" speed="1s" />
               <Text color="red.100" fontSize="12px" hideBelow="sm">
                 Aguardando servidor principal...
+              </Text>
+            </Flex>
+          </Tooltip>
+        )}
+        {queueMode && (
+          <Tooltip
+            hideBelow="md"
+            label="Você está na fila para encontrar uma partida e será redirecionado para a partida assim que outro jogador for encontrado."
+          >
+            <Flex
+              gap="5px"
+              alignItems="center"
+              bg="whiteAlpha.300"
+              p="5px 10px"
+              borderRadius="10px"
+              userSelect="none"
+              cursor="pointer"
+              _hover={{
+                bg: 'whiteAlpha.400',
+              }}
+              onClick={() => navigate('/')}
+            >
+              <Spinner size="xs" speed="1s" />
+              <Text color="red.100" fontSize="12px" hideBelow="sm">
+                Na fila
               </Text>
             </Flex>
           </Tooltip>

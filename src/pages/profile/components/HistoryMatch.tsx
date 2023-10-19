@@ -45,6 +45,21 @@ export default function ({ match }: Props) {
       p={['10px 15px', '10px 20px']}
       borderRadius="10px"
       bg={rowColors[result]}
+      transition="background 80ms linear"
+      _hover={{
+        bgColor:
+          result === 'defeat'
+            ? 'red.100'
+            : result === 'draw'
+            ? 'gray.100'
+            : 'green.100',
+        borderColor:
+          result === 'defeat'
+            ? 'red.300'
+            : result === 'draw'
+            ? 'gray.300'
+            : 'green.300',
+      }}
       borderLeft="solid 5px"
       borderLeftColor={
         result === 'defeat'
