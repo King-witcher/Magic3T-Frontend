@@ -92,14 +92,16 @@ export default function Navbar() {
       <Skeleton isLoaded={!isLoading} borderRadius="999px">
         {user ? (
           <Menu>
-            <MenuButton>
-              <Avatar
-                src={user.photoURL || undefined}
-                w="40px"
-                h="40px"
-                bg="whiteAlpha.300"
-              />
-            </MenuButton>
+            <Tooltip label={user.displayName}>
+              <MenuButton>
+                <Avatar
+                  src={user.photoURL || undefined}
+                  w="40px"
+                  h="40px"
+                  bg="whiteAlpha.300"
+                />
+              </MenuButton>
+            </Tooltip>
             <ProfilePopover />
           </Menu>
         ) : (
