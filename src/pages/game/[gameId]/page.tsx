@@ -5,6 +5,7 @@ import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
 import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
+import SignInPage from '@/components/SignInPage'
 
 export default function GamePage() {
   const { user } = useAuth()
@@ -86,6 +87,8 @@ export default function GamePage() {
       disconnect()
     }
   }, [])
+
+  if (!user) return <SignInPage />
 
   return (
     <VStack h="100%" justifyContent="space-around">
