@@ -17,6 +17,7 @@ export default function ProfilePopover() {
   return (
     <MenuList>
       <MenuItem onClick={() => navigate('/profile')}>Perfil</MenuItem>
+      <MenuItem isDisabled>Como jogar</MenuItem>
       <MenuItem onClick={signOut}>Sair</MenuItem>
     </MenuList>
   )

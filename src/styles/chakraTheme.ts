@@ -7,6 +7,7 @@ import { menuTheme } from './menu'
 import { inputTheme } from './input'
 import { textareaTheme } from './textarea'
 import '@fontsource-variable/nunito'
+import { tabsTheme } from './tabs'
 
 export const chakraTheme = extendTheme({
   styles: {
@@ -29,5 +30,6 @@ export const chakraTheme = extendTheme({
     Menu: menuTheme,
     Input: inputTheme,
     Textarea: textareaTheme,
+    Tabs: tabsTheme,
   },
 })

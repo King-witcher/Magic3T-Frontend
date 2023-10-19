@@ -21,7 +21,6 @@ import {
 import { useNavigate } from 'react-router-dom'
 import LeaveModal from './components/LeaveModal'
 import ProfilePopover from './components/ProfilePopopver'
-import ProfileCard from './components/ProfileCard'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
 import InfoArea from './components/InfoArea'

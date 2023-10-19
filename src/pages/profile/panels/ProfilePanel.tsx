@@ -29,8 +29,7 @@ export default function ProfilePanel({ user }: Props) {
         <Avatar
           size="xxl"
           src={user.photoURL || ''}
-          borderColor="gray.500"
-          borderWidth="5px"
+          boxShadow="0 0 20px 10px #00000020"
         />
         <Text fontSize="30px">{user.displayName}</Text>
         <Flex alignItems="center" userSelect="none">
