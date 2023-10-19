@@ -37,7 +37,7 @@ export default function Navbar() {
   return (
     <Flex
       as="header"
-      h="55px"
+      flex="0 0 55px"
       w="100%"
       alignItems="center"
       px="10px"
