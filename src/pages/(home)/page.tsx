@@ -2,11 +2,11 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { Center, Flex, Grid, Heading, Spinner } from '@chakra-ui/react'
+import { Center, Flex, Heading, Spinner } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function Page() {
+export default function Home() {
   const { connectGame } = useGame()
   const { enqueue, dequeue, queueMode } = useQueue()
   const navigate = useNavigate()

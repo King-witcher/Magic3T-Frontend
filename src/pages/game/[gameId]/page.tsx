@@ -1,21 +1,16 @@
-import { Flex, Grid, VStack, Text, useToast } from '@chakra-ui/react'
+import { Grid, VStack, Text, useToast } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import ChoiceComponent from '../components/ChoiceComponent'
-import ChoiceCollection from '../components/ChoiceCollection'
-import { TimeCounter } from '../components/TimeCounter'
+import ChoiceComponent from './components/ChoiceComponent'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
-import PlayerDeck from '../components/PlayerDeck'
+import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function GamePage() {
-  const { gameId } = useParams()
   const { user } = useAuth()
   const toast = useToast()
   const {
     disconnect,
-    connectGame,
     makeChoice,
     availableChoices,
     playerChoices,
@@ -23,10 +18,7 @@ export default function GamePage() {
     turn,
     gameStatus,
     messages,
-    oponentProfile,
   } = useGame()
-
-  const navigate = useNavigate()
 
   const playerTurn = turn === 'player'
 
