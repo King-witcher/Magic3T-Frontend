@@ -1,5 +1,3 @@
-import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { Api, SessionRequests } from '@/services/api'
 import {
   ReactNode,
   createContext,
@@ -9,17 +7,14 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { useServiceStatus } from './ServiceStatusContext'
 import {
   User,
   onAuthStateChanged,
   signInWithPopup,
-  GoogleAuthProvider,
   signOut as firebaseSignOut,
   getIdToken,
 } from 'firebase/auth'
 import { auth, provider } from '@/services/firebase'
-import { getId } from 'firebase/installations'
 
 interface AuthData {
   isLoading: boolean

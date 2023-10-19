@@ -12,6 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       {
         path: '/',
         element: <Layout />,
+        errorElement: <Layout />,
         children: [
           {
             path: '/',

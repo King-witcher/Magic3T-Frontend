@@ -114,25 +114,33 @@ export default function Navbar() {
         )}
       </Flex>
       <Skeleton isLoaded={!isLoading} borderRadius="999px">
-        {user ? (
-          <Menu>
-            <Tooltip label={user.displayName}>
-              <MenuButton>
-                <Avatar
-                  src={user.photoURL || undefined}
-                  w="40px"
-                  h="40px"
-                  bg="whiteAlpha.300"
-                />
-              </MenuButton>
-            </Tooltip>
-            <ProfileMenu />
-          </Menu>
-        ) : (
-          <Button variant="signIn" onClick={signIn}>
-            Entrar
-          </Button>
-        )}
+        <Menu>
+          <Tooltip label={user?.displayName} openDelay={400}>
+            <MenuButton
+              borderRadius="999px"
+              transition="all linear 80ms"
+              sx={{
+                img: {
+                  transition: 'all linear 80ms',
+                },
+                _hover: {
+                  backdropFilter: 'brightness(1.15)',
+                  img: {
+                    filter: 'brightness(1.1)',
+                  },
+                },
+              }}
+            >
+              <Avatar
+                src={user?.photoURL || undefined}
+                w="40px"
+                h="40px"
+                bg="whiteAlpha.300"
+              />
+            </MenuButton>
+          </Tooltip>
+          <ProfileMenu />
+        </Menu>
       </Skeleton>
       <LeaveModal onClose={onClose} isOpen={isOpen} />
     </Flex>
