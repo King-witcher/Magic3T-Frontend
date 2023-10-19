@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import LeaveModal from './components/LeaveModal'
-import ProfilePopover from './components/ProfilePopopver'
+import ProfileMenu from './components/ProfilePopopver'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
 import { useQueue } from '@/contexts/QueueContext'
@@ -126,7 +126,7 @@ export default function Navbar() {
                 />
               </MenuButton>
             </Tooltip>
-            <ProfilePopover />
+            <ProfileMenu />
           </Menu>
         ) : (
           <Button variant="signIn" onClick={signIn}>

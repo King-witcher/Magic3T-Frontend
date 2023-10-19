@@ -1,5 +1,6 @@
 import {
   Menu,
+  MenuDivider,
   MenuGroup,
   MenuItem,
   MenuList,
@@ -10,14 +11,16 @@ import Option from './Option'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
-export default function ProfilePopover() {
+export default function ProfileMenu() {
   const { signOut } = useAuth()
   const navigate = useNavigate()
 
   return (
     <MenuList>
-      <MenuItem onClick={() => navigate('/profile')}>Perfil</MenuItem>
+      <MenuItem onClick={() => navigate('/')}>Jogar</MenuItem>
       <MenuItem isDisabled>Como jogar</MenuItem>
+      <MenuItem onClick={() => navigate('/profile')}>Perfil</MenuItem>
+      <MenuDivider color="pink.100" />
       <MenuItem onClick={signOut}>Sair</MenuItem>
     </MenuList>
   )
