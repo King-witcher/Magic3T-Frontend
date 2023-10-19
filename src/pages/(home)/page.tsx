@@ -27,7 +27,7 @@ export default function Home() {
 
   async function handleFindMatch(payload: { matchId: string }) {
     await connectGame(payload.matchId)
-    navigate(`game/${payload.matchId}`) // Usar rediret em loader e actions
+    navigate(`/game/${payload.matchId}`) // Usar rediret em loader e actions
   }
 
   useEffect(() => {}, [])
