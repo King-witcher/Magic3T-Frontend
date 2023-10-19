@@ -8,7 +8,6 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
-import { AiFillEdit } from 'react-icons/ai'
 
 interface Props {
   user: User
@@ -27,8 +26,8 @@ export default function ProfileTab({ user }: Props) {
         justifyContent="center"
       >
         <Avatar
-          size="xxl"
-          src={user.photoURL || ''}
+          size="xl"
+          src={user.photoURL || undefined}
           boxShadow="0 0 20px 10px #00000020"
         />
         <Text fontSize="30px">{user.displayName}</Text>
