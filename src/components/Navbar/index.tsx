@@ -63,7 +63,7 @@ export default function Navbar() {
         {serverOnline === undefined && (
           <Tooltip
             hideBelow="md"
-            label="O servidor principal foi desligado quando inativo para reduzir custos, mas já está sendo religado. Aguarde por cerca de 2 a 3 minutos até que tudo estja no ar novamente!"
+            label="O servidor principal foi desligado quando inativo para reduzir custos, mas já está sendo religado. Aguarde por cerca de 2 minutos até que tudo estja no ar novamente!"
           >
             <Flex
               gap="5px"
