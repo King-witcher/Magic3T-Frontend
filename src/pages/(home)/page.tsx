@@ -56,7 +56,7 @@ export default function Home() {
             fontSize="20px"
             textAlign="center"
           >
-            {queueMode && <Spinner thickness="4px" />}Casual
+            {queueMode && <Spinner thickness="4px" speed="0.7s" />}Casual
           </Flex>
         </Flex>
         <Tooltip label="Aguarde!">

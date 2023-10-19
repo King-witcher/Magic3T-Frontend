@@ -48,8 +48,8 @@ export default function Navbar() {
       gap="10px"
       justifyContent="space-between"
     >
-      <Flex alignItems="center" gap={['0px', '5px']}>
-        <Box
+      <Flex alignItems="center" gap={['5px']}>
+        <Flex
           p="10px"
           rounded="10px"
           userSelect="none"
@@ -57,11 +57,8 @@ export default function Navbar() {
           _hover={{ bg: 'whiteAlpha.200' }}
           onClick={handleLogoClick}
         >
-          Magic3T
-          <Tag ml="0.5rem" bgColor="whiteAlpha.400" color="white">
-            alpha
-          </Tag>
-        </Box>
+          <Text fontWeight={700}>Magic3T</Text>
+        </Flex>
         {serverOnline === undefined && (
           <Tooltip
             hideBelow="md"
@@ -75,9 +72,9 @@ export default function Navbar() {
               borderRadius="10px"
               userSelect="none"
             >
-              <Spinner size="xs" speed="1s" />
-              <Text color="red.100" fontSize="12px" hideBelow="sm">
-                Aguardando servidor principal...
+              <Spinner size="xs" speed="700ms" />
+              <Text color="red.100" fontSize="12px">
+                Aguardando servidor...
               </Text>
             </Flex>
           </Tooltip>
@@ -100,8 +97,8 @@ export default function Navbar() {
               }}
               onClick={() => navigate('/')}
             >
-              <Spinner size="xs" speed="1s" />
-              <Text color="red.100" fontSize="12px" hideBelow="sm">
+              <Spinner size="xs" speed="700ms" />
+              <Text color="red.100" fontSize="12px">
                 Na fila
               </Text>
             </Flex>
