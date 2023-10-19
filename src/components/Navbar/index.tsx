@@ -2,11 +2,16 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { GameStatus } from '@/types/types'
 import {
+  Avatar,
   Box,
   Button,
   Flex,
+  Menu,
+  MenuButton,
+  MenuGroup,
   Popover,
   PopoverTrigger,
+  Skeleton,
   Spinner,
   Tag,
   Text,
@@ -24,7 +29,7 @@ import InfoArea from './components/InfoArea'
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
-  const { user, signIn } = useAuth()
+  const { isLoading, user, signIn } = useAuth()
   const { gameStatus } = useGame()
   const { serverOnline } = useServiceStatus()
 
@@ -89,18 +94,20 @@ export default function Navbar() {
           </Flex>
         )}
       </Flex>
-      {user ? (
-        <Popover>
-          <PopoverTrigger>
-            <ProfileCard />
-          </PopoverTrigger>
-          <ProfilePopover />
-        </Popover>
-      ) : (
-        <Button variant="signIn" onClick={signIn}>
-          Entrar
-        </Button>
-      )}
+      <Skeleton isLoaded={!isLoading} borderRadius="999px">
+        {user ? (
+          <Menu>
+            <MenuButton>
+              <Avatar src={user.photoURL || undefined} w="40px" h="40px" />
+            </MenuButton>
+            <ProfilePopover />
+          </Menu>
+        ) : (
+          <Button variant="signIn" onClick={signIn}>
+            Entrar
+          </Button>
+        )}
+      </Skeleton>
       <LeaveModal onClose={onClose} isOpen={isOpen} />
     </Flex>
   )

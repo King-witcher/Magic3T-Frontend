@@ -60,7 +60,7 @@ export default function HistoryPanel({ user }: Props) {
 
   if (matches !== 'loading')
     return (
-      <Stack>
+      <Stack h="100%">
         {matches.map((match, index) => (
           <HistoryMatch key={index} match={match} />
         ))}

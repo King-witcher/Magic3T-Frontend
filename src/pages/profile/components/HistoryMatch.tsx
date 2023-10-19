@@ -64,7 +64,7 @@ export default function ({ match }: Props) {
         sm: '16px',
       }}
     >
-      <Flex gap={['5px', '10px']} alignItems="center">
+      <Flex gap={['5px', '10px']} alignItems="center" overflow="hidden">
         <Text
           fontWeight={700}
           color={
@@ -81,13 +81,11 @@ export default function ({ match }: Props) {
             ? 'Empate'
             : 'Derrota'}
         </Text>
+        •
         <Text fontSize={['10px', '16px']}>
           {match[oponentSide].name} ({match[oponentSide].rating} SR)
         </Text>
-
-        <Text fontSize={['10px', '16px']}>1m12s</Text>
-
-        <Text fontSize={['10px', '16px']}>18/10/2023</Text>
+        •<Text fontSize={['10px', '16px']}>18/10/2023</Text>
       </Flex>
       <Flex gap="5px">
         {match.moves.map((move, index) => (

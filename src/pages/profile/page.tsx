@@ -23,18 +23,20 @@ export default function ProfilePage() {
 
   if (user)
     return (
-      <Tabs variant="unstyled" h="100%">
+      <Tabs variant="unstyled" h="100%" display="flex" flexDir="column">
         <TabList>
           <Tab>Perfil</Tab>
           <Tab>Histórico</Tab>
         </TabList>
         <TabIndicator
+          position="relative !important"
+          flex="1 0 3px"
           mt="-1.5px"
           height="2px"
           bg="pink.500"
-          borderRadius="1px"
+          borderRadius="5px"
         />
-        <TabPanels h="100%">
+        <TabPanels flex="0 1 100%">
           <TabPanel h="100%">
             <ProfilePanel user={user} />
           </TabPanel>

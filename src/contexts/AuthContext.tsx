@@ -38,11 +38,16 @@ const AuthContext = createContext<AuthData>({} as AuthData)
 
 export function AuthProvider({ children }: Props) {
   const [isLoading, setIsLoading] = useState(true)
-  const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const isLogged = useMemo(() => !!user, [user])
 
   const signIn = useCallback(async () => {
-    await signInWithPopup(auth, provider)
+    try {
+      await signInWithPopup(auth, provider)
+    } catch (e) {
+      console.error(e)
+      if (import.meta.env.DEV) alert(e)
+    }
   }, [])
 
   const signOut = useCallback(async () => {
@@ -59,6 +64,7 @@ export function AuthProvider({ children }: Props) {
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       setUser(user)
+      setIsLoading(false)
     })
   }, [])
 
