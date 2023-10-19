@@ -29,11 +29,12 @@ interface Props {
 export default function PlayerDeck({ player }: Props) {
   const { user } = useAuth()
 
-  const easterEgg = user?.displayName?.includes('Bianca Vieira')
-    ? 'não é burmor, é morbur c:'
-    : user?.displayName?.includes('Marileia Almeida')
-    ? 'Te amo, mãe <3'
-    : 'Sem easter eggs por ora.'
+  const easterEgg =
+    user?.uid === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
+      ? 'não é burmor, é morbur c:'
+      : user?.displayName?.includes('Marileia Almeida')
+      ? 'Te amo, mãe <3'
+      : ''
 
   const [message, setMessage] = useState('')
   const {
