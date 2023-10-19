@@ -1666,6 +1666,21 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.10.3.tgz#c894a21e8c911830e36bbbba55903ccfbc7a7e25"
   integrity sha512-+ZplYUN3HOpgCfgInqgdDAbkGGVzES1cs32JJpeqoh87SkRobGXElJx+1GZSaDqzFL+bYiX18qEcBK76mYs8uA==
 
+"@fontsource-variable/heebo@^5.0.13":
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/heebo/-/heebo-5.0.13.tgz#0d342e9976c95002cf926817037308c657bb33ab"
+  integrity sha512-cGblgcaPbcaMv4nTt8sPNdl7Ij7q1o6dNI5zHQ4COIL2FTcz1e3nB7WdcyZGSCMuREjtUOUTLV3JRh3SAKhTLQ==
+
+"@fontsource-variable/montserrat@^5.0.14":
+  version "5.0.14"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/montserrat/-/montserrat-5.0.14.tgz#98676b2d15c75961e370156976b4edc417bc8508"
+  integrity sha512-OQzydsAhI7MBPB59HxzwHGpdJAZVONTgkGW+NWA98iRNDaUbR1HyEuD9ptxkjwr3egslLKV5/eJN4+22G3kl6A==
+
+"@fontsource-variable/nunito@^5.0.14":
+  version "5.0.14"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/nunito/-/nunito-5.0.14.tgz#b30f3644f4252adb678efc12aafe9f23479ed4a4"
+  integrity sha512-xnmZuyxe77YVOScYw9Wjw6zEqL/EPE708tG42rl39GVoJuhDQl60iFfZl6FQBZATNKeMswQsb+fGeAYeHbS+4Q==
+
 "@grpc/grpc-js@~1.9.0":
   version "1.9.5"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.9.5.tgz#22e283754b7b10d1ad26c3fb21849028dcaabc53"

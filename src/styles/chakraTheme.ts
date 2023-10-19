@@ -6,6 +6,7 @@ import { buttonTheme } from './button'
 import { menuTheme } from './menu'
 import { inputTheme } from './input'
 import { textareaTheme } from './textarea'
+import '@fontsource-variable/nunito'
 
 export const chakraTheme = extendTheme({
   styles: {
@@ -13,6 +14,7 @@ export const chakraTheme = extendTheme({
       body: {
         bg: 'pink.100',
         color: 'pink.900',
+        fontFamily: 'Nunito Variable',
       },
     },
   },
