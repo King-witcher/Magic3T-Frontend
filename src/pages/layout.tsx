@@ -2,6 +2,7 @@ import { Box, Stack, Text } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Providers from './providers'
+import Sticky from '@/components/Sticky'
 
 export default function Layout() {
   console.log('rendering layout once')
@@ -9,7 +10,9 @@ export default function Layout() {
   return (
     <Providers>
       <Stack alignItems="center" h="100dvh" gap="0">
-        <Navbar />
+        <Sticky>
+          <Navbar />
+        </Sticky>
         <Box flex="1" boxSizing="border-box" padding="10px" w="100%" gap="10px">
           <Box
             pos="relative"
