@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import LeaveModal from './components/LeaveModal'
-import ProfileMenu from './components/ProfileMenu'
+import ProfileMenu from '../MainMenu/MainMenu'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useCallback } from 'react'
 import { useQueue } from '@/contexts/QueueContext'

@@ -5,6 +5,7 @@ import ProfilePage from './pages/profile/page'
 import GamePage from './pages/game/[gameId]/page'
 import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
+import TutorialPage from './pages/tutorial/page'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <RouterProvider
@@ -19,8 +20,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             element: <Home />,
           },
           {
-            path: '/signup',
-            element: <></>,
+            path: '/tutorial',
+            element: <TutorialPage />,
           },
           {
             path: '/profile',

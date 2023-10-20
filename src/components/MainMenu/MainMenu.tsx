@@ -28,7 +28,7 @@ export default function ProfileMenu() {
     <MenuList>
       {user && <MenuItem onClick={() => navigate('/profile')}>Perfil</MenuItem>}
       {user && <MenuItem onClick={() => navigate('/')}>Jogar</MenuItem>}
-      <MenuItem isDisabled>Como jogar</MenuItem>
+      <MenuItem onClick={() => navigate('/tutorial')}>Como jogar</MenuItem>
       {user && <MenuItem onClick={openSecretCode}>Códigos secretos</MenuItem>}
       <MenuDivider color="pink.100" />
       {user && <MenuItem onClick={openLogout}>Sair</MenuItem>}
