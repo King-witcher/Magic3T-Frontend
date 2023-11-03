@@ -2,7 +2,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { NotFoundError } from '@/models/errors/NotFoundError'
-import { Avatar, Box, Center, Flex, Stack, Text } from '@chakra-ui/react'
+import { getElo } from '@/pages/profile/tabs/ProfileTab'
+import { Avatar, Box, Center, Flex, Stack, Text, Image } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 
 interface Props {
@@ -92,7 +93,15 @@ export default function MatchViewer({ match: matchId }: Props) {
         <Avatar size="lg" />
         <Flex flexDir="column">
           <Text>{oponent.name}</Text>
-          <Flex gap="5px">
+          <Flex gap="5px" alignItems="center">
+            <Image
+              ml="3px"
+              src={`https://quake-stats.bethesda.net/ranks/${getElo(
+                oponent.rating,
+              )}.png`}
+              alt="rank"
+              draggable={false}
+            />
             {oponent.rating.toFixed()}{' '}
             <Text
               color={
