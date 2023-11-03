@@ -4,9 +4,9 @@ import { FcGoogle } from 'react-icons/fc'
 
 /** Handles the process of loading the auth state and requiring login, if the user is not signed in. */
 export default function SignInPage() {
-  const { isLoading, signIn } = useAuth()
+  const { firstLoading, signIn } = useAuth()
 
-  if (isLoading)
+  if (firstLoading)
     return (
       <Center h="100%">
         <Spinner size="lg" thickness="4px" color="pink.500" speed="0.8s" />

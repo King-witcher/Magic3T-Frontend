@@ -25,7 +25,7 @@ import { useQueue } from '@/contexts/QueueContext'
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
-  const { isLoading, user, signIn } = useAuth()
+  const { firstLoading, user, signIn } = useAuth()
   const { gameStatus } = useGame()
   const { serverOnline } = useServiceStatus()
   const { queueMode } = useQueue()
@@ -115,7 +115,7 @@ export default function Navbar() {
             </Flex>
           )}
         </Flex>
-        <Skeleton isLoaded={!isLoading} borderRadius="999px">
+        <Skeleton isLoaded={!firstLoading} borderRadius="999px">
           <Menu>
             <Tooltip label={user?.displayName} openDelay={400}>
               <MenuButton
