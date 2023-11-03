@@ -1,4 +1,4 @@
-import { ChakraProps, defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import { ChakraProps, defineStyle, defineStyleConfig } from '@chakra-ui/react'
 
 const baseStyle = defineStyle<ChakraProps>({
   borderRadius: '10px',
@@ -14,6 +14,6 @@ const signIn = defineStyle<ChakraProps>({
 export const buttonTheme = defineStyleConfig({
   baseStyle,
   variants: {
-    signIn
-  }
+    signIn,
+  },
 })

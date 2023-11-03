@@ -1,18 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext'
 import {
-  Avatar,
-  Center,
-  Input,
-  Stack,
   Tab,
   TabIndicator,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
 import ProfileTab from './tabs/ProfileTab'
 import HistoryTab from './tabs/HistoryTab'
 import SignInPage from '@/components/SignInPage'

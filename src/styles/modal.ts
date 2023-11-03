@@ -5,8 +5,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(modalAnatomy.keys)
 
 const baseStyle = definePartsStyle({
-  overlay: {
-  },
+  overlay: {},
   dialog: {
     borderRadius: '10px',
     padding: '10px',
@@ -31,7 +30,7 @@ const baseStyle = definePartsStyle({
   closeButton: {
     top: '10px',
     right: '10px',
-  }
+  },
 })
 
 export const modalTheme = defineMultiStyleConfig({

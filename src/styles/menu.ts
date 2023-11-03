@@ -21,17 +21,17 @@ const baseStyle = definePartsStyle({
     h: '40px',
     color: 'black',
     _hover: {
-      bg: 'pink.200'
+      bg: 'pink.200',
     },
     _focus: {
       bg: 'initial',
     },
     _active: {
       bg: 'initial',
-    }
+    },
   },
 })
 
 export const menuTheme = defineMultiStyleConfig({
-  baseStyle
+  baseStyle,
 })

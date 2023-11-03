@@ -1,3 +1,5 @@
+import { models } from '@/models'
+import { UserData } from '@/models/users/User'
 import {
   Avatar,
   Center,
@@ -8,12 +10,22 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
+import { useEffect, useState } from 'react'
 
 interface Props {
   user: User
 }
 
 export default function ProfileTab({ user }: Props) {
+  const [profile, setProfile] = useState<UserData | null>(null)
+
+  useEffect(() => {
+    load()
+    async function load() {
+      setProfile(await models.users.getbyId(user.uid))
+    }
+  }, [])
+
   return (
     <Center h="100%">
       <VStack
@@ -44,7 +56,7 @@ export default function ProfileTab({ user }: Props) {
             />
           </Tooltip>
           <Text fontSize="18px" fontWeight="500" color="gray.500">
-            1500 SR
+            {profile && `${profile.rating.toFixed()} SR`}
           </Text>
         </Flex>
       </VStack>

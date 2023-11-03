@@ -19,11 +19,14 @@ export default function Home() {
   const { enqueue, dequeue, queueMode } = useQueue()
   const navigate = useNavigate()
   const { serverOnline } = useServiceStatus()
-  const { user, isLoading } = useAuth()
+  const { user, firstLoading } = useAuth()
 
-  const handleEnqueue = useCallback(() => {
-    enqueue(GameMode.Casual, handleFindMatch)
-  }, [enqueue])
+  const handleEnqueue = useCallback(
+    (mode: GameMode) => {
+      enqueue(mode, handleFindMatch)
+    },
+    [enqueue],
+  )
 
   async function handleFindMatch(payload: { matchId: string }) {
     await connectGame(payload.matchId)
@@ -68,40 +71,38 @@ export default function Home() {
         _hover={{
           bg: 'pink.200',
         }}
-        onClick={queueMode ? dequeue : handleEnqueue}
+        onClick={queueMode ? dequeue : () => handleEnqueue(GameMode.Casual)}
       >
         <Flex alignItems="center" gap="10px" fontSize="20px" textAlign="center">
-          {queueMode && <Spinner thickness="4px" speed="0.7s" />}Casual
+          {queueMode === GameMode.Casual && (
+            <Spinner thickness="4px" speed="0.7s" />
+          )}
+          Casual
         </Flex>
       </Flex>
-      <Tooltip label="Aguarde!">
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          transition="background 80ms linear"
-          rounded="10px"
-          cursor="not-allowed"
-          fontSize="20px"
-          userSelect="none"
-          w="200px"
-          fontWeight={700}
-          h="80px"
-          opacity="0.5"
-          // _hover={{
-          //   bg: 'pink.200',
-          // }}
-        >
-          <Flex
-            alignItems="center"
-            gap="10px"
-            fontSize="20px"
-            textAlign="center"
-          >
-            Ranqueada
-          </Flex>
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        bg="gray.100"
+        transition="background 80ms linear"
+        rounded="10px"
+        fontSize="20px"
+        userSelect="none"
+        w="200px"
+        fontWeight={700}
+        h="80px"
+        _hover={{
+          bg: 'pink.200',
+        }}
+        onClick={queueMode ? dequeue : () => handleEnqueue(GameMode.Ranked)}
+      >
+        <Flex alignItems="center" gap="10px" fontSize="20px" textAlign="center">
+          {queueMode === GameMode.Ranked && (
+            <Spinner thickness="4px" speed="0.7s" />
+          )}
+          Ranqueada
         </Flex>
-      </Tooltip>
+      </Flex>
     </VStack>
   )
 }

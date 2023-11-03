@@ -26,7 +26,7 @@ export const chakraTheme = extendTheme({
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {
           w: '5px',
-          animation: `${scrollbarAnimation} 500ms linear`
+          animation: `${scrollbarAnimation} 500ms linear`,
         },
         '::-webkit-scrollbar-thumb': {
           w: '5px',

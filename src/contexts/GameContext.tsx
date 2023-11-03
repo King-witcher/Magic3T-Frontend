@@ -93,7 +93,7 @@ export function GameProvider({ children }: Props) {
           socket.emit('getOponentProfile')
         })
     },
-    [user]
+    [user],
   )
 
   const handleReceiveMessage = useCallback(
@@ -107,7 +107,7 @@ export function GameProvider({ children }: Props) {
         },
       ])
     },
-    [oponentProfile]
+    [oponentProfile],
   )
 
   const makeChoice = useCallback(
@@ -118,7 +118,7 @@ export function GameProvider({ children }: Props) {
       playerTimer.pause()
       oponentTimer.start()
     },
-    [setPlayerChoices, setTurn, playerTimer, oponentTimer, socket]
+    [setPlayerChoices, setTurn, playerTimer, oponentTimer, socket],
   )
 
   function handleServerDisconnect() {
@@ -153,7 +153,7 @@ export function GameProvider({ children }: Props) {
 
     // Define o terno de números vencedor.
     function getTriple(
-      numbers: Choice[]
+      numbers: Choice[],
     ): [Choice | 0, Choice | 0, Choice | 0] {
       for (let i = 0; i < numbers.length - 2; i++)
         for (let j = 1; j < numbers.length - 1; j++)
@@ -208,7 +208,7 @@ export function GameProvider({ children }: Props) {
       getEventfulSocket,
       resetGameState,
       socket,
-    ]
+    ],
   )
 
   function disconnect() {
@@ -225,7 +225,7 @@ export function GameProvider({ children }: Props) {
   }
 
   const availableChoices = useMemo(() => {
-    let availableChoices: Choice[] = []
+    const availableChoices: Choice[] = []
 
     for (let i = 1; i < 10; i++) {
       if (

@@ -11,11 +11,12 @@ import { useAuth } from './AuthContext'
 
 export enum GameMode {
   Casual = 'casual',
+  Ranked = 'ranked',
 }
 interface QueueContextData {
   enqueue(
     queuType: GameMode,
-    callback: (payload: { matchId: string; playerKey: string }) => void
+    callback: (payload: { matchId: string; playerKey: string }) => void,
   ): void
   dequeue(): void
   /**Para qual modo se está na fila; caso não esteja, null. */
@@ -36,7 +37,7 @@ export function QueueProvider({ children }: QueueContextProps) {
   const enqueue = useCallback(
     async (
       queueMode: Parameters<QueueContextData['enqueue']>[0],
-      callback: Parameters<QueueContextData['enqueue']>[1]
+      callback: Parameters<QueueContextData['enqueue']>[1],
     ) => {
       if (socket) return
 
@@ -48,7 +49,7 @@ export function QueueProvider({ children }: QueueContextProps) {
       })
       setSocket(newSocket)
       newSocket.on('connect', () => {
-        newSocket.emit('enqueue')
+        newSocket.emit(queueMode)
       })
       newSocket.on('matchFound', callback)
       newSocket.on('disconnect', () => {
@@ -58,7 +59,7 @@ export function QueueProvider({ children }: QueueContextProps) {
 
       setQueueMode(queueMode)
     },
-    [socket, user]
+    [socket, user],
   )
 
   const dequeue = useCallback(() => {

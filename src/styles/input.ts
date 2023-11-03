@@ -10,8 +10,8 @@ const baseStyle = definePartsStyle({
     boxShadow: '0 0 5px 2px #00000020',
     _focus: {
       outine: '3px solid black',
-    }
-  }
+    },
+  },
 })
 
-export const inputTheme = defineMultiStyleConfig({baseStyle})
+export const inputTheme = defineMultiStyleConfig({ baseStyle })

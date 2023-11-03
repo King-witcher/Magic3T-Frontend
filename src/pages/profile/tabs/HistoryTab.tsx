@@ -35,9 +35,9 @@ export default function HistoryTab({ user }: Props) {
       col,
       or(
         where('black.uid', '==', user.uid),
-        where('white.uid', '==', user.uid)
+        where('white.uid', '==', user.uid),
       ),
-      orderBy('timestamp', 'desc')
+      orderBy('timestamp', 'desc'),
     )
     const snapshot = await getDocs(q)
     const result: MatchRegistry[] = []

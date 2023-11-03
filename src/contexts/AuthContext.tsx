@@ -4,7 +4,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react'
 import {
@@ -16,14 +15,23 @@ import {
 } from 'firebase/auth'
 import { auth, provider } from '@/services/firebase'
 
-interface AuthData {
-  isLoading: boolean
-  isLogged: boolean
-  getToken(): Promise<string | null>
-  signIn(): Promise<void>
-  signOut(): Promise<void>
-  user: User | null
-}
+type AuthData = {
+  signIn(): Promise<string | null>
+  signOut(): Promise<string | null>
+} & (
+  | {
+      user: null
+      logged: false
+      firstLoading: boolean
+      getToken: null
+    }
+  | {
+      logged: true
+      firstLoading: false
+      user: User
+      getToken(): Promise<string | null>
+    }
+)
 
 interface Props {
   children?: ReactNode
@@ -32,9 +40,9 @@ interface Props {
 const AuthContext = createContext<AuthData>({} as AuthData)
 
 export function AuthProvider({ children }: Props) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [firstLoading, setFirstLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
-  const isLogged = useMemo(() => !!user, [user])
+  const logged = !!user
 
   const signIn = useCallback(async () => {
     try {
@@ -59,20 +67,22 @@ export function AuthProvider({ children }: Props) {
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       setUser(user)
-      setIsLoading(false)
+      setFirstLoading(false)
     })
   }, [])
 
   return (
     <AuthContext.Provider
-      value={{
-        isLoading,
-        isLogged,
-        getToken,
-        signIn,
-        signOut,
-        user,
-      }}
+      value={
+        {
+          firstLoading,
+          logged,
+          getToken,
+          signIn,
+          signOut,
+          user,
+        } as unknown as AuthData
+      }
     >
       {children}
     </AuthContext.Provider>

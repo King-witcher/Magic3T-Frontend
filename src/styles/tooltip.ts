@@ -1,4 +1,9 @@
-import { ChakraProps, TooltipProps, defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import {
+  ChakraProps,
+  TooltipProps,
+  defineStyle,
+  defineStyleConfig,
+} from '@chakra-ui/react'
 
 const baseStyle = defineStyle<ChakraProps>({
   bgColor: 'white',
@@ -9,5 +14,5 @@ const baseStyle = defineStyle<ChakraProps>({
 })
 
 export const tooltipTheme = defineStyleConfig({
-  baseStyle
+  baseStyle,
 })

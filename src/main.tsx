@@ -26,6 +26,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           {
             path: '/profile',
             element: <ProfilePage />,
+            children: [
+              {
+                path: '/profile',
+                element: <ProfilePage />,
+              },
+              {
+                path: '/profile/:path',
+                element: <ProfilePage />,
+              },
+            ],
           },
           {
             path: '/game/:gameId',
@@ -38,5 +48,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         ],
       },
     ])}
-  />
+  />,
 )
