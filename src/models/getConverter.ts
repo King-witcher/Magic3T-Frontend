@@ -5,6 +5,7 @@ import {
   Timestamp,
 } from 'firebase/firestore/lite'
 import { Firestorify } from './Firestorify'
+import { WithId } from '@/types/WithId'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convert(data: Record<string, any>) {
@@ -17,14 +18,17 @@ function convert(data: Record<string, any>) {
   }
 }
 
-export function getConverter<
-  T extends DocumentData,
->(): FirestoreDataConverter<T> {
+export function getConverter<T extends DocumentData>(): FirestoreDataConverter<
+  WithId<T>
+> {
   return {
     fromFirestore(snap: QueryDocumentSnapshot) {
       const data = snap.data()
       convert(data)
-      return data as T
+      return {
+        ...data,
+        _id: snap.id,
+      } as WithId<T>
     },
     toFirestore: (data) => data as Firestorify<T>,
   }

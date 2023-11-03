@@ -14,10 +14,7 @@ async function getbyId(id: string): Promise<WithId<UserData>> {
   const data = snap.data()
   if (!data) throw new NotFoundError('users', id)
 
-  return {
-    _id: snap.id,
-    ...data,
-  }
+  return data
 }
 
 export const users = { getbyId }

@@ -1,4 +1,4 @@
-import { Grid, VStack, Text, useToast } from '@chakra-ui/react'
+import { Grid, VStack, Text, useToast, Flex, Center } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import ChoiceComponent from './components/ChoiceComponent'
 import { GameStatus } from '@/types/types'
@@ -6,6 +6,11 @@ import { useGame } from '@/contexts/GameContext'
 import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
+import { Link, useParams } from 'react-router-dom'
+
+type Params = {
+  gameId: string
+}
 
 export default function GamePage() {
   const { user } = useAuth()
@@ -20,6 +25,8 @@ export default function GamePage() {
     gameStatus,
     messages,
   } = useGame()
+
+  const { gameId } = useParams()
 
   const playerTurn = turn === 'player'
 
@@ -199,6 +206,29 @@ export default function GamePage() {
           >
             Empate
           </Text>
+        )}
+        {(gameStatus === GameStatus.Victory ||
+          gameStatus === GameStatus.Defeat ||
+          gameStatus === GameStatus.Draw) && (
+          <Center
+            as={Link}
+            to={`/profile/history/${gameId}`}
+            w="full"
+            cursor="pointer"
+            userSelect="none"
+            transition="all 100ms linear"
+            _hover={{
+              bg: 'gray.100',
+            }}
+            bg="gray.200"
+            pos="absolute"
+            bottom="-50px"
+            transform="translateY(100%)"
+            p="10px"
+            rounded="10px"
+          >
+            Ver no histórico
+          </Center>
         )}
       </Grid>
       <PlayerDeck player="current" />

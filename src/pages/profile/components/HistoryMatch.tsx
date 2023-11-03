@@ -14,7 +14,7 @@ const rowColors = {
   defeat: 'red.200',
 }
 
-export default function ({ match }: Props) {
+export default function HistoryMatch({ match }: Props) {
   const { user } = useAuth()
   if (!user) return null
 
@@ -79,7 +79,12 @@ export default function ({ match }: Props) {
         sm: '16px',
       }}
     >
-      <Flex gap={['5px', '10px']} alignItems="center" overflow="hidden">
+      <Flex
+        gap={['5px', '10px']}
+        alignItems="center"
+        justifyContent="space-between"
+        overflow="hidden"
+      >
         <Text
           fontWeight={700}
           color={
@@ -98,7 +103,7 @@ export default function ({ match }: Props) {
         </Text>
         •
         <Text fontSize={['10px', '16px']}>
-          {match[oponentSide].name} ({match[oponentSide].rating} SR)
+          {match[oponentSide].name} ({match[oponentSide].rating.toFixed()} SR)
         </Text>
         •<Text fontSize={['10px', '16px']}>18/10/2023</Text>
       </Flex>

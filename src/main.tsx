@@ -25,15 +25,22 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           },
           {
             path: '/profile',
-            element: <ProfilePage />,
             children: [
               {
                 path: '/profile',
-                element: <ProfilePage />,
+                element: <ProfilePage index={0} />,
               },
               {
-                path: '/profile/:path',
-                element: <ProfilePage />,
+                path: '/profile/history',
+                element: <ProfilePage index={1} />,
+              },
+              {
+                path: '/profile/history/:matchId',
+                element: <ProfilePage index={1} />,
+              },
+              {
+                path: '/profile/standings',
+                element: <ProfilePage index={2} />,
               },
             ],
           },

@@ -1,62 +1,40 @@
-import { firestore } from '@/services/firebase'
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Center, Spinner, Stack } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import { useCallback, useEffect, useState } from 'react'
 import { MatchRegistry } from './MatchRegistry'
-import {
-  collection,
-  getDocs,
-  or,
-  query,
-  where,
-  orderBy,
-} from 'firebase/firestore/lite'
-import { formatTime } from '@/lib/utils'
+
 import HistoryMatch from '../components/HistoryMatch'
+import { models } from '@/models'
+import { WithId } from '@/types/WithId'
+import { Match } from '@/models/matches/Match'
+import { Loader } from '@/hooks/useAsync'
+import { Link, useParams } from 'react-router-dom'
+import HistoryMatchTab from './HistoryMatchTab'
 
 interface Props {
   user: User
+  matchLoader: Loader<WithId<Match>[]>
 }
 
-export default function HistoryTab({ user }: Props) {
-  const [matches, setMatches] = useState<MatchRegistry[] | 'loading'>('loading')
+type Params = {
+  matchId?: string
+}
 
-  const fetchDocs = useCallback(async () => {
-    const col = collection(firestore, 'matches')
-    const q = query(
-      col,
-      or(
-        where('black.uid', '==', user.uid),
-        where('white.uid', '==', user.uid),
-      ),
-      orderBy('timestamp', 'desc'),
-    )
-    const snapshot = await getDocs(q)
-    const result: MatchRegistry[] = []
-    snapshot.forEach((docRef) => {
-      result.push(docRef.data() as MatchRegistry)
-    })
-    console.log(result)
-    setMatches(result)
-  }, [user])
+export default function HistoryTab({
+  user,
+  matchLoader: [matches, loading],
+}: Props) {
+  const { matchId } = useParams<Params>()
 
-  useEffect(() => {
-    fetchDocs()
-  }, [user])
+  if (matchId) return <HistoryMatchTab matchId={matchId} />
 
-  if (matches !== 'loading')
+  if (!loading && matches)
     return (
       <Stack h="100%">
         {matches.map((match, index) => (
-          <HistoryMatch key={index} match={match} />
+          <Link key={index} to={`/profile/history/${match._id}`}>
+            <HistoryMatch match={match} />
+          </Link>
         ))}
       </Stack>
     )
