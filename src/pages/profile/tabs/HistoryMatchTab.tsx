@@ -1,6 +1,4 @@
 import MatchViewer from '@/components/MatchViewer'
-import { Match } from '@/models/matches/Match'
-import { WithId } from '@/types/WithId'
 
 interface Props {
   matchId: string

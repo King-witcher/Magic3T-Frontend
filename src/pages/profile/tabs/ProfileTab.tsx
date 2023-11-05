@@ -80,7 +80,7 @@ export default function ProfileTab({ user }: Props) {
               <Image
                 ml="3px"
                 src={`https://quake-stats.bethesda.net/ranks/${getElo(
-                  profile.rating,
+                  profile.glicko.rating,
                 )}.png`}
                 alt="rank"
                 draggable={false}
@@ -88,7 +88,10 @@ export default function ProfileTab({ user }: Props) {
             </Tooltip>
           )}
           <Text fontSize="18px" fontWeight="500" color="gray.500">
-            {profile && `${profile.rating.toFixed()} SR`}
+            {profile &&
+              `${profile.glicko.rating.toFixed()} (±${(
+                2 * profile.glicko.deviation
+              ).toFixed()}) SR`}
           </Text>
         </Flex>
       </VStack>

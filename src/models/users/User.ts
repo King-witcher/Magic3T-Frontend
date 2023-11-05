@@ -1,5 +1,9 @@
 export type UserData = {
   nickname: string
-  rating: number
+  glicko: {
+    rating: number
+    deviation: number
+    timestamp: number
+  }
   role: 'player' | 'admin'
 }
