@@ -7,7 +7,7 @@ export function useAsync<T>(loader: () => Promise<T>): Loader<T> {
 
   useEffect(() => {
     loader().then(setData)
-  }, [loader])
+  }, [])
 
   if (data) return [data, false]
   else return [null, true]

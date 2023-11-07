@@ -27,6 +27,13 @@ async function listByPlayerId(uid: string): Promise<WithId<Match>[]> {
     limit(20),
   )
   const snap = await getDocs(q)
+
+  if (import.meta.env.DEV)
+    console.info(
+      `%cFirestore: Get ${snap.docs.length} matches`,
+      'color: #FFCA28',
+    )
+
   return snap.docs.map((doc) => doc.data())
 }
 
@@ -34,6 +41,8 @@ async function getById(id: string) {
   const snap = await getDoc(doc(col, id))
   const data = snap.data()
   if (!data) throw new NotFoundError('matches', id)
+  if (import.meta.env.DEV)
+    console.info('%cFirestore: Get match by id', 'color: #FFCA28')
   return data
 }
 
