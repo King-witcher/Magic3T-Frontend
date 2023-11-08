@@ -40,6 +40,7 @@ interface Profile {
   name: string
   uid: string
   rating: number
+  photoUrl: string
 }
 
 interface Props {
@@ -63,7 +64,7 @@ export function GameProvider({ children }: Props) {
     0, 0, 0,
   ])
   const [oponentProfile, setOponentProfile] = useState<Profile | null>(null)
-  const { getToken, user } = useAuth()
+  const { user } = useAuth()
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {

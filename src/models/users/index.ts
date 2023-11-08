@@ -1,9 +1,10 @@
-import { collection, doc, getDoc } from 'firebase/firestore/lite'
+import { collection, doc } from 'firebase/firestore/lite'
 import { getConverter } from '../getConverter'
 import { UserData } from './User'
 import { firestore } from '@/services/firebase'
 import { WithId } from '@/types/WithId'
 import { NotFoundError } from '../errors/NotFoundError'
+import { getDoc } from '@/services/firestore'
 
 const converter = getConverter<UserData>()
 

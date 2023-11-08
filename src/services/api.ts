@@ -5,7 +5,7 @@ export const Api = axios.create({
   validateStatus: () => true,
 })
 
-export namespace SessionRequests {
+export module SessionRequests {
   type validateSessionResponse = {
     authenticated: boolean
   }
