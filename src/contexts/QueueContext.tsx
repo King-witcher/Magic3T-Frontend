@@ -55,6 +55,9 @@ export function QueueProvider({ children }: QueueContextProps) {
         newSocket.on('disconnect', () => {
           setQueueModes({})
         })
+        newSocket.on('queueModes', (data: any) => {
+          setQueueModes(data)
+        })
         setSocket(newSocket)
       }
     }
