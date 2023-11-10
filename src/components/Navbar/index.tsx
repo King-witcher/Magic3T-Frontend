@@ -26,15 +26,15 @@ export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
   const { firstLoading, user, signIn } = useAuth()
-  const { gameStatus } = useGame()
+  const { gameState } = useGame()
   const { serverOnline } = useServiceStatus()
-  const { queueMode } = useQueue()
+  const { queueModes } = useQueue()
 
   const handleLogoClick = useCallback(() => {
-    if (gameStatus === GameStatus.Playing) {
+    if (gameState?.gameStatus === GameStatus.Playing) {
       onOpen()
     } else navigate('/')
-  }, [gameStatus])
+  }, [gameState?.gameStatus])
 
   return (
     <>
@@ -81,31 +81,32 @@ export default function Navbar() {
               </Flex>
             </Tooltip>
           )}
-          {queueMode && (
-            <Tooltip
-              hideBelow="md"
-              label="Você está na fila para encontrar uma partida e será redirecionado para a partida assim que outro jogador for encontrado."
-            >
-              <Flex
-                gap="5px"
-                alignItems="center"
-                bg="whiteAlpha.300"
-                p="5px 10px"
-                borderRadius="10px"
-                userSelect="none"
-                cursor="pointer"
-                _hover={{
-                  bg: 'whiteAlpha.400',
-                }}
-                onClick={() => navigate('/')}
+          {queueModes.casual ||
+            (queueModes.ranked && (
+              <Tooltip
+                hideBelow="md"
+                label="Você está na fila para encontrar uma partida e será redirecionado para a partida assim que outro jogador for encontrado."
               >
-                <Spinner size="xs" speed="700ms" />
-                <Text color="red.100" fontSize="12px">
-                  Na fila
-                </Text>
-              </Flex>
-            </Tooltip>
-          )}
+                <Flex
+                  gap="5px"
+                  alignItems="center"
+                  bg="whiteAlpha.300"
+                  p="5px 10px"
+                  borderRadius="10px"
+                  userSelect="none"
+                  cursor="pointer"
+                  _hover={{
+                    bg: 'whiteAlpha.400',
+                  }}
+                  onClick={() => navigate('/')}
+                >
+                  <Spinner size="xs" speed="700ms" />
+                  <Text color="red.100" fontSize="12px">
+                    Na fila
+                  </Text>
+                </Flex>
+              </Tooltip>
+            ))}
           {serverOnline === false && (
             <Flex gap="5px" alignItems="center" userSelect="none">
               <Box w="8px" h="8px" bg="red" borderRadius="10px" />
