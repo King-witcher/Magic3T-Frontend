@@ -20,10 +20,23 @@ type QueueModesType = {
   ranked?: boolean
 }
 
+interface QueueUserCount {
+  casual: {
+    inGame: number
+    queue: number
+  }
+  connected: number
+  ranked: {
+    inGame: number
+    queue: number
+  }
+}
+
 interface QueueContextData {
   enqueue(mode: GameMode): void
   dequeue(mode: GameMode): void
   queueModes: QueueModesType
+  queueUserCount: QueueUserCount
 }
 
 interface QueueContextProps {
@@ -35,6 +48,17 @@ const QueueContext = createContext<QueueContextData>({} as QueueContextData)
 export function QueueProvider({ children }: QueueContextProps) {
   const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
+  const [queueUserCount, setQueueUserCount] = useState<QueueUserCount>({
+    casual: {
+      inGame: NaN,
+      queue: 0,
+    },
+    connected: NaN,
+    ranked: {
+      inGame: NaN,
+      queue: 0,
+    },
+  })
   const { user, getToken } = useAuth()
   const { connectGame } = useGame()
 
@@ -51,6 +75,9 @@ export function QueueProvider({ children }: QueueContextProps) {
         newSocket.on('matchFound', (data) => {
           setQueueModes({})
           connectGame(data.matchId)
+        })
+        newSocket.on('updateUserCount', (data: any) => {
+          setQueueUserCount(data)
         })
         newSocket.on('disconnect', () => {
           setQueueModes({})
@@ -95,7 +122,9 @@ export function QueueProvider({ children }: QueueContextProps) {
   )
 
   return (
-    <QueueContext.Provider value={{ enqueue, dequeue, queueModes }}>
+    <QueueContext.Provider
+      value={{ enqueue, dequeue, queueModes, queueUserCount }}
+    >
       {children}
     </QueueContext.Provider>
   )

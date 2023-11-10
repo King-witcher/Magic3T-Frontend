@@ -12,6 +12,7 @@ import {
   Flex,
   Heading,
   Spinner,
+  Stack,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -19,7 +20,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
-  const { enqueue, dequeue, queueModes } = useQueue()
+  const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
   const { serverOnline } = useServiceStatus()
   const { user } = useAuth()
 
@@ -82,15 +83,24 @@ export default function Home() {
               : enqueue.bind(null, GameMode.Casual)
           }
         >
-          <Flex
-            alignItems="center"
-            gap="10px"
-            fontSize="20px"
-            textAlign="center"
-          >
-            {queueModes.casual && <Spinner thickness="4px" speed="0.7s" />}
-            Casual
-          </Flex>
+          <VStack>
+            <Flex
+              alignItems="center"
+              gap="10px"
+              fontSize="20px"
+              textAlign="center"
+            >
+              {queueModes.casual && <Spinner thickness="4px" speed="0.7s" />}
+              Casual
+            </Flex>
+            <Text
+              fontSize="14px"
+              color={queueUserCount.casual.queue ? 'green.400' : 'gray.400'}
+            >
+              {queueUserCount.casual.queue} jogador
+              {queueUserCount.casual.queue !== 1 ? 'es' : ''}
+            </Text>
+          </VStack>
         </Flex>
         <Flex
           alignItems="center"
@@ -113,15 +123,24 @@ export default function Home() {
               : enqueue.bind(null, GameMode.Ranked)
           }
         >
-          <Flex
-            alignItems="center"
-            gap="10px"
-            fontSize="20px"
-            textAlign="center"
-          >
-            {queueModes.ranked && <Spinner thickness="4px" speed="0.7s" />}
-            Ranqueada
-          </Flex>
+          <VStack gap="0">
+            <Flex
+              alignItems="center"
+              gap="10px"
+              fontSize="20px"
+              textAlign="center"
+            >
+              {queueModes.ranked && <Spinner thickness="4px" speed="0.7s" />}
+              Ranqueada
+            </Flex>
+            <Text
+              fontSize="14px"
+              color={queueUserCount.ranked.queue ? 'green.400' : 'gray.400'}
+            >
+              {queueUserCount.ranked.queue} jogador
+              {queueUserCount.ranked.queue !== 1 ? 'es' : ''}
+            </Text>
+          </VStack>
         </Flex>
       </VStack>
     </Center>
