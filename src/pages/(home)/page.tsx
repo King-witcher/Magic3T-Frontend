@@ -62,6 +62,11 @@ export default function Home() {
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">
         <Heading fontFamily="nunito variable">PvP</Heading>
+        <Text fontSize="14px" fontWeight="700" color="green.500">
+          {queueUserCount.connected <= 1
+            ? 'Só você está online'
+            : `${queueUserCount.connected} jogadores online`}
+        </Text>
         <Flex
           alignItems="center"
           justifyContent="center"

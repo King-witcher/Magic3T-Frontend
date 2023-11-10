@@ -53,7 +53,7 @@ export function QueueProvider({ children }: QueueContextProps) {
       inGame: NaN,
       queue: 0,
     },
-    connected: NaN,
+    connected: 0,
     ranked: {
       inGame: NaN,
       queue: 0,
@@ -81,10 +81,23 @@ export function QueueProvider({ children }: QueueContextProps) {
         })
         newSocket.on('disconnect', () => {
           setQueueModes({})
+          setQueueUserCount({
+            casual: {
+              queue: 0,
+              inGame: 0,
+            },
+            ranked: {
+              queue: 0,
+              inGame: 0,
+            },
+            connected: 0,
+          })
         })
         newSocket.on('queueModes', (data: any) => {
           setQueueModes(data)
         })
+
+        newSocket.emit('interact')
         setSocket(newSocket)
       }
     }
