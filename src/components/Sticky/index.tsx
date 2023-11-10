@@ -25,7 +25,6 @@ export default function Sticky({ children }: Props) {
 
   useEffect(() => {
     setStickyHeight(wrapperRef.current!.clientHeight)
-    console.log(wrapperRef.current!.clientHeight)
   }, [])
 
   useEffect(() => {

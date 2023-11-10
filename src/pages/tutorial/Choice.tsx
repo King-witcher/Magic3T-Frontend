@@ -1,4 +1,4 @@
-import { Box, Center, Text } from '@chakra-ui/react'
+import { Box, Center } from '@chakra-ui/react'
 
 interface Props {
   choice: number
@@ -7,6 +7,7 @@ interface Props {
 export default function Choice({ choice }: Props) {
   return (
     <Box
+      as="span"
       display="inline-block"
       textIndent="0"
       position="relative"
@@ -15,7 +16,7 @@ export default function Choice({ choice }: Props) {
       bg="pink.200"
       borderRadius="5px"
     >
-      <Center w="100%" h="100%" fontSize="16px">
+      <Center as="span" w="100%" h="100%" fontSize="16px">
         {choice}
       </Center>
     </Box>

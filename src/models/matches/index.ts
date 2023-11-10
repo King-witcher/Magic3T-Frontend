@@ -9,10 +9,9 @@ import {
 } from 'firebase/firestore/lite'
 import { getConverter } from '../getConverter'
 import { Match } from './Match'
-import { firestore } from '@/services/firebase'
 import { WithId } from '@/types/WithId'
 import { NotFoundError } from '../errors/NotFoundError'
-import { getDoc, getDocs } from '@/services/firestore'
+import { firestore, getDoc, getDocs } from '@/services/firestore'
 
 const converter = getConverter<Match>()
 

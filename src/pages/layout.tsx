@@ -5,8 +5,6 @@ import Providers from './providers'
 import Sticky from '@/components/Sticky'
 
 export default function Layout() {
-  console.log('rendering layout once')
-
   return (
     <Providers>
       <Stack alignItems="center" h="100dvh" gap="0">

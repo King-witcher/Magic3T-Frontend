@@ -9,8 +9,9 @@ import { DocumentData } from 'firebase/firestore'
 export const firestore = getFirestore()
 
 const PERIOD = 1000
-const MAX_READS = 25
+const MAX_READS = 50
 const MAX_QUERIES = 5
+
 let BLOCK_TIME = 5000
 
 let readCount = 0
@@ -32,9 +33,29 @@ setInterval(() => {
     setTimeout(() => {
       blocked = false
     }, BLOCK_TIME)
-    readCount = 0
-    queryCount = 0
   }
+  readCount = 0
+  queryCount = 0
+}, PERIOD)
+
+setInterval(() => {
+  if (readCount > MAX_READS || queryCount > MAX_QUERIES) {
+    BLOCK_TIME *= 2
+    console.log(
+      `${readCount} document reads and ${queryCount} queries were detected within ${
+        PERIOD / 1000
+      } seconds.`,
+    )
+    console.error(
+      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`,
+    )
+    blocked = true
+    setTimeout(() => {
+      blocked = false
+    }, BLOCK_TIME)
+  }
+  readCount = 0
+  queryCount = 0
 }, PERIOD)
 
 export async function getDoc<AppModelType, DbModelType extends DocumentData>(

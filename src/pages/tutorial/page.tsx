@@ -1,5 +1,4 @@
 import { Box, Center, Divider, Heading, Text } from '@chakra-ui/react'
-import ChoiceComponent from '../game/[gameId]/components/ChoiceComponent'
 import Choice from './Choice'
 
 export default function TutorialPage() {
@@ -64,6 +63,17 @@ export default function TutorialPage() {
           Apesar do número relativamente pequeno de possibilidades, o Magic3T
           não admite estratégia vencedora, ou seja: é impossível ganhar sempre,
           e dois jogadores suficientemente bons sempre encerrarão em empate.
+        </Text>
+        <Heading as="h3" fontSize="28px" mt="15px">
+          Estratégia secreta
+        </Heading>
+        <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
+          Apesar de não admitir estratégia vencedora, o nome do <b>Magic3T</b>{' '}
+          esconde uma estratégia extremamente forte e que pode te fazer ganhar
+          até 90% das partidas contra jogadores menos experientes. No entanto,
+          não a revelarei e peço que, caso a descubra, não revele a mais ninguém
+          ou jogar Magic3T se tornará algo como jogar uma partida de{' '}
+          <i>jogo da velha</i>.
         </Text>
       </Box>
     </Center>
