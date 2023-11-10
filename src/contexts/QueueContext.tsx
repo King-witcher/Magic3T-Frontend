@@ -8,19 +8,22 @@ import {
 } from 'react'
 import { io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
+import { useGame } from './GameContext'
 
 export enum GameMode {
   Casual = 'casual',
   Ranked = 'ranked',
 }
+
+type QueueModesType = {
+  casual?: boolean
+  ranked?: boolean
+}
+
 interface QueueContextData {
-  enqueue(
-    queuType: GameMode,
-    callback: (payload: { matchId: string; playerKey: string }) => void,
-  ): void
-  dequeue(): void
-  /**Para qual modo se está na fila; caso não esteja, null. */
-  queueMode: GameMode | null
+  enqueue(mode: GameMode): void
+  dequeue(mode: GameMode): void
+  queueModes: QueueModesType
 }
 
 interface QueueContextProps {
@@ -31,14 +34,40 @@ const QueueContext = createContext<QueueContextData>({} as QueueContextData)
 
 export function QueueProvider({ children }: QueueContextProps) {
   const [socket, setSocket] = useState<ReturnType<typeof io>>()
-  const [queueMode, setQueueMode] = useState<GameMode | null>(null)
-  const { user } = useAuth()
+  const [queueModes, setQueueModes] = useState<QueueModesType>({})
+  const { user, getToken } = useAuth()
+  const { connectGame } = useGame()
+
+  useEffect(() => {
+    let newSocket: ReturnType<typeof io>
+    async function init() {
+      if (user) {
+        const token = await getToken()
+        newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
+          auth: {
+            token,
+          },
+        })
+        newSocket.on('matchFound', (data) => {
+          setQueueModes({})
+          connectGame(data.matchId)
+        })
+        newSocket.on('disconnect', () => {
+          setQueueModes({})
+        })
+        setSocket(newSocket)
+      }
+    }
+    init()
+
+    return () => {
+      if (newSocket) newSocket.disconnect()
+      setQueueModes({})
+    }
+  }, [user])
 
   const enqueue = useCallback(
-    async (
-      queueMode: Parameters<QueueContextData['enqueue']>[0],
-      callback: Parameters<QueueContextData['enqueue']>[1],
-    ) => {
+    async (queueMode: 'casual' | 'ranked') => {
       if (socket) return
 
       const token = await user?.getIdToken()
@@ -51,32 +80,36 @@ export function QueueProvider({ children }: QueueContextProps) {
       newSocket.on('connect', () => {
         newSocket.emit(queueMode)
       })
-      newSocket.on('matchFound', callback)
+      newSocket.on('matchFound', (data) => {
+        setQueueModes({})
+      })
       newSocket.on('disconnect', () => {
-        setSocket(undefined)
-        setQueueMode(null)
+        // setSocket(undefined)
+        setQueueModes({})
       })
 
-      setQueueMode(queueMode)
+      setQueueModes((current) => ({
+        ...current,
+        [queueMode]: true,
+      }))
     },
     [socket, user],
   )
 
-  const dequeue = useCallback(() => {
-    if (!socket) return
-    socket.disconnect()
-    setSocket(undefined)
-    setQueueMode(null)
-  }, [socket])
-
-  useEffect(() => {
-    socket?.disconnect()
-    setSocket(undefined)
-    setQueueMode(null)
-  }, [user])
+  const dequeue = useCallback(
+    (mode: 'casual' | 'ranked') => {
+      if (!socket) return
+      setSocket(undefined)
+      setQueueModes((current) => ({
+        ...current,
+        [mode]: false,
+      }))
+    },
+    [socket],
+  )
 
   return (
-    <QueueContext.Provider value={{ enqueue, dequeue, queueMode }}>
+    <QueueContext.Provider value={{ enqueue, dequeue, queueModes }}>
       {children}
     </QueueContext.Provider>
   )
