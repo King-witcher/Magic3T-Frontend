@@ -83,7 +83,7 @@ export default function Home() {
               : enqueue.bind(null, GameMode.Casual)
           }
         >
-          <VStack>
+          <VStack gap="0">
             <Flex
               alignItems="center"
               gap="10px"
