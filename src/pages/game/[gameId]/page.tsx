@@ -1,37 +1,22 @@
 import { Grid, VStack, Text, useToast, Flex, Center } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import ChoiceComponent from './components/ChoiceComponent'
-import { GameStatus } from '@/types/types'
+import { Choice, GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
 import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
 import { Link, useParams } from 'react-router-dom'
 
-type Params = {
-  gameId: string
-}
-
 export default function GamePage() {
   const { user } = useAuth()
   const toast = useToast()
-  const {
-    disconnect,
-    makeChoice,
-    availableChoices,
-    playerChoices,
-    oponentChoices,
-    turn,
-    gameStatus,
-    messages,
-  } = useGame()
+  const { disconnect, makeChoice, gameState, availableChoices } = useGame()
 
-  const { gameId } = useParams()
-
-  const playerTurn = turn === 'player'
+  const playerTurn = gameState?.turn === 'player'
 
   useEffect(() => {
-    switch (gameStatus) {
+    switch (gameState?.gameStatus) {
       case GameStatus.Victory:
         toast({
           title: user?.displayName?.includes('Bianca Vieira')
@@ -70,11 +55,12 @@ export default function GamePage() {
       default:
         break
     }
-  }, [gameStatus])
+  }, [gameState?.gameStatus])
 
   useEffect(() => {
-    if (messages.length) {
-      const { sender, content, timestamp } = messages[messages.length - 1]
+    if (gameState?.messages.length) {
+      const { sender, content, timestamp } =
+        gameState.messages[gameState.messages.length - 1]
       toast({
         title: `${sender} diz:`,
         description: content,
@@ -87,7 +73,7 @@ export default function GamePage() {
         },
       })
     }
-  }, [messages])
+  }, [gameState?.messages])
 
   useEffect(() => {
     return () => {
@@ -96,6 +82,7 @@ export default function GamePage() {
   }, [])
 
   if (!user) return <SignInPage />
+  if (!gameState) return null // Improve
 
   return (
     <VStack h="100%" justifyContent="space-around">
@@ -107,13 +94,13 @@ export default function GamePage() {
         h="fit-content"
         pos="relative"
       >
-        {availableChoices.map((choice) => (
+        {availableChoices.map((choice: Choice) => (
           <ChoiceComponent
             choice={choice}
             key={choice}
             onClick={playerTurn ? () => makeChoice(choice) : undefined}
             cursor={playerTurn ? 'pointer' : 'auto'}
-            opacity={gameStatus === GameStatus.Defeat ? '0' : '1'}
+            opacity={gameState.gameStatus === GameStatus.Defeat ? '0' : '1'}
             transition="opacity 300ms linear"
             _hover={
               playerTurn
@@ -126,7 +113,11 @@ export default function GamePage() {
         ))}
         <Text
           userSelect="none"
-          opacity={playerTurn && gameStatus === GameStatus.Playing ? '1' : '0'}
+          opacity={
+            playerTurn && gameState.gameStatus === GameStatus.Playing
+              ? '1'
+              : '0'
+          }
           transition="opacity 200ms"
           pos="absolute"
           bottom="-10px"
@@ -137,9 +128,9 @@ export default function GamePage() {
         >
           Sua vez!
         </Text>
-        {playerChoices.length === 0 &&
-          oponentChoices.length === 0 &&
-          gameStatus === GameStatus.Playing && (
+        {gameState.player.choices.length === 0 &&
+          gameState.oponent.choices.length === 0 &&
+          gameState.gameStatus === GameStatus.Playing && (
             <Text
               width="400px"
               textAlign="center"
@@ -156,7 +147,7 @@ export default function GamePage() {
               Aguarde a vez do oponente.
             </Text>
           )}
-        {gameStatus === GameStatus.Victory && (
+        {gameState.gameStatus === GameStatus.Victory && (
           <Text
             width="400px"
             textAlign="center"
@@ -173,7 +164,7 @@ export default function GamePage() {
             Você venceu!
           </Text>
         )}
-        {gameStatus === GameStatus.Defeat && (
+        {gameState.gameStatus === GameStatus.Defeat && (
           <Text
             width="400px"
             textAlign="center"
@@ -190,7 +181,7 @@ export default function GamePage() {
             Você perdeu.
           </Text>
         )}
-        {gameStatus === GameStatus.Draw && (
+        {gameState.gameStatus === GameStatus.Draw && (
           <Text
             width="400px"
             textAlign="center"
@@ -207,12 +198,12 @@ export default function GamePage() {
             Empate
           </Text>
         )}
-        {(gameStatus === GameStatus.Victory ||
-          gameStatus === GameStatus.Defeat ||
-          gameStatus === GameStatus.Draw) && (
+        {(gameState.gameStatus === GameStatus.Victory ||
+          gameState.gameStatus === GameStatus.Defeat ||
+          gameState.gameStatus === GameStatus.Draw) && (
           <Center
             as={Link}
-            to={`/profile/history/${gameId}`}
+            to={`/profile/history/${gameState.matchId}`}
             w="full"
             cursor="pointer"
             userSelect="none"

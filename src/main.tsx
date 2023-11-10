@@ -45,7 +45,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             ],
           },
           {
-            path: '/game/:gameId',
+            path: '/game',
             element: <GamePage />,
           },
           {

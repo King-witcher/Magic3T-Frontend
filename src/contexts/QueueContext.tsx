@@ -67,39 +67,22 @@ export function QueueProvider({ children }: QueueContextProps) {
   }, [user])
 
   const enqueue = useCallback(
-    async (queueMode: 'casual' | 'ranked') => {
-      if (socket) return
-
+    async (mode: 'casual' | 'ranked') => {
       const token = await user?.getIdToken()
-      const newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
-        auth: {
-          token,
-        },
-      })
-      setSocket(newSocket)
-      newSocket.on('connect', () => {
-        newSocket.emit(queueMode)
-      })
-      newSocket.on('matchFound', (data) => {
-        setQueueModes({})
-      })
-      newSocket.on('disconnect', () => {
-        // setSocket(undefined)
-        setQueueModes({})
-      })
+
+      socket?.emit(mode)
 
       setQueueModes((current) => ({
         ...current,
-        [queueMode]: true,
+        [mode]: true,
       }))
     },
-    [socket, user],
+    [socket, user, setQueueModes],
   )
 
   const dequeue = useCallback(
     (mode: 'casual' | 'ranked') => {
-      if (!socket) return
-      setSocket(undefined)
+      socket?.emit('dequeue', mode)
       setQueueModes((current) => ({
         ...current,
         [mode]: false,

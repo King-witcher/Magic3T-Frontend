@@ -43,21 +43,10 @@ export default function PlayerDeck({ player }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const {
-    playerChoices,
-    oponentChoices,
-    playerTimer,
-    oponentTimer,
-    triple,
-    oponentProfile,
-    gameStatus,
-    sendMessage,
-  } = useGame()
+  const { gameState, sendMessage } = useGame()
   const popoverFocusElement = useRef(null)
 
   const currentPlayer = player === 'current'
-  const choices = currentPlayer ? playerChoices : oponentChoices
-  const timer = currentPlayer ? playerTimer : oponentTimer
 
   const {
     isOpen: chatIsOpen,
@@ -75,6 +64,13 @@ export default function PlayerDeck({ player }: Props) {
   function handleChangeMessage(e: any) {
     setMessage(e.target.value)
   }
+
+  if (!gameState) return null
+
+  const choices = currentPlayer
+    ? gameState.player.choices
+    : gameState.oponent.choices
+  const timer = currentPlayer ? gameState.player.time : gameState.oponent.time
 
   return (
     <Flex
@@ -123,7 +119,7 @@ export default function PlayerDeck({ player }: Props) {
               <MenuList hidden={!currentPlayer}>
                 <MenuItem onClick={chatOnOpen}>Enviar mensagem</MenuItem>
                 <MenuItem
-                  hidden={gameStatus !== GameStatus.Playing}
+                  hidden={gameState.gameStatus !== GameStatus.Playing}
                   bg="red.200"
                   _hover={{
                     bg: 'red.400',
@@ -158,12 +154,12 @@ export default function PlayerDeck({ player }: Props) {
           <Text fontWeight="bold">
             {currentPlayer
               ? user?.displayName || 'Você'
-              : oponentProfile?.name || 'Anônimo'}
+              : gameState.oponent.profile?.name || 'Anônimo'}
           </Text>
         </VStack>
         <ChoiceCollection
           choices={choices}
-          triple={triple}
+          triple={gameState.triple}
           flexDir={currentPlayer ? 'row' : 'row-reverse'}
         />
       </Flex>

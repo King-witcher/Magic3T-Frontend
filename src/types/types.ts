@@ -8,7 +8,7 @@ export enum GameStatus {
   Waiting = 'waiting',
 }
 
-export type GameState = {
+export type GameStateReport = {
   playerChoices: Choice[]
   oponentChoices: Choice[]
   status: GameStatus
