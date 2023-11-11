@@ -5,12 +5,14 @@ import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
+import { getEloUrl } from '@/utils/getEloUrl'
 import {
   Avatar,
   Center,
   Divider,
   Flex,
   Heading,
+  Image,
   Spinner,
   Stack,
   Text,
@@ -53,10 +55,18 @@ export default function Home() {
         <Avatar src={user?.photoURL || undefined} size={'xl'} />
         <Text fontSize="22px">{user?.displayName}</Text>
         {userData && (
-          <Text>
-            {userData.glicko.rating.toFixed()} (±
-            {(2 * userData.glicko.deviation).toFixed()}) SR
-          </Text>
+          <Flex alignItems="center" gap="5px">
+            <Image
+              ml="3px"
+              src={getEloUrl(userData.glicko.rating)}
+              alt="rank"
+              draggable={false}
+            />
+            <Text>
+              {userData.glicko.rating.toFixed()} (±
+              {(2 * userData.glicko.deviation).toFixed()}) SR
+            </Text>
+          </Flex>
         )}
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />

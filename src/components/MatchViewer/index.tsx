@@ -2,7 +2,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { NotFoundError } from '@/models/errors/NotFoundError'
-import { getElo } from '@/pages/profile/tabs/ProfileTab'
+import { getEloUrl } from '@/utils/getEloUrl'
 import { Avatar, Box, Center, Flex, Stack, Text, Image } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 
@@ -96,9 +96,7 @@ export default function MatchViewer({ match: matchId }: Props) {
           <Flex gap="5px" alignItems="center">
             <Image
               ml="3px"
-              src={`https://quake-stats.bethesda.net/ranks/${getElo(
-                oponent.rating,
-              )}.png`}
+              src={getEloUrl(oponent.rating)}
               alt="rank"
               draggable={false}
             />
