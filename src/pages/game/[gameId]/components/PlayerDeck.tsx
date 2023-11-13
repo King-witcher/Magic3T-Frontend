@@ -43,7 +43,7 @@ export default function PlayerDeck({ player }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const { gameState, sendMessage } = useGame()
+  const { gameState, sendMessage, playerTimer, oponentTimer } = useGame()
   const popoverFocusElement = useRef(null)
 
   const currentPlayer = player === 'current'
@@ -70,7 +70,7 @@ export default function PlayerDeck({ player }: Props) {
   const choices = currentPlayer
     ? gameState.player.choices
     : gameState.oponent.choices
-  const timer = currentPlayer ? gameState.player.time : gameState.oponent.time
+  const timer = currentPlayer ? playerTimer : oponentTimer
 
   return (
     <Flex

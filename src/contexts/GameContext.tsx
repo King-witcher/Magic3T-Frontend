@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { io } from 'socket.io-client'
@@ -19,12 +20,10 @@ type Message = { sender: string; content: string; timestamp: number }
 interface GameState {
   player: {
     choices: Choice[]
-    time: Timer
   }
   oponent: {
     profile: Profile | null
     choices: Choice[]
-    time: Timer
   }
   gameStatus: GameStatus
   turn: 'player' | 'oponent' | null
@@ -35,6 +34,8 @@ interface GameState {
 
 interface GameData {
   gameState: GameState | null
+  playerTimer: Timer
+  oponentTimer: Timer
   availableChoices: Choice[]
 
   connectGame(matchId: string): Promise<void>
@@ -59,6 +60,8 @@ const GameContext = createContext<GameData>({} as GameData)
 
 export function GameProvider({ children }: Props) {
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const playerTimer = useRef(new Timer(0))
+  const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -132,8 +135,8 @@ export function GameProvider({ children }: Props) {
           },
       )
 
-      gameState?.player.time.pause()
-      gameState?.oponent.time.pause()
+      playerTimer.current.pause()
+      oponentTimer.current.start()
     },
     [socket, gameState],
   )
@@ -165,8 +168,21 @@ export function GameProvider({ children }: Props) {
         },
     )
 
-    gameState?.player.time.setRemaining(incomingGameState.playerTimeLeft)
-    gameState?.oponent.time.setRemaining(incomingGameState.oponentTimeLeft)
+    // Change which timer is playing.
+    if (incomingGameState.turn) {
+      playerTimer.current.start()
+      oponentTimer.current.pause()
+    } else if (incomingGameState.status === GameStatus.Playing) {
+      playerTimer.current.pause()
+      oponentTimer.current.start()
+    } else {
+      playerTimer.current.pause()
+      oponentTimer.current.pause()
+    }
+
+    // Sync timers with server
+    playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
+    oponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
 
     // Define o terno de números vencedor.
     function getTriple(
@@ -226,11 +242,9 @@ export function GameProvider({ children }: Props) {
         triple: [0, 0, 0],
         player: {
           choices: [],
-          time: new Timer(0),
         },
         oponent: {
           choices: [],
-          time: new Timer(0),
           profile: {
             name: '',
             photoUrl: '',
@@ -282,6 +296,8 @@ export function GameProvider({ children }: Props) {
     <GameContext.Provider
       value={{
         gameState,
+        playerTimer: playerTimer.current,
+        oponentTimer: oponentTimer.current,
         availableChoices,
 
         /** Se conecta a um jogo a partir de um token. */
