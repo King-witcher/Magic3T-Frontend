@@ -21,7 +21,7 @@ export default function HistoryMatch({ match }: Props) {
   const result =
     match.winner === 'none'
       ? 'draw'
-      : match[match.winner].uid === user.uid
+      : match[match.winner].uid === user._id
       ? 'victory'
       : 'defeat'
 
@@ -29,7 +29,7 @@ export default function HistoryMatch({ match }: Props) {
   const timeFmt = formatTime(timeMs)
 
   const side = useMemo(() => {
-    if (match.white.uid === user.uid) return 'white'
+    if (match.white.uid === user._id) return 'white'
     else return 'black'
   }, [user])
 

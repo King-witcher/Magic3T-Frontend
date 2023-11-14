@@ -31,17 +31,17 @@ export default function MatchViewer({ match: matchId }: Props) {
   })
   if (!match || !user) return 'match'
 
-  const side = match.black.uid === user.uid ? 'black' : 'white'
+  const side = match.black.uid === user._id ? 'black' : 'white'
 
   const result =
     match.winner === 'none'
       ? 'draw'
-      : match[match.winner].uid === user.uid
+      : match[match.winner].uid === user._id
       ? 'victory'
       : 'defeat'
 
-  const currentPlayer = match.black.uid === user.uid ? match.black : match.white
-  const oponent = match.black.uid === user.uid ? match.white : match.black
+  const currentPlayer = match.black.uid === user._id ? match.black : match.white
+  const oponent = match.black.uid === user._id ? match.white : match.black
 
   return (
     <Stack

@@ -30,9 +30,9 @@ export default function PlayerDeck({ player }: Props) {
   const { user } = useAuth()
 
   const easterEgg =
-    user?.uid === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
+    user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
       ? 'não é burmor, é morbur c:'
-      : user?.displayName?.includes('Marileia Almeida')
+      : user?.nickname?.includes('Marileia Almeida')
       ? 'Te amo, mãe <3'
       : ''
 
@@ -153,7 +153,7 @@ export default function PlayerDeck({ player }: Props) {
           </Popover>
           <Text fontWeight="bold">
             {currentPlayer
-              ? user?.displayName || 'Você'
+              ? user?.nickname || 'Você'
               : gameState.oponent.profile?.name || 'Anônimo'}
           </Text>
         </VStack>
