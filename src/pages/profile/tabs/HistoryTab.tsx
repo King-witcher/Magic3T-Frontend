@@ -1,29 +1,22 @@
 import { Center, Spinner, Stack } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
-import { useCallback, useEffect, useState } from 'react'
-import { MatchRegistry } from './MatchRegistry'
 
 import HistoryMatch from '../components/HistoryMatch'
-import { models } from '@/models'
-import { WithId } from '@/types/WithId'
 import { Match } from '@/models/matches/Match'
 import { Loader } from '@/hooks/useAsync'
 import { Link, useParams } from 'react-router-dom'
 import HistoryMatchTab from './HistoryMatchTab'
+import { UserData } from '@/models/users/User'
 
 interface Props {
-  user: User
-  matchLoader: Loader<WithId<Match>[]>
+  matchLoader: Loader<Match[]>
 }
 
 type Params = {
   matchId?: string
 }
 
-export default function HistoryTab({
-  user,
-  matchLoader: [matches, loading],
-}: Props) {
+export default function HistoryTab({ matchLoader: [matches, loading] }: Props) {
   const { matchId } = useParams<Params>()
 
   if (matchId) return <HistoryMatchTab matchId={matchId} />

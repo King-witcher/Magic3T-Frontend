@@ -6,7 +6,7 @@ import { useGame } from '@/contexts/GameContext'
 import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export default function GamePage() {
   const { user } = useAuth()
@@ -19,7 +19,7 @@ export default function GamePage() {
     switch (gameState?.gameStatus) {
       case GameStatus.Victory:
         toast({
-          title: user?.displayName?.includes('Bianca Vieira')
+          title: user?.nickname?.includes('Bianca')
             ? 'Nha burmor toda fofinha vencedora c:'
             : 'Você venceu a partida!',
           status: 'success',
@@ -31,7 +31,7 @@ export default function GamePage() {
       case GameStatus.Defeat:
         toast({
           title: 'Você perdeu.',
-          description: user?.displayName?.includes('Bianca Vieira')
+          description: user?.nickname?.includes('Bianca Vieira')
             ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
             : '',
           status: 'error',
@@ -43,7 +43,7 @@ export default function GamePage() {
       case GameStatus.Draw:
         toast({
           title: 'A partida acabou em empate.',
-          description: user?.displayName?.includes('Bianca Vieira')
+          description: user?.nickname?.includes('Bianca Vieira')
             ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
             : '',
           status: 'info',

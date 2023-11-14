@@ -1,3 +1,4 @@
+import { WithId } from '@/types/WithId'
 import { Choice } from '@/types/types'
 
 interface PlayerMove {
@@ -13,7 +14,7 @@ interface Player {
   rv: number
 }
 
-export interface Match {
+export interface Match extends WithId {
   white: Player
   black: Player
   moves: PlayerMove[]

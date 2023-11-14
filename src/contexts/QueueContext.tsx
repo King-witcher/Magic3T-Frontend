@@ -111,7 +111,7 @@ export function QueueProvider({ children }: QueueContextProps) {
 
   const enqueue = useCallback(
     async (mode: 'casual' | 'ranked') => {
-      const token = await user?.getIdToken()
+      const token = await getToken()
 
       socket?.emit(mode)
 

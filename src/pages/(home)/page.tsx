@@ -1,10 +1,7 @@
 import SignInPage from '@/components/SignInPage'
 import { useAuth } from '@/contexts/AuthContext'
-import { useGame } from '@/contexts/GameContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { useAsync } from '@/hooks/useAsync'
-import { models } from '@/models'
 import { getEloUrl } from '@/utils/getEloUrl'
 import {
   Avatar,
@@ -18,18 +15,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
   const { serverOnline } = useServiceStatus()
   const { user } = useAuth()
-
-  const [userData, loading] = useAsync(async () => {
-    if (user) return models.users.getbyId(user.uid)
-    return null
-  }, [user])
 
   if (!user) return <SignInPage />
 
@@ -53,21 +43,19 @@ export default function Home() {
     <Center h="100%" gap="15px" flexDir={['column', 'row']}>
       <Center flex="1" flexDir="column">
         <Avatar src={user?.photoURL || undefined} size={'xl'} />
-        <Text fontSize="22px">{user?.displayName}</Text>
-        {userData && (
-          <Flex alignItems="center" gap="5px">
-            <Image
-              ml="3px"
-              src={getEloUrl(userData.glicko.rating)}
-              alt="rank"
-              draggable={false}
-            />
-            <Text>
-              {userData.glicko.rating.toFixed()} (±
-              {(2 * userData.glicko.deviation).toFixed()}) SR
-            </Text>
-          </Flex>
-        )}
+        <Text fontSize="22px">{user?.nickname}</Text>
+        <Flex alignItems="center" gap="5px">
+          <Image
+            ml="3px"
+            src={getEloUrl(user.glicko.rating)}
+            alt="rank"
+            draggable={false}
+          />
+          <Text>
+            {user.glicko.rating.toFixed()} (±
+            {(2 * user.glicko.deviation).toFixed()}) SR
+          </Text>
+        </Flex>
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">

@@ -6,10 +6,9 @@ import {
   orderBy,
   query,
   where,
-} from 'firebase/firestore/lite'
+} from 'firebase/firestore'
 import { getConverter } from '../getConverter'
 import { Match } from './Match'
-import { WithId } from '@/types/WithId'
 import { NotFoundError } from '../errors/NotFoundError'
 import { firestore, getDoc, getDocs } from '@/services/firestore'
 
@@ -17,7 +16,7 @@ const converter = getConverter<Match>()
 
 const col = collection(firestore, 'matches').withConverter(converter)
 
-async function listByPlayerId(uid: string): Promise<WithId<Match>[]> {
+async function listByPlayerId(uid: string): Promise<Match[]> {
   const q = query(
     col,
     or(where('black.uid', '==', uid), where('white.uid', '==', uid)),

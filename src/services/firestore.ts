@@ -1,10 +1,10 @@
 import {
+  DocumentData,
   getDoc as firestoreGetDoc,
   getDocs as firestoreGetDocs,
   getFirestore,
-} from 'firebase/firestore/lite'
+} from 'firebase/firestore'
 import './firebase'
-import { DocumentData } from 'firebase/firestore'
 
 export const firestore = getFirestore()
 

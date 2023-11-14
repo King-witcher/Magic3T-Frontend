@@ -60,11 +60,14 @@ const GameContext = createContext<GameData>({} as GameData)
 
 export function GameProvider({ children }: Props) {
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const [triple, setTriple] = useState<[Choice | 0, Choice | 0, Choice | 0]>([
+    0, 0, 0,
+  ])
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { getToken } = useAuth()
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {
@@ -73,7 +76,7 @@ export function GameProvider({ children }: Props) {
 
   const getEventfulSocket = useCallback(
     async (matchId: string) => {
-      const token = await user?.getIdToken()
+      const token = await getToken()
       if (!token) throw new Error('No Id Token')
       const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
         auth: { matchId, token },
@@ -99,7 +102,7 @@ export function GameProvider({ children }: Props) {
           socket.emit('getOponentProfile')
         })
     },
-    [user],
+    [getToken],
   )
 
   const handleReceiveMessage = useCallback((message: string) => {
@@ -196,11 +199,10 @@ export function GameProvider({ children }: Props) {
       return [0, 0, 0]
     }
 
-    // Refazer!
-    // if (incomingGameState.status === GameStatus.Victory)
-    //   setTriple(getTriple(incomingGameState.playerChoices))
-    // else if (incomingGameState.status === GameStatus.Defeat)
-    //   setTriple(getTriple(incomingGameState.oponentChoices))
+    if (incomingGameState.status === GameStatus.Victory)
+      setTriple(getTriple(incomingGameState.playerChoices))
+    else if (incomingGameState.status === GameStatus.Defeat)
+      setTriple(getTriple(incomingGameState.oponentChoices))
   }
 
   function sendMessage(message: string) {

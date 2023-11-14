@@ -29,12 +29,11 @@ const pathIndexMap: Record<string, number> = {
 }
 
 export default function ProfilePage({ index }: Props) {
-  const { user, logged } = useAuth()
-  const { matchId } = useParams<Params>()
+  const { user } = useAuth()
   const matchLoader = useAsync(async () => {
-    if (user) return models.matches.listByPlayerId(user.uid)
+    if (user) return models.matches.listByPlayerId(user._id)
     else return []
-  })
+  }, [user?._id])
 
   if (!user) return <SignInPage />
 
@@ -55,7 +54,7 @@ export default function ProfilePage({ index }: Props) {
           <ProfileTab user={user} />
         </TabPanel>
         <TabPanel>
-          <HistoryTab user={user} matchLoader={matchLoader} />
+          <HistoryTab matchLoader={matchLoader} />
         </TabPanel>
       </TabPanels>
     </Tabs>

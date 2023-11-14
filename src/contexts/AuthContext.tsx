@@ -14,22 +14,24 @@ import {
   getIdToken,
 } from 'firebase/auth'
 import { auth, provider } from '@/services/firebase'
+import { models } from '@/models'
+import { UserData } from '@/models/users/User'
+import { Unsubscribe } from 'firebase/firestore'
 
 type AuthData = {
   signIn(): Promise<string | null>
   signOut(): Promise<string | null>
+  getToken(): Promise<string | null>
 } & (
   | {
       user: null
       logged: false
-      firstLoading: boolean
-      getToken: null
+      loading: boolean
     }
   | {
+      user: UserData
       logged: true
-      firstLoading: false
-      user: User
-      getToken(): Promise<string | null>
+      loading: false
     }
 )
 
@@ -40,13 +42,16 @@ interface Props {
 const AuthContext = createContext<AuthData>({} as AuthData)
 
 export function AuthProvider({ children }: Props) {
-  const [firstLoading, setFirstLoading] = useState(true)
-  const [user, setUser] = useState<User | null>(null)
-  const logged = !!user
+  const [loading, setLoading] = useState(true)
+  const [authData, setAuthData] = useState<User | null>(null)
+  const [user, setUser] = useState<UserData | null>(null)
+  const logged = !!authData
 
   const signIn = useCallback(async () => {
     try {
+      // states will be changed by onAuthStateChanged method
       await signInWithPopup(auth, provider)
+      setLoading(true)
     } catch (e) {
       console.error(e)
       if (import.meta.env.DEV) alert(e)
@@ -58,16 +63,27 @@ export function AuthProvider({ children }: Props) {
   }, [])
 
   const getToken = useCallback(async () => {
-    if (user) {
-      const token = await getIdToken(user, true)
+    if (authData) {
+      const token = await getIdToken(authData, true)
       return token
     } else throw new Error('No user connected')
-  }, [user])
+  }, [authData])
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setFirstLoading(false)
+    let unsubscribe: Unsubscribe | null = null
+    return onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userData = await models.users.getbyId(user.uid)
+        unsubscribe = models.users.subscribe(user.uid, (snap) => {
+          setUser(snap)
+        })
+        setUser(userData)
+      } else {
+        if (unsubscribe) unsubscribe()
+        setUser(null)
+      }
+      setAuthData(user)
+      setLoading(false)
     })
   }, [])
 
@@ -75,12 +91,12 @@ export function AuthProvider({ children }: Props) {
     <AuthContext.Provider
       value={
         {
-          firstLoading,
+          loading,
           logged,
+          user,
           getToken,
           signIn,
           signOut,
-          user,
         } as unknown as AuthData
       }
     >

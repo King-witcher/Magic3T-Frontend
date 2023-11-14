@@ -4,7 +4,7 @@ import { FcGoogle } from 'react-icons/fc'
 
 /** Handles the process of loading the auth state and requiring login, if the user is not signed in. */
 export default function SignInPage() {
-  const { firstLoading, signIn } = useAuth()
+  const { loading: firstLoading, signIn } = useAuth()
 
   if (firstLoading)
     return (
