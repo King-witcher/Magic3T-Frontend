@@ -22,7 +22,7 @@ export const chakraTheme = extendTheme({
     global: {
       body: {
         bg: 'pink.100',
-        color: 'pink.900',
+        color: 'blackAlpha.800',
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {
           w: '5px',

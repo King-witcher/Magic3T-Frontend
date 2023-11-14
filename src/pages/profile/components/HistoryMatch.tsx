@@ -85,27 +85,30 @@ export default function HistoryMatch({ match }: Props) {
         justifyContent="space-between"
         overflow="hidden"
       >
-        <Text
-          fontWeight={700}
-          color={
-            result === 'victory'
-              ? 'green.700'
+        <Flex gap="5px" alignItems="center">
+          <Text
+            fontWeight={700}
+            color={
+              result === 'victory'
+                ? 'green.700'
+                : result === 'draw'
+                ? 'gray.600'
+                : 'red.700'
+            }
+          >
+            ({match.mode === 'ranked' ? 'Ranqueada' : 'Casual'}){' '}
+            {result === 'victory'
+              ? 'Vitória'
               : result === 'draw'
-              ? 'gray.600'
-              : 'red.700'
-          }
-        >
-          {result === 'victory'
-            ? 'Vitória'
-            : result === 'draw'
-            ? 'Empate'
-            : 'Derrota'}
-        </Text>
-        •
+              ? 'Empate'
+              : 'Derrota'}
+          </Text>
+          •<Text fontSize={['10px', '16px']}>{match[oponentSide].name}</Text>
+        </Flex>
         <Text fontSize={['10px', '16px']}>
-          {match[oponentSide].name} ({match[oponentSide].rating.toFixed()} SR)
+          {match.timestamp.getDay()}/{match.timestamp.getMonth()}/
+          {match.timestamp.getFullYear()}
         </Text>
-        •<Text fontSize={['10px', '16px']}>18/10/2023</Text>
       </Flex>
       <Flex gap="5px">
         {match.moves.map((move, index) => (
