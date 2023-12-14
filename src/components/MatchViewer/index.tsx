@@ -4,6 +4,8 @@ import { models } from '@/models'
 import { NotFoundError } from '@/models/errors/NotFoundError'
 import { users } from '@/models/users'
 import { getEloUrl } from '@/utils/getEloUrl'
+import { formatDate } from '@/utils/timeFormat'
+import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import {
   Avatar,
   Box,
@@ -109,24 +111,21 @@ export default function MatchViewer({ match: matchId }: Props) {
         </Text>
         •
         <Text
-          fontSize={16}
+          fontSize={['14px', '16px']}
           fontWeight={600}
           color={
             currentPlayer.rv > 0
-              ? 'green.400'
+              ? 'green.500'
               : currentPlayer.rv === 0
-              ? 'gray.400'
-              : 'red.400'
+              ? 'gray.500'
+              : 'red.500'
           }
         >
           {currentPlayer.rv < 0 ? '-' : '+'}
           {Math.abs(currentPlayer.rv).toFixed()} SR
         </Text>
       </Flex>
-      <Text fontSize={['12px', '14px']}>
-        {match.timestamp.getDay()}/{match.timestamp.getUTCMonth()}/
-        {match.timestamp.getUTCFullYear()}
-      </Text>
+      <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
       <VStack gap="40px" py="20px" justify="space-between" h="full">
         <Flex
           p="10px"

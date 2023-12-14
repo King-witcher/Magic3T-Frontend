@@ -3,6 +3,7 @@ import { MatchRegistry } from '../tabs/MatchRegistry'
 import { formatTime } from '@/lib/utils'
 import { Box, Center, Divider, Flex, Stack, Text } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import { formatDate } from '@/utils/timeFormat'
 
 interface Props {
   match: MatchRegistry
@@ -105,10 +106,7 @@ export default function HistoryMatch({ match }: Props) {
           </Text>
           •<Text fontSize={['10px', '16px']}>{match[oponentSide].name}</Text>
         </Flex>
-        <Text fontSize={['10px', '16px']}>
-          {match.timestamp.getDay()}/{match.timestamp.getMonth()}/
-          {match.timestamp.getFullYear()}
-        </Text>
+        <Text fontSize={['10px', '16px']}>{formatDate(match.timestamp)}</Text>
       </Flex>
       <Flex gap="5px">
         {match.moves.map((move, index) => (

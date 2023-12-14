@@ -1,3 +1,5 @@
+import { Glicko } from '@/types/Glicko'
+
 export function getEloUrl(rating: number) {
   let variablePart: string
   if (rating < 400) variablePart = 'Bronze_01'
@@ -23,4 +25,39 @@ export function getEloUrl(rating: number) {
   else variablePart = 'Elite_01'
 
   return `https://quake-stats.bethesda.net/ranks/${variablePart}.png`
+}
+
+type Tier = 'Bronze' | 'Silver' | 'Gold' | 'Diamond' | 'Elite'
+type Division = 1 | 2 | 3 | 4 | 5
+
+const divisionSize = 100
+const bronze1 = 300
+
+type RatingInfo = {
+  tier: Tier
+  division: Division
+  thumbnail: string
+  trustedRating: number
+}
+
+const tiers: Tier[] = ['Bronze', 'Silver', 'Gold', 'Diamond', 'Elite']
+
+export function getRatingInfo(glicko: Glicko): RatingInfo {
+  const trustedRating = Math.round(glicko.rating)
+  const absoluteDivision = Math.max(
+    Math.trunc((trustedRating - bronze1) / divisionSize),
+    0,
+  )
+
+  const tierIndex = Math.min(Math.trunc(absoluteDivision / 5), 4)
+  const division = tierIndex === 4 ? 1 : (absoluteDivision % 5) + 1
+
+  const result: RatingInfo = {
+    trustedRating,
+    tier: tiers[tierIndex],
+    division: division as Division,
+    thumbnail: `https://quake-stats.bethesda.net/ranks/${tiers[tierIndex]}_0${division}.png`,
+  }
+
+  return result
 }

@@ -51,10 +51,7 @@ export default function Home() {
             alt="rank"
             draggable={false}
           />
-          <Text>
-            {user.glicko.rating.toFixed()} (±
-            {(2 * user.glicko.deviation).toFixed()}) SR
-          </Text>
+          <Text>{user.glicko.rating.toFixed()}</Text>
         </Flex>
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />
@@ -65,6 +62,39 @@ export default function Home() {
             ? 'Só você está online'
             : `${queueUserCount.connected} jogadores online`}
         </Text>
+        <Flex
+          alignItems="center"
+          justifyContent="center"
+          bg="gray.100"
+          transition="background 80ms linear"
+          rounded="10px"
+          cursor="pointer"
+          fontSize="20px"
+          userSelect="none"
+          w="200px"
+          fontWeight={700}
+          h="80px"
+          _hover={{
+            bg: 'pink.200',
+          }}
+          onClick={
+            queueModes.bot
+              ? dequeue.bind(null, GameMode.Bot)
+              : enqueue.bind(null, GameMode.Bot)
+          }
+        >
+          <VStack gap="0">
+            <Flex
+              alignItems="center"
+              gap="10px"
+              fontSize="20px"
+              textAlign="center"
+            >
+              {queueModes.bot && <Spinner thickness="4px" speed="0.7s" />}
+              Robô
+            </Flex>
+          </VStack>
+        </Flex>
         <Flex
           alignItems="center"
           justifyContent="center"

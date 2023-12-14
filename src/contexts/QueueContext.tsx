@@ -11,11 +11,13 @@ import { useAuth } from './AuthContext'
 import { useGame } from './GameContext'
 
 export enum GameMode {
+  Bot = 'bot',
   Casual = 'casual',
   Ranked = 'ranked',
 }
 
 type QueueModesType = {
+  bot?: boolean
   casual?: boolean
   ranked?: boolean
 }
@@ -110,21 +112,20 @@ export function QueueProvider({ children }: QueueContextProps) {
   }, [user])
 
   const enqueue = useCallback(
-    async (mode: 'casual' | 'ranked') => {
-      const token = await getToken()
-
-      socket?.emit(mode)
-
+    async (mode: GameMode) => {
       setQueueModes((current) => ({
         ...current,
         [mode]: true,
       }))
+      const token = await getToken()
+
+      socket?.emit(mode)
     },
     [socket, user, setQueueModes],
   )
 
   const dequeue = useCallback(
-    (mode: 'casual' | 'ranked') => {
+    (mode: GameMode) => {
       socket?.emit('dequeue', mode)
       setQueueModes((current) => ({
         ...current,
