@@ -43,7 +43,8 @@ export default function PlayerDeck({ player }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const { gameState, sendMessage, playerTimer, oponentTimer } = useGame()
+  const { gameState, winningTriple, sendMessage, playerTimer, oponentTimer } =
+    useGame()
   const popoverFocusElement = useRef(null)
 
   const currentPlayer = player === 'current'
@@ -159,7 +160,7 @@ export default function PlayerDeck({ player }: Props) {
         </VStack>
         <ChoiceCollection
           choices={choices}
-          triple={gameState.triple}
+          triple={winningTriple}
           flexDir={currentPlayer ? 'row' : 'row-reverse'}
         />
       </Flex>

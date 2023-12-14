@@ -4,7 +4,7 @@ import { Choice } from '@/types/types'
 
 interface Props extends FlexProps {
   choices: Choice[]
-  triple: [Choice | 0, Choice | 0, Choice | 0]
+  triple: [Choice, Choice, Choice] | null
 }
 
 export default function ChoiceCollection({ choices, triple, ...rest }: Props) {
@@ -14,7 +14,7 @@ export default function ChoiceCollection({ choices, triple, ...rest }: Props) {
         <ChoiceComponent
           key={choice}
           choice={choice}
-          highlight={triple.includes(choice)}
+          highlight={!!triple?.includes(choice)}
         />
       ))}
     </Flex>

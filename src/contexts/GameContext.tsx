@@ -27,7 +27,6 @@ interface GameState {
   }
   gameStatus: GameStatus
   turn: 'player' | 'oponent' | null
-  triple: [Choice | 0, Choice | 0, Choice | 0]
   matchId: string | null
   messages: Message[]
 }
@@ -37,6 +36,7 @@ interface GameData {
   playerTimer: Timer
   oponentTimer: Timer
   availableChoices: Choice[]
+  winningTriple: [Choice, Choice, Choice] | null
 
   connectGame(matchId: string): Promise<void>
   makeChoice(choice: Choice): void
@@ -60,9 +60,7 @@ const GameContext = createContext<GameData>({} as GameData)
 
 export function GameProvider({ children }: Props) {
   const [gameState, setGameState] = useState<GameState | null>(null)
-  const [triple, setTriple] = useState<[Choice | 0, Choice | 0, Choice | 0]>([
-    0, 0, 0,
-  ])
+  const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
@@ -171,8 +169,8 @@ export function GameProvider({ children }: Props) {
         },
     )
 
-    // Change which timer is playing.
     if (incomingGameState.turn) {
+      // Change which timer is playing.
       playerTimer.current.start()
       oponentTimer.current.pause()
     } else if (incomingGameState.status === GameStatus.Playing) {
@@ -188,15 +186,13 @@ export function GameProvider({ children }: Props) {
     oponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
 
     // Define o terno de números vencedor.
-    function getTriple(
-      numbers: Choice[],
-    ): [Choice | 0, Choice | 0, Choice | 0] {
+    function getTriple(numbers: Choice[]): [Choice, Choice, Choice] | null {
       for (let i = 0; i < numbers.length - 2; i++)
         for (let j = 1; j < numbers.length - 1; j++)
           for (let k = 2; k < numbers.length; k++)
             if (numbers[i] + numbers[j] + numbers[k] === 15)
               return [numbers[i], numbers[j], numbers[k]]
-      return [0, 0, 0]
+      return null
     }
 
     if (incomingGameState.status === GameStatus.Victory)
@@ -241,7 +237,6 @@ export function GameProvider({ children }: Props) {
         matchId,
         messages: [],
         turn: null,
-        triple: [0, 0, 0],
         player: {
           choices: [],
         },
@@ -301,6 +296,7 @@ export function GameProvider({ children }: Props) {
         playerTimer: playerTimer.current,
         oponentTimer: oponentTimer.current,
         availableChoices,
+        winningTriple: triple,
 
         /** Se conecta a um jogo a partir de um token. */
         connectGame,
