@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext'
+import { Loader } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { UserData } from '@/models/users/User'
 import { getRatingInfo, getEloUrl } from '@/utils/getEloUrl'
@@ -18,7 +19,10 @@ interface Props {
 }
 
 export default function ProfileTab({ user }: Props) {
-  const rating = useMemo(() => getRatingInfo(user.glicko), [user])
+  const rating = useMemo(
+    () => (user ? getRatingInfo(user.glicko) : null),
+    [user],
+  )
 
   return (
     <Center h="100%">
@@ -52,7 +56,7 @@ export default function ProfileTab({ user }: Props) {
             </Tooltip>
           )}
           <Text fontSize="18px" fontWeight="500" color="gray.500">
-            {user && `${rating.trustedRating} SR`}
+            {user && `${rating?.trustedRating} SR`}
           </Text>
         </Flex>
       </VStack>

@@ -16,6 +16,7 @@ import {
   Image,
   VStack,
   Divider,
+  LinkOverlay,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 
@@ -45,7 +46,7 @@ export default function MatchViewer({ match: matchId }: Props) {
   const [oponentProfile] = useAsync(async () => {
     try {
       if (match && user) {
-        return models.users.getbyId(
+        return models.users.getById(
           match.black.uid === user._id ? match.white.uid : match.black.uid,
         )
       }
@@ -134,6 +135,7 @@ export default function MatchViewer({ match: matchId }: Props) {
           gap="15px"
           bg="whiteAlpha.600"
         >
+          <LinkOverlay href={`/profile?userId=${oponentProfile?._id}`} />
           <Avatar size="lg" src={oponentProfile?.photoURL} />
           <Flex flexDir="column">
             <Text>{oponent.name}</Text>

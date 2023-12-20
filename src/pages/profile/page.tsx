@@ -1,19 +1,27 @@
 import { useAuth } from '@/contexts/AuthContext'
 import {
+  Center,
+  Spinner,
   Tab,
   TabIndicator,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
+  VStack,
+  useQuery,
 } from '@chakra-ui/react'
 import ProfileTab from './tabs/ProfileTab'
 import HistoryTab from './tabs/HistoryTab'
 import SignInPage from '@/components/SignInPage'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { matches } from '@/models/matches'
+import { useQueryParams } from '@/hooks/useQueryParams'
+import { UserData } from '@/models/users/User'
+import { GiBrokenArrow } from 'react-icons/gi'
 
 type Params = {
   matchId: string
@@ -29,13 +37,34 @@ const pathIndexMap: Record<string, number> = {
 }
 
 export default function ProfilePage({ index }: Props) {
-  const { user } = useAuth()
-  const matchLoader = useAsync(async () => {
-    if (user) return models.matches.listByPlayerId(user._id)
-    else return []
-  }, [user?._id])
+  const { user: authUser } = useAuth()
+  const params = useQueryParams()
+  const userId = params.get('userId')
 
-  if (!user) return <SignInPage />
+  const [matches, loadingMatches] = useAsync(async () => {
+    return authUser ? models.matches.listByPlayerId(userId ?? authUser._id) : []
+  }, [userId, authUser?._id])
+
+  const [profile, loadingProfile] = useAsync(async () => {
+    return userId ? models.users.getById(userId) : authUser
+  }, [userId, authUser?._id])
+
+  if (!authUser) return <SignInPage />
+
+  if (loadingMatches || loadingProfile)
+    return (
+      <Center h="full">
+        <Spinner />
+      </Center>
+    )
+
+  if (!profile)
+    return (
+      <VStack h="100%" justifyContent="center">
+        <GiBrokenArrow size="36px" />
+        <Text fontSize="20px">Perfil não encontrado</Text>
+      </VStack>
+    )
 
   return (
     <Tabs index={index}>
@@ -51,10 +80,10 @@ export default function ProfilePage({ index }: Props) {
       <TabIndicator />
       <TabPanels>
         <TabPanel>
-          <ProfileTab user={user} />
+          <ProfileTab user={profile} />
         </TabPanel>
         <TabPanel>
-          <HistoryTab matchLoader={matchLoader} />
+          <HistoryTab matches={matches} />
         </TabPanel>
       </TabPanels>
     </Tabs>

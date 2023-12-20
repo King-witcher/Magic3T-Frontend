@@ -13,7 +13,7 @@ const converter = getConverter<UserData>()
 
 const usersCollection = collection(firestore, 'users').withConverter(converter)
 
-async function getbyId(id: string): Promise<UserData> {
+async function getById(id: string): Promise<UserData> {
   if (import.meta.env.DEV)
     console.info('%cFirestore: Get user', 'color: #FFCA28')
   const snap = await getDoc(doc(usersCollection, id))
@@ -33,4 +33,4 @@ function subscribe(uid: string, callback: (data: UserData) => void) {
   )
 }
 
-export const users = { getbyId, subscribe }
+export const users = { getById, subscribe }

@@ -70,6 +70,7 @@ export function GameProvider({ children }: Props) {
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {
     setGameState(null)
+    setTriple(null)
   }, [])
 
   const getEventfulSocket = useCallback(
