@@ -15,6 +15,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import Profile from './components/profile'
 
 export default function Home() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
@@ -41,18 +42,8 @@ export default function Home() {
 
   return (
     <Center h="100%" gap="15px" flexDir={['column', 'row']}>
-      <Center flex="1" flexDir="column">
-        <Avatar src={user?.photoURL || undefined} size={'xl'} />
-        <Text fontSize="22px">{user?.nickname}</Text>
-        <Flex alignItems="center" gap="5px">
-          <Image
-            ml="3px"
-            src={getEloUrl(user.glicko.rating)}
-            alt="rank"
-            draggable={false}
-          />
-          <Text>{user.glicko.rating.toFixed()}</Text>
-        </Flex>
+      <Center flex="1">
+        <Profile user={user} />
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">
