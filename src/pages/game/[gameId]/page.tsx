@@ -7,11 +7,12 @@ import PlayerDeck from './components/PlayerDeck'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
 import { Link } from 'react-router-dom'
+import ChoiceGrid from './components/Grid'
 
 export default function GamePage() {
   const { user } = useAuth()
   const toast = useToast()
-  const { disconnect, makeChoice, gameState, availableChoices } = useGame()
+  const { disconnect, gameState } = useGame()
 
   const playerTurn = gameState?.turn === 'player'
 
@@ -87,30 +88,8 @@ export default function GamePage() {
   return (
     <VStack h="100%" justifyContent="space-around">
       <PlayerDeck player="opponent" />
-      <Grid
-        width="fit-content"
-        gridTemplateColumns="repeat(3, 1fr)"
-        gap="10px"
-        h="fit-content"
-        pos="relative"
-      >
-        {availableChoices.map((choice: Choice) => (
-          <ChoiceComponent
-            choice={choice}
-            key={choice}
-            onClick={playerTurn ? () => makeChoice(choice) : undefined}
-            cursor={playerTurn ? 'pointer' : 'auto'}
-            opacity={gameState.gameStatus === GameStatus.Defeat ? '0' : '1'}
-            transition="opacity 300ms linear"
-            _hover={
-              playerTurn
-                ? {
-                    bg: 'pink.200',
-                  }
-                : undefined
-            }
-          />
-        ))}
+      <VStack gap="10px">
+        <ChoiceGrid />
         <Text
           userSelect="none"
           opacity={
@@ -119,10 +98,6 @@ export default function GamePage() {
               : '0'
           }
           transition="opacity 200ms"
-          pos="absolute"
-          bottom="-10px"
-          left="50%"
-          transform="translate(-50%, 100%)"
           fontWeight="semibold"
           color="green.500"
         >
@@ -154,10 +129,6 @@ export default function GamePage() {
             userSelect="none"
             opacity={playerTurn ? '0' : '1'}
             transition="opacity 200ms"
-            pos="absolute"
-            bottom="-10px"
-            left="50%"
-            transform="translate(-50%, 100%)"
             fontWeight="semibold"
             color="green.500"
           >
@@ -171,10 +142,6 @@ export default function GamePage() {
             userSelect="none"
             opacity={playerTurn ? '0' : '1'}
             transition="opacity 200ms"
-            pos="absolute"
-            bottom="-10px"
-            left="50%"
-            transform="translate(-50%, 100%)"
             fontWeight="semibold"
             color="red.600"
           >
@@ -188,10 +155,6 @@ export default function GamePage() {
             userSelect="none"
             opacity={playerTurn ? '0' : '1'}
             transition="opacity 200ms"
-            pos="absolute"
-            bottom="-10px"
-            left="50%"
-            transform="translate(-50%, 100%)"
             fontWeight="semibold"
             color="gray.600"
           >
@@ -204,7 +167,7 @@ export default function GamePage() {
           <Center
             as={Link}
             to={`/profile/history/${gameState.matchId}`}
-            w="full"
+            w="fit-content"
             cursor="pointer"
             userSelect="none"
             transition="all 100ms linear"
@@ -212,16 +175,13 @@ export default function GamePage() {
               bg: 'gray.100',
             }}
             bg="gray.200"
-            pos="absolute"
-            bottom="-50px"
-            transform="translateY(100%)"
             p="10px"
             rounded="10px"
           >
             Ver no histórico
           </Center>
         )}
-      </Grid>
+      </VStack>
       <PlayerDeck player="current" />
     </VStack>
   )
