@@ -17,6 +17,7 @@ import {
   VStack,
   Divider,
   LinkOverlay,
+  LinkBox,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 
@@ -128,7 +129,8 @@ export default function MatchViewer({ match: matchId }: Props) {
       </Flex>
       <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
       <VStack gap="40px" py="20px" justify="space-between" h="full">
-        <Flex
+        <LinkBox
+          display="flex"
           p="10px"
           rounded="10px"
           alignItems="center"
@@ -162,7 +164,7 @@ export default function MatchViewer({ match: matchId }: Props) {
               SR
             </Flex>
           </Flex>
-        </Flex>
+        </LinkBox>
         <Flex
           gap={['8px 5px', '14px 8px']}
           flexWrap="wrap"

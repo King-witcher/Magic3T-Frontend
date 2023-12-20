@@ -71,6 +71,10 @@ export function GameProvider({ children }: Props) {
   const resetGameState = useCallback(() => {
     setGameState(null)
     setTriple(null)
+    playerTimer.current.pause()
+    oponentTimer.current.pause()
+    playerTimer.current.setRemaining(0)
+    oponentTimer.current.setRemaining(0)
   }, [])
 
   const getEventfulSocket = useCallback(
