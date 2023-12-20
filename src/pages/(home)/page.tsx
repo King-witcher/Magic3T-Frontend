@@ -91,7 +91,7 @@ export default function Home() {
               textAlign="center"
             >
               {queueModes.bot && <Spinner thickness="4px" speed="0.7s" />}
-              Robô
+              CPU
             </Flex>
           </VStack>
         </Flex>
