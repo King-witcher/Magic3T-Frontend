@@ -184,7 +184,7 @@ export default function MatchViewer({ match: matchId }: Props) {
                   : move.move === 'timeout'
                   ? 'yellow.500'
                   : move.player === side
-                  ? 'green.300'
+                  ? 'blue.300'
                   : 'red.300'
               }
             >

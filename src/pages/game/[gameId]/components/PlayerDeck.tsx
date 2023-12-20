@@ -104,7 +104,7 @@ export default function PlayerDeck({ player }: Props) {
                 >
                   <Flex
                     rounded="100%"
-                    bg={currentPlayer ? 'green.500' : 'red.600'}
+                    bg={currentPlayer ? 'blue.500' : 'red.600'}
                     w="70px"
                     h="70px"
                     alignItems="center"
