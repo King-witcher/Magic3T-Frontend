@@ -2,11 +2,33 @@ import { Choice, GameStatus } from '@/types/types'
 import ChoiceComponent from './ChoiceComponent'
 import { Grid } from '@chakra-ui/react'
 import { useGame } from '@/contexts/GameContext'
+import { useCallback, useEffect, useState } from 'react'
+import { setCommand } from '@/lib/Commands'
 
-const allChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+let initialAllChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const cheatAllChoices: Choice[] = [2, 9, 4, 7, 5, 3, 6, 1, 8]
+
+function initialTicTacToeCheat() {
+  initialAllChoices = cheatAllChoices
+}
+
+setCommand('3tmode', initialTicTacToeCheat)
 
 export default function ChoiceGrid() {
   const { makeChoice, gameState, availableChoices, winningTriple } = useGame()
+  const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
+
+  const ticTacToeCheat = useCallback(() => {
+    initialTicTacToeCheat()
+    setAllChoices(cheatAllChoices)
+  }, [])
+
+  useEffect(() => {
+    setCommand('3tmode', ticTacToeCheat)
+    return () => {
+      setCommand('3tmode', initialTicTacToeCheat)
+    }
+  }, [])
 
   const playerTurn = gameState?.turn === 'player'
 

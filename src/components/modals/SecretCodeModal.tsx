@@ -1,3 +1,4 @@
+import { runCommand } from '@/lib/Commands'
 import {
   Button,
   Input,
@@ -12,8 +13,16 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 
 export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
+  const [input, setInput] = useState('')
+
+  function useCheat() {
+    runCommand(input)
+    props.onClose()
+  }
+
   return (
     <Modal isCentered {...props}>
       <ModalOverlay />
@@ -25,11 +34,16 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
               Insira um código para ativar alguma funcionalidade secreta ou
               cheat do jogo.
             </Text>
-            <Input />
+            <Input
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value)
+              }}
+            />
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={props.onClose}>Entrar</Button>
+          <Button onClick={useCheat}>Usar</Button>
         </ModalFooter>
         <ModalCloseButton />
       </ModalContent>
