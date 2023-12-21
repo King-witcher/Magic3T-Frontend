@@ -150,7 +150,7 @@ export function GameProvider({ children }: Props) {
 
   function handleServerDisconnect() {
     console.error('disconnection happened')
-    setSocket(null)
+    // setSocket(null)
   }
 
   function handleServerGameState(stateString: string) {
