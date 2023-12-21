@@ -1,5 +1,5 @@
 import { Choice } from '@/types/types'
-import { ChakraProps, Flex, FlexProps } from '@chakra-ui/react'
+import { ChakraProps, Flex, FlexProps, keyframes } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 export type ChoiceStyle =
@@ -23,18 +23,20 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
       return {
         cursor: 'pointer',
         _hover: {
-          bg: 'pink.200',
+          bg: 'blue.100',
         },
       }
     case 'oponentSelected':
       return {
-        opacity: 0.3,
-        bg: 'red.200',
+        //opacity: 0.5,
+        bg: 'red.400',
+        color: 'white',
       }
     case 'playerSelected':
       return {
-        opacity: 0.3,
-        bg: 'blue.200',
+        //opacity: 0.5,
+        bg: 'blue.400',
+        color: 'white',
       }
     case 'disabled':
       return {
@@ -42,6 +44,24 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
       }
   }
 }
+
+const highlightAnimation = keyframes`
+  0% {
+    background-position: -100% -100%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+`
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
 
 export default function ChoiceComponent({
   choice,
@@ -58,11 +78,31 @@ export default function ChoiceComponent({
       h="50px"
       alignItems="center"
       justifyContent="center"
-      bg={highlight ? 'green.200' : 'gray.200'}
+      bg={highlight ? 'gray.200' : 'gray.200'}
+      backgroundSize="200%"
+      boxSizing="border-box"
       rounded="10px"
+      animation={`${highlightAnimation} infinite 3s linear`}
       fontWeight="bold"
       userSelect="none"
-      transition="opacity 300ms linear"
+      transition="opacity 300ms linear, background-color 80ms linear"
+      pos="relative"
+      _after={
+        highlight
+          ? {
+              transition: 'opacity 1s linear',
+              rounded: '10px',
+              content: '""',
+              inset: '0',
+              pos: 'absolute',
+              w: 'full',
+              h: 'full',
+              bg: 'linear-gradient(45deg, transparent, #ffffff80, transparent, #ffffff80)',
+              bgSize: '200%',
+              animation: `${highlightAnimation} infinite 700ms linear, ${appear} 1s linear`,
+            }
+          : {}
+      }
       {...styleOverride}
       {...rest}
     >

@@ -6,7 +6,7 @@ import { useGame } from '@/contexts/GameContext'
 const allChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 export default function ChoiceGrid() {
-  const { makeChoice, gameState, availableChoices } = useGame()
+  const { makeChoice, gameState, availableChoices, winningTriple } = useGame()
 
   const playerTurn = gameState?.turn === 'player'
 
@@ -29,6 +29,7 @@ export default function ChoiceGrid() {
           <ChoiceComponent
             choice={choice}
             key={choice}
+            highlight={winningTriple?.includes(choice)}
             choiceStyle={
               available
                 ? enabled

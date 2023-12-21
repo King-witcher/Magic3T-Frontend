@@ -158,11 +158,11 @@ export default function PlayerDeck({ player }: Props) {
               : gameState.oponent.profile?.name || 'Anônimo'}
           </Text>
         </VStack>
-        <ChoiceCollection
+        {/* <ChoiceCollection
           choices={choices}
           triple={winningTriple}
           flexDir={currentPlayer ? 'row' : 'row-reverse'}
-        />
+        /> */}
       </Flex>
     </Flex>
   )
