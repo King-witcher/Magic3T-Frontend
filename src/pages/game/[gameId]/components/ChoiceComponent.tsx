@@ -74,16 +74,17 @@ export default function ChoiceComponent({
   return (
     <Flex
       key={choice}
-      w="50px"
-      h="50px"
+      w="60px"
+      h="60px"
       alignItems="center"
       justifyContent="center"
       bg={highlight ? 'gray.200' : 'gray.200'}
       backgroundSize="200%"
       boxSizing="border-box"
+      fontSize="21px"
+      fontWeight="bold"
       rounded="10px"
       animation={`${highlightAnimation} infinite 3s linear`}
-      fontWeight="bold"
       userSelect="none"
       transition="opacity 300ms linear, background-color 80ms linear"
       pos="relative"

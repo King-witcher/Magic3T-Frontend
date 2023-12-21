@@ -1,4 +1,12 @@
-import { Grid, VStack, Text, useToast, Flex, Center } from '@chakra-ui/react'
+import {
+  Grid,
+  VStack,
+  Text,
+  useToast,
+  Flex,
+  Center,
+  Box,
+} from '@chakra-ui/react'
 import { useEffect } from 'react'
 import ChoiceComponent from './components/ChoiceComponent'
 import { Choice, GameStatus } from '@/types/types'
@@ -88,7 +96,7 @@ export default function GamePage() {
   return (
     <VStack h="100%" justifyContent="space-around">
       <PlayerDeck player="opponent" />
-      <VStack gap="10px">
+      <Box pos="relative">
         <ChoiceGrid />
         <Text
           userSelect="none"
@@ -100,6 +108,10 @@ export default function GamePage() {
           transition="opacity 200ms"
           fontWeight="semibold"
           color="green.500"
+          pos="absolute"
+          bottom="-10px"
+          left="50%"
+          transform="translate(-50%, 100%)"
         >
           Sua vez!
         </Text>
@@ -112,12 +124,12 @@ export default function GamePage() {
               userSelect="none"
               opacity={playerTurn ? '0' : '1'}
               transition="opacity 200ms"
+              fontWeight="semibold"
+              color="gray.500"
               pos="absolute"
               bottom="-10px"
               left="50%"
               transform="translate(-50%, 100%)"
-              fontWeight="semibold"
-              color="gray.500"
             >
               Aguarde a vez do oponente.
             </Text>
@@ -131,6 +143,10 @@ export default function GamePage() {
             transition="opacity 200ms"
             fontWeight="semibold"
             color="green.500"
+            pos="absolute"
+            bottom="-10px"
+            left="50%"
+            transform="translate(-50%, 100%)"
           >
             Você venceu!
           </Text>
@@ -144,6 +160,10 @@ export default function GamePage() {
             transition="opacity 200ms"
             fontWeight="semibold"
             color="red.600"
+            pos="absolute"
+            bottom="-10px"
+            left="50%"
+            transform="translate(-50%, 100%)"
           >
             Você perdeu.
           </Text>
@@ -157,6 +177,10 @@ export default function GamePage() {
             transition="opacity 200ms"
             fontWeight="semibold"
             color="gray.600"
+            pos="absolute"
+            bottom="-10px"
+            left="50%"
+            transform="translate(-50%, 100%)"
           >
             Empate
           </Text>
@@ -167,7 +191,7 @@ export default function GamePage() {
           <Center
             as={Link}
             to={`/profile/history/${gameState.matchId}`}
-            w="fit-content"
+            w="200px"
             cursor="pointer"
             userSelect="none"
             transition="all 100ms linear"
@@ -177,11 +201,15 @@ export default function GamePage() {
             bg="gray.200"
             p="10px"
             rounded="10px"
+            pos="absolute"
+            bottom="-45px"
+            left="50%"
+            transform="translate(-50%, 100%)"
           >
-            Ver no histórico
+            <Text>Ver no histórico</Text>
           </Center>
         )}
-      </VStack>
+      </Box>
       <PlayerDeck player="current" />
     </VStack>
   )
