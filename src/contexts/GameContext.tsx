@@ -64,6 +64,7 @@ export function GameProvider({ children }: Props) {
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const { getToken } = useAuth()
 
@@ -148,6 +149,7 @@ export function GameProvider({ children }: Props) {
   )
 
   function handleServerDisconnect() {
+    console.error('disconnection happened')
     setSocket(null)
   }
 
