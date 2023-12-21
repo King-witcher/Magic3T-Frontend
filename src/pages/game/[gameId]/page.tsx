@@ -1,17 +1,8 @@
-import {
-  Grid,
-  VStack,
-  Text,
-  useToast,
-  Flex,
-  Center,
-  Box,
-} from '@chakra-ui/react'
+import { VStack, Text, useToast, Center, Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import ChoiceComponent from './components/ChoiceComponent'
-import { Choice, GameStatus } from '@/types/types'
+import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
-import PlayerDeck from './components/PlayerDeck'
+import PlayerCard from './components/PlayerCard'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
 import { Link } from 'react-router-dom'
@@ -95,7 +86,7 @@ export default function GamePage() {
 
   return (
     <VStack h="100%" justifyContent="space-around">
-      <PlayerDeck player="opponent" />
+      <PlayerCard player="opponent" />
       <Box pos="relative">
         <ChoiceGrid />
         <Text
@@ -210,7 +201,7 @@ export default function GamePage() {
           </Center>
         )}
       </Box>
-      <PlayerDeck player="current" />
+      <PlayerCard player="current" />
     </VStack>
   )
 }

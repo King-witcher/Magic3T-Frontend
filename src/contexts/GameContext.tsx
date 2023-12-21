@@ -1,5 +1,4 @@
 import { Timer } from '@/lib/Timer'
-import { compareArrays } from '@/lib/utils'
 import { Choice, GameStateReport, GameStatus } from '@/types/types'
 import {
   ReactNode,
@@ -14,6 +13,8 @@ import {
 import { io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { UserData } from '@/models/users/User'
+import { models } from '@/models'
 
 type Message = { sender: string; content: string; timestamp: number }
 
@@ -22,7 +23,6 @@ interface GameState {
     choices: Choice[]
   }
   oponent: {
-    profile: Profile | null
     choices: Choice[]
   }
   gameStatus: GameStatus
@@ -37,6 +37,7 @@ interface GameData {
   oponentTimer: Timer
   availableChoices: Choice[]
   winningTriple: [Choice, Choice, Choice] | null
+  oponentProfile: UserData | null
 
   connectGame(matchId: string): Promise<void>
   makeChoice(choice: Choice): void
@@ -64,9 +65,10 @@ export function GameProvider({ children }: Props) {
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
-  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const { getToken } = useAuth()
+
+  const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 
   /**Limpa o estado do jogo, colocando os timers em 0. */
   const resetGameState = useCallback(() => {
@@ -76,6 +78,7 @@ export function GameProvider({ children }: Props) {
     oponentTimer.current.pause()
     playerTimer.current.setRemaining(0)
     oponentTimer.current.setRemaining(0)
+    setOponentProfile(null)
   }, [])
 
   const getEventfulSocket = useCallback(
@@ -86,28 +89,36 @@ export function GameProvider({ children }: Props) {
         auth: { matchId, token },
       })
 
-      return socket
-        .on('gameState', handleServerGameState)
-        .on('disconnect', handleServerDisconnect)
-        .on('message', handleReceiveMessage)
-        .on('oponentProfile', (profile) => {
-          setGameState(
-            (current) =>
-              current && {
-                ...current,
-                oponent: {
-                  ...current.oponent,
-                  profile,
-                },
-              },
-          )
-        })
-        .on('connect', () => {
-          socket.emit('getOponentProfile')
-        })
+      return (
+        socket
+          .on('gameState', handleServerGameState)
+          .on('disconnect', handleServerDisconnect)
+          .on('message', handleReceiveMessage)
+          // .on('oponentProfile', (profile) => {
+          //   setGameState(
+          //     (current) =>
+          //       current && {
+          //         ...current,
+          //         oponent: {
+          //           ...current.oponent,
+          //           profile,
+          //         },
+          //       },
+          //   )
+          // })
+          .on('oponentUid', handleReceiveOponentUid)
+          .on('connect', () => {
+            socket.emit('getOponentProfile')
+          })
+      )
     },
     [getToken],
   )
+
+  const handleReceiveOponentUid = useCallback(async (uid: string) => {
+    const oponentProfile = await models.users.getById(uid)
+    setOponentProfile(oponentProfile)
+  }, [])
 
   const handleReceiveMessage = useCallback((message: string) => {
     setGameState(
@@ -119,7 +130,7 @@ export function GameProvider({ children }: Props) {
             {
               timestamp: Date.now(),
               content: message,
-              sender: current.oponent.profile?.name || 'Anônimo',
+              sender: oponentProfile?.nickname || 'Anônimo',
             },
           ],
         },
@@ -149,8 +160,7 @@ export function GameProvider({ children }: Props) {
   )
 
   function handleServerDisconnect() {
-    console.error('disconnection happened')
-    // setSocket(null)
+    console.error('Connection failed')
   }
 
   function handleServerGameState(stateString: string) {
@@ -249,12 +259,6 @@ export function GameProvider({ children }: Props) {
         },
         oponent: {
           choices: [],
-          profile: {
-            name: '',
-            photoUrl: '',
-            rating: 0,
-            uid: '',
-          },
         },
       })
       newSocket.emitWithAck('ready', {})
@@ -304,6 +308,7 @@ export function GameProvider({ children }: Props) {
         oponentTimer: oponentTimer.current,
         availableChoices,
         winningTriple: triple,
+        oponentProfile,
 
         /** Se conecta a um jogo a partir de um token. */
         connectGame,

@@ -7,6 +7,8 @@ import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
 
+console.clear()
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <RouterProvider
     router={createBrowserRouter([

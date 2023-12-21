@@ -100,14 +100,17 @@ export function QueueProvider({ children }: QueueContextProps) {
         })
 
         newSocket.emit('interact')
+        if (socket) socket.disconnect()
         setSocket(newSocket)
       }
     }
-    init()
+    const initPromise = init()
 
     return () => {
-      if (newSocket) newSocket.disconnect()
-      setQueueModes({})
+      initPromise.then(() => {
+        if (newSocket) newSocket.disconnect()
+        setQueueModes({})
+      })
     }
   }, [user])
 
@@ -117,7 +120,6 @@ export function QueueProvider({ children }: QueueContextProps) {
         ...current,
         [mode]: true,
       }))
-      const token = await getToken()
 
       socket?.emit(mode)
     },

@@ -73,13 +73,9 @@ export function AuthProvider({ children }: Props) {
     let unsubscribe: Unsubscribe | null = null
     return onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const userData = await models.users.getById(user.uid)
-        unsubscribe = models.users.subscribe(user.uid, (snap) => {
-          setUser(snap)
-        })
-        setUser(userData)
+        unsubscribe = models.users.subscribe(user.uid, setUser)
       } else {
-        if (unsubscribe) unsubscribe()
+        unsubscribe && unsubscribe()
         setUser(null)
       }
       setAuthData(user)

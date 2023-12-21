@@ -1,10 +1,8 @@
 import { Flex, VStack, Text } from '@chakra-ui/layout'
 import { TimeCounter } from './TimeCounter'
-import ChoiceCollection from './ChoiceCollection'
 import { useGame } from '@/contexts/GameContext'
 import {
   Input,
-  InputGroup,
   Menu,
   MenuButton,
   MenuItem,
@@ -26,7 +24,7 @@ interface Props {
   player: 'current' | 'opponent'
 }
 
-export default function PlayerDeck({ player }: Props) {
+export default function PlayerCard({ player }: Props) {
   const { user } = useAuth()
 
   const easterEgg =
@@ -43,7 +41,7 @@ export default function PlayerDeck({ player }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const { gameState, winningTriple, sendMessage, playerTimer, oponentTimer } =
+  const { gameState, sendMessage, playerTimer, oponentTimer, oponentProfile } =
     useGame()
   const popoverFocusElement = useRef(null)
 
@@ -59,7 +57,6 @@ export default function PlayerDeck({ player }: Props) {
     e.preventDefault()
     sendMessage(message)
     setMessage('')
-    //onClose()
   }
 
   function handleChangeMessage(e: any) {
@@ -67,10 +64,6 @@ export default function PlayerDeck({ player }: Props) {
   }
 
   if (!gameState) return null
-
-  const choices = currentPlayer
-    ? gameState.player.choices
-    : gameState.oponent.choices
   const timer = currentPlayer ? playerTimer : oponentTimer
 
   return (
@@ -155,14 +148,9 @@ export default function PlayerDeck({ player }: Props) {
           <Text fontWeight="bold">
             {currentPlayer
               ? user?.nickname || 'Você'
-              : gameState.oponent.profile?.name || 'Anônimo'}
+              : oponentProfile?.nickname || 'Anônimo'}
           </Text>
         </VStack>
-        {/* <ChoiceCollection
-          choices={choices}
-          triple={winningTriple}
-          flexDir={currentPlayer ? 'row' : 'row-reverse'}
-        /> */}
       </Flex>
     </Flex>
   )
