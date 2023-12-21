@@ -109,7 +109,7 @@ export default function GamePage() {
           fontWeight="semibold"
           color="green.500"
           pos="absolute"
-          bottom="-10px"
+          bottom="-20px"
           left="50%"
           transform="translate(-50%, 100%)"
         >
@@ -127,11 +127,11 @@ export default function GamePage() {
               fontWeight="semibold"
               color="gray.500"
               pos="absolute"
-              bottom="-10px"
+              bottom="-20px"
               left="50%"
               transform="translate(-50%, 100%)"
             >
-              Aguarde a vez do oponente.
+              Aguarde a escolha do oponente.
             </Text>
           )}
         {gameState.gameStatus === GameStatus.Victory && (
@@ -144,7 +144,7 @@ export default function GamePage() {
             fontWeight="semibold"
             color="green.500"
             pos="absolute"
-            bottom="-10px"
+            bottom="-20px"
             left="50%"
             transform="translate(-50%, 100%)"
           >
@@ -161,7 +161,7 @@ export default function GamePage() {
             fontWeight="semibold"
             color="red.600"
             pos="absolute"
-            bottom="-10px"
+            bottom="-20px"
             left="50%"
             transform="translate(-50%, 100%)"
           >
@@ -178,7 +178,7 @@ export default function GamePage() {
             fontWeight="semibold"
             color="gray.600"
             pos="absolute"
-            bottom="-10px"
+            bottom="-20px"
             left="50%"
             transform="translate(-50%, 100%)"
           >
@@ -202,7 +202,7 @@ export default function GamePage() {
             p="10px"
             rounded="10px"
             pos="absolute"
-            bottom="-45px"
+            bottom="-55px"
             left="50%"
             transform="translate(-50%, 100%)"
           >
