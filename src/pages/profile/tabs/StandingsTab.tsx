@@ -60,7 +60,7 @@ export default function StandingsTab() {
   if (loading) return null
 
   const filtered = filter
-    ? standings.filter((user) => user.glicko.deviation < 200)
+    ? standings.filter((user) => user.glicko.deviation < 150)
     : standings
 
   return (
@@ -140,7 +140,7 @@ export default function StandingsTab() {
                     />
                     <Text fontWeight={[600, 800]}>
                       {rinfo.rating}
-                      {rinfo.deviation > 200 && '*'}
+                      {rinfo.deviation >= 150 && '*'}
                       {rinfo.deviation < 50 && '!'}
                     </Text>
                   </Flex>
