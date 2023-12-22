@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 
-type Message = { sender: string; content: string; timestamp: number }
+type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 interface GameState {
   player: {
@@ -130,7 +130,7 @@ export function GameProvider({ children }: Props) {
             {
               timestamp: Date.now(),
               content: message,
-              sender: oponentProfile?.nickname || 'Anônimo',
+              sender: 'him',
             },
           ],
         },
@@ -228,7 +228,7 @@ export function GameProvider({ children }: Props) {
             {
               timestamp: Date.now(),
               content: message,
-              sender: 'Você',
+              sender: 'you',
             },
           ],
         },

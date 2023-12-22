@@ -14,7 +14,7 @@ function initialTicTacToeCheat() {
 
 setCommand('3tmode', initialTicTacToeCheat)
 
-export default function ChoiceGrid() {
+export default function ChoiceTable() {
   const { makeChoice, gameState, availableChoices, winningTriple } = useGame()
   const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
 

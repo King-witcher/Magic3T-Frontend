@@ -37,15 +37,17 @@ type RatingInfo = {
   tier: Tier
   division: Division
   thumbnail: string
-  trustedRating: number
+  rating: number
+  deviation: number
 }
 
 const tiers: Tier[] = ['Bronze', 'Silver', 'Gold', 'Diamond', 'Elite']
 
 export function getRatingInfo(glicko: Glicko): RatingInfo {
-  const trustedRating = Math.round(glicko.rating)
+  const rating = Math.round(glicko.rating)
+  const deviation = Math.round(glicko.deviation)
   const absoluteDivision = Math.max(
-    Math.trunc((trustedRating - bronze1) / divisionSize),
+    Math.trunc((rating - bronze1) / divisionSize),
     0,
   )
 
@@ -53,7 +55,8 @@ export function getRatingInfo(glicko: Glicko): RatingInfo {
   const division = tierIndex === 4 ? 1 : (absoluteDivision % 5) + 1
 
   const result: RatingInfo = {
-    trustedRating,
+    rating,
+    deviation,
     tier: tiers[tierIndex],
     division: division as Division,
     thumbnail: `https://quake-stats.bethesda.net/ranks/${tiers[tierIndex]}_0${division}.png`,

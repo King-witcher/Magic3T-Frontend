@@ -20,6 +20,17 @@ const scrollbarAnimation = keyframes`
 export const chakraTheme = extendTheme({
   styles: {
     global: {
+      '*': {
+        '::-webkit-scrollbar': {
+          w: '5px',
+          animation: `${scrollbarAnimation} 500ms linear`,
+        },
+        '::-webkit-scrollbar-thumb': {
+          w: '5px',
+          bg: 'pink.700',
+          borderRadius: '999px',
+        },
+      },
       body: {
         bg: 'pink.100',
         color: 'blackAlpha.800',

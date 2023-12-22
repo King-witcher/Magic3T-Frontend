@@ -1,30 +1,26 @@
-import { Flex, VStack, Text } from '@chakra-ui/layout'
-import { TimeCounter } from './TimeCounter'
+import { Flex, Text, Center, Stack, Image } from '@chakra-ui/react'
 import { useGame } from '@/contexts/GameContext'
 import {
-  Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Popover,
-  PopoverAnchor,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverHeader,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { RefObject, useRef, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import ForfeitModal from './ForfeitModal'
 import { GameStatus } from '@/types/types'
+import { Avatar } from '@chakra-ui/react'
+import { getRatingInfo } from '@/utils/getEloUrl'
+import ChatDrawer from './ChatDrawer'
 
 interface Props {
   player: 'current' | 'opponent'
+  chatInputRef: RefObject<HTMLInputElement>
 }
 
-export default function PlayerCard({ player }: Props) {
+export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
 
   const easterEgg =
@@ -34,16 +30,13 @@ export default function PlayerCard({ player }: Props) {
       ? 'Te amo, mãe <3'
       : ''
 
-  const [message, setMessage] = useState('')
   const {
     isOpen: forfeitModaOpen,
     onClose: closeForfeitModal,
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const { gameState, sendMessage, playerTimer, oponentTimer, oponentProfile } =
-    useGame()
-  const popoverFocusElement = useRef(null)
+  const { gameState, oponentProfile } = useGame()
 
   const currentPlayer = player === 'current'
 
@@ -53,105 +46,83 @@ export default function PlayerCard({ player }: Props) {
     onOpen: chatOnOpen,
   } = useDisclosure()
 
-  function handleSubmitMessage(e: any) {
-    e.preventDefault()
-    sendMessage(message)
-    setMessage('')
-  }
-
-  function handleChangeMessage(e: any) {
-    setMessage(e.target.value)
-  }
+  const profile = currentPlayer ? user : oponentProfile
+  const rating = profile && getRatingInfo(profile.glicko)
 
   if (!gameState) return null
-  const timer = currentPlayer ? playerTimer : oponentTimer
 
   return (
-    <Flex
-      flex="1"
-      w="100%"
-      justifyContent={currentPlayer ? 'flex-start' : 'flex-end'}
-      alignItems={currentPlayer ? 'flex-end' : 'flex-start'}
-    >
-      <Flex
-        alignItems="center"
-        h="fit-content"
-        gap="30px"
-        margin="10px"
-        flexDir={currentPlayer ? 'row' : 'row-reverse'}
+    <Menu>
+      <ChatDrawer
+        isOpen={chatIsOpen}
+        onClose={chatOnClose}
+        size="xs"
+        placement="right"
+      />
+      <MenuButton
+        disabled={!currentPlayer}
+        cursor={currentPlayer ? 'pointer' : 'auto'}
+        sx={
+          currentPlayer
+            ? {
+                '&:hover .playerCard': {
+                  bg: 'gray.50',
+                },
+              }
+            : {}
+        }
       >
-        <VStack>
-          <Popover
-            initialFocusRef={popoverFocusElement}
-            variant="messageBox"
-            //returnFocusOnClose={false}
-            isOpen={chatIsOpen}
-            onClose={chatOnClose}
-            // onOpen={chatOnOpen}
-          >
-            <Menu>
-              <PopoverAnchor>
-                <MenuButton
-                  disabled={!currentPlayer}
-                  cursor={currentPlayer ? 'pointer' : 'auto'}
-                >
-                  <Flex
-                    rounded="100%"
-                    bg={currentPlayer ? 'blue.500' : 'red.600'}
-                    w="70px"
-                    h="70px"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontWeight="bold"
-                    color="white"
-                    userSelect="none"
-                  >
-                    <TimeCounter timer={timer} />
-                  </Flex>
-                </MenuButton>
-              </PopoverAnchor>
-              <MenuList hidden={!currentPlayer}>
-                <MenuItem onClick={chatOnOpen}>Enviar mensagem</MenuItem>
-                <MenuItem
-                  hidden={gameState.gameStatus !== GameStatus.Playing}
-                  bg="red.200"
-                  _hover={{
-                    bg: 'red.400',
-                  }}
-                  onClick={openForfeitModal}
-                >
-                  Render-se
-                  <ForfeitModal
-                    onClose={closeForfeitModal}
-                    isOpen={forfeitModaOpen}
-                  />
-                </MenuItem>
-              </MenuList>
-            </Menu>
-            <PopoverContent w={['100%', '500px']}>
-              <PopoverArrow />
-              <PopoverHeader>Enviar mensagem</PopoverHeader>
-              <PopoverBody>
-                <form onSubmit={handleSubmitMessage}>
-                  <Input
-                    variant="unstyled"
-                    ref={popoverFocusElement}
-                    value={message}
-                    onChange={handleChangeMessage}
-                    placeholder={easterEgg}
-                    maxLength={100}
-                  />
-                </form>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-          <Text fontWeight="bold">
-            {currentPlayer
-              ? user?.nickname || 'Você'
-              : oponentProfile?.nickname || 'Anônimo'}
-          </Text>
-        </VStack>
-      </Flex>
-    </Flex>
+        <Center
+          className="playerCard"
+          alignItems="center"
+          justifyContent="left"
+          gap="10px"
+          border="solid 1px #ddd"
+          p="10px"
+          rounded="10px"
+          overflow="hidden"
+          transition="background 80ms linear"
+          w="250px"
+        >
+          <Avatar src={profile?.photoURL} size="lg" />
+          <Stack gap="0">
+            <Text fontSize="20px" fontWeight={700} noOfLines={1}>
+              {profile?.nickname}
+            </Text>
+            <Flex alignItems="center" gap="5px">
+              <Image src={rating?.thumbnail} w="25px" />
+              <Text fontSize="16px">
+                {rating?.rating}
+                {(rating?.deviation || 200) > 100 && '*'} SR
+              </Text>
+            </Flex>
+          </Stack>
+        </Center>
+      </MenuButton>
+      <MenuList>
+        <MenuItem display={{ base: 'block', lg: 'none' }} onClick={chatOnOpen}>
+          Enviar mensagem
+        </MenuItem>
+        <MenuItem
+          display={{ base: 'none', lg: 'block' }}
+          onClick={() => {
+            if (chatInputRef.current) chatInputRef.current.focus()
+          }}
+        >
+          Enviar mensagem
+        </MenuItem>
+        <MenuItem
+          hidden={gameState.gameStatus !== GameStatus.Playing}
+          bg="red.200"
+          _hover={{
+            bg: 'red.400',
+          }}
+          onClick={openForfeitModal}
+        >
+          Render-se
+          <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />
+        </MenuItem>
+      </MenuList>
+    </Menu>
   )
 }

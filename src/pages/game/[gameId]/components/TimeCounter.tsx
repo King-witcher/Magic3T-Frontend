@@ -1,7 +1,8 @@
 import { Timer } from '@/lib/Timer'
+import { TextProps, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-interface Props {
+interface Props extends TextProps {
   timer: Timer
 }
 
@@ -15,11 +16,11 @@ function format(timer: Timer): string {
       .toFixed()
       .padStart(2, '0')}`
   } else {
-    return `${timeSecs.toFixed(1)}`
+    return `${timeSecs.toFixed(2)}`
   }
 }
 
-export function TimeCounter({ timer }: Props) {
+export function TimeCounter({ timer, ...rest }: Props) {
   const [time, setTime] = useState('')
 
   useEffect(() => {
@@ -37,5 +38,5 @@ export function TimeCounter({ timer }: Props) {
     }
   }, [])
 
-  return <>{time}</>
+  return <Text {...rest}>{time}</Text>
 }

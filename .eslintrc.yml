@@ -40,3 +40,4 @@ rules:
   prefer-const: warn
   "@typescript-eslint/no-unused-vars": off
   "@typescript-eslint/no-explicit-any": warn
+  no-unreachable: warn
