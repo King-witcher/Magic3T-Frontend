@@ -10,6 +10,10 @@ import {
   Flex,
   Heading,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spinner,
   Stack,
   Text,
@@ -53,39 +57,65 @@ export default function Home() {
             ? 'Só você está online'
             : `${queueUserCount.connected} jogadores online`}
         </Text>
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          transition="background 80ms linear"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          w="200px"
-          fontWeight={700}
-          h="80px"
-          _hover={{
-            bg: 'pink.200',
-          }}
-          onClick={
-            queueModes.bot
-              ? dequeue.bind(null, GameMode.Bot)
-              : enqueue.bind(null, GameMode.Bot)
-          }
-        >
-          <VStack gap="0">
+        <Menu>
+          <MenuButton
+            disabled={
+              queueModes['bot-1'] || queueModes['bot-2'] || queueModes['bot-3']
+            }
+            sx={{
+              '&:hover .cpu-button': {
+                bg: 'pink.200',
+              },
+            }}
+          >
             <Flex
+              className="cpu-button"
               alignItems="center"
-              gap="10px"
+              justifyContent="center"
+              bg="gray.100"
+              transition="background 80ms linear"
+              rounded="10px"
+              cursor="pointer"
               fontSize="20px"
-              textAlign="center"
+              userSelect="none"
+              w="200px"
+              fontWeight={700}
+              h="80px"
+              // onClick={
+              //   queueModes.bot
+              //     ? dequeue.bind(null, GameMode.Bot)
+              //     : enqueue.bind(null, GameMode.Bot)
+              // }
             >
-              {queueModes.bot && <Spinner thickness="4px" speed="0.7s" />}
-              CPU
+              <VStack gap="0">
+                <Flex
+                  alignItems="center"
+                  gap="10px"
+                  fontSize="20px"
+                  textAlign="center"
+                >
+                  {(queueModes['bot-1'] ||
+                    queueModes['bot-2'] ||
+                    queueModes['bot-3']) && (
+                    <Spinner thickness="4px" speed="0.7s" />
+                  )}
+                  CPU
+                </Flex>
+              </VStack>
             </Flex>
-          </VStack>
-        </Flex>
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={enqueue.bind(null, GameMode.Bot1)}>
+              Fácil
+            </MenuItem>
+            <MenuItem onClick={enqueue.bind(null, GameMode.Bot2)}>
+              Difícil
+            </MenuItem>
+            <MenuItem onClick={enqueue.bind(null, GameMode.Bot3)}>
+              Invencível
+            </MenuItem>
+          </MenuList>
+        </Menu>
         <Flex
           alignItems="center"
           justifyContent="center"
