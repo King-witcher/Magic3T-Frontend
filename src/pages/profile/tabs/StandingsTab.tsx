@@ -79,7 +79,7 @@ export default function StandingsTab() {
         spacing="15px"
         size="lg"
       >
-        Filtrar rankings incertos
+        Filtrar ratings incertos
       </Checkbox>
       <Stack userSelect="none">
         {filtered.map((player, index) => {
