@@ -302,7 +302,6 @@ export function GameProvider({ children }: Props) {
   }, [])
 
   useEffect(() => {
-    console.log(oponentProfile?._id)
     let unsubscribe: Unsubscribe | null = null
     if (oponentProfile)
       unsubscribe = models.users.subscribe(oponentProfile?._id, (data) => {

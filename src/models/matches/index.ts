@@ -21,7 +21,7 @@ async function listByPlayerId(uid: string): Promise<Match[]> {
     col,
     or(where('black.uid', '==', uid), where('white.uid', '==', uid)),
     orderBy('timestamp', 'desc'),
-    limit(10),
+    limit(20),
   )
   const snap = await getDocs(q)
 

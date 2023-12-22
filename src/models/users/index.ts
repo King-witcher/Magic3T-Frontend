@@ -1,8 +1,15 @@
-import { collection, doc, onSnapshot } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore'
 import { getConverter } from '../getConverter'
 import { UserData } from './User'
 import { NotFoundError } from '../errors/NotFoundError'
-import { firestore, getDoc } from '@/services/firestore'
+import { firestore, getDoc, getDocs } from '@/services/firestore'
 
 const converter = getConverter<UserData>()
 
@@ -18,6 +25,19 @@ async function getById(id: string): Promise<UserData> {
   return data
 }
 
+async function getStandings(): Promise<UserData[]> {
+  const q = query(usersCollection, orderBy('glicko.rating', 'desc'), limit(20))
+  const snap = await getDocs(q)
+
+  import.meta.env.DEV &&
+    console.info(
+      `%cFirestore: Get ${snap.docs.length} users.`,
+      'color: #FFCA28',
+    )
+
+  return snap.docs.map((doc) => doc.data())
+}
+
 function subscribe(uid: string, callback: (data: UserData) => void) {
   return onSnapshot(
     doc(firestore, 'users', uid).withConverter(converter),
@@ -29,4 +49,4 @@ function subscribe(uid: string, callback: (data: UserData) => void) {
   )
 }
 
-export const users = { getById, subscribe }
+export const users = { getById, getStandings, subscribe }

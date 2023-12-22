@@ -22,6 +22,7 @@ import { matches } from '@/models/matches'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { UserData } from '@/models/users/User'
 import { GiBrokenArrow } from 'react-icons/gi'
+import StandingsTab from './tabs/StandingsTab'
 
 type Params = {
   matchId: string
@@ -39,15 +40,17 @@ const pathIndexMap: Record<string, number> = {
 export default function ProfilePage({ index }: Props) {
   const { user: authUser } = useAuth()
   const params = useQueryParams()
-  const userId = params.get('userId')
+  const uidParam = params.get('uid')
 
   const [matches, loadingMatches] = useAsync(async () => {
-    return authUser ? models.matches.listByPlayerId(userId ?? authUser._id) : []
-  }, [userId, authUser?._id])
+    return authUser
+      ? models.matches.listByPlayerId(uidParam ?? authUser._id)
+      : []
+  }, [uidParam, authUser?._id])
 
   const [profile, loadingProfile] = useAsync(async () => {
-    return userId ? models.users.getById(userId) : authUser
-  }, [userId, authUser?._id])
+    return uidParam ? models.users.getById(uidParam) : authUser
+  }, [uidParam, authUser?._id])
 
   if (!authUser) return <SignInPage />
 
@@ -69,13 +72,25 @@ export default function ProfilePage({ index }: Props) {
   return (
     <Tabs index={index}>
       <TabList>
-        <Link to="/profile/">
+        <Link to={uidParam ? `/profile/?uid=${uidParam}` : '/profile/'}>
           <Tab>Perfil</Tab>
         </Link>
-        <Link to="/profile/history/">
+        <Link
+          to={
+            uidParam ? `/profile/history/?uid=${uidParam}` : '/profile/history/'
+          }
+        >
           <Tab>Histórico</Tab>
         </Link>
-        <Tab isDisabled>Classificações</Tab>
+        <Link
+          to={
+            uidParam
+              ? `/profile/standings/?uid=${uidParam}`
+              : '/profile/standings/'
+          }
+        >
+          <Tab>Ranking</Tab>
+        </Link>
       </TabList>
       <TabIndicator />
       <TabPanels>
@@ -84,6 +99,9 @@ export default function ProfilePage({ index }: Props) {
         </TabPanel>
         <TabPanel>
           <HistoryTab matches={matches} />
+        </TabPanel>
+        <TabPanel>
+          <StandingsTab />
         </TabPanel>
       </TabPanels>
     </Tabs>

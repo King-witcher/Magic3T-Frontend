@@ -20,9 +20,11 @@ import {
   LinkBox,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
+import { useQueryParams } from '@/hooks/useQueryParams'
 
 interface Props {
   match: string
+  viewerId?: string
 }
 
 const rowColors = {
@@ -34,6 +36,18 @@ const rowColors = {
 export default function MatchViewer({ match: matchId }: Props) {
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
+
+  const params = useQueryParams()
+  const uidParam = params.get('uid')
+
+  const [viewerProfile] = useAsync(async () => {
+    if (uidParam) {
+      return await models.users.getById(uidParam)
+    } else {
+      return user
+    }
+  }, [uidParam, user?._id])
+
   const [match, loading] = useAsync(async () => {
     try {
       return await models.matches.getById(matchId)
@@ -48,7 +62,9 @@ export default function MatchViewer({ match: matchId }: Props) {
     try {
       if (match && user) {
         return models.users.getById(
-          match.black.uid === user._id ? match.white.uid : match.black.uid,
+          match.black.uid === viewerProfile?._id
+            ? match.white.uid
+            : match.black.uid,
         )
       }
     } catch (e) {
@@ -61,17 +77,19 @@ export default function MatchViewer({ match: matchId }: Props) {
 
   if (!match || !user) return null
 
-  const side = match.black.uid === user._id ? 'black' : 'white'
+  const side = match.black.uid === viewerProfile?._id ? 'black' : 'white'
 
   const result =
     match.winner === 'none'
       ? 'draw'
-      : match[match.winner].uid === user._id
+      : match[match.winner].uid === viewerProfile?._id
       ? 'victory'
       : 'defeat'
 
-  const currentPlayer = match.black.uid === user._id ? match.black : match.white
-  const oponent = match.black.uid === user._id ? match.white : match.black
+  const currentPlayer =
+    match.black.uid === viewerProfile?._id ? match.black : match.white
+  const oponent =
+    match.black.uid === viewerProfile?._id ? match.white : match.black
   const contextColor =
     result === 'victory' ? 'green' : result === 'defeat' ? 'red' : 'gray'
 
@@ -137,7 +155,7 @@ export default function MatchViewer({ match: matchId }: Props) {
           gap="15px"
           bg="whiteAlpha.600"
         >
-          <LinkOverlay href={`/profile?userId=${oponentProfile?._id}`} />
+          <LinkOverlay href={`/profile?uid=${oponentProfile?._id}`} />
           <Avatar size="lg" src={oponentProfile?.photoURL} />
           <Flex flexDir="column">
             <Text>{oponent.name}</Text>
@@ -201,9 +219,9 @@ export default function MatchViewer({ match: matchId }: Props) {
           border="solid 5px white"
           boxSizing="border-box"
         >
-          <Avatar size="lg" src={user.photoURL} />
+          <Avatar size="lg" src={viewerProfile?.photoURL} />
           <Flex flexDir="column">
-            <Text>{currentPlayer.name}</Text>
+            <Text>{viewerProfile?.nickname}</Text>
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"

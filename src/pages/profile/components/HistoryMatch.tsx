@@ -4,6 +4,7 @@ import { formatTime } from '@/lib/utils'
 import { Box, Center, Divider, Flex, Stack, Text } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { formatDate } from '@/utils/timeFormat'
+import { useQueryParams } from '@/hooks/useQueryParams'
 
 interface Props {
   match: MatchRegistry
@@ -19,25 +20,21 @@ export default function HistoryMatch({ match }: Props) {
   const { user } = useAuth()
   if (!user) return null
 
+  const params = useQueryParams()
+  const viewerId = params.get('uid') || user._id
+
   const result =
     match.winner === 'none'
       ? 'draw'
-      : match[match.winner].uid === user._id
+      : match[match.winner].uid === viewerId
       ? 'victory'
       : 'defeat'
 
-  const timeMs = match.moves[match.moves.length - 1].time
-  const timeFmt = formatTime(timeMs)
+  //const timeMs = match.moves[match.moves.length - 1].time
+  //const timeFmt = formatTime(timeMs)
 
-  const side = useMemo(() => {
-    if (match.white.uid === user._id) return 'white'
-    else return 'black'
-  }, [user])
-
-  const oponentSide = useMemo(() => {
-    if (side === 'white') return 'black'
-    else return 'white'
-  }, [side])
+  const side = match.white.uid === viewerId ? 'white' : 'black'
+  const oponentSide = side === 'white' ? 'black' : 'white'
 
   return (
     <Flex
