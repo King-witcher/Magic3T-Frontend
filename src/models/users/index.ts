@@ -5,6 +5,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from 'firebase/firestore'
 import { getConverter } from '../getConverter'
 import { UserData } from './User'
@@ -26,7 +27,7 @@ async function getById(id: string): Promise<UserData> {
 }
 
 async function getStandings(): Promise<UserData[]> {
-  const q = query(usersCollection, orderBy('glicko.rating', 'desc'), limit(20))
+  const q = query(usersCollection, orderBy('glicko.rating', 'desc'), limit(30))
   const snap = await getDocs(q)
 
   import.meta.env.DEV &&
@@ -35,7 +36,9 @@ async function getStandings(): Promise<UserData[]> {
       'color: #FFCA28',
     )
 
-  return snap.docs.map((doc) => doc.data())
+  const result = snap.docs.map((doc) => doc.data())
+
+  return result
 }
 
 function subscribe(uid: string, callback: (data: UserData) => void) {

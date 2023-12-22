@@ -1,12 +1,20 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { MatchRegistry } from '../tabs/MatchRegistry'
 import { formatTime } from '@/lib/utils'
-import { Box, Center, Divider, Flex, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  FlexProps,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { formatDate } from '@/utils/timeFormat'
 import { useQueryParams } from '@/hooks/useQueryParams'
 
-interface Props {
+interface Props extends FlexProps {
   match: MatchRegistry
 }
 
@@ -16,7 +24,7 @@ const rowColors = {
   defeat: 'red.200',
 }
 
-export default function HistoryMatch({ match }: Props) {
+export default function HistoryMatch({ match, ...rest }: Props) {
   const { user } = useAuth()
   if (!user) return null
 
@@ -76,6 +84,7 @@ export default function HistoryMatch({ match }: Props) {
         base: '11px',
         sm: '16px',
       }}
+      {...rest}
     >
       <Flex
         gap={['5px', '10px']}

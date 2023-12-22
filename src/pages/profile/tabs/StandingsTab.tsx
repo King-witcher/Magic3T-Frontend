@@ -4,6 +4,7 @@ import { getRatingInfo } from '@/utils/getEloUrl'
 import {
   Box,
   Center,
+  Checkbox,
   ColorProps,
   Flex,
   Image,
@@ -12,8 +13,19 @@ import {
   Td,
   Text,
   Tr,
+  keyframes,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
 
 const bgMap = {
   Bronze: 'orange.500',
@@ -41,10 +53,15 @@ const borderColorMap = {
 
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
+  const [filter, setFilter] = useState(true)
 
   console.log(standings)
 
   if (loading) return null
+
+  const filtered = filter
+    ? standings.filter((user) => user.glicko.deviation < 200)
+    : standings
 
   return (
     <Stack gap="20px" p={{ base: '0', lg: '20px 0' }}>
@@ -55,19 +72,31 @@ export default function StandingsTab() {
       >
         Melhores jogadores de Magic3t
       </Text>
+      <Checkbox
+        isChecked={filter}
+        onChange={(e) => setFilter(e.target.checked)}
+        colorScheme="pink"
+        spacing="15px"
+        size="lg"
+      >
+        Filtrar rankings incertos
+      </Checkbox>
       <Stack userSelect="none">
-        {standings.map((player, index) => {
+        {filtered.map((player, index) => {
           const rinfo = getRatingInfo(player.glicko)
 
           const bg = bgMap[rinfo.tier]
           const hoverBg = hoverBgMap[rinfo.tier]
           const borderColor = borderColorMap[rinfo.tier]
 
+          const delay = (0.5 * index) / filtered.length
+
           return (
             <Flex
+              animation={`${appear} ${delay}s ease-in`}
               as={Link}
               to={`/profile?uid=${player._id}`}
-              key={player._id}
+              key={filtered.length + player._id}
               w="full"
               alignItems="center"
               p="10px 10px"
@@ -111,8 +140,8 @@ export default function StandingsTab() {
                     />
                     <Text fontWeight={[600, 800]}>
                       {rinfo.rating}
-                      {rinfo.deviation > 100 && '*'}
-                      {rinfo.deviation < 40 && '!'}
+                      {rinfo.deviation > 200 && '*'}
+                      {rinfo.deviation < 50 && '!'}
                     </Text>
                   </Flex>
                 </Box>

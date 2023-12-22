@@ -95,8 +95,8 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   <Image src={rating?.thumbnail} w="25px" />
                   <Text fontSize="16px">
                     {rating!.rating}
-                    {rating!.deviation > 100 && '*'}
-                    {rating!.deviation < 40 && '!'} SR
+                    {rating!.deviation > 200 && '*'}
+                    {rating!.deviation < 50 && '!'} SR
                   </Text>
                 </Flex>
               </>
