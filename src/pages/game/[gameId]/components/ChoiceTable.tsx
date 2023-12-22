@@ -55,7 +55,9 @@ export default function ChoiceTable() {
             choiceStyle={
               available
                 ? enabled
-                  ? 'selectable'
+                  ? gameState.turn
+                    ? 'selectable'
+                    : 'normal'
                   : 'disabled'
                 : playerSelected
                 ? 'playerSelected'
