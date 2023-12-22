@@ -115,8 +115,24 @@ export default function Home() {
             <MenuItem onClick={enqueue.bind(null, GameMode.Bot2)}>
               Difícil
             </MenuItem>
-            <MenuItem onClick={enqueue.bind(null, GameMode.Bot3)}>
+            <MenuItem bg="red.100" onClick={enqueue.bind(null, GameMode.Bot3)}>
               Invencível
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                const bots = [
+                  GameMode.Bot0,
+                  GameMode.Bot1,
+                  GameMode.Bot2,
+                  GameMode.Bot3,
+                ]
+
+                const bot = bots[Math.floor(Math.random() * 4)]
+
+                enqueue(bot)
+              }}
+            >
+              Qualquer um
             </MenuItem>
           </MenuList>
         </Menu>
