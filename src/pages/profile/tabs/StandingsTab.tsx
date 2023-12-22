@@ -1,3 +1,4 @@
+import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { getRatingInfo } from '@/utils/getEloUrl'
@@ -54,13 +55,12 @@ const borderColorMap = {
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
   const [filter, setFilter] = useState(true)
-
-  console.log(standings)
+  const { maxReliableDeviation } = useServiceStatus()
 
   if (loading) return null
 
   const filtered = filter
-    ? standings.filter((user) => user.glicko.deviation < 150)
+    ? standings.filter((user) => user.glicko.deviation < maxReliableDeviation)
     : standings
 
   return (
@@ -140,7 +140,7 @@ export default function StandingsTab() {
                     />
                     <Text fontWeight={[600, 800]}>
                       {rinfo.rating}
-                      {rinfo.deviation >= 150 && '*'}
+                      {rinfo.deviation >= maxReliableDeviation && '*'}
                       {rinfo.deviation < 50 && '!'}
                     </Text>
                   </Flex>

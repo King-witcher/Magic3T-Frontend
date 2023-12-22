@@ -7,13 +7,14 @@ import {
   MenuList,
   useDisclosure,
 } from '@chakra-ui/react'
-import { RefObject, useRef, useState } from 'react'
+import { RefObject } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import ForfeitModal from './ForfeitModal'
 import { GameStatus } from '@/types/types'
 import { Avatar } from '@chakra-ui/react'
 import { getRatingInfo } from '@/utils/getEloUrl'
 import ChatDrawer from './ChatDrawer'
+import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -22,6 +23,7 @@ interface Props {
 
 export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
+  const { maxReliableDeviation } = useServiceStatus()
 
   const easterEgg =
     user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
@@ -95,7 +97,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   <Image src={rating?.thumbnail} w="25px" />
                   <Text fontSize="16px">
                     {rating!.rating}
-                    {rating!.deviation >= 150 && '*'}
+                    {rating!.deviation >= 135 && '*'}
                     {rating!.deviation < 50 && '!'} SR
                   </Text>
                 </Flex>

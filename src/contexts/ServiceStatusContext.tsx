@@ -1,4 +1,7 @@
+import { useAsync } from '@/hooks/useAsync'
+import { firestore, getDoc } from '@/services/firestore'
 import axios from 'axios'
+import { doc } from 'firebase/firestore'
 import {
   ReactNode,
   createContext,
@@ -10,6 +13,7 @@ import {
 
 interface ServiceStatusData {
   serverOnline: boolean | undefined
+  maxReliableDeviation: number
 }
 
 interface Props {
@@ -18,10 +22,16 @@ interface Props {
 
 const ServiceStatusContext = createContext<ServiceStatusData>({
   serverOnline: false,
+  maxReliableDeviation: 0,
 })
 
 export function ServiceStatusProvider({ children }: Props) {
   const [serverOnline, setServerOnline] = useState<boolean>()
+  const [maxReliableDeviation] = useAsync(async () => {
+    const snap = await getDoc(doc(firestore, 'config/rating'))
+    const configs = snap.data()
+    return configs?.maxReliableDeviation || 0
+  })
   const timeoutRef = useRef<NodeJS.Timeout>()
 
   async function fetchStatus() {
@@ -45,7 +55,9 @@ export function ServiceStatusProvider({ children }: Props) {
   }, [])
 
   return (
-    <ServiceStatusContext.Provider value={{ serverOnline }}>
+    <ServiceStatusContext.Provider
+      value={{ serverOnline, maxReliableDeviation }}
+    >
       {children}
     </ServiceStatusContext.Provider>
   )
