@@ -51,7 +51,7 @@ export default function Home() {
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">
-        <Heading fontFamily="nunito variable">PvP</Heading>
+        <Heading fontFamily="nunito variable">Jogar contra</Heading>
         <Text fontSize="14px" fontWeight="700" color="green.500">
           {queueUserCount.connected <= 1
             ? 'Só você está online'
@@ -94,19 +94,23 @@ export default function Home() {
                   fontSize="20px"
                   textAlign="center"
                 >
-                  {(queueModes['bot-1'] ||
+                  {(queueModes['bot-0'] ||
+                    queueModes['bot-1'] ||
                     queueModes['bot-2'] ||
                     queueModes['bot-3']) && (
                     <Spinner thickness="4px" speed="0.7s" />
                   )}
-                  CPU
+                  Máquina
                 </Flex>
               </VStack>
             </Flex>
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={enqueue.bind(null, GameMode.Bot1)}>
+            <MenuItem onClick={enqueue.bind(null, GameMode.Bot0)}>
               Fácil
+            </MenuItem>
+            <MenuItem onClick={enqueue.bind(null, GameMode.Bot1)}>
+              Médio
             </MenuItem>
             <MenuItem onClick={enqueue.bind(null, GameMode.Bot2)}>
               Difícil
@@ -116,7 +120,7 @@ export default function Home() {
             </MenuItem>
           </MenuList>
         </Menu>
-        <Flex
+        {/* <Flex
           alignItems="center"
           justifyContent="center"
           bg="gray.100"
@@ -155,7 +159,7 @@ export default function Home() {
               {queueUserCount.casual.queue !== 1 ? 'es' : ''}
             </Text>
           </VStack>
-        </Flex>
+        </Flex> */}
         <Flex
           alignItems="center"
           justifyContent="center"
@@ -185,7 +189,7 @@ export default function Home() {
               textAlign="center"
             >
               {queueModes.ranked && <Spinner thickness="4px" speed="0.7s" />}
-              Ranqueada
+              Humano
             </Flex>
             <Text
               fontSize="14px"

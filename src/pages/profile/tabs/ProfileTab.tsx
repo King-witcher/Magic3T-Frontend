@@ -56,7 +56,7 @@ export default function ProfileTab({ user }: Props) {
             </Tooltip>
           )}
           <Text fontSize="18px" fontWeight="500" color="gray.500">
-            {user && `${rating?.rating} SR`}
+            {user && `${rating?.rating} (±${rating?.deviation}) SR`}
           </Text>
         </Flex>
       </VStack>

@@ -11,6 +11,7 @@ import { useAuth } from './AuthContext'
 import { useGame } from './GameContext'
 
 export enum GameMode {
+  Bot0 = 'bot-0',
   Bot1 = 'bot-1',
   Bot2 = 'bot-2',
   Bot3 = 'bot-3',
@@ -19,6 +20,7 @@ export enum GameMode {
 }
 
 type QueueModesType = {
+  'bot-0'?: boolean
   'bot-1'?: boolean
   'bot-2'?: boolean
   'bot-3'?: boolean

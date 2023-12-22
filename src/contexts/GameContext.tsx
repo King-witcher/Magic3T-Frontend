@@ -15,6 +15,7 @@ import { useAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
+import { Unsubscribe } from 'firebase/auth'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -299,6 +300,18 @@ export function GameProvider({ children }: Props) {
       socket?.disconnect()
     }
   }, [])
+
+  useEffect(() => {
+    console.log(oponentProfile?._id)
+    let unsubscribe: Unsubscribe | null = null
+    if (oponentProfile)
+      unsubscribe = models.users.subscribe(oponentProfile?._id, (data) => {
+        setOponentProfile(data)
+      })
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
+  }, [oponentProfile?._id])
 
   return (
     <GameContext.Provider

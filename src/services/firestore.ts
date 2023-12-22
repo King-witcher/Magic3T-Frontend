@@ -1,7 +1,9 @@
 import {
   DocumentData,
+  DocumentReference,
   getDoc as firestoreGetDoc,
   getDocs as firestoreGetDocs,
+  onSnapshot as firestoreOnSnapshot,
   getFirestore,
 } from 'firebase/firestore'
 import './firebase'
@@ -73,6 +75,16 @@ export async function getDocs<AppModelType, DbModelType extends DocumentData>(
   if (blocked) throw new Error('Firestore access blocked.')
   const result = await firestoreGetDocs<AppModelType, DbModelType>(...params)
   readCount += result.size
+  queryCount++
+  return result
+}
+
+export function onSnapshot<AppModelType, DbModelType extends DocumentData>(
+  ...params: Parameters<typeof firestoreOnSnapshot<AppModelType, DbModelType>>
+): ReturnType<typeof firestoreOnSnapshot<AppModelType, DbModelType>> {
+  if (blocked) throw new Error('Firestore access blocked.')
+  const result = onSnapshot(...params)
+  readCount++
   queryCount++
   return result
 }
