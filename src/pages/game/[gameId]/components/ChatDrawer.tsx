@@ -1,4 +1,3 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { useGame } from '@/contexts/GameContext'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
@@ -12,14 +11,12 @@ import {
   VStack,
   Text,
   DrawerCloseButton,
-  Flex,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface Props extends Omit<DrawerProps, 'children'> {}
 
 export default function ChatDrawer(props: Props) {
-  const { user } = useAuth()
   const { gameState, sendMessage } = useGame()
   const [message, setMessage] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -38,24 +35,16 @@ export default function ChatDrawer(props: Props) {
     let last = Date.now()
     function movedn() {
       if (!scrollRef.current) return
-
       const current = Date.now()
       const deltaTime = current - last
       last = current
-
       const position = scrollRef.current.scrollTop
-
       const target =
         scrollRef.current.scrollHeight - scrollRef.current.clientHeight
-
       const distance = target - position
-
       const movement = deltaTime * (distance * 0.005 + 0.3)
-
       scrollRef.current.scrollTop = Math.min(target, position + movement)
-
       if (position + movement >= target) return
-
       window.requestAnimationFrame(movedn)
     }
 
@@ -67,7 +56,7 @@ export default function ChatDrawer(props: Props) {
   return (
     <Drawer {...props}>
       <DrawerCloseButton />
-      <DrawerOverlay />
+      <DrawerOverlay backdropFilter="blur(10px)" />
       <DrawerContent
         rounded="10px 0 0 10px"
         overflow="hidden"

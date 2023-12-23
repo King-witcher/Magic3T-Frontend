@@ -6,6 +6,7 @@ import {
   Box,
   Stack,
   Flex,
+  useBreakpoint,
 } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { GameStatus } from '@/types/types'
@@ -30,11 +31,11 @@ export default function GamePage() {
     switch (gameState?.gameStatus) {
       case GameStatus.Victory:
         toast({
-          title: user?.nickname?.includes('Bianca')
+          title: user?.nickname?.includes('burmor')
             ? 'Nha burmor toda fofinha vencedora c:'
             : 'Você venceu a partida!',
           status: 'success',
-          duration: 5000,
+          duration: 2000,
           isClosable: true,
         })
         break
@@ -42,11 +43,11 @@ export default function GamePage() {
       case GameStatus.Defeat:
         toast({
           title: 'Você perdeu.',
-          description: user?.nickname?.includes('Bianca Vieira')
+          description: user?.nickname?.includes('burmor')
             ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
             : '',
           status: 'error',
-          duration: 5000,
+          duration: 2000,
           isClosable: true,
         })
         break
@@ -54,11 +55,11 @@ export default function GamePage() {
       case GameStatus.Draw:
         toast({
           title: 'A partida acabou em empate.',
-          description: user?.nickname?.includes('Bianca Vieira')
+          description: user?.nickname?.includes('burmor')
             ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
             : '',
           status: 'info',
-          duration: 5000,
+          duration: 2000,
           isClosable: true,
         })
         break
@@ -67,24 +68,6 @@ export default function GamePage() {
         break
     }
   }, [gameState?.gameStatus])
-
-  // useEffect(() => {
-  //   if (gameState?.messages.length) {
-  //     const { sender, content, timestamp } =
-  //       gameState.messages[gameState.messages.length - 1]
-  //     toast({
-  //       title: `${sender} diz:`,
-  //       description: content,
-  //       status: 'info',
-  //       duration: 5000,
-  //       isClosable: true,
-  //       containerStyle: {
-  //         maxW: '100%',
-  //         p: '20px',
-  //       },
-  //     })
-  //   }
-  // }, [gameState?.messages])
 
   useEffect(() => {
     return () => {

@@ -36,24 +36,16 @@ export default function ChatBox({ inputRef, ...props }: Props) {
     let last = Date.now()
     function movedn() {
       if (!scrollRef.current) return
-
       const current = Date.now()
       const deltaTime = current - last
       last = current
-
       const position = scrollRef.current.scrollTop
-
       const target =
         scrollRef.current.scrollHeight - scrollRef.current.clientHeight
-
       const distance = target - position
-
       const movement = deltaTime * (distance * 0.005 + 0.3)
-
       scrollRef.current.scrollTop = Math.min(target, position + movement)
-
       if (position + movement >= target) return
-
       window.requestAnimationFrame(movedn)
     }
 
