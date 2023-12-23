@@ -47,10 +47,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             ],
           },
           {
-            path: '/game',
-            element: <GamePage />,
-          },
-          {
             path: '/*',
             element: <NotFound />,
           },
