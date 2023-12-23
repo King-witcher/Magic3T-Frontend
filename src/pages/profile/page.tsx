@@ -12,8 +12,8 @@ import {
   VStack,
   useQuery,
 } from '@chakra-ui/react'
-import ProfileTab from './tabs/ProfileTab'
-import HistoryTab from './tabs/HistoryTab'
+import ProfileTab from './Profile/ProfileTab'
+import HistoryTab from './History/HistoryTab'
 import SignInPage from '@/components/SignInPage'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAsync } from '@/hooks/useAsync'
@@ -22,7 +22,7 @@ import { matches } from '@/models/matches'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { UserData } from '@/models/users/User'
 import { GiBrokenArrow } from 'react-icons/gi'
-import StandingsTab from './tabs/StandingsTab'
+import StandingsTab from './Standings/StandingsTab'
 
 type Params = {
   matchId: string

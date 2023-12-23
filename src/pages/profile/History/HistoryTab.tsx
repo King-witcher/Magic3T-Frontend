@@ -1,7 +1,7 @@
 import { Center, Spinner, Stack, keyframes } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 
-import HistoryMatch from '../components/HistoryMatch'
+import HistoryMatch from './HistoryMatch'
 import { Match } from '@/models/matches/Match'
 import { Loader } from '@/hooks/useAsync'
 import { Link, useParams } from 'react-router-dom'

@@ -1,5 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext'
-import { MatchRegistry } from '../tabs/MatchRegistry'
+import { MatchRegistry } from './MatchRegistry'
 import { formatTime } from '@/lib/utils'
 import {
   Box,

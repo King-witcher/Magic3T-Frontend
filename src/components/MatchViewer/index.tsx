@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { useQueryParams } from '@/hooks/useQueryParams'
+import { Link } from 'react-router-dom'
 
 interface Props {
   match: string
@@ -155,7 +156,7 @@ export default function MatchViewer({ match: matchId }: Props) {
           gap="15px"
           bg="whiteAlpha.600"
         >
-          <LinkOverlay href={`/profile?uid=${oponentProfile?._id}`} />
+          <LinkOverlay as={Link} to={`/profile?uid=${oponentProfile?._id}`} />
           <Avatar size="lg" src={oponentProfile?.photoURL} />
           <Flex flexDir="column">
             <Text>{oponent.name}</Text>
