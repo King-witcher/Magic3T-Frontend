@@ -1,7 +1,7 @@
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
-import { getRatingInfo } from '@/utils/getEloUrl'
+import { getRD, getRatingInfo } from '@/utils/getEloUrl'
 import {
   Box,
   Center,
@@ -60,7 +60,7 @@ export default function StandingsTab() {
   if (loading) return null
 
   const filtered = filter
-    ? standings.filter((user) => user.glicko.deviation < maxReliableDeviation)
+    ? standings.filter((user) => getRD(user.glicko) < maxReliableDeviation)
     : standings
 
   return (

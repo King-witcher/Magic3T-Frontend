@@ -43,9 +43,18 @@ type RatingInfo = {
 
 const tiers: Tier[] = ['Bronze', 'Silver', 'Gold', 'Diamond', 'Elite']
 
+// TODO REFACT HARD CODED
+export function getRD(glicko: Glicko, c = 0.004829) {
+  if (glicko.deviation === 0) return 0 // Tapa-buracos para prevenir que o Glicko do lmm2 infle com o tempo
+
+  const t = Date.now() - glicko.timestamp.getTime()
+  const candidate = Math.sqrt(glicko.deviation ** 2 + c ** 2 * t)
+  return Math.min(candidate, 350)
+}
+
 export function getRatingInfo(glicko: Glicko): RatingInfo {
   const rating = Math.round(glicko.rating)
-  const deviation = Math.round(glicko.deviation)
+  const deviation = Math.round(getRD(glicko))
   const absoluteDivision = Math.max(
     Math.trunc((rating - bronze1) / divisionSize),
     0,
