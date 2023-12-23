@@ -206,8 +206,8 @@ export function GameProvider({ children }: Props) {
     // Define o terno de números vencedor.
     function getTriple(numbers: Choice[]): [Choice, Choice, Choice] | null {
       for (let i = 0; i < numbers.length - 2; i++)
-        for (let j = 1; j < numbers.length - 1; j++)
-          for (let k = 2; k < numbers.length; k++)
+        for (let j = i + 1; j < numbers.length - 1; j++)
+          for (let k = j + 1; k < numbers.length; k++)
             if (numbers[i] + numbers[j] + numbers[k] === 15)
               return [numbers[i], numbers[j], numbers[k]]
       return null
