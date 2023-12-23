@@ -55,12 +55,14 @@ const borderColorMap = {
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
   const [filter, setFilter] = useState(true)
-  const { maxReliableDeviation } = useServiceStatus()
+  const { maxReliableDeviation, rdInflationTime } = useServiceStatus()
 
   if (loading) return null
 
   const filtered = filter
-    ? standings.filter((user) => getRD(user.glicko) < maxReliableDeviation)
+    ? standings.filter(
+        (user) => getRD(user.glicko, rdInflationTime) < maxReliableDeviation,
+      )
     : standings
 
   return (
@@ -83,7 +85,7 @@ export default function StandingsTab() {
       </Checkbox>
       <Stack userSelect="none">
         {filtered.map((player, index) => {
-          const rinfo = getRatingInfo(player.glicko)
+          const rinfo = getRatingInfo(player.glicko, rdInflationTime)
 
           const bg = bgMap[rinfo.tier]
           const hoverBg = hoverBgMap[rinfo.tier]

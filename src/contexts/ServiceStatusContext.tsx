@@ -14,6 +14,7 @@ import {
 interface ServiceStatusData {
   serverOnline: boolean | undefined
   maxReliableDeviation: number
+  rdInflationTime: number
 }
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
 const ServiceStatusContext = createContext<ServiceStatusData>({
   serverOnline: false,
   maxReliableDeviation: 0,
+  rdInflationTime: 180,
 })
 
 export function ServiceStatusProvider({ children }: Props) {
@@ -30,9 +32,16 @@ export function ServiceStatusProvider({ children }: Props) {
   const [maxReliableDeviation] = useAsync(async () => {
     const snap = await getDoc(doc(firestore, 'config/rating'))
     const configs = snap.data()
-    return configs?.maxReliableDeviation || 0
+    return (configs?.maxReliableDeviation as number) || 0
   })
   const timeoutRef = useRef<NodeJS.Timeout>()
+
+  const [rdInflationTime] = useAsync(async () => {
+    const configSnap = await getDoc(doc(firestore, 'config/rating'))
+    const configs = configSnap.data()
+    const inflationTime = configs?.deviationInflationTime || 180
+    return inflationTime as number
+  })
 
   async function fetchStatus() {
     try {
@@ -56,7 +65,11 @@ export function ServiceStatusProvider({ children }: Props) {
 
   return (
     <ServiceStatusContext.Provider
-      value={{ serverOnline, maxReliableDeviation }}
+      value={{
+        serverOnline,
+        maxReliableDeviation: maxReliableDeviation || 350,
+        rdInflationTime: rdInflationTime || 180,
+      }}
     >
       {children}
     </ServiceStatusContext.Provider>

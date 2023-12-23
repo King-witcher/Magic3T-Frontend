@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext'
+import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { Loader } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { UserData } from '@/models/users/User'
@@ -19,8 +20,9 @@ interface Props {
 }
 
 export default function ProfileTab({ user }: Props) {
+  const { rdInflationTime } = useServiceStatus()
   const rating = useMemo(
-    () => (user ? getRatingInfo(user.glicko) : null),
+    () => (user ? getRatingInfo(user.glicko, rdInflationTime) : null),
     [user],
   )
 
@@ -49,7 +51,7 @@ export default function ProfileTab({ user }: Props) {
             <Tooltip label="Rating">
               <Image
                 ml="3px"
-                src={getRatingInfo(user.glicko).thumbnail}
+                src={getRatingInfo(user.glicko, rdInflationTime).thumbnail}
                 alt="rank"
                 draggable={false}
               />

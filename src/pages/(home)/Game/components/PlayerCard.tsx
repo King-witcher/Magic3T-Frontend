@@ -32,7 +32,7 @@ interface Props {
 
 export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
-  const { maxReliableDeviation } = useServiceStatus()
+  const { maxReliableDeviation, rdInflationTime } = useServiceStatus()
 
   const easterEgg =
     user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
@@ -58,7 +58,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   } = useDisclosure()
 
   const profile = currentPlayer ? user : oponentProfile
-  const rating = profile && getRatingInfo(profile.glicko)
+  const rating = profile && getRatingInfo(profile.glicko, rdInflationTime)
 
   if (!gameState) return null
 
