@@ -290,12 +290,6 @@ export function GameProvider({ children }: Props) {
   }, [gameState])
 
   useEffect(() => {
-    if (gameState) {
-      navigate('/game')
-    }
-  }, [gameState])
-
-  useEffect(() => {
     return () => {
       socket?.disconnect()
     }

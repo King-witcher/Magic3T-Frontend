@@ -69,11 +69,16 @@ export default function GamePage() {
     }
   }, [gameState?.gameStatus])
 
+  // Gambiarra
   useEffect(() => {
     return () => {
-      disconnect()
+      if (
+        gameState?.gameStatus !== GameStatus.Playing &&
+        gameState?.gameStatus !== GameStatus.Waiting
+      )
+        disconnect()
     }
-  }, [])
+  }, [gameState?.gameStatus])
 
   if (!user) return <SignInPage />
   if (!gameState) return null // Improve
@@ -193,8 +198,6 @@ export default function GamePage() {
             gameState.gameStatus === GameStatus.Defeat ||
             gameState.gameStatus === GameStatus.Draw) && (
             <Center
-              as={Link}
-              to={`/profile/history/${gameState.matchId}`}
               w="200px"
               cursor="pointer"
               userSelect="none"
@@ -209,8 +212,9 @@ export default function GamePage() {
               bottom="-55px"
               left="50%"
               transform="translate(-50%, 100%)"
+              onClick={disconnect}
             >
-              <Text>Ver no histórico</Text>
+              <Text>Sair</Text>
             </Center>
           )}
         </Box>

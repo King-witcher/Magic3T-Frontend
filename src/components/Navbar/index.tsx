@@ -15,7 +15,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import LeaveModal from './components/LeaveModal'
 import ProfileMenu from '../MainMenu/MainMenu'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
@@ -52,12 +52,13 @@ export default function Navbar() {
       >
         <Flex alignItems="center" gap={['5px']}>
           <Flex
+            as={Link}
+            to="/"
             p="10px"
             rounded="10px"
             userSelect="none"
             cursor="pointer"
             _hover={{ bg: 'whiteAlpha.200' }}
-            onClick={handleLogoClick}
           >
             <Text fontWeight={700}>Magic3T</Text>
           </Flex>
@@ -112,6 +113,25 @@ export default function Navbar() {
               <Box w="8px" h="8px" bg="red" borderRadius="10px" />
               <Text color="red.100" fontSize="12px">
                 Servidor offline
+              </Text>
+            </Flex>
+          )}
+          {gameState && (
+            <Flex
+              gap="5px"
+              alignItems="center"
+              bg="whiteAlpha.300"
+              p="5px 10px"
+              borderRadius="10px"
+              userSelect="none"
+              cursor="pointer"
+              _hover={{
+                bg: 'whiteAlpha.400',
+              }}
+              onClick={() => navigate('/')}
+            >
+              <Text color="red.100" fontSize="12px">
+                Em jogo
               </Text>
             </Flex>
           )}

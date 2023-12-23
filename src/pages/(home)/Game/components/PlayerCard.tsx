@@ -1,4 +1,12 @@
-import { Flex, Text, Center, Stack, Image } from '@chakra-ui/react'
+import {
+  Flex,
+  Text,
+  Center,
+  Stack,
+  Image,
+  LinkBox,
+  LinkOverlay,
+} from '@chakra-ui/react'
 import { useGame } from '@/contexts/GameContext'
 import {
   Menu,
@@ -15,6 +23,7 @@ import { Avatar } from '@chakra-ui/react'
 import { getRatingInfo } from '@/utils/getEloUrl'
 import ChatDrawer from './ChatDrawer'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { Link } from 'react-router-dom'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -62,6 +71,8 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
         placement="right"
       />
       <MenuButton
+        as={Link}
+        to={currentPlayer ? '.' : `/profile/?uid=${profile?._id}`}
         disabled={!currentPlayer}
         cursor={currentPlayer ? 'pointer' : 'auto'}
         sx={
@@ -118,6 +129,15 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
         >
           Enviar mensagem
         </MenuItem>
+        {(gameState.gameStatus === GameStatus.Defeat ||
+          gameState.gameStatus === GameStatus.Draw ||
+          gameState.gameStatus === GameStatus.Victory) && (
+          <Link to={`/profile/history/${gameState.matchId}`}>
+            <MenuItem display={{ base: 'none', lg: 'block' }}>
+              Ver no histórico
+            </MenuItem>
+          </Link>
+        )}
         <MenuItem
           hidden={gameState.gameStatus !== GameStatus.Playing}
           bg="red.200"
