@@ -65,7 +65,9 @@ export default function ChoiceTable() {
                 ? 'oponentSelected'
                 : 'normal'
             }
-            onClick={playerTurn ? () => makeChoice(choice) : undefined}
+            onClick={
+              available && playerTurn ? () => makeChoice(choice) : undefined
+            }
           />
         )
       })}
