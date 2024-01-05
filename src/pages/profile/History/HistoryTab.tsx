@@ -1,14 +1,10 @@
-import { Center, Spinner, Stack, keyframes } from '@chakra-ui/react'
-import { User } from 'firebase/auth'
+import { Center, Stack, keyframes } from '@chakra-ui/react'
 
 import HistoryMatch from './HistoryMatch'
 import { Match } from '@/models/matches/Match'
-import { Loader } from '@/hooks/useAsync'
 import { Link, useParams } from 'react-router-dom'
 import HistoryMatchTab from './HistoryMatchTab'
-import { UserData } from '@/models/users/User'
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { useId } from 'react'
 
 interface Props {
   matches: Match[]

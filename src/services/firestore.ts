@@ -1,6 +1,5 @@
 import {
   DocumentData,
-  DocumentReference,
   getDoc as firestoreGetDoc,
   getDocs as firestoreGetDocs,
   onSnapshot as firestoreOnSnapshot,
@@ -26,10 +25,10 @@ setInterval(() => {
     console.log(
       `${readCount} document reads and ${queryCount} queries were detected within ${
         PERIOD / 1000
-      } seconds.`,
+      } seconds.`
     )
     console.error(
-      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`,
+      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`
     )
     blocked = true
     setTimeout(() => {
@@ -46,10 +45,10 @@ setInterval(() => {
     console.log(
       `${readCount} document reads and ${queryCount} queries were detected within ${
         PERIOD / 1000
-      } seconds.`,
+      } seconds.`
     )
     console.error(
-      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`,
+      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`
     )
     blocked = true
     setTimeout(() => {

@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Providers from './providers'
 import Sticky from '@/components/Sticky'

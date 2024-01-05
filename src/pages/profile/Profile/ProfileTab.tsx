@@ -1,9 +1,6 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { Loader } from '@/hooks/useAsync'
-import { models } from '@/models'
 import { UserData } from '@/models/users/User'
-import { getRatingInfo, getEloUrl } from '@/utils/getEloUrl'
+import { getRatingInfo } from '@/utils/getEloUrl'
 import {
   Avatar,
   Center,
@@ -13,7 +10,7 @@ import {
   Image,
   Tooltip,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 interface Props {
   user: UserData

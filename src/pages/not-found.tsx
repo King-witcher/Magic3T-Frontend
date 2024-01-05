@@ -1,4 +1,4 @@
-import { Center, Text, VStack } from '@chakra-ui/react'
+import { Text, VStack } from '@chakra-ui/react'
 import { GiBrokenArrow } from 'react-icons/gi'
 
 export default function NotFound() {

@@ -1,16 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { MatchRegistry } from './MatchRegistry'
-import { formatTime } from '@/lib/utils'
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  FlexProps,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { Center, Flex, FlexProps, Text } from '@chakra-ui/react'
 import { formatDate } from '@/utils/timeFormat'
 import { useQueryParams } from '@/hooks/useQueryParams'
 
