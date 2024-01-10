@@ -60,7 +60,7 @@ export function useRankInfo() {
   const getRankInfo = useCallback(
     ({ rating, deviation, timestamp }: Glicko): RatingInfo => {
       const infiniteTier = (rating - initialRating) / tierSize + initialTier
-      const boundedTier = Math.max(Math.min(infiniteTier, 5), 0)
+      const boundedTier = Math.max(Math.min(infiniteTier, 4), 0)
       const tierIndex = Math.floor(boundedTier)
       const division =
         tierIndex === 4 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
