@@ -2,10 +2,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { NotFoundError } from '@/models/errors/NotFoundError'
-import { users } from '@/models/users'
-import { getEloUrl } from '@/utils/getEloUrl'
 import { formatDate } from '@/utils/timeFormat'
-import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import {
   Avatar,
   Box,
@@ -15,13 +12,13 @@ import {
   Text,
   Image,
   VStack,
-  Divider,
   LinkOverlay,
   LinkBox,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { Link } from 'react-router-dom'
+import { useRankInfo } from '@/hooks/useRanks'
 
 interface Props {
   match: string
@@ -37,6 +34,8 @@ const rowColors = {
 export default function MatchViewer({ match: matchId }: Props) {
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
+
+  const { getRankThumbnail } = useRankInfo()
 
   const params = useQueryParams()
   const uidParam = params.get('uid')
@@ -59,6 +58,7 @@ export default function MatchViewer({ match: matchId }: Props) {
       }
     }
   })
+
   const [oponentProfile] = useAsync(async () => {
     try {
       if (match && user) {
@@ -163,11 +163,11 @@ export default function MatchViewer({ match: matchId }: Props) {
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"
-                src={getEloUrl(oponent.rating)}
+                src={getRankThumbnail(oponent.rating)}
                 alt="rank"
                 draggable={false}
               />
-              {oponent.rating.toFixed()}{' '}
+              {Math.round(oponent.rating)}{' '}
               <Text
                 color={
                   oponent.rv > 0
@@ -178,7 +178,7 @@ export default function MatchViewer({ match: matchId }: Props) {
                 }
               >
                 ({oponent.rv < 0 ? '-' : '+'}
-                {Math.abs(oponent.rv).toFixed()})
+                {Math.round(Math.abs(oponent.rv))})
               </Text>{' '}
               SR
             </Flex>
@@ -226,11 +226,11 @@ export default function MatchViewer({ match: matchId }: Props) {
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"
-                src={getEloUrl(currentPlayer.rating)}
+                src={getRankThumbnail(currentPlayer.rating)}
                 alt="rank"
                 draggable={false}
               />
-              {currentPlayer.rating.toFixed()}{' '}
+              {Math.round(currentPlayer.rating)}{' '}
               <Text
                 color={
                   currentPlayer.rv > 0
@@ -241,7 +241,7 @@ export default function MatchViewer({ match: matchId }: Props) {
                 }
               >
                 ({currentPlayer.rv < 0 ? '-' : '+'}
-                {Math.abs(currentPlayer.rv).toFixed()})
+                {Math.round(Math.abs(currentPlayer.rv))})
               </Text>{' '}
               SR
             </Flex>

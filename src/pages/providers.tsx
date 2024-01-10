@@ -1,4 +1,5 @@
 import { AuthProvider } from '@/contexts/AuthContext'
+import { ConfigProvider } from '@/contexts/ConfigContext'
 import { GameProvider } from '@/contexts/GameContext'
 import { QueueProvider } from '@/contexts/QueueContext'
 import { ServiceStatusProvider } from '@/contexts/ServiceStatusContext'
@@ -13,13 +14,15 @@ interface Props {
 export default function Providers({ children }: Props) {
   return (
     <ServiceStatusProvider>
-      <AuthProvider>
-        <GameProvider>
-          <QueueProvider>
-            <ChakraProvider theme={chakraTheme}>{children}</ChakraProvider>
-          </QueueProvider>
-        </GameProvider>
-      </AuthProvider>
+      <ConfigProvider>
+        <AuthProvider>
+          <GameProvider>
+            <QueueProvider>
+              <ChakraProvider theme={chakraTheme}>{children}</ChakraProvider>
+            </QueueProvider>
+          </GameProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </ServiceStatusProvider>
   )
 }

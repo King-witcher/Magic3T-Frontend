@@ -1,12 +1,4 @@
-import {
-  Flex,
-  Text,
-  Center,
-  Stack,
-  Image,
-  LinkBox,
-  LinkOverlay,
-} from '@chakra-ui/react'
+import { Flex, Text, Center, Stack, Image } from '@chakra-ui/react'
 import { useGame } from '@/contexts/GameContext'
 import {
   Menu,
@@ -20,10 +12,9 @@ import { useAuth } from '@/contexts/AuthContext'
 import ForfeitModal from './ForfeitModal'
 import { GameStatus } from '@/types/types'
 import { Avatar } from '@chakra-ui/react'
-import { getRatingInfo } from '@/utils/getEloUrl'
 import ChatDrawer from './ChatDrawer'
-import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { Link } from 'react-router-dom'
+import { useRankInfo } from '@/hooks/useRanks'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -32,7 +23,7 @@ interface Props {
 
 export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
-  const { maxReliableDeviation, rdInflationTime } = useServiceStatus()
+  const { getRankInfo } = useRankInfo()
 
   const easterEgg =
     user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
@@ -58,7 +49,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   } = useDisclosure()
 
   const profile = currentPlayer ? user : oponentProfile
-  const rating = profile && getRatingInfo(profile.glicko, rdInflationTime)
+  const rating = profile && getRankInfo(profile.glicko)
 
   if (!gameState) return null
 

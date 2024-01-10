@@ -54,6 +54,7 @@ export function AuthProvider({ children }: Props) {
       setLoading(true)
     } catch (e) {
       console.error(e)
+      setLoading(false)
       if (import.meta.env.DEV) alert(e)
     }
   }, [])

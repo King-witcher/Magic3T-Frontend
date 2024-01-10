@@ -1,19 +1,15 @@
-import { useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { useConfig } from '@/contexts/ConfigContext'
 import { useAsync } from '@/hooks/useAsync'
+import { useRankInfo } from '@/hooks/useRanks'
 import { models } from '@/models'
-import { getRD, getRatingInfo } from '@/utils/getEloUrl'
 import {
   Box,
   Center,
   Checkbox,
-  ColorProps,
   Flex,
   Image,
   Stack,
-  Table,
-  Td,
   Text,
-  Tr,
   keyframes,
 } from '@chakra-ui/react'
 import { useState } from 'react'
@@ -55,13 +51,16 @@ const borderColorMap = {
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
   const [filter, setFilter] = useState(true)
-  const { maxReliableDeviation, rdInflationTime } = useServiceStatus()
+
+  const { ratingConfig } = useConfig()
+
+  const { getRD, getRankInfo } = useRankInfo()
 
   if (loading) return null
 
   const filtered = filter
     ? standings.filter(
-        (user) => getRD(user.glicko, rdInflationTime) < maxReliableDeviation,
+        (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation,
       )
     : standings
 
@@ -85,7 +84,7 @@ export default function StandingsTab() {
       </Checkbox>
       <Stack userSelect="none">
         {filtered.map((player, index) => {
-          const rinfo = getRatingInfo(player.glicko, rdInflationTime)
+          const rinfo = getRankInfo(player.glicko)
 
           const bg = bgMap[rinfo.tier]
           const hoverBg = hoverBgMap[rinfo.tier]
@@ -142,7 +141,8 @@ export default function StandingsTab() {
                     />
                     <Text fontWeight={[600, 800]}>
                       {rinfo.rating}
-                      {rinfo.deviation >= maxReliableDeviation && '*'}
+                      {rinfo.deviation >= ratingConfig.maxReliableDeviation &&
+                        '*'}
                       {rinfo.deviation < 50 && '!'}
                     </Text>
                   </Flex>

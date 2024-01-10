@@ -1,6 +1,6 @@
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
-import { getRatingInfo } from '@/utils/getEloUrl'
 import {
   Avatar,
   Center,
@@ -17,11 +17,9 @@ interface Props {
 }
 
 export default function ProfileTab({ user }: Props) {
-  const { rdInflationTime } = useServiceStatus()
-  const rating = useMemo(
-    () => (user ? getRatingInfo(user.glicko, rdInflationTime) : null),
-    [user],
-  )
+  const { getRankInfo } = useRankInfo()
+
+  const rating = useMemo(() => (user ? getRankInfo(user.glicko) : null), [user])
 
   return (
     <Center h="100%">
@@ -48,7 +46,7 @@ export default function ProfileTab({ user }: Props) {
             <Tooltip label="Rating">
               <Image
                 ml="3px"
-                src={getRatingInfo(user.glicko, rdInflationTime).thumbnail}
+                src={rating?.thumbnail}
                 alt="rank"
                 draggable={false}
               />

@@ -1,6 +1,6 @@
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
-import { getEloUrl, getRatingInfo } from '@/utils/getEloUrl'
 import { Avatar, Flex, Text, Image, VStack } from '@chakra-ui/react'
 
 interface Props {
@@ -8,8 +8,8 @@ interface Props {
 }
 
 export default function Profile({ user }: Props) {
-  const { rdInflationTime } = useServiceStatus()
-  const rinfo = getRatingInfo(user.glicko, rdInflationTime)
+  const { getRankInfo } = useRankInfo()
+  const rinfo = getRankInfo(user.glicko)
 
   return (
     <VStack gap="0">
