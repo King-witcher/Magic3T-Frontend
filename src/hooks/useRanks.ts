@@ -62,7 +62,8 @@ export function useRankInfo() {
       const infiniteTier = (rating - initialRating) / tierSize + initialTier
       const boundedTier = Math.max(Math.min(infiniteTier, 5), 0)
       const tierIndex = Math.floor(boundedTier)
-      const division = Math.floor(5 * (boundedTier - tierIndex)) + 1
+      const division =
+        tierIndex === 4 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
 
       return {
         rating: Math.round(rating),
