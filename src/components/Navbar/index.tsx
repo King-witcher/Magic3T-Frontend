@@ -58,8 +58,10 @@ export default function Navbar() {
             rounded="10px"
             userSelect="none"
             cursor="pointer"
+            gap="3px"
             _hover={{ bg: 'whiteAlpha.200' }}
           >
+            <Text fontWeight={400}>Jogar</Text>
             <Text fontWeight={700}>Magic3T</Text>
           </Flex>
           {serverOnline === undefined && (

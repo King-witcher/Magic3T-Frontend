@@ -27,47 +27,47 @@ export default function GamePage() {
   const playerTurn = gameState?.turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    switch (gameState?.gameStatus) {
-      case GameStatus.Victory:
-        toast({
-          title: user?.nickname?.includes('burmor')
-            ? 'Nha burmor toda fofinha vencedora c:'
-            : 'Você venceu a partida!',
-          status: 'success',
-          duration: 2000,
-          isClosable: true,
-        })
-        break
+  // useEffect(() => {
+  //   switch (gameState?.gameStatus) {
+  //     case GameStatus.Victory:
+  //       toast({
+  //         title: user?.nickname?.includes('burmor')
+  //           ? 'Nha burmor toda fofinha vencedora c:'
+  //           : 'Você venceu a partida!',
+  //         status: 'success',
+  //         duration: 2000,
+  //         isClosable: true,
+  //       })
+  //       break
 
-      case GameStatus.Defeat:
-        toast({
-          title: 'Você perdeu.',
-          description: user?.nickname?.includes('burmor')
-            ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
-            : '',
-          status: 'error',
-          duration: 2000,
-          isClosable: true,
-        })
-        break
+  //     case GameStatus.Defeat:
+  //       toast({
+  //         title: 'Você perdeu.',
+  //         description: user?.nickname?.includes('burmor')
+  //           ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
+  //           : '',
+  //         status: 'error',
+  //         duration: 2000,
+  //         isClosable: true,
+  //       })
+  //       break
 
-      case GameStatus.Draw:
-        toast({
-          title: 'A partida acabou em empate.',
-          description: user?.nickname?.includes('burmor')
-            ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
-            : '',
-          status: 'info',
-          duration: 2000,
-          isClosable: true,
-        })
-        break
+  //     case GameStatus.Draw:
+  //       toast({
+  //         title: 'A partida acabou em empate.',
+  //         description: user?.nickname?.includes('burmor')
+  //           ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
+  //           : '',
+  //         status: 'info',
+  //         duration: 2000,
+  //         isClosable: true,
+  //       })
+  //       break
 
-      default:
-        break
-    }
-  }, [gameState?.gameStatus])
+  //     default:
+  //       break
+  //   }
+  // }, [gameState?.gameStatus])
 
   // Gambiarra
   useEffect(() => {
