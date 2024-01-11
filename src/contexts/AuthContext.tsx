@@ -51,7 +51,6 @@ export function AuthProvider({ children }: Props) {
     try {
       // states will be changed by onAuthStateChanged method
       await signInWithPopup(auth, provider)
-      setLoading(true)
     } catch (e) {
       console.error(e)
       setLoading(false)
