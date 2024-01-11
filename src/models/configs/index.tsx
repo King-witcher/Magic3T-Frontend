@@ -4,10 +4,10 @@ import { doc } from 'firebase/firestore'
 
 async function getRatingConfig(): Promise<RatingConfig> {
   const snap = await getDoc(doc(firestore, 'config/rating'))
+  import.meta.env.DEV &&
+    console.info('%cFirestore: Get rating config', 'color: #FFCA28')
   const data = snap.data() as RatingConfig
   return data
 }
-
-getRatingConfig().then(console.log)
 
 export const configs = { getRatingConfig }

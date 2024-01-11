@@ -1,11 +1,12 @@
 import ReactDOM from 'react-dom/client'
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './pages/layout'
 import ProfilePage from './pages/profile/page'
-import GamePage from './pages/(home)/Game'
 import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
+
+console.clear()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <RouterProvider

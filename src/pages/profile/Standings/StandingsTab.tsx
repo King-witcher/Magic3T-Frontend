@@ -8,6 +8,7 @@ import {
   Checkbox,
   Flex,
   Image,
+  Select,
   Stack,
   Text,
   keyframes,
@@ -50,7 +51,7 @@ const borderColorMap = {
 
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
-  const [filter, setFilter] = useState(true)
+  const [filter, setFilter] = useState<'valid' | 'defined' | 'all'>('valid')
 
   const { ratingConfig } = useConfig()
 
@@ -58,11 +59,14 @@ export default function StandingsTab() {
 
   if (loading) return null
 
-  const filtered = filter
-    ? standings.filter(
-        (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation,
-      )
-    : standings
+  const filtered =
+    filter === 'valid'
+      ? standings.filter(
+          (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation,
+        )
+      : filter === 'defined'
+      ? standings.filter((user) => getRD(user.glicko) < 350)
+      : standings
 
   return (
     <Stack gap="20px" p={{ base: '0', lg: '20px 0' }}>
@@ -73,15 +77,19 @@ export default function StandingsTab() {
       >
         Melhores jogadores de Magic3t
       </Text>
-      <Checkbox
-        isChecked={filter}
-        onChange={(e) => setFilter(e.target.checked)}
+      <Select
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
         colorScheme="pink"
-        spacing="15px"
         size="lg"
+        borderRadius="8px"
+        fontWeight={600}
       >
+        <option value="valid">Válidos</option>
+        <option value="defined">Calculados</option>
+        <option value="all">Todos</option>
         Filtrar ratings incertos
-      </Checkbox>
+      </Select>
       <Stack userSelect="none">
         {filtered.map((player, index) => {
           const rinfo = getRankInfo(player.glicko)
