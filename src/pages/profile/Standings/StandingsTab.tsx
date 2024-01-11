@@ -26,30 +26,6 @@ const appear = keyframes`
   }
 `
 
-const bgMap = {
-  Bronze: 'orange.500',
-  Silver: 'gray.400',
-  Gold: 'yellow.300',
-  Diamond: 'cyan.300',
-  Elite: 'purple.300',
-}
-
-const hoverBgMap = {
-  Bronze: 'orange.400',
-  Silver: 'gray.300',
-  Gold: 'yellow.200',
-  Diamond: 'cyan.100',
-  Elite: 'purple.200',
-}
-
-const borderColorMap = {
-  Bronze: 'orange.700',
-  Silver: 'gray.500',
-  Gold: 'yellow.500',
-  Diamond: 'cyan.500',
-  Elite: 'purple.600',
-}
-
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
   const [filter, setFilter] = useState<'valid' | 'modified' | 'all'>('valid')
@@ -97,10 +73,6 @@ export default function StandingsTab() {
         {filtered.map((player, index) => {
           const rinfo = getRankInfo(player.glicko)
 
-          const bg = bgMap[rinfo.tier]
-          const hoverBg = hoverBgMap[rinfo.tier]
-          const borderColor = borderColorMap[rinfo.tier]
-
           const delay = (0.5 * index) / filtered.length
 
           return (
@@ -112,13 +84,13 @@ export default function StandingsTab() {
               w="full"
               alignItems="center"
               p="10px 10px"
-              bg={bg}
+              bg={rinfo.colorScheme.normal}
               borderLeft="solid 5px"
-              borderColor={borderColor}
+              borderColor={rinfo.colorScheme.darker}
               rounded="8px"
               gap={{ base: '10px', sm: '0' }}
               _hover={{
-                bg: hoverBg,
+                bg: rinfo.colorScheme.lighter,
               }}
             >
               <Center textAlign="center" w="50px" p="10px">

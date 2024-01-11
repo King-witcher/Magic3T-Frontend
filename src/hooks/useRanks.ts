@@ -115,7 +115,13 @@ export function useRankInfo() {
           : 'https://quake-stats.bethesda.net/ranks/Zero_01.png',
         reliable,
         precise: deviation < 50,
-        colorScheme: RatingColorSchemes[tiers[tierIndex]],
+        colorScheme: reliable
+          ? RatingColorSchemes[tiers[tierIndex]]
+          : {
+              darker: 'gray.400',
+              lighter: 'gray.100',
+              normal: 'gray.200',
+            },
       }
     },
     [initialTier, tierSize, initialRating, getRD],
