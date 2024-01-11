@@ -43,7 +43,8 @@ export default function ChoiceTable() {
     >
       {allChoices.map((choice: Choice) => {
         const enabled = gameState.gameStatus === GameStatus.Playing
-        const available = availableChoices.includes(choice)
+        const available =
+          availableChoices.includes(choice) && gameState.turn === 'player'
         const playerSelected = gameState.player.choices.includes(choice)
         const oponentSelected = gameState.oponent.choices.includes(choice)
 

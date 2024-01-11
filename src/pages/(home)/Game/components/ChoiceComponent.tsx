@@ -18,7 +18,9 @@ interface Props extends FlexProps {
 function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
   switch (choiceStyle) {
     case 'normal':
-      return {}
+      return {
+        opacity: '0.6',
+      }
     case 'selectable':
       return {
         cursor: 'pointer',
