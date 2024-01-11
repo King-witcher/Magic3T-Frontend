@@ -14,6 +14,7 @@ import {
   VStack,
   LinkOverlay,
   LinkBox,
+  Badge,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { useQueryParams } from '@/hooks/useQueryParams'
@@ -159,7 +160,14 @@ export default function MatchViewer({ match: matchId }: Props) {
           <LinkOverlay as={Link} to={`/profile?uid=${oponentProfile?._id}`} />
           <Avatar size="lg" src={oponentProfile?.photoURL} />
           <Flex flexDir="column">
-            <Text>{oponent.name}</Text>
+            <Flex alignItems="center" gap="5px">
+              {oponentProfile?.role === 'bot' && (
+                <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
+                  Bot
+                </Badge>
+              )}
+              <Text>{oponent.name}</Text>
+            </Flex>
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"
@@ -222,7 +230,14 @@ export default function MatchViewer({ match: matchId }: Props) {
         >
           <Avatar size="lg" src={viewerProfile?.photoURL} />
           <Flex flexDir="column">
-            <Text>{viewerProfile?.nickname}</Text>
+            <Flex alignItems="center" gap="5px">
+              {viewerProfile?.role === 'bot' && (
+                <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
+                  Bot
+                </Badge>
+              )}
+              <Text>{currentPlayer.name}</Text>
+            </Flex>
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"

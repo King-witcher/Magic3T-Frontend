@@ -5,5 +5,5 @@ export type UserData = WithId & {
   nickname: string
   photoURL: string
   glicko: Glicko
-  role: 'player' | 'admin'
+  role: 'player' | 'admin' | 'bot'
 }

@@ -9,6 +9,7 @@ import {
   VStack,
   Image,
   Tooltip,
+  Badge,
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
@@ -37,11 +38,15 @@ export default function ProfileTab({ user }: Props) {
           src={user.photoURL || undefined}
           boxShadow="0 0 20px 10px #00000020"
         />
-        <Text fontSize="30px">{user.nickname}</Text>
+        <Flex alignItems="center" gap="8px">
+          {user.role === 'bot' && (
+            <Badge rounded="5px" fontSize="14px" bg="gray.200">
+              Bot
+            </Badge>
+          )}
+          <Text fontSize="30px">{user.nickname}</Text>
+        </Flex>
         <Flex alignItems="center" userSelect="none" gap="4px">
-          <Text fontSize="18px" fontWeight="600">
-            Rating:
-          </Text>
           {user && (
             <Tooltip label="Rating">
               <Image

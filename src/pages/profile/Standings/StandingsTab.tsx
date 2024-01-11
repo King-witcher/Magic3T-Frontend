@@ -3,6 +3,7 @@ import { useAsync } from '@/hooks/useAsync'
 import { useRankInfo } from '@/hooks/useRanks'
 import { models } from '@/models'
 import {
+  Badge,
   Box,
   Center,
   Checkbox,
@@ -134,14 +135,21 @@ export default function StandingsTab() {
                 alignItems={{ base: 'flex-start', sm: 'center' }}
               >
                 <Box flex={{ base: '0', sm: '1' }}>
-                  <Text
-                    noOfLines={1}
-                    fontWeight={[700, 600]}
-                    fontSize={{ base: '20px', sm: '16px' }}
-                    userSelect="text"
-                  >
-                    {player.nickname}
-                  </Text>
+                  <Flex alignItems="center" gap="5px">
+                    {player.role === 'bot' && (
+                      <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
+                        Bot
+                      </Badge>
+                    )}
+                    <Text
+                      noOfLines={1}
+                      fontWeight={[700, 600]}
+                      fontSize={{ base: '20px', sm: '16px' }}
+                      userSelect="text"
+                    >
+                      {player.nickname}
+                    </Text>
+                  </Flex>
                 </Box>
                 <Box w={{ base: 'fit-content', sm: '100px' }}>
                   <Flex alignItems="center" gap="5px">
@@ -152,7 +160,7 @@ export default function StandingsTab() {
                     <Text fontWeight={[600, 800]}>
                       {rinfo.rating}
                       {rinfo.deviation >= ratingConfig.maxReliableDeviation &&
-                        '*'}
+                        '?'}
                       {rinfo.deviation < 50 && '!'}
                     </Text>
                   </Flex>
