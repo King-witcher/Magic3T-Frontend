@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { io } from 'socket.io-client'
+import { Socket, io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { UserData } from '@/models/users/User'
@@ -67,7 +67,6 @@ export function GameProvider({ children }: Props) {
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
-  const navigate = useNavigate()
   const { getToken, logged } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
@@ -161,8 +160,8 @@ export function GameProvider({ children }: Props) {
     [socket, gameState],
   )
 
-  function handleServerDisconnect() {
-    console.error('Connection failed')
+  function handleServerDisconnect(reason: Socket.DisconnectReason) {
+    console.log('Socket disconnected because of', reason, '.')
   }
 
   function handleServerGameState(stateString: string) {
