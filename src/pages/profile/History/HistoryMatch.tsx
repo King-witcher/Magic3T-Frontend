@@ -31,8 +31,9 @@ export default function HistoryMatch({ match, ...rest }: Props) {
   //const timeMs = match.moves[match.moves.length - 1].time
   //const timeFmt = formatTime(timeMs)
 
-  const side = match.white.uid === viewerId ? 'white' : 'black'
-  const oponentSide = side === 'white' ? 'black' : 'white'
+  const playerSide = match.white.uid === viewerId ? 'white' : 'black'
+  const player = match[playerSide]
+  const oponent = player === match.white ? match.black : match.white
 
   return (
     <Flex
@@ -93,14 +94,22 @@ export default function HistoryMatch({ match, ...rest }: Props) {
                 : 'red.700'
             }
           >
-            ({match.mode === 'ranked' ? 'Ranqueada' : 'Casual'}){' '}
+            {/* ({match.mode === 'ranked' ? 'Ranqueada' : 'Casual'}){' '} */}
             {result === 'victory'
               ? 'Vitória'
               : result === 'draw'
               ? 'Empate'
               : 'Derrota'}
+
+            {player.rv !== 0 && (
+              <>
+                {' '}
+                ({player.rv > 0 ? '+' : '-'}
+                {Math.abs(Math.round(player.rv))} SR)
+              </>
+            )}
           </Text>
-          •<Text fontSize={['10px', '16px']}>{match[oponentSide].name}</Text>
+          •<Text fontSize={['10px', '16px']}>{oponent.name}</Text>
         </Flex>
         <Text fontSize={['10px', '16px']}>{formatDate(match.timestamp)}</Text>
       </Flex>
@@ -117,7 +126,7 @@ export default function HistoryMatch({ match, ...rest }: Props) {
                 ? 'red.500'
                 : move.move === 'timeout'
                 ? 'yellow.500'
-                : move.player === side
+                : move.player === playerSide
                 ? 'blue.300'
                 : 'red.300'
             }
