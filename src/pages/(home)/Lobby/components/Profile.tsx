@@ -18,7 +18,9 @@ export default function Profile({ user }: Props) {
       <Flex alignItems="center" gap="5px">
         <Image ml="3px" src={rinfo.thumbnail} alt="rank" draggable={false} />
         <Text>
-          {rinfo.rating} (±{rinfo.deviation}) SR
+          {rinfo.rating}
+          {!rinfo.reliable && '?'}
+          {rinfo.precise && '!'} (±{rinfo.deviation}) SR
         </Text>
       </Flex>
     </VStack>

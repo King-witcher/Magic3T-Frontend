@@ -52,7 +52,7 @@ const borderColorMap = {
 
 export default function StandingsTab() {
   const [standings, loading] = useAsync(models.users.getStandings)
-  const [filter, setFilter] = useState<'valid' | 'defined' | 'all'>('valid')
+  const [filter, setFilter] = useState<'valid' | 'modified' | 'all'>('valid')
 
   const { ratingConfig } = useConfig()
 
@@ -65,7 +65,7 @@ export default function StandingsTab() {
       ? standings.filter(
           (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation,
         )
-      : filter === 'defined'
+      : filter === 'modified'
       ? standings.filter((user) => getRD(user.glicko) < 350)
       : standings
 
@@ -81,7 +81,7 @@ export default function StandingsTab() {
       <Select
         value={filter}
         onChange={(e) =>
-          setFilter(e.target.value as 'valid' | 'defined' | 'all')
+          setFilter(e.target.value as 'valid' | 'modified' | 'all')
         }
         colorScheme="pink"
         size="lg"
@@ -89,7 +89,7 @@ export default function StandingsTab() {
         fontWeight={600}
       >
         <option value="valid">Válidos</option>
-        <option value="defined">Calculados</option>
+        <option value="modified">Modificados</option>
         <option value="all">Todos</option>
         Filtrar ratings incertos
       </Select>

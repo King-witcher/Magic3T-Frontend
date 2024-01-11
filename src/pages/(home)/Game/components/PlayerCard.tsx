@@ -15,6 +15,7 @@ import { Avatar } from '@chakra-ui/react'
 import ChatDrawer from './ChatDrawer'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
+import { useConfig } from '@/contexts/ConfigContext'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -24,6 +25,7 @@ interface Props {
 export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
   const { getRankInfo } = useRankInfo()
+  const { ratingConfig } = useConfig()
 
   const easterEgg =
     user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
@@ -49,7 +51,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   } = useDisclosure()
 
   const profile = currentPlayer ? user : oponentProfile
-  const rating = profile && getRankInfo(profile.glicko)
+  const rinfo = profile && getRankInfo(profile.glicko)
 
   if (!gameState) return null
 
@@ -81,12 +83,21 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
           alignItems="center"
           justifyContent="left"
           gap="10px"
-          border="solid 1px #ddd"
-          p="10px"
+          borderWidth="0 0 0 5px"
+          borderColor={rinfo ? rinfo.colorScheme.darker : 'transparent'}
+          p="10px 10px 10px 5px"
           rounded="10px"
           overflow="hidden"
+          bg={rinfo ? rinfo.colorScheme.normal : 'transparent'}
           transition="background 80ms linear"
           w="250px"
+          _hover={
+            rinfo
+              ? {
+                  bg: rinfo.colorScheme.lighter,
+                }
+              : {}
+          }
         >
           <Avatar src={profile?.photoURL} size="lg" />
           <Stack gap="0">
@@ -103,11 +114,12 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   </Text>
                 </Flex>
                 <Flex alignItems="center" gap="5px">
-                  <Image src={rating?.thumbnail} w="25px" />
+                  <Image src={rinfo?.thumbnail} w="25px" />
+
                   <Text fontSize="16px">
-                    {rating!.rating}
-                    {rating!.deviation >= 135 && '*'}
-                    {rating!.deviation < 50 && '!'} SR
+                    {rinfo!.rating}
+                    {!rinfo!.reliable && '?'}
+                    {rinfo!.precise && '!'} SR
                   </Text>
                 </Flex>
               </>

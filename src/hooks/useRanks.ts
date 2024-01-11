@@ -1,17 +1,52 @@
 import { useConfig } from '@/contexts/ConfigContext'
 import { Glicko } from '@/types/Glicko'
+import { Division, Tier, tiers } from '@/utils/ranks'
+import { ThemeTypings } from '@chakra-ui/react'
 import { useCallback } from 'react'
 
-type Tiers = 'Bronze' | 'Silver' | 'Gold' | 'Diamond' | 'Elite'
-type Division = 1 | 2 | 3 | 4 | 5
-const tiers: Tiers[] = ['Bronze', 'Silver', 'Gold', 'Diamond', 'Elite']
+export type RatingColorScheme = {
+  normal: ThemeTypings['colors']
+  darker: ThemeTypings['colors']
+  lighter: ThemeTypings['colors']
+}
+
+export const RatingColorSchemes: Record<Tier, RatingColorScheme> = {
+  Bronze: {
+    normal: 'orange.500',
+    darker: 'orange.700',
+    lighter: 'orange.400',
+  },
+  Silver: {
+    normal: 'gray.400',
+    darker: 'gray.500',
+    lighter: 'gray.300',
+  },
+  Gold: {
+    normal: 'yellow.300',
+    darker: 'yellow.500',
+    lighter: 'yellow.200',
+  },
+  Diamond: {
+    normal: 'cyan.300',
+    darker: 'cyan.500',
+    lighter: 'cyan.100',
+  },
+  Elite: {
+    normal: 'purple.300',
+    darker: 'purple.600',
+    lighter: 'purple.200',
+  },
+}
 
 type RatingInfo = {
-  tier: Tiers
+  tier: Tier
   division: Division
   thumbnail: string
   rating: number
   deviation: number
+  reliable: boolean
+  precise: boolean
+  colorScheme: RatingColorScheme
 }
 
 function getC(inflationTime: number) {
@@ -30,6 +65,7 @@ export function useRankInfo() {
     ratingConfig: {
       initialRating,
       deviationInflationTime,
+      maxReliableDeviation,
       maxRD,
       ranks: { initialTier, tierSize },
     },
@@ -67,12 +103,19 @@ export function useRankInfo() {
       const division =
         tierIndex === 4 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
 
+      const reliable = deviation < maxReliableDeviation
+
       return {
         rating: Math.round(rating),
         deviation: Math.round(getRD({ rating, deviation, timestamp })),
         tier: tiers[tierIndex],
         division: division as Division,
-        thumbnail: getThumbnailByTierAndDivision(tierIndex, division),
+        thumbnail: reliable
+          ? getThumbnailByTierAndDivision(tierIndex, division)
+          : 'https://quake-stats.bethesda.net/ranks/Zero_01.png',
+        reliable,
+        precise: deviation < 50,
+        colorScheme: RatingColorSchemes[tiers[tierIndex]],
       }
     },
     [initialTier, tierSize, initialRating, getRD],
