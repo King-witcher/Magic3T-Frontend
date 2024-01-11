@@ -37,6 +37,8 @@ export function useRankInfo() {
 
   const getRD = useCallback(
     (rating: Glicko) => {
+      if (rating.deviation === 0) return 0
+
       const c = getC(deviationInflationTime)
       const t = Date.now() - rating.timestamp.getTime()
       const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
@@ -48,7 +50,7 @@ export function useRankInfo() {
   const getRankThumbnail = useCallback(
     (rating: number) => {
       const infiniteTier = (rating - initialRating) / tierSize + initialTier
-      const boundedTier = Math.max(Math.min(infiniteTier, 5), 0)
+      const boundedTier = Math.max(Math.min(infiniteTier, 4), 0)
       const tierINdex = Math.floor(boundedTier)
       const division = Math.floor(5 * (boundedTier - tierINdex)) + 1
 
