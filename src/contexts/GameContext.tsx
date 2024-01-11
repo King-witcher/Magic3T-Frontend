@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 import { Unsubscribe } from 'firebase/auth'
+import { Api } from '@/services/api'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -67,7 +68,7 @@ export function GameProvider({ children }: Props) {
   const oponentTimer = useRef(new Timer(0))
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
   const navigate = useNavigate()
-  const { getToken } = useAuth()
+  const { getToken, logged } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 
@@ -288,6 +289,26 @@ export function GameProvider({ children }: Props) {
 
     return availableChoices
   }, [gameState])
+
+  // Auto connects the user to the current game that is being played.
+  useEffect(() => {
+    async function checkStatus() {
+      if (!logged) return
+      const token = await getToken()
+      if (!token) return
+      const response = await Api.get('/matchId', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (response.status === 200) {
+        connectGame(response.data.id)
+      }
+    }
+
+    checkStatus()
+  }, [getToken, logged])
 
   useEffect(() => {
     return () => {
