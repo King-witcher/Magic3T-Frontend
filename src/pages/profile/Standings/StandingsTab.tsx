@@ -79,7 +79,9 @@ export default function StandingsTab() {
       </Text>
       <Select
         value={filter}
-        onChange={(e) => setFilter(e.target.value)}
+        onChange={(e) =>
+          setFilter(e.target.value as 'valid' | 'defined' | 'all')
+        }
         colorScheme="pink"
         size="lg"
         borderRadius="8px"
