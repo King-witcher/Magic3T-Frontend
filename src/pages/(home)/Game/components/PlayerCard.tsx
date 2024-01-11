@@ -83,12 +83,16 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
           alignItems="center"
           justifyContent="left"
           gap="10px"
-          borderWidth="0 0 0 5px"
-          borderColor={rinfo ? rinfo.colorScheme.darker : 'transparent'}
-          p="10px 10px 10px 5px"
+          borderWidth={rinfo?.reliable ? '0 0 0 5px' : '1px'}
+          borderColor={
+            rinfo && rinfo?.reliable ? rinfo.colorScheme.darker : 'gray.400'
+          }
+          p={rinfo?.reliable ? '10px 10px 10px 5px' : '10px'}
           rounded="10px"
           overflow="hidden"
-          bg={rinfo ? rinfo.colorScheme.normal : 'transparent'}
+          bg={
+            rinfo && rinfo.reliable ? rinfo.colorScheme.normal : 'transparent'
+          }
           transition="background 80ms linear"
           w="250px"
           _hover={
