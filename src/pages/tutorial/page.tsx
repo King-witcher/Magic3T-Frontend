@@ -4,7 +4,7 @@ import Choice from './Choice'
 export default function TutorialPage() {
   return (
     <Center>
-      <Box h="100%" p="20px" maxW="800px">
+      <Box w="full" h="100%" p="20px" maxW="800px">
         <Heading>Como jogar Magic3T</Heading>
         <Divider />
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">

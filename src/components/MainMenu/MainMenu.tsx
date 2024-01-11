@@ -4,7 +4,7 @@ import {
   MenuList,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import LogoutModal from '@/components/modals/LogoutModal'
 import { useAuth } from '@/contexts/AuthContext'
 import SecretCodeModal from '@/components/modals/SecretCodeModal'
@@ -26,10 +26,19 @@ export default function ProfileMenu() {
 
   return (
     <MenuList>
-      {user && <MenuItem onClick={() => navigate('/profile')}>Perfil</MenuItem>}
+      {user && (
+        <MenuItem as={Link} to="/profile">
+          Perfil
+        </MenuItem>
+      )}
       {user && <MenuItem onClick={() => navigate('/')}>Jogar</MenuItem>}
-      <MenuItem onClick={() => navigate('/tutorial')}>Como jogar</MenuItem>
       {user && <MenuItem onClick={openSecretCode}>Códigos secretos</MenuItem>}
+      <MenuItem as={Link} to="/tutorial">
+        Como jogar
+      </MenuItem>
+      <MenuItem as={Link} to="/rating-system">
+        Sistema de Ranking
+      </MenuItem>
       <MenuDivider color="pink.100" />
       {user && <MenuItem onClick={openLogout}>Sair</MenuItem>}
       {!user && <MenuItem onClick={signIn}>Entrar</MenuItem>}

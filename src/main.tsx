@@ -5,6 +5,7 @@ import ProfilePage from './pages/profile/page'
 import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
+import RatingSystemPage from './pages/rating-system/page'
 
 console.clear()
 
@@ -23,6 +24,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           {
             path: '/tutorial',
             element: <TutorialPage />,
+          },
+          {
+            path: '/rating-system',
+            element: <RatingSystemPage />,
           },
           {
             path: '/profile',
