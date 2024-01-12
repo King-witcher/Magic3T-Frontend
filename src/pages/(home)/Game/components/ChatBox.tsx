@@ -17,7 +17,7 @@ interface Props extends StackProps {
 }
 
 export default function ChatBox({ inputRef, ...props }: Props) {
-  const { gameState, sendMessage } = useGame()
+  const { messages, sendMessage } = useGame()
   const [message, setMessage] = useState('')
   const { user } = useAuth()
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -52,7 +52,7 @@ export default function ChatBox({ inputRef, ...props }: Props) {
     movedn()
   }, [])
 
-  useEffect(smoothScroll, [gameState?.messages])
+  useEffect(smoothScroll, [messages])
 
   return (
     <Center flexShrink={0} h="full" position="relative" w="500px" {...props}>
@@ -73,34 +73,31 @@ export default function ChatBox({ inputRef, ...props }: Props) {
             minH="full"
             p="25px 20px"
           >
-            {gameState &&
-              gameState.messages.map((message) => (
-                <Stack
-                  maxW="300px"
-                  p="8px 13px"
-                  gap="3px"
-                  rounded="8px"
-                  color={message.sender === 'you' ? 'blue.700' : 'red.700'}
-                  bg={message.sender === 'you' ? 'blue.100' : 'red.100'}
-                  key={message.timestamp}
-                  alignSelf={
-                    message.sender === 'you' ? 'flex-end' : 'flex-start'
-                  }
+            {messages.map((message) => (
+              <Stack
+                maxW="300px"
+                p="8px 13px"
+                gap="3px"
+                rounded="8px"
+                color={message.sender === 'you' ? 'blue.700' : 'red.700'}
+                bg={message.sender === 'you' ? 'blue.100' : 'red.100'}
+                key={message.timestamp}
+                alignSelf={message.sender === 'you' ? 'flex-end' : 'flex-start'}
+              >
+                <Text fontSize="16px" lineHeight="18px">
+                  {message.content}
+                </Text>
+                <Text
+                  fontSize="10px"
+                  lineHeight="12px"
+                  fontWeight={600}
+                  opacity={0.8}
+                  alignSelf="flex-end"
                 >
-                  <Text fontSize="16px" lineHeight="18px">
-                    {message.content}
-                  </Text>
-                  <Text
-                    fontSize="10px"
-                    lineHeight="12px"
-                    fontWeight={600}
-                    opacity={0.8}
-                    alignSelf="flex-end"
-                  >
-                    {formatMinutes(message.timestamp)}
-                  </Text>
-                </Stack>
-              ))}
+                  {formatMinutes(message.timestamp)}
+                </Text>
+              </Stack>
+            ))}
           </VStack>
         </Box>
         <Box as="form" onSubmit={handleSubmitMessage} w="full">

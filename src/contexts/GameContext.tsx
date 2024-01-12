@@ -29,11 +29,11 @@ interface GameState {
   gameStatus: GameStatus
   turn: 'player' | 'oponent' | null
   matchId: string | null
-  messages: Message[]
 }
 
 interface GameData {
   gameState: GameState | null
+  messages: Message[]
   playerTimer: Timer
   oponentTimer: Timer
   availableChoices: Choice[]
@@ -66,13 +66,15 @@ export function GameProvider({ children }: Props) {
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
   const socketRef = useRef<Socket | null>(null)
+  const [messages, setMessages] = useState<Message[]>([])
   const { getToken, logged } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 
-  /**Limpa o estado do jogo, colocando os timers em 0. */
-  const resetGameState = useCallback(() => {
+  /** Limpa o estado do jogo, colocando os timers em 0. */
+  const resetStates = useCallback(() => {
     setGameState(null)
+    setMessages([])
     setTriple(null)
     playerTimer.current.pause()
     oponentTimer.current.pause()
@@ -121,22 +123,19 @@ export function GameProvider({ children }: Props) {
     setOponentProfile(oponentProfile)
   }, [])
 
-  const handleReceiveMessage = useCallback((message: string) => {
-    setGameState(
-      (current) =>
-        current && {
-          ...current,
-          messages: [
-            ...current.messages,
-            {
-              timestamp: Date.now(),
-              content: message,
-              sender: 'him',
-            },
-          ],
+  const handleReceiveMessage = useCallback(
+    (message: string) => {
+      setMessages((current) => [
+        ...current,
+        {
+          timestamp: Date.now(),
+          content: message,
+          sender: 'him',
         },
-    )
-  }, [])
+      ])
+    },
+    [setMessages],
+  )
 
   const makeChoice = useCallback(
     (choice: Choice) => {
@@ -221,22 +220,18 @@ export function GameProvider({ children }: Props) {
   }
 
   function sendMessage(message: string) {
-    setGameState(
-      (current) =>
-        current && {
-          ...current,
-          messages: [
-            ...current.messages,
-            {
-              timestamp: Date.now(),
-              content: message,
-              sender: 'you',
-            },
-          ],
+    if (socketRef.current) {
+      setMessages((current) => [
+        ...current,
+        {
+          content: message,
+          sender: 'you',
+          timestamp: Date.now(),
         },
-    )
+      ])
 
-    socketRef.current?.emit('message', message)
+      socketRef.current?.emit('message', message)
+    }
   }
 
   const forfeit = useCallback(async () => {
@@ -247,14 +242,13 @@ export function GameProvider({ children }: Props) {
     async (matchId: string) => {
       socketRef.current?.disconnect()
 
-      resetGameState()
+      resetStates()
 
       const newSocket = await getEventfulSocket(matchId)
       socketRef.current = newSocket
       setGameState({
         gameStatus: GameStatus.Waiting,
         matchId,
-        messages: [],
         turn: null,
         player: {
           choices: [],
@@ -265,7 +259,7 @@ export function GameProvider({ children }: Props) {
       })
       newSocket.emitWithAck('ready', {})
     },
-    [gameState, getEventfulSocket, setGameState, resetGameState],
+    [gameState, getEventfulSocket, setGameState, resetStates],
   )
 
   function disconnect() {
@@ -331,6 +325,7 @@ export function GameProvider({ children }: Props) {
     <GameContext.Provider
       value={{
         gameState,
+        messages,
         playerTimer: playerTimer.current,
         oponentTimer: oponentTimer.current,
         availableChoices,
