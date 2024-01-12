@@ -11,7 +11,7 @@ const baseStyle = definePartsStyle({
   indicator: {
     pos: 'relative !important',
     flex: '1 0 3px',
-    bg: 'pink.500',
+    bg: 'blue.500',
     borderRadius: '3px',
   },
   tabpanels: {

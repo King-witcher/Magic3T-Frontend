@@ -13,7 +13,7 @@ export default function Choice({ choice }: Props) {
       position="relative"
       w="28px"
       h="28px"
-      bg="pink.200"
+      bg="blue.200"
       borderRadius="5px"
     >
       <Center as="span" w="100%" h="100%" fontSize="16px">

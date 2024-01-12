@@ -45,7 +45,7 @@ export default function Navbar() {
         w="100%"
         alignItems="center"
         px="10px"
-        bg="pink.600"
+        bg="blue.600"
         color="white"
         gap="10px"
         justifyContent="space-between"

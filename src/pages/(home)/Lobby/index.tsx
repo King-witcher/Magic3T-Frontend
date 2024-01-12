@@ -60,7 +60,7 @@ export default function Lobby() {
             }
             sx={{
               '&:hover .cpu-button': {
-                bg: 'pink.200',
+                bg: 'blue.200',
               },
             }}
           >
@@ -145,7 +145,7 @@ export default function Lobby() {
           fontWeight={700}
           h="80px"
           _hover={{
-            bg: 'pink.200',
+            bg: 'blue.200',
           }}
           onClick={
             queueModes.casual
@@ -185,7 +185,7 @@ export default function Lobby() {
           fontWeight={700}
           h="80px"
           _hover={{
-            bg: 'pink.200',
+            bg: 'blue.200',
           }}
           onClick={
             queueModes.ranked

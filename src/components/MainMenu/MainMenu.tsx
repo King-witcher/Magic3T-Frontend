@@ -39,7 +39,7 @@ export default function ProfileMenu() {
       <MenuItem as={Link} to="/rating-system">
         Sistema de Ranking
       </MenuItem>
-      <MenuDivider color="pink.100" />
+      <MenuDivider color="blue.100" />
       {user && <MenuItem onClick={openLogout}>Sair</MenuItem>}
       {!user && <MenuItem onClick={signIn}>Entrar</MenuItem>}
       <LogoutModal isOpen={logoutModalOpen} onClose={closeLogout} />

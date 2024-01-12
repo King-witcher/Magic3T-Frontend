@@ -27,12 +27,12 @@ export const chakraTheme = extendTheme({
         },
         '::-webkit-scrollbar-thumb': {
           w: '5px',
-          bg: 'pink.700',
+          bg: 'blue.700',
           borderRadius: '999px',
         },
       },
       body: {
-        bg: 'pink.100',
+        bg: 'blue.100',
         color: 'blackAlpha.800',
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {
@@ -41,7 +41,7 @@ export const chakraTheme = extendTheme({
         },
         '::-webkit-scrollbar-thumb': {
           w: '5px',
-          bg: 'pink.700',
+          bg: 'blue.700',
           borderRadius: '999px',
         },
       },

@@ -21,7 +21,7 @@ const baseStyle = definePartsStyle({
     h: '40px',
     color: 'black',
     _hover: {
-      bg: 'pink.200',
+      bg: 'blue.200',
     },
     _focus: {
       bg: 'initial',

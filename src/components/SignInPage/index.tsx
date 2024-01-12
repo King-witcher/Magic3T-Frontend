@@ -9,7 +9,7 @@ export default function SignInPage() {
   if (firstLoading)
     return (
       <Center h="100%">
-        <Spinner size="lg" thickness="4px" color="pink.500" speed="0.8s" />
+        <Spinner size="lg" thickness="4px" color="blue.500" speed="0.8s" />
       </Center>
     )
   else
@@ -18,7 +18,7 @@ export default function SignInPage() {
         <Text
           fontSize={['60px', '80px', '120px']}
           fontWeight="700"
-          color="pink.500"
+          color="blue.500"
         >
           Magic3T
         </Text>

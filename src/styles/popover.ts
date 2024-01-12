@@ -13,7 +13,7 @@ const messageBox = definePartsStyle({
     boxShadow: '0 0 30px 10px #00000030',
   },
   arrow: {
-    bg: 'pink.400',
+    bg: 'blue.400',
     border: 'none',
   },
   header: {

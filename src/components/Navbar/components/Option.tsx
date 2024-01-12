@@ -15,9 +15,9 @@ export default function Option({ label, icon, ...rest }: Props) {
       px="20px"
       userSelect="none"
       cursor="pointer"
-      color="pink.800"
+      color="blue.800"
       _hover={{
-        bg: 'pink.200',
+        bg: 'blue.200',
       }}
       justifyContent="space-between"
       {...rest}
