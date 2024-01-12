@@ -66,7 +66,7 @@ export function useRankInfo() {
       initialRating,
       deviationInflationTime,
       maxReliableDeviation,
-      maxRD,
+      initialRD,
       ranks: { initialTier, tierSize },
     },
   } = useConfig()
@@ -78,7 +78,7 @@ export function useRankInfo() {
       const c = getC(deviationInflationTime)
       const t = Date.now() - rating.timestamp.getTime()
       const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
-      return Math.min(candidate, maxRD)
+      return Math.min(candidate, initialRD)
     },
     [deviationInflationTime],
   )
