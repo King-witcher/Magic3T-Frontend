@@ -1,10 +1,12 @@
 export interface RatingConfig {
   deviationInflationTime: number
   distrust: number
+
+  /** Max RD a player can have */
   initialRD: number
   initialRating: number
 
-  /** Max RD a player can have */
+  /** Should not be used */
   maxRD: number
 
   /** Max RD a player can have to be placed */

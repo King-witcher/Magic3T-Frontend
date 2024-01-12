@@ -12,7 +12,6 @@ import {
 } from 'react'
 import { Socket, io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
-import { useNavigate } from 'react-router-dom'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 import { Unsubscribe } from 'firebase/auth'
@@ -66,7 +65,7 @@ export function GameProvider({ children }: Props) {
   const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
-  const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null)
+  const socketRef = useRef<Socket | null>(null)
   const { getToken, logged } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
@@ -86,6 +85,7 @@ export function GameProvider({ children }: Props) {
     async (matchId: string) => {
       const token = await getToken()
       if (!token) throw new Error('No Id Token')
+
       const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
         auth: { matchId, token },
       })
@@ -140,7 +140,7 @@ export function GameProvider({ children }: Props) {
 
   const makeChoice = useCallback(
     (choice: Choice) => {
-      socket?.emit('choice', choice)
+      socketRef.current?.emit('choice', choice)
 
       setGameState(
         (current) =>
@@ -157,11 +157,12 @@ export function GameProvider({ children }: Props) {
       playerTimer.current.pause()
       oponentTimer.current.start()
     },
-    [socket, gameState],
+    [setGameState],
   )
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
-    console.log('Socket disconnected because of', reason, '.')
+    console.log('Socket disconnected because of', reason + '.')
+    socketRef.current?.connect()
   }
 
   function handleServerGameState(stateString: string) {
@@ -187,8 +188,8 @@ export function GameProvider({ children }: Props) {
         },
     )
 
+    // Muda qual timer está contando
     if (incomingGameState.turn) {
-      // Change which timer is playing.
       playerTimer.current.start()
       oponentTimer.current.pause()
     } else if (incomingGameState.status === GameStatus.Playing) {
@@ -199,7 +200,7 @@ export function GameProvider({ children }: Props) {
       oponentTimer.current.pause()
     }
 
-    // Sync timers with server
+    // Sincroniza os timers com os dados recebidos do servidor
     playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
     oponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
 
@@ -235,21 +236,21 @@ export function GameProvider({ children }: Props) {
         },
     )
 
-    socket?.emit('message', message)
+    socketRef.current?.emit('message', message)
   }
 
   const forfeit = useCallback(async () => {
-    await socket?.emitWithAck('forfeit')
-  }, [socket])
+    await socketRef.current?.emitWithAck('forfeit')
+  }, [])
 
   const connectGame = useCallback(
     async (matchId: string) => {
-      socket?.disconnect()
+      socketRef.current?.disconnect()
 
       resetGameState()
 
       const newSocket = await getEventfulSocket(matchId)
-      setSocket(newSocket)
+      socketRef.current = newSocket
       setGameState({
         gameStatus: GameStatus.Waiting,
         matchId,
@@ -264,12 +265,12 @@ export function GameProvider({ children }: Props) {
       })
       newSocket.emitWithAck('ready', {})
     },
-    [gameState, socket, getEventfulSocket, setGameState],
+    [gameState, getEventfulSocket, setGameState, resetGameState],
   )
 
   function disconnect() {
-    socket?.disconnect()
-    setSocket(null)
+    socketRef.current?.disconnect()
+    socketRef.current = null
     setGameState(null)
   }
 
@@ -311,7 +312,7 @@ export function GameProvider({ children }: Props) {
 
   useEffect(() => {
     return () => {
-      socket?.disconnect()
+      socketRef.current?.disconnect()
     }
   }, [])
 
