@@ -6,4 +6,9 @@ export type UserData = WithId & {
   photoURL: string
   glicko: Glicko
   role: 'player' | 'admin' | 'bot'
+  stats: {
+    wins: number
+    draws: number
+    defeats: number
+  }
 }
