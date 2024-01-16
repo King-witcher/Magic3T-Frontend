@@ -6,9 +6,11 @@ import { useState } from 'react'
 import { Match } from '@/models/matches/Match'
 import PlayerCard from './components/PlayerCard'
 import MovesView from './components/MovesView'
+import Header from './components/Header'
 
 interface Props {
   match: Match
+  backButton?: boolean
   referenceUid?: string
 }
 
@@ -61,17 +63,17 @@ export default function MatchViewer({ match, referenceUid }: Props) {
 
   const referenceMatchPlayer =
     match.black.uid === referenceUid ? match.black : match.white
-  const contextColor =
+  const borderColor =
     referenceResult === 'victory'
-      ? 'green'
+      ? 'green.400'
       : referenceResult === 'defeat'
-      ? 'red'
-      : 'gray'
+      ? 'red.400'
+      : 'gray.400'
 
   return (
     <Stack
       borderLeft="solid 5px"
-      borderLeftColor={contextColor + '.400'}
+      borderLeftColor={borderColor}
       p="20px"
       w="full"
       h="full"
@@ -79,49 +81,13 @@ export default function MatchViewer({ match, referenceUid }: Props) {
       rounded="10px"
       bg={'gray.100'}
     >
-      <Flex alignItems="center" gap="10px">
-        <Text
-          fontSize={['20px', '26px']}
-          fontWeight={700}
-          color={
-            referenceResult === 'victory'
-              ? 'green.600'
-              : referenceResult === 'draw'
-              ? 'gray.500'
-              : 'red.600'
-          }
-        >
-          {match.mode === 'casual' ? '(Casual) ' : '(Ranqueada) '}
-          {referenceResult === 'victory'
-            ? 'Vitória'
-            : referenceResult === 'draw'
-            ? 'Empate'
-            : 'Derrota'}
-        </Text>
-        •
-        <Text
-          fontSize={['14px', '16px']}
-          fontWeight={600}
-          color={
-            referenceMatchPlayer.rv > 0
-              ? 'green.500'
-              : referenceMatchPlayer.rv === 0
-              ? 'gray.500'
-              : 'red.500'
-          }
-        >
-          {referenceMatchPlayer.rv < 0 ? '-' : '+'}
-          {Math.abs(referenceMatchPlayer.rv).toFixed()} SR
-        </Text>
-      </Flex>
-      <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
+      <Header match={match} referenceSide={referenceSide} />
 
-      {/* Perfil das pretas */}
       <VStack gap="40px" py="20px" justify="space-between" h="full">
         <PlayerCard
           user={blackProfile}
           matchPlayer={match.black}
-          highlight={referenceSide === 'black'}
+          highlight={referenceSide === 'black' ? 'red' : null}
         />
         <Flex
           gap={['8px 5px', '14px 8px']}
@@ -154,7 +120,7 @@ export default function MatchViewer({ match, referenceUid }: Props) {
         <PlayerCard
           user={whiteProfile}
           matchPlayer={match.white}
-          highlight={referenceSide === 'white'}
+          highlight={referenceSide === 'white' ? 'blue' : null}
         />
       </VStack>
     </Stack>

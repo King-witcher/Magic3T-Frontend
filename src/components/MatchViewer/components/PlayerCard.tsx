@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom'
 interface Props {
   user?: UserData | null
   matchPlayer: MatchPlayer
-  highlight?: boolean
+  highlight?: 'blue' | 'red' | null
 }
 
 export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
@@ -34,7 +34,7 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
       bg="white"
       border={
         highlight
-          ? 'solid 5px var(--chakra-colors-blue-300)'
+          ? `solid 5px var(--chakra-colors-${highlight}-300)`
           : 'solid 5px var(--chakra-colors-gray-300)'
       }
     >
