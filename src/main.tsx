@@ -6,6 +6,7 @@ import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
 import RatingSystemPage from './pages/rating-system/page'
+import MePage from './pages/me/page'
 
 console.clear()
 
@@ -18,40 +19,44 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         errorElement: <Layout />,
         children: [
           {
-            path: '/',
+            path: '',
             element: <Home />,
           },
           {
-            path: '/tutorial',
+            path: 'tutorial',
             element: <TutorialPage />,
           },
           {
-            path: '/rating-system',
+            path: 'rating-system',
             element: <RatingSystemPage />,
           },
           {
-            path: '/profile',
+            path: 'me',
+            element: <MePage />,
+          },
+          {
+            path: 'profile',
             children: [
               {
-                path: '/profile',
+                path: '',
                 element: <ProfilePage index={0} />,
               },
               {
-                path: '/profile/history',
+                path: 'history',
                 element: <ProfilePage index={1} />,
               },
               {
-                path: '/profile/history/:matchId',
+                path: 'history/:matchId',
                 element: <ProfilePage index={1} />,
               },
               {
-                path: '/profile/standings',
+                path: 'standings',
                 element: <ProfilePage index={2} />,
               },
             ],
           },
           {
-            path: '/*',
+            path: '*',
             element: <NotFound />,
           },
         ],

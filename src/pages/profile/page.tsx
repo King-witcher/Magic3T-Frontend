@@ -70,7 +70,7 @@ export default function ProfilePage({ index }: Props) {
     )
 
   return (
-    <Tabs index={index}>
+    <Tabs index={index} isLazy>
       <TabList>
         <Link to={uidParam ? `/profile/?uid=${uidParam}` : '/profile/'}>
           <Tab>Perfil</Tab>

@@ -5,7 +5,7 @@ export type UserData = WithId & {
   nickname: string
   photoURL: string
   glicko: Glicko
-  role: 'player' | 'admin' | 'bot'
+  role: 'player' | 'creator' | 'bot'
   stats: {
     wins: number
     draws: number

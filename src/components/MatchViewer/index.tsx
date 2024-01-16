@@ -16,15 +16,23 @@ import {
   LinkBox,
   Badge,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
+import { Match } from '@/models/matches/Match'
 
-interface Props {
-  match: string
-  viewerId?: string
-}
+type Props =
+  | {
+      match?: undefined
+      matchId: string
+      referenceUid?: string
+    }
+  | {
+      match: Match
+      matchId?: undefined
+      referenceUid: string
+    }
 
 const rowColors = {
   victory: 'green.200',
@@ -32,24 +40,21 @@ const rowColors = {
   defeat: 'red.200',
 }
 
-export default function MatchViewer({ match: matchId }: Props) {
+export default function MatchViewer({
+  match: propsMatch,
+  matchId,
+  referenceUid,
+}: Props) {
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
 
   const { getRankThumbnail } = useRankInfo()
 
-  const params = useQueryParams()
-  const uidParam = params.get('uid')
-
-  const [viewerProfile] = useAsync(async () => {
-    if (uidParam) {
-      return await models.users.getById(uidParam)
-    } else {
-      return user
-    }
-  }, [uidParam, user?._id])
-
   const [match, loading] = useAsync(async () => {
+    if (propsMatch) {
+      return propsMatch
+    }
+
     try {
       return await models.matches.getById(matchId)
     } catch (e) {
@@ -60,40 +65,53 @@ export default function MatchViewer({ match: matchId }: Props) {
     }
   })
 
-  const [oponentProfile] = useAsync(async () => {
+  const [whiteProfile] = useAsync(async () => {
     try {
-      if (match && user) {
-        return models.users.getById(
-          match.black.uid === viewerProfile?._id
-            ? match.white.uid
-            : match.black.uid,
-        )
+      if (match) {
+        return await models.users.getById(match.white.uid)
       }
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        setError('Oponent not found')
-        return null
+    } catch (e: any) {
+      console.error(e.message)
+    }
+  }, [match])
+
+  const [blackProfile] = useAsync(async () => {
+    if (match) {
+      try {
+        return await models.users.getById(match.black.uid)
+      } catch (e: any) {
+        console.error(e.message)
       }
     }
   }, [match])
 
-  if (!match || !user) return null
+  if (!match) return <>Partida não encontrada.</>
 
-  const side = match.black.uid === viewerProfile?._id ? 'black' : 'white'
+  const referenceSide = referenceUid
+    ? referenceUid === match.white.uid
+      ? 'white'
+      : referenceUid === match.black.uid
+      ? 'black'
+      : null
+    : null
 
-  const result =
-    match.winner === 'none'
+  const referenceResult = referenceSide
+    ? match.winner === 'none'
       ? 'draw'
-      : match[match.winner].uid === viewerProfile?._id
+      : match[match.winner].uid === referenceUid
       ? 'victory'
       : 'defeat'
+    : null
 
   const currentPlayer =
-    match.black.uid === viewerProfile?._id ? match.black : match.white
-  const oponent =
-    match.black.uid === viewerProfile?._id ? match.white : match.black
+    match.black.uid === referenceUid ? match.black : match.white
+  const oponent = match.black.uid === referenceUid ? match.white : match.black
   const contextColor =
-    result === 'victory' ? 'green' : result === 'defeat' ? 'red' : 'gray'
+    referenceResult === 'victory'
+      ? 'green'
+      : referenceResult === 'defeat'
+      ? 'red'
+      : 'gray'
 
   return (
     <Stack
@@ -105,9 +123,9 @@ export default function MatchViewer({ match: matchId }: Props) {
       gap="0px"
       rounded="10px"
       bg={
-        result === 'defeat'
+        referenceResult === 'defeat'
           ? 'red.200'
-          : result === 'draw'
+          : referenceResult === 'draw'
           ? 'gray.200'
           : 'green.200'
       }
@@ -117,17 +135,17 @@ export default function MatchViewer({ match: matchId }: Props) {
           fontSize={['20px', '26px']}
           fontWeight={700}
           color={
-            result === 'victory'
+            referenceResult === 'victory'
               ? 'green.600'
-              : result === 'draw'
+              : referenceResult === 'draw'
               ? 'gray.500'
               : 'red.600'
           }
         >
           {match.mode === 'casual' ? '(Casual) ' : '(Ranqueada) '}
-          {result === 'victory'
+          {referenceResult === 'victory'
             ? 'Vitória'
-            : result === 'draw'
+            : referenceResult === 'draw'
             ? 'Empate'
             : 'Derrota'}
         </Text>
@@ -148,6 +166,8 @@ export default function MatchViewer({ match: matchId }: Props) {
         </Text>
       </Flex>
       <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
+
+      {/* Perfil das pretas */}
       <VStack gap="40px" py="20px" justify="space-between" h="full">
         <LinkBox
           display="flex"
@@ -157,35 +177,37 @@ export default function MatchViewer({ match: matchId }: Props) {
           gap="15px"
           bg="whiteAlpha.600"
         >
-          <LinkOverlay as={Link} to={`/profile?uid=${oponentProfile?._id}`} />
-          <Avatar size="lg" src={oponentProfile?.photoURL} />
+          {blackProfile && (
+            <LinkOverlay as={Link} to={`/profile/${blackProfile._id}`} />
+          )}
+          <Avatar size="lg" src={blackProfile?.photoURL} />
           <Flex flexDir="column">
             <Flex alignItems="center" gap="5px">
-              {oponentProfile?.role === 'bot' && (
+              {blackProfile?.role === 'bot' && (
                 <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
                   Bot
                 </Badge>
               )}
-              <Text>{oponent.name}</Text>
+              <Text>{match.black.name}</Text>
             </Flex>
             <Flex gap="5px" alignItems="center">
               <Image
                 ml="3px"
-                src={getRankThumbnail(oponent.rating)}
+                src={getRankThumbnail(match.black.rating)}
                 alt="rank"
                 draggable={false}
               />
-              {Math.round(oponent.rating)}{' '}
+              {Math.round(match.black.rating)}{' '}
               <Text
                 color={
-                  oponent.rv > 0
+                  match.black.rv > 0
                     ? 'green.400'
-                    : oponent.rv === 0
+                    : match.black.rv === 0
                     ? 'gray.400'
                     : 'red.400'
                 }
               >
-                ({oponent.rv < 0 ? '-' : '+'}
+                ({match.black.rv < 0 ? '-' : '+'}
                 {Math.round(Math.abs(oponent.rv))})
               </Text>{' '}
               SR
@@ -210,7 +232,7 @@ export default function MatchViewer({ match: matchId }: Props) {
                   ? 'red.500'
                   : move.move === 'timeout'
                   ? 'yellow.500'
-                  : move.player === side
+                  : move.player === 'white'
                   ? 'blue.300'
                   : 'red.300'
               }
@@ -228,10 +250,10 @@ export default function MatchViewer({ match: matchId }: Props) {
           border="solid 5px white"
           boxSizing="border-box"
         >
-          <Avatar size="lg" src={viewerProfile?.photoURL} />
+          <Avatar size="lg" src={whiteProfile?.photoURL} />
           <Flex flexDir="column">
             <Flex alignItems="center" gap="5px">
-              {viewerProfile?.role === 'bot' && (
+              {whiteProfile?.role === 'bot' && (
                 <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
                   Bot
                 </Badge>

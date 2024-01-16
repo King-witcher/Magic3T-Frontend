@@ -287,17 +287,21 @@ export function GameProvider({ children }: Props) {
   // Auto connects the user to the current game that is being played.
   useEffect(() => {
     async function checkStatus() {
-      if (!logged) return
-      const token = await getToken()
-      if (!token) return
-      const response = await Api.get('/matchId', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      try {
+        if (!logged) return
+        const token = await getToken()
+        if (!token) return
+        const response = await Api.get('/matchId', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
-      if (response.status === 200) {
-        connectGame(response.data.id)
+        if (response.status === 200) {
+          connectGame(response.data.id)
+        }
+      } catch (e) {
+        console.error(e)
       }
     }
 
