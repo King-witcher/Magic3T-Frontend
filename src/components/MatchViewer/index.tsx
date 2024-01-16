@@ -1,8 +1,6 @@
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
-import { formatDate } from '@/utils/timeFormat'
-import { Center, Flex, Stack, Text, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Flex, Stack, VStack } from '@chakra-ui/react'
 import { Match } from '@/models/matches/Match'
 import PlayerCard from './components/PlayerCard'
 import MovesView from './components/MovesView'
@@ -10,7 +8,6 @@ import Header from './components/Header'
 
 interface Props {
   match: Match
-  backButton?: boolean
   referenceUid?: string
 }
 
@@ -21,8 +18,6 @@ const rowColors = {
 }
 
 export default function MatchViewer({ match, referenceUid }: Props) {
-  const [error, setError] = useState<string | null>(null)
-
   const [whiteProfile] = useAsync(async () => {
     try {
       if (match) {

@@ -1,6 +1,7 @@
 import { Match } from '@/models/matches/Match'
 import { formatDate } from '@/utils/timeFormat'
 import { Flex, Stack, Text } from '@chakra-ui/react'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 
 interface Props {
   match: Match
@@ -24,6 +25,9 @@ export default function Header({ match, referenceSide }: Props) {
           </Text>
         </Flex>
         <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
+        <Text color="blackAlpha.600" fontSize={['10px', '12px']}>
+          Id: {match._id}
+        </Text>
       </Stack>
     )
 
@@ -86,6 +90,9 @@ export default function Header({ match, referenceSide }: Props) {
         </Text>
       </Text>
       <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
+      <Text color="blackAlpha.600" fontSize={['10px', '12px']}>
+        Id: {match._id}
+      </Text>
     </Stack>
   )
 }
