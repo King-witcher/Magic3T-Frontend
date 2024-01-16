@@ -11,6 +11,7 @@ import MeLayout from './pages/me/layout'
 import UserPageLayout from './pages/user/[uid]/layout'
 import UserPage from './pages/user/[uid]/page'
 import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
+import MatchPage from './pages/match/[matchId]/page'
 
 console.clear()
 
@@ -33,6 +34,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           {
             path: 'rating-system',
             element: <RatingSystemPage />,
+          },
+          {
+            path: 'match/:matchId',
+            element: <MatchPage />,
           },
           {
             path: 'me',

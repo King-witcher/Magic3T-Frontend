@@ -31,8 +31,12 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
       rounded="10px"
       alignItems="center"
       gap="15px"
-      bg="whiteAlpha.600"
-      border={highlight ? 'solid 5px white' : 'none'}
+      bg="white"
+      border={
+        highlight
+          ? 'solid 5px var(--chakra-colors-blue-300)'
+          : 'solid 5px var(--chakra-colors-gray-300)'
+      }
     >
       <LinkOverlay
         as={Link}

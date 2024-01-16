@@ -1,39 +1,16 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
-import { NotFoundError } from '@/models/errors/NotFoundError'
 import { formatDate } from '@/utils/timeFormat'
-import {
-  Avatar,
-  Box,
-  Center,
-  Flex,
-  Stack,
-  Text,
-  Image,
-  VStack,
-  LinkOverlay,
-  LinkBox,
-  Badge,
-} from '@chakra-ui/react'
+import { Center, Flex, Stack, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useQueryParams } from '@/hooks/useQueryParams'
-import { Link } from 'react-router-dom'
-import { useRankInfo } from '@/hooks/useRanks'
 import { Match } from '@/models/matches/Match'
 import PlayerCard from './components/PlayerCard'
+import MovesView from './components/MovesView'
 
-type Props =
-  | {
-      match?: undefined
-      matchId: string
-      referenceUid?: string
-    }
-  | {
-      match: Match
-      matchId?: undefined
-      referenceUid: string
-    }
+interface Props {
+  match: Match
+  referenceUid?: string
+}
 
 const rowColors = {
   victory: 'green.200',
@@ -41,27 +18,8 @@ const rowColors = {
   defeat: 'red.200',
 }
 
-export default function MatchViewer({
-  match: propsMatch,
-  matchId,
-  referenceUid,
-}: Props) {
+export default function MatchViewer({ match, referenceUid }: Props) {
   const [error, setError] = useState<string | null>(null)
-
-  const [match, loading] = useAsync(async () => {
-    if (propsMatch) {
-      return propsMatch
-    }
-
-    try {
-      return await models.matches.getById(matchId)
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        setError('Match not found')
-        return null
-      }
-    }
-  })
 
   const [whiteProfile] = useAsync(async () => {
     try {
@@ -119,13 +77,7 @@ export default function MatchViewer({
       h="full"
       gap="0px"
       rounded="10px"
-      bg={
-        referenceResult === 'defeat'
-          ? 'red.200'
-          : referenceResult === 'draw'
-          ? 'gray.200'
-          : 'green.200'
-      }
+      bg={'gray.100'}
     >
       <Flex alignItems="center" gap="10px">
         <Text
@@ -176,7 +128,7 @@ export default function MatchViewer({
           flexWrap="wrap"
           justifyContent="center"
         >
-          {match.moves.map((move, index) => (
+          {/* {match.moves.map((move, index) => (
             <Center
               px={['6px', '8px 10px']}
               key={index}
@@ -196,7 +148,8 @@ export default function MatchViewer({
             >
               {move.move}
             </Center>
-          ))}
+          ))} */}
+          <MovesView moves={match.moves} />
         </Flex>
         <PlayerCard
           user={whiteProfile}

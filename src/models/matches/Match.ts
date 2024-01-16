@@ -1,7 +1,7 @@
 import { WithId } from '@/types/WithId'
 import { Choice } from '@/types/types'
 
-interface PlayerMove {
+export interface PlayerMove {
   player: 'white' | 'black'
   move: Choice | 'forfeit' | 'timeout'
   time: number
