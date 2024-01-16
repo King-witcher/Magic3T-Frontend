@@ -78,7 +78,7 @@ export default function Navbar() {
                 userSelect="none"
               >
                 <Spinner size="xs" speed="700ms" />
-                <Text color="red.100" fontSize="12px">
+                <Text color="white" fontSize="12px">
                   Aguardando servidor...
                 </Text>
               </Flex>
@@ -104,7 +104,7 @@ export default function Navbar() {
                   onClick={() => navigate('/')}
                 >
                   <Spinner size="xs" speed="700ms" />
-                  <Text color="red.100" fontSize="12px">
+                  <Text color="white" fontSize="12px">
                     Na fila
                   </Text>
                 </Flex>
@@ -113,7 +113,7 @@ export default function Navbar() {
           {serverOnline === false && (
             <Flex gap="5px" alignItems="center" userSelect="none">
               <Box w="8px" h="8px" bg="red" borderRadius="10px" />
-              <Text color="red.100" fontSize="12px">
+              <Text color="white" fontSize="12px">
                 Servidor offline
               </Text>
             </Flex>
