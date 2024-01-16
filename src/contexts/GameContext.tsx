@@ -40,6 +40,7 @@ interface GameData {
   availableChoices: Choice[]
   winningTriple: [Choice, Choice, Choice] | null
   oponentProfile: UserData | null
+  ratingsVariation: { player: number; oponent: number } | null
 
   connectGame(matchId: string): Promise<void>
   makeChoice(choice: Choice): void
@@ -68,6 +69,10 @@ export function GameProvider({ children }: Props) {
   const oponentTimer = useRef(new Timer(0))
   const socketRef = useRef<Socket | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
+  const [ratingsVariation, setRatingsVariation] = useState<{
+    player: number
+    oponent: number
+  } | null>(null)
   const { getToken, logged } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
@@ -77,6 +82,7 @@ export function GameProvider({ children }: Props) {
     setGameState(null)
     setMessages([])
     setTriple(null)
+    setRatingsVariation(null)
     playerTimer.current.pause()
     oponentTimer.current.pause()
     playerTimer.current.setRemaining(0)
@@ -93,28 +99,15 @@ export function GameProvider({ children }: Props) {
         auth: { matchId, token },
       })
 
-      return (
-        socket
-          .on('gameState', handleServerGameState)
-          .on('disconnect', handleServerDisconnect)
-          .on('message', handleReceiveMessage)
-          // .on('oponentProfile', (profile) => {
-          //   setGameState(
-          //     (current) =>
-          //       current && {
-          //         ...current,
-          //         oponent: {
-          //           ...current.oponent,
-          //           profile,
-          //         },
-          //       },
-          //   )
-          // })
-          .on('oponentUid', handleReceiveOponentUid)
-          .on('connect', () => {
-            socket.emit('getOponentProfile')
-          })
-      )
+      return socket
+        .on('gameState', handleServerGameState)
+        .on('disconnect', handleServerDisconnect)
+        .on('message', handleReceiveMessage)
+        .on('oponentUid', handleReceiveOponentUid)
+        .on('ratingsVariation', handleReceiveRatingsVariation)
+        .on('connect', () => {
+          socket.emit('getOponentProfile')
+        })
     },
     [getToken],
   )
@@ -123,6 +116,13 @@ export function GameProvider({ children }: Props) {
     const oponentProfile = await models.users.getById(uid)
     setOponentProfile(oponentProfile)
   }, [])
+
+  const handleReceiveRatingsVariation = useCallback(
+    (data: { player: number; oponent: number }) => {
+      setRatingsVariation(data)
+    },
+    [setRatingsVariation],
+  )
 
   const handleReceiveMessage = useCallback(
     (message: string) => {
@@ -326,6 +326,7 @@ export function GameProvider({ children }: Props) {
         availableChoices,
         winningTriple: triple,
         oponentProfile,
+        ratingsVariation,
 
         /** Se conecta a um jogo a partir de um token. */
         connectGame,

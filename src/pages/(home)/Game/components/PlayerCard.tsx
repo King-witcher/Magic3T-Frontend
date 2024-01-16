@@ -1,4 +1,12 @@
-import { Flex, Text, Center, Stack, Image, Badge } from '@chakra-ui/react'
+import {
+  Flex,
+  Text,
+  Center,
+  Stack,
+  Image,
+  Badge,
+  keyframes,
+} from '@chakra-ui/react'
 import { useGame } from '@/contexts/GameContext'
 import {
   Menu,
@@ -22,10 +30,24 @@ interface Props {
   chatInputRef: RefObject<HTMLInputElement>
 }
 
+const appear = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+`
+
 export default function PlayerCard({ player, chatInputRef }: Props) {
   const { user } = useAuth()
   const { getRankInfo } = useRankInfo()
   const { ratingConfig } = useConfig()
+
+  const {
+    isOpen: forfeitModaOpen,
+    onClose: closeForfeitModal,
+    onOpen: openForfeitModal,
+  } = useDisclosure()
 
   const easterEgg =
     user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
@@ -34,13 +56,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
       ? 'Te amo, mãe <3'
       : ''
 
-  const {
-    isOpen: forfeitModaOpen,
-    onClose: closeForfeitModal,
-    onOpen: openForfeitModal,
-  } = useDisclosure()
-
-  const { gameState, oponentProfile } = useGame()
+  const { gameState, oponentProfile, ratingsVariation } = useGame()
 
   const currentPlayer = player === 'current'
 
@@ -52,6 +68,12 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
 
   const profile = currentPlayer ? user : oponentProfile
   const rinfo = profile && getRankInfo(profile.glicko)
+
+  const ratingVariation =
+    ratingsVariation && ratingsVariation[currentPlayer ? 'player' : 'oponent']
+
+  const integerVariation =
+    ratingVariation && Math.round(Math.abs(ratingVariation))
 
   if (!gameState) return null
 
@@ -119,8 +141,25 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   <Text fontSize="16px">
                     {rinfo!.rating}
                     {!rinfo!.reliable && '?'}
-                    {rinfo!.precise && '!'} SR
+                    {rinfo!.precise && '!'}
                   </Text>
+                  {ratingVariation && (
+                    <Text
+                      animation={`${appear} linear 300ms`}
+                      fontWeight={800}
+                      fontSize="14px"
+                      color={
+                        ratingVariation < 0
+                          ? 'red.700'
+                          : ratingVariation > 0
+                          ? 'green.700'
+                          : 'gray.700'
+                      }
+                    >
+                      {ratingVariation < 0 ? '-' : '+'}
+                      {integerVariation}
+                    </Text>
+                  )}
                 </Flex>
               </>
             )}
