@@ -24,6 +24,7 @@ import ChatDrawer from './ChatDrawer'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
 import { useConfig } from '@/contexts/ConfigContext'
+import SmoothNumber from '@/components/SmoothNumber'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -139,7 +140,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   <Image src={rinfo?.thumbnail} w="25px" />
 
                   <Text fontSize="16px">
-                    {rinfo!.rating}
+                    {<SmoothNumber value={rinfo!.rating} />}
                     {!rinfo!.reliable && '?'}
                     {rinfo!.precise && '!'}
                   </Text>

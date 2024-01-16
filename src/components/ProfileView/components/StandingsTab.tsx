@@ -92,6 +92,7 @@ export default function StandingsTab({ standings }: Props) {
               bg={rinfo.colorScheme.normal}
               borderLeft="solid 5px"
               borderColor={rinfo.colorScheme.darker}
+              transition="background linear 80ms"
               rounded="8px"
               gap={{ base: '10px', sm: '0' }}
               _hover={{
