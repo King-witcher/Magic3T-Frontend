@@ -7,6 +7,8 @@ import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
 import RatingSystemPage from './pages/rating-system/page'
 import MePage from './pages/me/page'
+import MeMatchPage from './pages/me/match/[matchId]/page'
+import MeLayout from './pages/me/layout'
 
 console.clear()
 
@@ -32,7 +34,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           },
           {
             path: 'me',
-            element: <MePage />,
+            element: <MeLayout />,
+            children: [
+              {
+                path: '',
+                element: <MePage />,
+              },
+              {
+                path: 'match/:matchId',
+                element: <MeMatchPage />,
+              },
+            ],
           },
           {
             path: 'profile',
