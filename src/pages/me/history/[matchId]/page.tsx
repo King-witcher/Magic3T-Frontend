@@ -1,18 +1,29 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useMeContext } from '../../layout'
 import MatchViewer from '@/components/MatchViewer'
 import { useAuth } from '@/contexts/AuthContext'
 import SignInPage from '@/components/SignInPage'
-import { useParams } from 'react-router-dom'
+import { redirect, useNavigate, useParams } from 'react-router-dom'
+import { models } from '@/models'
 
 export default function MeMatchPage() {
   const { user } = useAuth()
 
   const { matchId } = useParams()
 
+  const navigate = useNavigate()
+
   const {
     lazyMatchLoader: [matches, loading, load],
   } = useMeContext()
+
+  const searchAndRedirect = useCallback(async () => {
+    // Get desperdiçado
+    const match = await models.matches.getById(matchId || '')
+    if (match) {
+      navigate(`/match/${matchId}`)
+    }
+  }, [matchId])
 
   useEffect(() => {
     if (!matches && !loading) load()
@@ -28,5 +39,6 @@ export default function MeMatchPage() {
     }
   }
 
-  return <>Match not found</>
+  searchAndRedirect()
+  return <>Partida não encontrada.</>
 }
