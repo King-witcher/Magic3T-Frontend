@@ -65,7 +65,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
       />
       <MenuButton
         as={Link}
-        to={currentPlayer ? '.' : `/profile/?uid=${profile?._id}`}
+        to={currentPlayer ? '.' : `/user/${profile?._id}`}
         disabled={!currentPlayer}
         cursor={currentPlayer ? 'pointer' : 'auto'}
         sx={

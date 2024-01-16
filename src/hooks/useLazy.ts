@@ -23,5 +23,5 @@ export function useLazy<ReturnType>(
     setResource(null)
   }, deps)
 
-  return [resource, loading, load] as const
+  return [resource, loading, load]
 }

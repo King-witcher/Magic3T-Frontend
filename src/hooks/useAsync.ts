@@ -9,6 +9,7 @@ export function useAsync<T>(
   const [data, setData] = useState<T | null>(null)
 
   useEffect(() => {
+    setData(null)
     loader().then(setData)
   }, deps)
 

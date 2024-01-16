@@ -2,9 +2,7 @@ import { Center, Stack, keyframes } from '@chakra-ui/react'
 
 import HistoryMatch from './HistoryMatch'
 import { Match } from '@/models/matches/Match'
-import { Link, useParams } from 'react-router-dom'
-import HistoryMatchTab from './HistoryMatchTab'
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface Props {
   matches: Match[]

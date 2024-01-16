@@ -2,7 +2,7 @@ import { LazyLoadData } from '@/hooks/useLazy'
 import { Center } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-interface Props<ReturnType, ArgsType = unknown> {
+interface Props<ReturnType> {
   lazyLoadData: LazyLoadData<ReturnType>
 }
 

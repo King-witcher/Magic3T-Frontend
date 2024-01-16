@@ -1,3 +1,4 @@
+import { useAuth } from '@/contexts/AuthContext'
 import { useConfig } from '@/contexts/ConfigContext'
 import { useAsync } from '@/hooks/useAsync'
 import { useRankInfo } from '@/hooks/useRanks'
@@ -35,6 +36,8 @@ export default function StandingsTab({ standings }: Props) {
   const [filter, setFilter] = useState<'valid' | 'modified' | 'all'>('valid')
 
   const { ratingConfig } = useConfig()
+
+  const { user: authUser } = useAuth()
 
   const { getRD, getRankInfo } = useRankInfo()
 
@@ -81,7 +84,7 @@ export default function StandingsTab({ standings }: Props) {
             <Flex
               animation={`${appear} ${delay}s ease-in`}
               as={Link}
-              to={`/profile?uid=${player._id}`}
+              to={authUser?._id === player._id ? '/me' : `/user/${player._id}`}
               key={filtered.length + player._id}
               w="full"
               alignItems="center"

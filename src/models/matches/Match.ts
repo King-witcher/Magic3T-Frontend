@@ -7,7 +7,7 @@ interface PlayerMove {
   time: number
 }
 
-interface Player {
+export interface MatchPlayer {
   uid: string
   name: string
   rating: number
@@ -15,8 +15,8 @@ interface Player {
 }
 
 export interface Match extends WithId {
-  white: Player
-  black: Player
+  white: MatchPlayer
+  black: MatchPlayer
   moves: PlayerMove[]
   winner: 'white' | 'black' | 'none'
   mode: 'casual' | 'ranked'

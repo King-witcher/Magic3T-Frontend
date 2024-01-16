@@ -21,6 +21,7 @@ import { useQueryParams } from '@/hooks/useQueryParams'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
 import { Match } from '@/models/matches/Match'
+import PlayerCard from './components/PlayerCard'
 
 type Props =
   | {
@@ -46,9 +47,6 @@ export default function MatchViewer({
   referenceUid,
 }: Props) {
   const [error, setError] = useState<string | null>(null)
-  const { user } = useAuth()
-
-  const { getRankThumbnail } = useRankInfo()
 
   const [match, loading] = useAsync(async () => {
     if (propsMatch) {
@@ -103,9 +101,8 @@ export default function MatchViewer({
       : 'defeat'
     : null
 
-  const currentPlayer =
+  const referenceMatchPlayer =
     match.black.uid === referenceUid ? match.black : match.white
-  const oponent = match.black.uid === referenceUid ? match.white : match.black
   const contextColor =
     referenceResult === 'victory'
       ? 'green'
@@ -154,66 +151,26 @@ export default function MatchViewer({
           fontSize={['14px', '16px']}
           fontWeight={600}
           color={
-            currentPlayer.rv > 0
+            referenceMatchPlayer.rv > 0
               ? 'green.500'
-              : currentPlayer.rv === 0
+              : referenceMatchPlayer.rv === 0
               ? 'gray.500'
               : 'red.500'
           }
         >
-          {currentPlayer.rv < 0 ? '-' : '+'}
-          {Math.abs(currentPlayer.rv).toFixed()} SR
+          {referenceMatchPlayer.rv < 0 ? '-' : '+'}
+          {Math.abs(referenceMatchPlayer.rv).toFixed()} SR
         </Text>
       </Flex>
       <Text fontSize={['12px', '14px']}>{formatDate(match.timestamp)}</Text>
 
       {/* Perfil das pretas */}
       <VStack gap="40px" py="20px" justify="space-between" h="full">
-        <LinkBox
-          display="flex"
-          p="10px"
-          rounded="10px"
-          alignItems="center"
-          gap="15px"
-          bg="whiteAlpha.600"
-        >
-          {blackProfile && (
-            <LinkOverlay as={Link} to={`/profile/${blackProfile._id}`} />
-          )}
-          <Avatar size="lg" src={blackProfile?.photoURL} />
-          <Flex flexDir="column">
-            <Flex alignItems="center" gap="5px">
-              {blackProfile?.role === 'bot' && (
-                <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
-                  Bot
-                </Badge>
-              )}
-              <Text>{match.black.name}</Text>
-            </Flex>
-            <Flex gap="5px" alignItems="center">
-              <Image
-                ml="3px"
-                src={getRankThumbnail(match.black.rating)}
-                alt="rank"
-                draggable={false}
-              />
-              {Math.round(match.black.rating)}{' '}
-              <Text
-                color={
-                  match.black.rv > 0
-                    ? 'green.400'
-                    : match.black.rv === 0
-                    ? 'gray.400'
-                    : 'red.400'
-                }
-              >
-                ({match.black.rv < 0 ? '-' : '+'}
-                {Math.round(Math.abs(oponent.rv))})
-              </Text>{' '}
-              SR
-            </Flex>
-          </Flex>
-        </LinkBox>
+        <PlayerCard
+          user={blackProfile}
+          matchPlayer={match.black}
+          highlight={referenceSide === 'black'}
+        />
         <Flex
           gap={['8px 5px', '14px 8px']}
           flexWrap="wrap"
@@ -241,49 +198,11 @@ export default function MatchViewer({
             </Center>
           ))}
         </Flex>
-        <Flex
-          p="10px"
-          rounded="10px"
-          alignItems="center"
-          gap="15px"
-          bg="whiteAlpha.600"
-          border="solid 5px white"
-          boxSizing="border-box"
-        >
-          <Avatar size="lg" src={whiteProfile?.photoURL} />
-          <Flex flexDir="column">
-            <Flex alignItems="center" gap="5px">
-              {whiteProfile?.role === 'bot' && (
-                <Badge rounded="5px" fontSize="12px" bg="blackAlpha.300">
-                  Bot
-                </Badge>
-              )}
-              <Text>{currentPlayer.name}</Text>
-            </Flex>
-            <Flex gap="5px" alignItems="center">
-              <Image
-                ml="3px"
-                src={getRankThumbnail(currentPlayer.rating)}
-                alt="rank"
-                draggable={false}
-              />
-              {Math.round(currentPlayer.rating)}{' '}
-              <Text
-                color={
-                  currentPlayer.rv > 0
-                    ? 'green.400'
-                    : currentPlayer.rv === 0
-                    ? 'gray.400'
-                    : 'red.400'
-                }
-              >
-                ({currentPlayer.rv < 0 ? '-' : '+'}
-                {Math.round(Math.abs(currentPlayer.rv))})
-              </Text>{' '}
-              SR
-            </Flex>
-          </Flex>
-        </Flex>
+        <PlayerCard
+          user={whiteProfile}
+          matchPlayer={match.white}
+          highlight={referenceSide === 'white'}
+        />
       </VStack>
     </Stack>
   )

@@ -8,7 +8,9 @@ import RatingSystemPage from './pages/rating-system/page'
 import MePage from './pages/me/page'
 import MeMatchPage from './pages/me/history/[matchId]/page'
 import MeLayout from './pages/me/layout'
-import ProfilePage from './pages/old_profile/page'
+import UserPageLayout from './pages/user/[uid]/layout'
+import UserPage from './pages/user/[uid]/page'
+import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
 
 console.clear()
 
@@ -59,23 +61,28 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             ],
           },
           {
-            path: 'profile',
+            path: 'user/:uid',
+            element: <UserPageLayout />,
             children: [
               {
                 path: '',
-                element: <ProfilePage index={0} />,
+                element: <UserPage index={0} />,
+              },
+              {
+                path: 'profile',
+                element: <UserPage index={0} />,
               },
               {
                 path: 'history',
-                element: <ProfilePage index={1} />,
+                element: <UserPage index={1} />,
               },
               {
                 path: 'history/:matchId',
-                element: <ProfilePage index={1} />,
+                element: <UserMatchPage />,
               },
               {
                 path: 'standings',
-                element: <ProfilePage index={2} />,
+                element: <UserPage index={2} />,
               },
             ],
           },

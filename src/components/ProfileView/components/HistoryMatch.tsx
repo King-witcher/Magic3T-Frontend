@@ -1,11 +1,10 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { Center, Flex, FlexProps, Text } from '@chakra-ui/react'
 import { formatDate } from '@/utils/timeFormat'
-import { useQueryParams } from '@/hooks/useQueryParams'
-import { MatchRegistry } from '@/pages/profile/History/MatchRegistry'
+import { Match } from '@/models/matches/Match'
 
 interface Props extends FlexProps {
-  match: MatchRegistry
+  match: Match
   referenceUid: string
 }
 
