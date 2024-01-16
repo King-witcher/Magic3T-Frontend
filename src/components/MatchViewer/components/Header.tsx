@@ -15,11 +15,11 @@ export default function Header({ match, referenceSide }: Props) {
         <Flex alignItems="center" gap="10px">
           <Text fontSize={['20px', '26px']}>
             Partida de{' '}
-            <Text as="span" fontWeight={700}>
+            <Text as="span" fontWeight={700} color="blue.400">
               {match.white.name}
             </Text>{' '}
             contra{' '}
-            <Text as="span" fontWeight={700}>
+            <Text as="span" fontWeight={700} color="red.400">
               {match.black.name}
             </Text>{' '}
           </Text>

@@ -82,7 +82,7 @@ export default function MatchViewer({ match, referenceUid }: Props) {
         <PlayerCard
           user={blackProfile}
           matchPlayer={match.black}
-          highlight={referenceSide === 'black' ? 'red' : null}
+          highlight={referenceSide !== 'white' ? 'red' : null}
         />
         <Flex
           gap={['8px 5px', '14px 8px']}
@@ -94,7 +94,7 @@ export default function MatchViewer({ match, referenceUid }: Props) {
         <PlayerCard
           user={whiteProfile}
           matchPlayer={match.white}
-          highlight={referenceSide === 'white' ? 'blue' : null}
+          highlight={referenceSide !== 'black' ? 'blue' : null}
         />
       </VStack>
     </Stack>

@@ -142,7 +142,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
         {(gameState.gameStatus === GameStatus.Defeat ||
           gameState.gameStatus === GameStatus.Draw ||
           gameState.gameStatus === GameStatus.Victory) && (
-          <Link to={`/profile/history/${gameState.matchId}`}>
+          <Link to={`/me/history/${gameState.matchId}`}>
             <MenuItem display={{ base: 'none', lg: 'block' }}>
               Ver no histórico
             </MenuItem>
