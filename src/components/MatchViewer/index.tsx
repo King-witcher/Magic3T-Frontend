@@ -89,27 +89,6 @@ export default function MatchViewer({ match, referenceUid }: Props) {
           flexWrap="wrap"
           justifyContent="center"
         >
-          {/* {match.moves.map((move, index) => (
-            <Center
-              px={['6px', '8px 10px']}
-              key={index}
-              borderRadius={['8px']}
-              minW={['40px', '50px']}
-              h={['40px', '50px']}
-              fontSize={['16px', '20px']}
-              bg={
-                move.move === 'forfeit'
-                  ? 'red.500'
-                  : move.move === 'timeout'
-                  ? 'yellow.500'
-                  : move.player === 'white'
-                  ? 'blue.300'
-                  : 'red.300'
-              }
-            >
-              {move.move}
-            </Center>
-          ))} */}
           <MovesView moves={match.moves} />
         </Flex>
         <PlayerCard

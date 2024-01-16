@@ -77,19 +77,22 @@ export default function MovesView({ moves }: Props) {
         justifyContent="center"
         fontSize="18px"
       >
-        <Control onClick={() => setIndex(0)}>
+        <Control onClick={() => setIndex(0)} disabled={index === 0}>
           <FaBackwardFast />
         </Control>
 
-        <Control onClick={() => go(-1)}>
+        <Control onClick={() => go(-1)} disabled={index === 0}>
           <FaBackwardStep />
         </Control>
 
-        <Control onClick={() => go(1)}>
+        <Control onClick={() => go(1)} disabled={index === moves.length}>
           <FaForwardStep />
         </Control>
 
-        <Control onClick={() => setIndex(moves.length)}>
+        <Control
+          onClick={() => setIndex(moves.length)}
+          disabled={index === moves.length}
+        >
           <FaForwardFast />
         </Control>
       </Flex>
