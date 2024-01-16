@@ -1,10 +1,8 @@
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
 import { UserData } from '@/models/users/User'
-import StandingsTab from '@/pages/profile/Standings/StandingsTab'
 import {
   Center,
-  Link,
   Tab,
   TabIndicator,
   TabList,
@@ -16,22 +14,36 @@ import LazyLoadingPage from './components/LazyLoadingPage'
 import ProfileTab from './components/ProfileTab'
 import HistoryTab from './components/HistoryTab'
 import { Match } from '@/models/matches/Match'
+import { Link } from 'react-router-dom'
+import StandingsTab from './components/StandingsTab'
 
 interface Props {
   user: UserData
   lazyMatchLoader: LazyLoadData<Match[]>
+  lazyStandingsLoader: LazyLoadData<UserData[]>
+  baseUrl: string
+  index: 0 | 1 | 2
 }
 
 export default function ProfileView({
   user,
   lazyMatchLoader: [matches, loadingMatches, loadMatches],
+  lazyStandingsLoader: [standings, loadingStandings, loadStandings],
+  index,
+  baseUrl,
 }: Props) {
   return (
-    <Tabs isLazy>
+    <Tabs index={index} isLazy>
       <TabList>
-        <Tab>Perfil</Tab>
-        <Tab>Histórico</Tab>
-        <Tab>Ranking</Tab>
+        <Link to={`${baseUrl}/profile`}>
+          <Tab>Perfil</Tab>
+        </Link>
+        <Link to={`${baseUrl}/history`}>
+          <Tab>Histórico</Tab>
+        </Link>
+        <Link to={`${baseUrl}/standings`}>
+          <Tab>Ranking</Tab>
+        </Link>
       </TabList>
       <TabIndicator />
       <TabPanels>
@@ -48,7 +60,13 @@ export default function ProfileView({
           )}
         </TabPanel>
         <TabPanel>
-          <StandingsTab />
+          {standings ? (
+            <StandingsTab standings={standings} />
+          ) : (
+            <LazyLoadingPage
+              lazyLoadData={[standings, loadingStandings, loadStandings]}
+            />
+          )}
         </TabPanel>
       </TabPanels>
     </Tabs>

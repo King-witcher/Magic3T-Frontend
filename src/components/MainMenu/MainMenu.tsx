@@ -27,7 +27,7 @@ export default function ProfileMenu() {
   return (
     <MenuList>
       {user && (
-        <MenuItem as={Link} to="/profile">
+        <MenuItem as={Link} to="/me">
           Perfil
         </MenuItem>
       )}

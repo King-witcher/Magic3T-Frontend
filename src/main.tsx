@@ -1,14 +1,14 @@
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './pages/layout'
-import ProfilePage from './pages/profile/page'
 import Home from './pages/(home)/page'
 import NotFound from './pages/not-found'
 import TutorialPage from './pages/tutorial/page'
 import RatingSystemPage from './pages/rating-system/page'
 import MePage from './pages/me/page'
-import MeMatchPage from './pages/me/match/[matchId]/page'
+import MeMatchPage from './pages/me/history/[matchId]/page'
 import MeLayout from './pages/me/layout'
+import ProfilePage from './pages/old_profile/page'
 
 console.clear()
 
@@ -38,11 +38,23 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             children: [
               {
                 path: '',
-                element: <MePage />,
+                element: <MePage index={0} />,
               },
               {
-                path: 'match/:matchId',
+                path: 'profile',
+                element: <MePage index={0} />,
+              },
+              {
+                path: 'history',
+                element: <MePage index={1} />,
+              },
+              {
+                path: 'history/:matchId',
                 element: <MeMatchPage />,
+              },
+              {
+                path: 'standings',
+                element: <MePage index={2} />,
               },
             ],
           },

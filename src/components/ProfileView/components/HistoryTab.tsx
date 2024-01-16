@@ -4,6 +4,7 @@ import HistoryMatch from './HistoryMatch'
 import { Match } from '@/models/matches/Match'
 import { Link, useParams } from 'react-router-dom'
 import HistoryMatchTab from './HistoryMatchTab'
+import { useState } from 'react'
 
 interface Props {
   matches: Match[]
@@ -24,17 +25,13 @@ const appear = keyframes`
 `
 
 export default function HistoryTab({ matches, referenceUid }: Props) {
-  const { matchId } = useParams<Params>()
-
-  if (matchId) return <HistoryMatchTab matchId={matchId} />
-
   return matches.length ? (
     <Stack h="100%">
       {matches.map((match, index) => {
         const delay = (0.5 * index) / matches.length
 
         return (
-          <Link key={index} to={`match/${match._id}`}>
+          <Link key={index} to={`${match._id}`}>
             <HistoryMatch
               referenceUid={referenceUid}
               animation={`${appear} ${delay}s ease-in`}
