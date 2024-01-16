@@ -27,24 +27,31 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
   return (
     <LinkBox
       display="flex"
-      p="10px"
+      p="10px 14px"
       rounded="10px"
       alignItems="center"
-      gap="15px"
-      bg="white"
+      w="250px"
+      overflow="hidden"
+      gap="8px"
+      bg="whiteAlpha.600"
+      transition="background 80ms linear"
+      _hover={{
+        bg: 'white',
+      }}
       border={
         highlight
           ? `solid 5px var(--chakra-colors-${highlight}-300)`
           : 'solid 5px var(--chakra-colors-gray-300)'
       }
+      borderWidth={'1px 1px 1px 6px'}
     >
+      <Avatar size="lg" src={user?.photoURL} />
       <LinkOverlay
         as={Link}
         to={
           matchPlayer.uid === authUser?._id ? '/me' : `/user/${matchPlayer.uid}`
         }
       />
-      <Avatar size="lg" src={user?.photoURL} />
       <Flex flexDir="column">
         <Flex alignItems="center" gap="5px">
           {user?.role === 'bot' && (
@@ -63,6 +70,8 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
           />
           {Math.round(matchPlayer.rating)}{' '}
           <Text
+            fontSize="14px"
+            fontWeight={800}
             color={
               matchPlayer.rv > 0
                 ? 'green.400'
@@ -71,10 +80,9 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
                 : 'red.400'
             }
           >
-            ({matchPlayer.rv < 0 ? '-' : '+'}
-            {Math.round(Math.abs(matchPlayer.rv))})
-          </Text>{' '}
-          SR
+            {matchPlayer.rv < 0 ? '-' : '+'}
+            {Math.round(Math.abs(matchPlayer.rv))}
+          </Text>
         </Flex>
       </Flex>
     </LinkBox>

@@ -12,7 +12,7 @@ export default function Control({ children, disabled, ...rest }: Props) {
       p="12px"
       transition="80ms linear all"
       cursor={disabled ? 'normal' : 'pointer'}
-      opacity={disabled ? '0.7' : '1'}
+      opacity={disabled ? '0.5' : '1'}
       _hover={
         disabled
           ? {}

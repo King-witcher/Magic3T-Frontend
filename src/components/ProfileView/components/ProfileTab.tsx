@@ -50,7 +50,7 @@ export default function ProfileTab({ user }: Props) {
           )}
           <Text fontSize="30px">{user.nickname}</Text>
         </Flex>
-        <Flex alignItems="center" userSelect="none" gap="4px">
+        <Flex alignItems="center" userSelect="none" gap="5px">
           {user && (
             <Tooltip label="Rating">
               <Image
@@ -58,17 +58,21 @@ export default function ProfileTab({ user }: Props) {
                 src={rating?.thumbnail}
                 alt="rank"
                 draggable={false}
+                w="32px"
               />
             </Tooltip>
           )}
-          <Text fontSize="18px" fontWeight="500" color="gray.500">
+          <Text fontSize="18px" fontWeight="700" color="gray.600">
             {
               <>
                 {rating?.rating}
                 {rating?.precise && '!'}
-                {!rating?.reliable && '?'} (±{rating?.deviation}) SR
+                {!rating?.reliable && '?'}
               </>
             }
+          </Text>
+          <Text fontSize="14px" fontWeight="500" color="gray.600">
+            ±{rating?.deviation}
           </Text>
         </Flex>
         <Divider />

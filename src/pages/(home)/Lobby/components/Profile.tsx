@@ -13,14 +13,27 @@ export default function Profile({ user }: Props) {
 
   return (
     <VStack gap="0">
-      <Avatar src={user?.photoURL || undefined} size={'xl'} />
-      <Text fontSize="22px">{user?.nickname}</Text>
-      <Flex alignItems="center" gap="5px">
-        <Image ml="3px" src={rinfo.thumbnail} alt="rank" draggable={false} />
-        <Text>
+      <Avatar
+        src={user?.photoURL || undefined}
+        size={'xl'}
+        boxShadow="0 0 20px 10px #00000020"
+      />
+      <Text fontSize="30px">{user?.nickname}</Text>
+      <Flex alignItems="center" gap="5px" color="gray.600">
+        <Image
+          ml="3px"
+          src={rinfo.thumbnail}
+          alt="rank"
+          draggable={false}
+          w="32px"
+        />
+        <Text fontSize="18px" fontWeight={700}>
           {rinfo.rating}
           {!rinfo.reliable && '?'}
-          {rinfo.precise && '!'} (±{rinfo.deviation}) SR
+          {rinfo.precise && '!'}{' '}
+        </Text>
+        <Text fontSize="14px" fontWeight={500}>
+          ±{rinfo.deviation}
         </Text>
       </Flex>
     </VStack>

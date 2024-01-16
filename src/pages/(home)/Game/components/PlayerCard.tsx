@@ -106,13 +106,13 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
           alignItems="center"
           justifyContent="left"
           gap="10px"
-          borderWidth={rinfo?.reliable ? '0 0 0 5px' : '1px'}
+          borderWidth={rinfo?.reliable ? '1px 1px 1px 6px' : '1px'}
           borderColor={rinfo?.reliable ? rinfo.colorScheme.darker : 'gray.400'}
           p={rinfo?.reliable ? '10px 10px 10px 5px' : '10px'}
           rounded="10px"
           overflow="hidden"
           bg={rinfo?.reliable ? rinfo.colorScheme.normal : 'transparent'}
-          transition="background 80ms linear"
+          transition="background 2s linear, border-color 2s linear"
           w="250px"
           _hover={
             rinfo
@@ -137,14 +137,14 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   </Text>
                 </Flex>
                 <Flex alignItems="center" gap="5px">
-                  <Image src={rinfo?.thumbnail} w="25px" />
+                  <Image src={rinfo?.thumbnail} w="32px" />
 
-                  <Text fontSize="16px">
+                  <Text fontWeight={600} fontSize="16px">
                     {<SmoothNumber value={rinfo!.rating} />}
                     {!rinfo!.reliable && '?'}
                     {rinfo!.precise && '!'}
                   </Text>
-                  {ratingVariation && (
+                  {!!ratingVariation && (
                     <Text
                       animation={`${appear} linear 300ms`}
                       fontWeight={800}
@@ -158,7 +158,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                       }
                     >
                       {ratingVariation < 0 ? '-' : '+'}
-                      {integerVariation}
+                      {integerVariation || 'sdf'}
                     </Text>
                   )}
                 </Flex>
