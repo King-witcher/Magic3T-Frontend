@@ -103,7 +103,9 @@ export function useRankInfo() {
       const division =
         tierIndex === 4 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
 
-      const reliable = deviation < maxReliableDeviation
+      const newDeviation = Math.round(getRD({ rating, deviation, timestamp }))
+
+      const reliable = newDeviation < maxReliableDeviation
 
       return {
         rating: Math.round(rating),
@@ -114,7 +116,7 @@ export function useRankInfo() {
           ? getThumbnailByTierAndDivision(tierIndex, division)
           : 'https://quake-stats.bethesda.net/ranks/Zero_01.png',
         reliable,
-        precise: deviation < 50,
+        precise: newDeviation < 50,
         colorScheme: reliable
           ? RatingColorSchemes[tiers[tierIndex]]
           : {

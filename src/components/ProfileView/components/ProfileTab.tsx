@@ -85,10 +85,9 @@ export default function ProfileTab({ user }: Props) {
               fontSize="16px"
             >
               <Center
-                bg="green.400"
+                bg="red.400"
                 h="full"
-                overflow="hidden"
-                flex={user.stats.wins / matches}
+                flex={user.stats.defeats / matches}
               />
               <Center
                 bg="gray.400"
@@ -97,20 +96,21 @@ export default function ProfileTab({ user }: Props) {
                 overflow="hidden"
               />
               <Center
-                bg="red.400"
+                bg="green.400"
                 h="full"
-                flex={user.stats.defeats / matches}
+                overflow="hidden"
+                flex={user.stats.wins / matches}
               />
             </Flex>
             <Flex gap="10px">
-              <Text fontWeight="500" color="green.400">
-                {Math.round((100 * user.stats.wins) / matches)}%
+              <Text fontWeight="500" color="red.400">
+                {Math.round((100 * user.stats.defeats) / matches)}%
               </Text>
               <Text fontWeight="500" color="gray.500">
                 {Math.round((100 * user.stats.draws) / matches)}%
               </Text>
-              <Text fontWeight="500" color="red.400">
-                {Math.round((100 * user.stats.defeats) / matches)}%
+              <Text fontWeight="500" color="green.400">
+                {Math.round((100 * user.stats.wins) / matches)}%
               </Text>
             </Flex>
           </>
