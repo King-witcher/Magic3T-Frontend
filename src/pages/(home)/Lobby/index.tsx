@@ -15,7 +15,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import Profile from './components/Profile'
+import ProfileComponent from '@/components/ProfileComponent'
+import { Link } from 'react-router-dom'
 
 export default function Lobby() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
@@ -43,7 +44,9 @@ export default function Lobby() {
   return (
     <Center h="100%" gap="15px" flexDir={['column', 'row']}>
       <Center flex="1">
-        <Profile user={user} />
+        <Link to="/me">
+          <ProfileComponent user={user} />
+        </Link>
       </Center>
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">
