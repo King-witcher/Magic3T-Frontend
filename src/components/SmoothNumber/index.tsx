@@ -13,12 +13,15 @@ export default function SmoothNumber({ value }: Props) {
       if (!mounted) return
 
       const distance = value - smoothValue
-
       const deltaTime = (Date.now() - startTime) / 1000
-      const newValue = smoothValue + distance * deltaTime
 
-      if (Math.abs(newValue - smoothValue) > Math.abs(distance)) {
+      const easeFactor = 0 - 8 ** (0 - deltaTime) + 1
+
+      const newValue = smoothValue + easeFactor * distance
+
+      if (Math.abs(newValue - smoothValue) >= Math.abs(distance) - 1) {
         setSmoothValue(value)
+        console.log('stop', deltaTime)
         return
       }
 

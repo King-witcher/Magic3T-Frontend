@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import ProfileComponent from '@/components/ProfileComponent'
 import { Link } from 'react-router-dom'
+import SmoothNumber from '@/components/SmoothNumber'
 
 export default function Lobby() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()

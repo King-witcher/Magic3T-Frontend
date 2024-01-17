@@ -54,8 +54,6 @@ export default function ProfileComponent({ user }: Props) {
     return currentDivision
   }, [rinfo])
 
-  console.log(progress)
-
   return (
     <VStack
       gap="0px"
