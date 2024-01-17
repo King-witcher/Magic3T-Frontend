@@ -78,7 +78,8 @@ export default function RatingSystemPage() {
           </Stack>
           {tiers.map(
             (tier, tierIndex) =>
-              tier !== 'Elite' && (
+              tier !== 'Elite' &&
+              tier !== 'Unranked' && (
                 <Stack
                   key={tier}
                   bg={RatingColorSchemes[tier].normal}
@@ -109,7 +110,7 @@ export default function RatingSystemPage() {
                         <Text fontWeight={600} color="blackAlpha.800">
                           &ge;{' '}
                           {bronze1 +
-                            tierIndex * ratingConfig.ranks.tierSize +
+                            (tierIndex - 1) * ratingConfig.ranks.tierSize +
                             ((division - 1) * ratingConfig.ranks.tierSize) / 5}
                         </Text>
                       )}

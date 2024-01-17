@@ -55,12 +55,12 @@ export default function ProfileTab({ user }: Props) {
     const currentTier =
       (user.glicko.rating - bronze1) / ratingConfig.ranks.tierSize
 
-    const rest = currentTier % 1
+    const currentDivision = (currentTier * 5) % 1
 
     if (currentTier >= 4) return 1
     if (currentTier < 0) return 0
 
-    return rest
+    return currentDivision
   }, [rinfo.rating])
 
   return (
@@ -133,32 +133,34 @@ export default function ProfileTab({ user }: Props) {
               ±{rinfo?.deviation}
             </Text>
           </Flex>
-          <Flex
-            mt="5px"
-            w="300px"
-            h="6px"
-            rounded="999px"
-            overflow="hidden"
-            gap="1px"
-            color="white"
-            fontSize="16px"
-          >
-            {percentToNextDivision > 0 && (
-              <Box
-                bg={rinfo.colorScheme.darker}
-                h="full"
-                flex={percentToNextDivision}
-              />
-            )}
-            {percentToNextDivision < 1 && (
-              <Box
-                bg="gray.300"
-                h="full"
-                flex={1 - percentToNextDivision}
-                overflow="hidden"
-              />
-            )}
-          </Flex>
+          {rinfo.reliable && (
+            <Flex
+              mt="5px"
+              w="300px"
+              h="6px"
+              rounded="999px"
+              overflow="hidden"
+              gap="1px"
+              color="white"
+              fontSize="16px"
+            >
+              {percentToNextDivision > 0 && (
+                <Box
+                  bg={rinfo.colorScheme.darker}
+                  h="full"
+                  flex={percentToNextDivision}
+                />
+              )}
+              {percentToNextDivision < 1 && (
+                <Box
+                  bg="gray.300"
+                  h="full"
+                  flex={1 - percentToNextDivision}
+                  overflow="hidden"
+                />
+              )}
+            </Flex>
+          )}
         </VStack>
 
         <Divider />
