@@ -11,6 +11,11 @@ export type RatingColorScheme = {
 }
 
 export const RatingColorSchemes: Record<Tier, RatingColorScheme> = {
+  Unranked: {
+    darker: 'gray.400',
+    lighter: 'gray.100',
+    normal: 'gray.200',
+  },
   Bronze: {
     normal: 'orange.500',
     darker: 'orange.700',
@@ -97,26 +102,27 @@ export function useRankInfo() {
 
   const getRankInfo = useCallback(
     ({ rating, deviation, timestamp }: Glicko): RatingInfo => {
-      const infiniteTier = (rating - initialRating) / tierSize + initialTier
-      const boundedTier = Math.max(Math.min(infiniteTier, 4), 0)
+      const infiniteTier = (rating - initialRating) / tierSize + initialTier + 1
+      const boundedTier = Math.max(Math.min(infiniteTier, 5), 1)
       const tierIndex = Math.floor(boundedTier)
       const division =
-        tierIndex === 4 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
+        tierIndex === 5 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
 
-      const newDeviation = Math.round(getRD({ rating, deviation, timestamp }))
+      const currentRD = getRD({ rating, deviation, timestamp })
+      const newDeviation = Math.round(currentRD)
 
       const reliable = newDeviation < maxReliableDeviation
 
       return {
         rating: Math.round(rating),
         deviation: Math.round(getRD({ rating, deviation, timestamp })),
-        tier: tiers[tierIndex],
-        division: division as Division,
+        tier: reliable ? tiers[tierIndex] : 'Unranked',
+        division: (reliable ? division : 1) as Division,
         thumbnail: reliable
           ? getThumbnailByTierAndDivision(tierIndex, division)
           : 'https://quake-stats.bethesda.net/ranks/Zero_01.png',
         reliable,
-        precise: newDeviation < 50,
+        precise: currentRD < 50,
         colorScheme: reliable
           ? RatingColorSchemes[tiers[tierIndex]]
           : {
