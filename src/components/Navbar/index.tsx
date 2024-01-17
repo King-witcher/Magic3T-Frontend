@@ -161,6 +161,12 @@ export default function Navbar() {
                   w="40px"
                   h="40px"
                   bg="whiteAlpha.300"
+                  rounded="8px"
+                  sx={{
+                    '& img': {
+                      rounded: '8px',
+                    },
+                  }}
                 />
               </MenuButton>
             </Tooltip>
