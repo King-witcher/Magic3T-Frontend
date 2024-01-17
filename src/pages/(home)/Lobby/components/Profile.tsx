@@ -95,7 +95,7 @@ export default function Profile({ user }: Props) {
             <>
               {rinfo?.rating}
               {rinfo?.precise && '!'}
-              {!rinfo?.reliable && '?'} SR
+              {!rinfo?.reliable && '?'}
             </>
           }
         </Text>
