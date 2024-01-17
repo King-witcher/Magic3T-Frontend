@@ -12,6 +12,9 @@ import UserPageLayout from './pages/user/[uid]/layout'
 import UserPage from './pages/user/[uid]/page'
 import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
 import MatchPage from './pages/match/[matchId]/page'
+import AuthMiddleware from './pages/auth'
+import SignInPage from './pages/sign-in/page'
+import RegisterPage from './pages/register/page'
 
 console.clear()
 
@@ -24,76 +27,90 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         errorElement: <Layout />,
         children: [
           {
+            path: 'sign-in',
+            element: <SignInPage />,
+          },
+          {
+            path: 'register',
+            element: <RegisterPage />,
+          },
+          {
             path: '',
-            element: <Home />,
-          },
-          {
-            path: 'tutorial',
-            element: <TutorialPage />,
-          },
-          {
-            path: 'rating-system',
-            element: <RatingSystemPage />,
-          },
-          {
-            path: 'match/:matchId',
-            element: <MatchPage />,
-          },
-          {
-            path: 'me',
-            element: <MeLayout />,
+            element: <AuthMiddleware />,
             children: [
               {
                 path: '',
-                element: <MePage index={0} />,
+                element: <Home />,
               },
               {
-                path: 'profile',
-                element: <MePage index={0} />,
+                path: 'tutorial',
+                element: <TutorialPage />,
               },
               {
-                path: 'history',
-                element: <MePage index={1} />,
+                path: 'rating-system',
+                element: <RatingSystemPage />,
               },
               {
-                path: 'history/:matchId',
-                element: <MeMatchPage />,
+                path: 'match/:matchId',
+                element: <MatchPage />,
               },
               {
-                path: 'standings',
-                element: <MePage index={2} />,
+                path: 'me',
+                element: <MeLayout />,
+                children: [
+                  {
+                    path: '',
+                    element: <MePage index={0} />,
+                  },
+                  {
+                    path: 'profile',
+                    element: <MePage index={0} />,
+                  },
+                  {
+                    path: 'history',
+                    element: <MePage index={1} />,
+                  },
+                  {
+                    path: 'history/:matchId',
+                    element: <MeMatchPage />,
+                  },
+                  {
+                    path: 'standings',
+                    element: <MePage index={2} />,
+                  },
+                ],
+              },
+              {
+                path: 'user/:uid',
+                element: <UserPageLayout />,
+                children: [
+                  {
+                    path: '',
+                    element: <UserPage index={0} />,
+                  },
+                  {
+                    path: 'profile',
+                    element: <UserPage index={0} />,
+                  },
+                  {
+                    path: 'history',
+                    element: <UserPage index={1} />,
+                  },
+                  {
+                    path: 'history/:matchId',
+                    element: <UserMatchPage />,
+                  },
+                  {
+                    path: 'standings',
+                    element: <UserPage index={2} />,
+                  },
+                ],
+              },
+              {
+                path: '*',
+                element: <NotFound />,
               },
             ],
-          },
-          {
-            path: 'user/:uid',
-            element: <UserPageLayout />,
-            children: [
-              {
-                path: '',
-                element: <UserPage index={0} />,
-              },
-              {
-                path: 'profile',
-                element: <UserPage index={0} />,
-              },
-              {
-                path: 'history',
-                element: <UserPage index={1} />,
-              },
-              {
-                path: 'history/:matchId',
-                element: <UserMatchPage />,
-              },
-              {
-                path: 'standings',
-                element: <UserPage index={2} />,
-              },
-            ],
-          },
-          {
-            path: '*',
-            element: <NotFound />,
           },
         ],
       },

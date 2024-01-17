@@ -1,10 +1,11 @@
 import { useAuth } from '@/contexts/AuthContext'
-import { Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Center, Flex, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
+import { FaEnvelope, FaRegFaceSadCry } from 'react-icons/fa6'
 import { FcGoogle } from 'react-icons/fc'
 
 /** Handles the process of loading the auth state and requiring login, if the user is not signed in. */
 export default function SignInPage() {
-  const { loading: firstLoading, signIn } = useAuth()
+  const { loading: firstLoading, signInGoogle, signInEmail } = useAuth()
 
   if (firstLoading)
     return (
@@ -22,21 +23,38 @@ export default function SignInPage() {
         >
           Magic3T
         </Text>
-        <Flex
-          fontSize={['20px', '32px']}
-          alignItems="center"
-          bgColor="gray.100"
-          p={['5px 10px', '10px 20px']}
-          borderRadius={['10px', '20px']}
-          _hover={{ bg: 'gray.50' }}
-          gap="10px"
-          userSelect="none"
-          cursor="pointer"
-          onClick={signIn}
-        >
-          <FcGoogle />
-          <Text fontSize={['16px', '24px']}>Entrar com Google</Text>
-        </Flex>
+        <Stack>
+          <Flex
+            fontSize={['20px', '32px']}
+            alignItems="center"
+            bgColor="gray.100"
+            p={['5px 10px', '10px 20px']}
+            borderRadius={['10px', '20px']}
+            _hover={{ bg: 'gray.50' }}
+            gap="10px"
+            userSelect="none"
+            cursor="pointer"
+            onClick={signInGoogle}
+          >
+            <FcGoogle />
+            <Text fontSize={['16px', '24px']}>Entrar com Google</Text>
+          </Flex>
+          <Flex
+            fontSize={['20px', '32px']}
+            alignItems="center"
+            bgColor="gray.100"
+            p={['5px 10px', '10px 20px']}
+            borderRadius={['10px', '20px']}
+            _hover={{ bg: 'gray.50' }}
+            gap="10px"
+            userSelect="none"
+            cursor="pointer"
+            onClick={signInEmail}
+          >
+            <FaEnvelope />
+            <Text fontSize={['16px', '24px']}>Entrar com email</Text>
+          </Flex>
+        </Stack>
       </VStack>
     )
 }

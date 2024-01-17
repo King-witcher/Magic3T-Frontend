@@ -11,7 +11,7 @@ import SecretCodeModal from '@/components/modals/SecretCodeModal'
 
 export default function ProfileMenu() {
   const navigate = useNavigate()
-  const { user, signIn } = useAuth()
+  const { user, signInGoogle: signIn } = useAuth()
 
   const {
     isOpen: logoutModalOpen,
