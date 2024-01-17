@@ -151,10 +151,10 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                       fontSize="14px"
                       color={
                         ratingVariation < 0
-                          ? 'red.700'
+                          ? 'red.500'
                           : ratingVariation > 0
-                          ? 'green.700'
-                          : 'gray.700'
+                          ? 'green.500'
+                          : 'gray.500'
                       }
                     >
                       {ratingVariation < 0 ? '-' : '+'}

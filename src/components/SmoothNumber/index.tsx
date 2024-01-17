@@ -21,7 +21,6 @@ export default function SmoothNumber({ value }: Props) {
 
       if (Math.abs(newValue - smoothValue) >= Math.abs(distance) - 1) {
         setSmoothValue(value)
-        console.log('stop', deltaTime)
         return
       }
 
