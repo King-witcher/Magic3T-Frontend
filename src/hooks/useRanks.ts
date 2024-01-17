@@ -90,8 +90,8 @@ export function useRankInfo() {
 
   const getRankThumbnail = useCallback(
     (rating: number) => {
-      const infiniteTier = (rating - initialRating) / tierSize + initialTier
-      const boundedTier = Math.max(Math.min(infiniteTier, 4), 0)
+      const infiniteTier = (rating - initialRating) / tierSize + initialTier + 1
+      const boundedTier = Math.max(Math.min(infiniteTier, 5), 1)
       const tierINdex = Math.floor(boundedTier)
       const division = Math.floor(5 * (boundedTier - tierINdex)) + 1
 
