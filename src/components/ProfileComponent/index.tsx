@@ -113,7 +113,7 @@ export default function ProfileComponent({ user }: Props) {
             <>
               {rinfo?.rating}
               {rinfo?.precise && '!'}
-              {!rinfo?.reliable && '?'} SR
+              {!rinfo?.reliable && '?'}
             </>
           }
         </Text>

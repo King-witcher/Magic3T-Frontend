@@ -102,7 +102,7 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
               <>
                 {' '}
                 ({player.rv > 0 ? '+' : '-'}
-                {Math.abs(Math.round(player.rv))} SR)
+                {Math.abs(Math.round(player.rv))})
               </>
             )}
           </Text>
