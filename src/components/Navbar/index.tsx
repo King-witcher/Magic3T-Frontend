@@ -19,8 +19,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import LeaveModal from './components/LeaveModal'
 import ProfileMenu from '../MainMenu/MainMenu'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useQueue } from '@/contexts/QueueContext'
+import { useRankInfo } from '@/hooks/useRanks'
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -29,6 +30,10 @@ export default function Navbar() {
   const { gameState } = useGame()
   const { serverOnline } = useServiceStatus()
   const { queueModes } = useQueue()
+  const { getRankInfo } = useRankInfo()
+  const rinfo = useMemo(() => {
+    return user && getRankInfo(user.glicko)
+  }, [user])
 
   const handleLogoClick = useCallback(() => {
     if (gameState?.gameStatus === GameStatus.Playing) {
@@ -142,8 +147,9 @@ export default function Navbar() {
           <Menu>
             <Tooltip label={user?.nickname} openDelay={400}>
               <MenuButton
-                borderRadius="999px"
+                borderRadius="8px"
                 transition="all linear 80ms"
+                borderColor={rinfo?.colorScheme.darker}
                 sx={{
                   img: {
                     transition: 'all linear 80ms',
