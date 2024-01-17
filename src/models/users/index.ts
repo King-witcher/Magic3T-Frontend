@@ -45,7 +45,8 @@ function subscribe(uid: string, callback: (data: UserData) => void) {
   return onSnapshot(
     doc(firestore, 'users', uid).withConverter(converter),
     (snap) => {
-      console.info('%cFirestore: Snap user', 'color: #FFCA28')
+      import.meta.env.DEV &&
+        console.info('%cFirestore: Snap user', 'color: #FFCA28')
       const userData = snap.data()
       if (userData) callback(userData)
     },
