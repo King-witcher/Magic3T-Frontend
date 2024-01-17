@@ -1,7 +1,9 @@
+import { useConfig } from '@/contexts/ConfigContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
-import { Avatar, Flex, Text, Image, VStack } from '@chakra-ui/react'
+import { Avatar, Flex, Text, Image, VStack, Box } from '@chakra-ui/react'
+import { useMemo } from 'react'
 
 interface Props {
   user: UserData
@@ -25,8 +27,26 @@ const divisionMap = {
 }
 
 export default function Profile({ user }: Props) {
+  const { ratingConfig } = useConfig()
+
   const { getRankInfo } = useRankInfo()
   const rinfo = getRankInfo(user.glicko)
+
+  const percentToNextDivision = useMemo(() => {
+    const bronze1 =
+      ratingConfig.initialRating -
+      ratingConfig.ranks.tierSize * ratingConfig.ranks.initialTier
+
+    const currentTier =
+      (user.glicko.rating - bronze1) / ratingConfig.ranks.tierSize
+
+    const rest = currentTier % 1
+
+    if (currentTier >= 4) return 1
+    if (currentTier < 0) return 0
+
+    return rest
+  }, [rinfo.rating])
 
   return (
     <VStack gap="0">
@@ -82,6 +102,32 @@ export default function Profile({ user }: Props) {
         <Text fontSize="12px" fontWeight="500" color="gray.600">
           ±{rinfo?.deviation}
         </Text>
+      </Flex>
+      <Flex
+        mt="5px"
+        w="300px"
+        h="6px"
+        rounded="999px"
+        overflow="hidden"
+        gap="1px"
+        color="white"
+        fontSize="16px"
+      >
+        {percentToNextDivision > 0 && (
+          <Box
+            bg={rinfo.colorScheme.darker}
+            h="full"
+            flex={percentToNextDivision}
+          />
+        )}
+        {percentToNextDivision < 1 && (
+          <Box
+            bg="gray.300"
+            h="full"
+            flex={1 - percentToNextDivision}
+            overflow="hidden"
+          />
+        )}
       </Flex>
     </VStack>
   )

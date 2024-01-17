@@ -1,3 +1,4 @@
+import { useConfig } from '@/contexts/ConfigContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
 import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
@@ -42,7 +43,25 @@ export default function ProfileTab({ user }: Props) {
 
   const matches = user.stats.wins + user.stats.draws + user.stats.defeats
 
+  const { ratingConfig } = useConfig()
+
   const rinfo = useMemo(() => getRankInfo(user.glicko), [user])
+
+  const percentToNextDivision = useMemo(() => {
+    const bronze1 =
+      ratingConfig.initialRating -
+      ratingConfig.ranks.tierSize * ratingConfig.ranks.initialTier
+
+    const currentTier =
+      (user.glicko.rating - bronze1) / ratingConfig.ranks.tierSize
+
+    const rest = currentTier % 1
+
+    if (currentTier >= 4) return 1
+    if (currentTier < 0) return 0
+
+    return rest
+  }, [rinfo.rating])
 
   return (
     <Center h="100%">
@@ -114,6 +133,32 @@ export default function ProfileTab({ user }: Props) {
               ±{rinfo?.deviation}
             </Text>
           </Flex>
+          <Flex
+            mt="5px"
+            w="300px"
+            h="6px"
+            rounded="999px"
+            overflow="hidden"
+            gap="1px"
+            color="white"
+            fontSize="16px"
+          >
+            {percentToNextDivision > 0 && (
+              <Box
+                bg={rinfo.colorScheme.darker}
+                h="full"
+                flex={percentToNextDivision}
+              />
+            )}
+            {percentToNextDivision < 1 && (
+              <Box
+                bg="gray.300"
+                h="full"
+                flex={1 - percentToNextDivision}
+                overflow="hidden"
+              />
+            )}
+          </Flex>
         </VStack>
 
         <Divider />
@@ -131,23 +176,29 @@ export default function ProfileTab({ user }: Props) {
                 color="white"
                 fontSize="16px"
               >
-                <Center
-                  bg="red.400"
-                  h="full"
-                  flex={user.stats.defeats / matches}
-                />
-                <Center
-                  bg="gray.400"
-                  h="full"
-                  flex={user.stats.draws / matches}
-                  overflow="hidden"
-                />
-                <Center
-                  bg="green.400"
-                  h="full"
-                  overflow="hidden"
-                  flex={user.stats.wins / matches}
-                />
+                {!!user.stats.defeats && (
+                  <Center
+                    bg="red.400"
+                    h="full"
+                    flex={user.stats.defeats / matches}
+                  />
+                )}
+                {!!user.stats.draws && (
+                  <Center
+                    bg="gray.400"
+                    h="full"
+                    flex={user.stats.draws / matches}
+                    overflow="hidden"
+                  />
+                )}
+                {!!user.stats.wins && (
+                  <Center
+                    bg="green.400"
+                    h="full"
+                    overflow="hidden"
+                    flex={user.stats.wins / matches}
+                  />
+                )}
               </Flex>
               <Flex gap="10px">
                 <Text fontWeight="500" color="red.400">
