@@ -13,20 +13,25 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { FormEvent, useCallback, useState } from 'react'
 
 export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
   const [input, setInput] = useState('')
 
-  function useCheat() {
-    runCommand(input)
-    props.onClose()
-  }
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault()
+      runCommand(input)
+      setInput('')
+      props.onClose()
+    },
+    [input],
+  )
 
   return (
     <Modal isCentered {...props}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent as={'form'} onSubmit={handleSubmit}>
         <ModalHeader>Códigos secretos</ModalHeader>
         <ModalBody>
           <Stack>
@@ -43,7 +48,7 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={useCheat}>Usar</Button>
+          <Button onClick={handleSubmit}>Usar</Button>
         </ModalFooter>
         <ModalCloseButton />
       </ModalContent>

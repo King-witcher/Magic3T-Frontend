@@ -93,7 +93,6 @@ export default function ChoiceTable() {
       h="fit-content"
     >
       {allChoices.map((choice: Choice) => {
-        if (pugDance) return <Image src={PugDanceGif} w="60px" />
         const enabled = gameState.gameStatus === GameStatus.Playing
         const available =
           availableChoices.includes(choice) && gameState.turn === 'player'
