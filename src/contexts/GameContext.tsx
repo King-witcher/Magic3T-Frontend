@@ -77,7 +77,7 @@ export function GameProvider({ children }: Props) {
     player: number
     oponent: number
   } | null>(null)
-  const { getToken, authState } = useAuth()
+  const { getToken, authState } = useGuardedAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 

@@ -19,7 +19,6 @@ interface Props extends StackProps {
 export default function ChatBox({ inputRef, ...props }: Props) {
   const { messages, sendMessage } = useGame()
   const [message, setMessage] = useState('')
-  const { user } = useAuth()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   function handleSubmitMessage(e: any) {

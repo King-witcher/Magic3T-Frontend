@@ -15,9 +15,6 @@ const rowColors = {
 }
 
 export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
-  const { user } = useAuth()
-  if (!user) return null
-
   const result =
     match.winner === 'none'
       ? 'draw'

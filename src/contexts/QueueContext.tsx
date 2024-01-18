@@ -11,6 +11,7 @@ import { useAuth } from './AuthContext'
 import { useGame } from './GameContext'
 import { useLiveActivity } from './LiveActivityContext'
 import { IoGameController, IoSearch } from 'react-icons/io5'
+import { useGuardedAuth } from './GuardedAuthContext'
 
 export enum GameMode {
   Bot0 = 'bot-0',
@@ -70,48 +71,46 @@ export function QueueProvider({ children }: QueueContextProps) {
       queue: 0,
     },
   })
-  const { user, getToken } = useAuth()
+  const { user, getToken } = useGuardedAuth()
   const { connectGame } = useGame()
 
   useEffect(() => {
     let newSocket: ReturnType<typeof io>
     async function init() {
-      if (user) {
-        const token = await getToken()
-        newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
-          auth: {
-            token,
+      const token = await getToken()
+      newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
+        auth: {
+          token,
+        },
+      })
+      newSocket.on('matchFound', (data) => {
+        setQueueModes({})
+        connectGame(data.matchId)
+      })
+      newSocket.on('updateUserCount', (data: any) => {
+        setQueueUserCount(data)
+      })
+      newSocket.on('disconnect', () => {
+        setQueueModes({})
+        setQueueUserCount({
+          casual: {
+            queue: 0,
+            inGame: 0,
           },
+          ranked: {
+            queue: 0,
+            inGame: 0,
+          },
+          connected: 0,
         })
-        newSocket.on('matchFound', (data) => {
-          setQueueModes({})
-          connectGame(data.matchId)
-        })
-        newSocket.on('updateUserCount', (data: any) => {
-          setQueueUserCount(data)
-        })
-        newSocket.on('disconnect', () => {
-          setQueueModes({})
-          setQueueUserCount({
-            casual: {
-              queue: 0,
-              inGame: 0,
-            },
-            ranked: {
-              queue: 0,
-              inGame: 0,
-            },
-            connected: 0,
-          })
-        })
-        newSocket.on('queueModes', (data: any) => {
-          setQueueModes(data)
-        })
+      })
+      newSocket.on('queueModes', (data: any) => {
+        setQueueModes(data)
+      })
 
-        newSocket.emit('interact')
-        if (socket) socket.disconnect()
-        setSocket(newSocket)
-      }
+      newSocket.emit('interact')
+      if (socket) socket.disconnect()
+      setSocket(newSocket)
     }
     const initPromise = init()
 

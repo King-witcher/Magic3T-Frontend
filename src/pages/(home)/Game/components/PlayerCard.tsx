@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
 import { useConfig } from '@/contexts/ConfigContext'
 import SmoothNumber from '@/components/SmoothNumber'
+import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -40,9 +41,8 @@ const appear = keyframes`
 `
 
 export default function PlayerCard({ player, chatInputRef }: Props) {
-  const { user } = useAuth()
+  const { user } = useGuardedAuth()
   const { getRankInfo } = useRankInfo()
-  const { ratingConfig } = useConfig()
 
   const {
     isOpen: forfeitModaOpen,
@@ -51,9 +51,9 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   } = useDisclosure()
 
   const easterEgg =
-    user?._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
+    user._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
       ? 'não é burmor, é morbur c:'
-      : user?.nickname?.includes('Marileia Almeida')
+      : user.nickname.includes('Marileia Almeida')
       ? 'Te amo, mãe <3'
       : ''
 

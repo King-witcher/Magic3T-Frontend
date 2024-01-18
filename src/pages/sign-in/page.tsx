@@ -10,14 +10,12 @@ import {
   Heading,
   Input,
   Spinner,
-  Stack,
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth'
+import { sendPasswordResetEmail } from 'firebase/auth'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { FaEnvelope } from 'react-icons/fa6'
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom'
 
