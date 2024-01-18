@@ -183,7 +183,7 @@ export function GameProvider({ children }: Props) {
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
     console.warn('Socket disconnected because of', reason + '.')
-    if (reason === 'transport close' && gameState?.matchId) {
+    if (reason === 'transport error' && gameState?.matchId) {
       connectGame(gameState.matchId)
       console.log('Attempting to reconnect')
     }
