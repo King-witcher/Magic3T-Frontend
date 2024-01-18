@@ -147,19 +147,13 @@ export function QueueProvider({ children }: QueueContextProps) {
   )
 
   useEffect(() => {
-    let remove = () => {
-      console.log(1)
-    }
-
     if (queueModes.casual || queueModes.ranked) {
-      remove = push({
+      return push({
         content: <IoSearch size="16px" />,
         tooltip: 'Procurnado partida',
         url: '/',
       })
     }
-
-    return remove
   }, [queueModes.ranked, queueModes.casual])
 
   return (

@@ -1,6 +1,5 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
-import { useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { ServerStatus, useServiceStatus } from '@/contexts/ServiceStatusContext'
 import {
   Center,
   Divider,
@@ -16,29 +15,12 @@ import {
 } from '@chakra-ui/react'
 import ProfileComponent from '@/components/ProfileComponent'
 import { Link } from 'react-router-dom'
-import SmoothNumber from '@/components/SmoothNumber'
 import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
 export default function Lobby() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
-  const { serverOnline } = useServiceStatus()
+  const { serverStatus } = useServiceStatus()
   const { user } = useGuardedAuth()
-
-  if (serverOnline === undefined) {
-    return (
-      <Center w="100%" h="100%" fontSize="20px">
-        Aguardando servidor principal
-      </Center>
-    )
-  }
-
-  if (serverOnline === false) {
-    return (
-      <Center w="100%" h="100%" fontSize="20px" color="red.500">
-        Servidor principal offline
-      </Center>
-    )
-  }
 
   return (
     <Center h="100%" gap="15px" flexDir={['column', 'row']}>
@@ -50,13 +32,29 @@ export default function Lobby() {
       <Divider orientation="vertical" hideBelow={'sm'} />
       <VStack flex="1">
         <Heading fontFamily="nunito variable">Jogar contra</Heading>
-        <Text fontSize="14px" fontWeight="700" color="green.500">
-          {queueUserCount.connected <= 1
-            ? 'Só você está online'
-            : `${queueUserCount.connected} jogadores online`}
-        </Text>
+
+        {serverStatus === ServerStatus.On && (
+          <Text fontSize="14px" fontWeight="700" color="green.500">
+            {queueUserCount.connected <= 1
+              ? 'Só você está online'
+              : `${queueUserCount.connected} jogadores online`}
+          </Text>
+        )}
+
+        {serverStatus === ServerStatus.Loading && (
+          <Text fontSize="14px" fontWeight="700" color="blue.600">
+            O servidor de jogo está sendo religado.
+          </Text>
+        )}
+
+        {serverStatus === ServerStatus.Off && (
+          <Text fontSize="14px" fontWeight="700" color="red.500">
+            O servidor de jogo está fora do ar.
+          </Text>
+        )}
         <Menu>
           <MenuButton
+            pointerEvents={serverStatus === ServerStatus.On ? 'all' : 'none'}
             disabled={
               queueModes['bot-1'] || queueModes['bot-2'] || queueModes['bot-3']
             }
@@ -73,17 +71,14 @@ export default function Lobby() {
               bg="gray.100"
               transition="background 80ms linear"
               rounded="10px"
-              cursor="pointer"
               fontSize="20px"
               userSelect="none"
               w="200px"
               fontWeight={700}
               h="80px"
-              // onClick={
-              //   queueModes.bot
-              //     ? dequeue.bind(null, GameMode.Bot)
-              //     : enqueue.bind(null, GameMode.Bot)
-              // }
+              cursor={serverStatus === ServerStatus.On ? 'pointer' : 'default'}
+              opacity={serverStatus === ServerStatus.On ? 1 : 0.5}
+              pointerEvents={serverStatus === ServerStatus.On ? 'all' : 'none'}
             >
               <VStack gap="0">
                 <Flex
@@ -134,46 +129,6 @@ export default function Lobby() {
             </MenuItem>
           </MenuList>
         </Menu>
-        {/* <Flex
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.100"
-          transition="background 80ms linear"
-          rounded="10px"
-          cursor="pointer"
-          fontSize="20px"
-          userSelect="none"
-          w="200px"
-          fontWeight={700}
-          h="80px"
-          _hover={{
-            bg: 'blue.200',
-          }}
-          onClick={
-            queueModes.casual
-              ? dequeue.bind(null, GameMode.Casual)
-              : enqueue.bind(null, GameMode.Casual)
-          }
-        >
-          <VStack gap="0">
-            <Flex
-              alignItems="center"
-              gap="10px"
-              fontSize="20px"
-              textAlign="center"
-            >
-              {queueModes.casual && <Spinner thickness="4px" speed="0.7s" />}
-              Casual
-            </Flex>
-            <Text
-              fontSize="14px"
-              color={queueUserCount.casual.queue ? 'green.400' : 'gray.400'}
-            >
-              {queueUserCount.casual.queue} jogador
-              {queueUserCount.casual.queue !== 1 ? 'es' : ''}
-            </Text>
-          </VStack>
-        </Flex> */}
         <Flex
           alignItems="center"
           justifyContent="center"
@@ -181,7 +136,9 @@ export default function Lobby() {
           transition="background 80ms linear"
           rounded="10px"
           fontSize="20px"
-          cursor="pointer"
+          cursor={serverStatus === ServerStatus.On ? 'pointer' : 'default'}
+          opacity={serverStatus === ServerStatus.On ? 1 : 0.5}
+          pointerEvents={serverStatus === ServerStatus.On ? 'all' : 'none'}
           userSelect="none"
           w="200px"
           fontWeight={700}

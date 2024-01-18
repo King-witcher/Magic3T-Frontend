@@ -39,8 +39,11 @@ export function LiveActivityProvider({ children }: Props) {
       const key = lastKey++
       setActivities((current) => ({ ...current, [key]: activity }))
       return () => {
-        delete activities[key]
-        setActivities(activities)
+        console.log('deleting', key)
+        setActivities((current) => {
+          delete current[key]
+          return { ...current }
+        })
       }
     },
     [setActivities],
