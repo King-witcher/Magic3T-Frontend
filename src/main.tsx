@@ -35,20 +35,47 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             element: <RegisterPage />,
           },
           {
+            path: 'tutorial',
+            element: <TutorialPage />,
+          },
+          {
+            path: 'rating-system',
+            element: <RatingSystemPage />,
+          },
+          {
+            path: 'user/:uid',
+            element: <UserPageLayout />,
+            children: [
+              {
+                path: '',
+                element: <UserPage index={0} />,
+              },
+              {
+                path: 'profile',
+                element: <UserPage index={0} />,
+              },
+              {
+                path: 'history',
+                element: <UserPage index={1} />,
+              },
+              {
+                path: 'history/:matchId',
+                element: <UserMatchPage />,
+              },
+              {
+                path: 'standings',
+                element: <UserPage index={2} />,
+              },
+            ],
+          },
+          // Guarded routes
+          {
             path: '',
             element: <AuthMiddleware />,
             children: [
               {
                 path: '',
                 element: <Home />,
-              },
-              {
-                path: 'tutorial',
-                element: <TutorialPage />,
-              },
-              {
-                path: 'rating-system',
-                element: <RatingSystemPage />,
               },
               {
                 path: 'match/:matchId',
@@ -77,32 +104,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   {
                     path: 'standings',
                     element: <MePage index={2} />,
-                  },
-                ],
-              },
-              {
-                path: 'user/:uid',
-                element: <UserPageLayout />,
-                children: [
-                  {
-                    path: '',
-                    element: <UserPage index={0} />,
-                  },
-                  {
-                    path: 'profile',
-                    element: <UserPage index={0} />,
-                  },
-                  {
-                    path: 'history',
-                    element: <UserPage index={1} />,
-                  },
-                  {
-                    path: 'history/:matchId',
-                    element: <UserMatchPage />,
-                  },
-                  {
-                    path: 'standings',
-                    element: <UserPage index={2} />,
                   },
                 ],
               },
