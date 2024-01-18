@@ -158,7 +158,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                       }
                     >
                       {ratingVariation < 0 ? '-' : '+'}
-                      {integerVariation || 'sdf'}
+                      {integerVariation}
                     </Text>
                   )}
                 </Flex>

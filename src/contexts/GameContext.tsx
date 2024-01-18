@@ -19,7 +19,8 @@ import { Api } from '@/services/api'
 import { getTriple } from '@/utils/getTriple'
 import { useGuardedAuth } from './GuardedAuthContext'
 import { useLiveActivity } from './LiveActivityContext'
-import { IoGameController } from 'react-icons/io5'
+import { IoChatbox, IoGameController } from 'react-icons/io5'
+import { useBreakpoint } from '@chakra-ui/react'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -78,6 +79,7 @@ export function GameProvider({ children }: Props) {
     oponent: number
   } | null>(null)
   const { getToken, authState } = useGuardedAuth()
+  const breakpoint = useBreakpoint()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 
@@ -93,6 +95,21 @@ export function GameProvider({ children }: Props) {
     oponentTimer.current.setRemaining(0)
     setOponentProfile(null)
   }, [])
+
+  useEffect(() => {
+    if (
+      breakpoint === 'base' &&
+      messages.length &&
+      messages[messages.length - 1].sender !== 'you'
+    ) {
+      const remove = push({
+        content: <IoChatbox size="16px" />,
+        tooltip: 'Você tem uma nova mensagem',
+      })
+      setTimeout(remove, 3000)
+      return remove
+    }
+  }, [messages.length, breakpoint])
 
   const getEventfulSocket = useCallback(
     async (matchId: string) => {
