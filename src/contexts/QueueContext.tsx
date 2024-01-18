@@ -9,6 +9,8 @@ import {
 import { io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
 import { useGame } from './GameContext'
+import { useLiveActivity } from './LiveActivityContext'
+import { IoGameController, IoSearch } from 'react-icons/io5'
 
 export enum GameMode {
   Bot0 = 'bot-0',
@@ -54,6 +56,7 @@ interface QueueContextProps {
 const QueueContext = createContext<QueueContextData>({} as QueueContextData)
 
 export function QueueProvider({ children }: QueueContextProps) {
+  const { push } = useLiveActivity()
   const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
   const [queueUserCount, setQueueUserCount] = useState<QueueUserCount>({
@@ -142,6 +145,22 @@ export function QueueProvider({ children }: QueueContextProps) {
     },
     [socket],
   )
+
+  useEffect(() => {
+    let remove = () => {
+      console.log(1)
+    }
+
+    if (queueModes.casual || queueModes.ranked) {
+      remove = push({
+        content: <IoSearch size="16px" />,
+        tooltip: 'Procurnado partida',
+        url: '/',
+      })
+    }
+
+    return remove
+  }, [queueModes.ranked, queueModes.casual])
 
   return (
     <QueueContext.Provider

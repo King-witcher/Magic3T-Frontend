@@ -1,4 +1,3 @@
-import SignInPage from '@/components/SignInPage'
 import { Loader, useAsync } from '@/hooks/useAsync'
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
@@ -37,7 +36,7 @@ export default function UserPageLayout() {
   }, [])
 
   if (!user) {
-    return <SignInPage />
+    return <></>
   }
 
   return (

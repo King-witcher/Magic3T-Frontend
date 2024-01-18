@@ -1,45 +1,31 @@
-import { useAuth } from '@/contexts/AuthContext'
-import { useGame } from '@/contexts/GameContext'
-import { GameStatus } from '@/types/types'
+import { AuthState, useAuth } from '@/contexts/AuthContext'
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   Menu,
   MenuButton,
   Skeleton,
   Spinner,
-  Tag,
   Text,
   Tooltip,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { Link, useNavigate } from 'react-router-dom'
-import LeaveModal from './components/LeaveModal'
 import ProfileMenu from '../MainMenu/MainMenu'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { useCallback, useMemo } from 'react'
-import { useQueue } from '@/contexts/QueueContext'
+import { useMemo } from 'react'
 import { useRankInfo } from '@/hooks/useRanks'
+import { useLiveActivity } from '@/contexts/LiveActivityContext'
 
 export default function Navbar() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { activities } = useLiveActivity()
   const navigate = useNavigate()
-  const { loading, user } = useAuth()
-  const { gameState } = useGame()
+  const { authState, user } = useAuth()
   const { serverOnline } = useServiceStatus()
-  const { queueModes } = useQueue()
   const { getRankInfo } = useRankInfo()
   const rinfo = useMemo(() => {
     return user && getRankInfo(user.glicko)
   }, [user])
-
-  const handleLogoClick = useCallback(() => {
-    if (gameState?.gameStatus === GameStatus.Playing) {
-      onOpen()
-    } else navigate('/')
-  }, [gameState?.gameStatus])
 
   return (
     <>
@@ -89,32 +75,37 @@ export default function Navbar() {
               </Flex>
             </Tooltip>
           )}
-          {queueModes.casual ||
-            (queueModes.ranked && (
+          {Object.keys(activities).map((activityKey) => {
+            const activity = activities[parseInt(activityKey)] // wtf é isso k
+
+            return (
               <Tooltip
+                key={activityKey}
                 hideBelow="md"
-                label="Você está na fila para encontrar uma partida e será redirecionado para a partida assim que outro jogador for encontrado."
+                label={activity.tooltip}
               >
-                <Flex
-                  gap="5px"
-                  alignItems="center"
-                  bg="whiteAlpha.300"
-                  p="5px 10px"
-                  borderRadius="10px"
-                  userSelect="none"
-                  cursor="pointer"
-                  _hover={{
-                    bg: 'whiteAlpha.400',
-                  }}
-                  onClick={() => navigate('/')}
-                >
-                  <Spinner size="xs" speed="700ms" />
-                  <Text color="white" fontSize="12px">
-                    Na fila
-                  </Text>
-                </Flex>
+                <Link to={activity?.url || ''}>
+                  <Flex
+                    gap="5px"
+                    alignItems="center"
+                    bg="whiteAlpha.300"
+                    p="5px 5px"
+                    borderRadius="10px"
+                    userSelect="none"
+                    cursor="pointer"
+                    _hover={{
+                      bg: 'whiteAlpha.400',
+                    }}
+                    onClick={() => navigate('/')}
+                  >
+                    <Text color="white" fontSize="12px">
+                      {activity.content}
+                    </Text>
+                  </Flex>
+                </Link>
               </Tooltip>
-            ))}
+            )
+          })}
           {serverOnline === false && (
             <Flex gap="5px" alignItems="center" userSelect="none">
               <Box w="8px" h="8px" bg="red" borderRadius="10px" />
@@ -123,27 +114,11 @@ export default function Navbar() {
               </Text>
             </Flex>
           )}
-          {gameState && (
-            <Flex
-              gap="5px"
-              alignItems="center"
-              bg="whiteAlpha.300"
-              p="5px 10px"
-              borderRadius="10px"
-              userSelect="none"
-              cursor="pointer"
-              _hover={{
-                bg: 'whiteAlpha.400',
-              }}
-              onClick={() => navigate('/')}
-            >
-              <Text color="red.100" fontSize="12px">
-                Em jogo
-              </Text>
-            </Flex>
-          )}
         </Flex>
-        <Skeleton isLoaded={!loading} borderRadius="999px">
+        <Skeleton
+          isLoaded={authState !== AuthState.Loading}
+          borderRadius="999px"
+        >
           <Menu>
             <Tooltip label={user?.nickname} openDelay={400}>
               <MenuButton
@@ -179,7 +154,6 @@ export default function Navbar() {
             <ProfileMenu />
           </Menu>
         </Skeleton>
-        <LeaveModal onClose={onClose} isOpen={isOpen} />
       </Flex>
     </>
   )

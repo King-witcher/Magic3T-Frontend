@@ -12,64 +12,16 @@ import { useEffect, useRef } from 'react'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
 import PlayerCard from './components/PlayerCard'
-import { useAuth } from '@/contexts/AuthContext'
-import SignInPage from '@/components/SignInPage'
-import { Link } from 'react-router-dom'
 import ChoiceTable from './components/ChoiceTable'
 import { TimeCounter } from './components/TimeCounter'
 import ChatBox from './components/ChatBox'
 
 export default function GamePage() {
-  const { user } = useAuth()
-  const toast = useToast()
   const { disconnect, gameState, oponentTimer, playerTimer } = useGame()
 
   const playerTurn = gameState?.turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
 
-  // useEffect(() => {
-  //   switch (gameState?.gameStatus) {
-  //     case GameStatus.Victory:
-  //       toast({
-  //         title: user?.nickname?.includes('burmor')
-  //           ? 'Nha burmor toda fofinha vencedora c:'
-  //           : 'Você venceu a partida!',
-  //         status: 'success',
-  //         duration: 2000,
-  //         isClosable: true,
-  //       })
-  //       break
-
-  //     case GameStatus.Defeat:
-  //       toast({
-  //         title: 'Você perdeu.',
-  //         description: user?.nickname?.includes('burmor')
-  //           ? 'Burbur, você merece vencer em tudo na vida :c eu te amo'
-  //           : '',
-  //         status: 'error',
-  //         duration: 2000,
-  //         isClosable: true,
-  //       })
-  //       break
-
-  //     case GameStatus.Draw:
-  //       toast({
-  //         title: 'A partida acabou em empate.',
-  //         description: user?.nickname?.includes('burmor')
-  //           ? 'Burbur toda boa no Magic3T empatando com o Giu c:'
-  //           : '',
-  //         status: 'info',
-  //         duration: 2000,
-  //         isClosable: true,
-  //       })
-  //       break
-
-  //     default:
-  //       break
-  //   }
-  // }, [gameState?.gameStatus])
-
-  // Gambiarra
   useEffect(() => {
     return () => {
       if (
@@ -80,7 +32,6 @@ export default function GamePage() {
     }
   }, [gameState?.gameStatus])
 
-  if (!user) return <SignInPage />
   if (!gameState) return null // Improve
 
   return (

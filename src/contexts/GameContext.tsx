@@ -11,12 +11,15 @@ import {
   useState,
 } from 'react'
 import { Socket, io } from 'socket.io-client'
-import { useAuth } from './AuthContext'
+import { AuthState, useAuth } from './AuthContext'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 import { Unsubscribe } from 'firebase/auth'
 import { Api } from '@/services/api'
 import { getTriple } from '@/utils/getTriple'
+import { useGuardedAuth } from './GuardedAuthContext'
+import { useLiveActivity } from './LiveActivityContext'
+import { IoGameController } from 'react-icons/io5'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -69,11 +72,12 @@ export function GameProvider({ children }: Props) {
   const oponentTimer = useRef(new Timer(0))
   const socketRef = useRef<Socket | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
+  const { push } = useLiveActivity()
   const [ratingsVariation, setRatingsVariation] = useState<{
     player: number
     oponent: number
   } | null>(null)
-  const { getToken, logged } = useAuth()
+  const { getToken, authState } = useAuth()
 
   const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
 
@@ -283,7 +287,7 @@ export function GameProvider({ children }: Props) {
   useEffect(() => {
     async function checkStatus() {
       try {
-        if (!logged) return
+        if (authState !== AuthState.SignedIn) return
         const token = await getToken()
         if (!token) return
         const response = await Api.get('/matchId', {
@@ -301,7 +305,7 @@ export function GameProvider({ children }: Props) {
     }
 
     checkStatus()
-  }, [getToken, logged])
+  }, [getToken, authState])
 
   useEffect(() => {
     return () => {
@@ -319,6 +323,19 @@ export function GameProvider({ children }: Props) {
       if (unsubscribe) unsubscribe()
     }
   }, [oponentProfile?._id])
+
+  useEffect(() => {
+    let remove = () => {}
+    if (gameState) {
+      remove = push({
+        content: <IoGameController size="16px" />,
+        tooltip: 'Em jogo',
+        url: '/',
+      })
+    }
+
+    return remove
+  }, [!!gameState])
 
   return (
     <GameContext.Provider

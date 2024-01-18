@@ -1,5 +1,5 @@
 import { useConfig } from '@/contexts/ConfigContext'
-import { RatingColorSchemes, useRankInfo } from '@/hooks/useRanks'
+import { RatingColorSchemes } from '@/hooks/useRanks'
 import { tiers } from '@/utils/ranks'
 import {
   Box,

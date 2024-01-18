@@ -32,8 +32,8 @@ type AuthData = {
   signInGoogle(): Promise<void>
   signInEmail(email: string, password: string): Promise<string | null>
   registerEmail(email: string, password: string): Promise<string | null>
+  getToken(): Promise<string>
   signOut(): Promise<void>
-  getToken(): Promise<void>
 } & (
   | {
       user: null

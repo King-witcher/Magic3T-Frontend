@@ -2,12 +2,12 @@ import { useCallback, useEffect } from 'react'
 import { useMeContext } from '../../layout'
 import MatchViewer from '@/components/MatchViewer'
 import { useAuth } from '@/contexts/AuthContext'
-import SignInPage from '@/components/SignInPage'
 import { redirect, useNavigate, useParams } from 'react-router-dom'
 import { models } from '@/models'
+import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
 export default function MeMatchPage() {
-  const { user } = useAuth()
+  const { user } = useGuardedAuth()
 
   const { matchId } = useParams()
 
@@ -29,9 +29,7 @@ export default function MeMatchPage() {
     if (!matches && !loading) load()
   }, [matches, load])
 
-  if (!user) return <SignInPage />
-
-  if (loading || !matches) return 'loading'
+  if (loading || !matches) return 'carregando'
 
   for (const match of matches) {
     if (match._id === matchId) {

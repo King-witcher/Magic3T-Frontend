@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useUserPageContext } from '../../layout'
 import MatchViewer from '@/components/MatchViewer'
-import SignInPage from '@/components/SignInPage'
 import { useParams } from 'react-router-dom'
 
 export default function UserMatchPage() {
@@ -19,7 +18,7 @@ export default function UserMatchPage() {
     if (!matches && !loading) load()
   }, [matches, load])
 
-  if (!user) return <SignInPage />
+  if (!user) return <></>
 
   if (loading || !matches) return 'loading'
 

@@ -1,5 +1,5 @@
-import SignInPage from '@/components/SignInPage'
 import { useAuth } from '@/contexts/AuthContext'
+import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
 import { Match } from '@/models/matches/Match'
@@ -15,7 +15,7 @@ interface MeContextData {
 const MeContext = createContext<MeContextData>({} as MeContextData)
 
 export default function MeLayout() {
-  const { user } = useAuth()
+  const { user } = useGuardedAuth()
 
   const lazyMatchLoader = useLazy(async () => {
     if (user) {
@@ -23,15 +23,11 @@ export default function MeLayout() {
       return matches
     }
     return []
-  }, [user?._id])
+  }, [user._id])
 
   const lazyStandingsLoader = useLazy(async () => {
     return await models.users.getStandings()
   }, [])
-
-  if (!user) {
-    return <SignInPage />
-  }
 
   return (
     <MeContext.Provider value={{ lazyMatchLoader, lazyStandingsLoader }}>

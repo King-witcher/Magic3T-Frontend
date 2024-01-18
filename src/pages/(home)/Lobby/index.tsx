@@ -1,4 +1,3 @@
-import SignInPage from '@/components/SignInPage'
 import { useAuth } from '@/contexts/AuthContext'
 import { GameMode, useQueue } from '@/contexts/QueueContext'
 import { useServiceStatus } from '@/contexts/ServiceStatusContext'
@@ -18,13 +17,12 @@ import {
 import ProfileComponent from '@/components/ProfileComponent'
 import { Link } from 'react-router-dom'
 import SmoothNumber from '@/components/SmoothNumber'
+import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
 export default function Lobby() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
   const { serverOnline } = useServiceStatus()
-  const { user } = useAuth()
-
-  if (!user) return <SignInPage />
+  const { user } = useGuardedAuth()
 
   if (serverOnline === undefined) {
     return (

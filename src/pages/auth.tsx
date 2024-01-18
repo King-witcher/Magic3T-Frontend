@@ -1,19 +1,12 @@
-import SignInPage from '@/components/SignInPage'
 import { AuthState, useAuth } from '@/contexts/AuthContext'
-import {
-  Center,
-  Spinner,
-  VStack,
-  Text,
-  Modal,
-  ModalContent,
-  ModalOverlay,
-} from '@chakra-ui/react'
-import { ReactNode, useEffect } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { GuardedAuthProvider } from '@/contexts/GuardedAuthContext'
+import { Center, Spinner, VStack, Text } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import GuardedProviders from './guarded-providers'
 
 export default function AuthMiddleware() {
-  const { user, authState } = useAuth()
+  const { user, authState, getToken, signOut } = useAuth()
 
   const navigate = useNavigate()
 
@@ -40,5 +33,11 @@ export default function AuthMiddleware() {
     )
   }
 
-  return <Outlet />
+  return (
+    <GuardedAuthProvider user={user} getToken={getToken} signOut={signOut}>
+      <GuardedProviders>
+        <Outlet />
+      </GuardedProviders>
+    </GuardedAuthProvider>
+  )
 }
