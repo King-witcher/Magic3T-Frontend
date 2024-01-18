@@ -13,10 +13,10 @@ import ProfileMenu from '../MainMenu/MainMenu'
 import { useMemo } from 'react'
 import { useRankInfo } from '@/hooks/useRanks'
 import { useLiveActivity } from '@/contexts/LiveActivityContext'
+import ActivityBadge from './components/ActivityBadge'
 
 export default function Navbar() {
   const { activities } = useLiveActivity()
-  const navigate = useNavigate()
   const { authState, user } = useAuth()
   const { getRankInfo } = useRankInfo()
   const rinfo = useMemo(() => {
@@ -51,37 +51,9 @@ export default function Navbar() {
             <Text fontWeight={400}>Jogar</Text>
             <Text fontWeight={700}>Magic3T</Text>
           </Flex>
-          {Object.keys(activities).map((activityKey) => {
-            const activity = activities[parseInt(activityKey)] // wtf é isso k
-
-            return (
-              <Tooltip
-                key={activityKey}
-                hideBelow="md"
-                label={activity.tooltip}
-              >
-                <Link to={activity?.url || ''}>
-                  <Flex
-                    gap="5px"
-                    alignItems="center"
-                    bg="whiteAlpha.300"
-                    p="5px 5px"
-                    borderRadius="10px"
-                    userSelect="none"
-                    cursor="pointer"
-                    _hover={{
-                      bg: 'whiteAlpha.400',
-                    }}
-                    onClick={() => navigate('/')}
-                  >
-                    <Text color="white" fontSize="12px">
-                      {activity.content}
-                    </Text>
-                  </Flex>
-                </Link>
-              </Tooltip>
-            )
-          })}
+          {Object.entries(activities).map(([key, activity]) => (
+            <ActivityBadge key={key} liveActivity={activity} />
+          ))}
         </Flex>
         <Skeleton
           isLoaded={authState !== AuthState.Loading}

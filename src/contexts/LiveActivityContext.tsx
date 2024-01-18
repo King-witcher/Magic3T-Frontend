@@ -10,7 +10,7 @@ import {
 
 let lastKey = 0
 
-type LiveActivity = {
+export type LiveActivity = {
   content: ReactNode
   tooltip?: string
   url?: string
