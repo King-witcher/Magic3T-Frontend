@@ -13,11 +13,7 @@ export default function AuthMiddleware() {
   useEffect(() => {
     const path = window.location.pathname
     if (authState === AuthState.NotSignedIn)
-      navigate(
-        path === '/'
-          ? 'sign-in'
-          : `/sign-in?referrer=${window.location.pathname}`,
-      )
+      navigate(path === '/' ? '/sign-in' : `/sign-in?referrer=${path}`)
   }, [authState])
 
   if (authState === AuthState.Loading || authState === AuthState.NotSignedIn) {

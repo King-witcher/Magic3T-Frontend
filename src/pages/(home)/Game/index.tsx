@@ -1,13 +1,4 @@
-import {
-  VStack,
-  Text,
-  useToast,
-  Center,
-  Box,
-  Stack,
-  Flex,
-  useBreakpoint,
-} from '@chakra-ui/react'
+import { VStack, Text, Center, Box, Stack, Flex } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
