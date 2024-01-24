@@ -1,6 +1,6 @@
 import { PlayerMove } from '@/models/matches/Match'
 import { Choice } from '@/types/types'
-import { Box, Center, Flex, Grid, Stack } from '@chakra-ui/react'
+import { Box, Center, Flex, Grid, Stack, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import {
   FaBackwardFast,
@@ -8,10 +8,10 @@ import {
   FaForwardFast,
   FaForwardStep,
 } from 'react-icons/fa6'
-import Numberbox from './NumberBox'
 import ChoiceComponent from '@/components/ChoiceComponent'
 import { getTriple } from '@/utils/getTriple'
 import Control from './Control'
+import ChoiceTable from '@/components/ChoiceTable'
 
 interface Props {
   moves: PlayerMove[]
@@ -53,23 +53,12 @@ export default function MovesView({ moves }: Props) {
   )
 
   return (
-    <Stack gap="20px">
-      <Grid gridTemplateColumns="1fr 1fr 1fr" gap="10px">
-        {allNumbers.map((number) => (
-          <ChoiceComponent
-            key={number}
-            choice={number}
-            choiceStyle={
-              whiteMoves.includes(number)
-                ? 'playerSelected'
-                : blackMoves.includes(number)
-                ? 'oponentSelected'
-                : 'normal'
-            }
-            highlight={triple?.includes(number)}
-          />
-        ))}
-      </Grid>
+    <VStack gap="20px">
+      <ChoiceTable
+        blueMoves={whiteMoves}
+        redMoves={blackMoves}
+        state="static"
+      />
       <Flex
         gap="5px"
         userSelect="none"
@@ -96,6 +85,6 @@ export default function MovesView({ moves }: Props) {
           <FaForwardFast />
         </Control>
       </Flex>
-    </Stack>
+    </VStack>
   )
 }

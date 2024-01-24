@@ -21,7 +21,7 @@ function initialSetPugDanceCheat() {
 setCommand('3tmode', initialSetPugDanceCheat)
 setCommand('ttt', initialTicTacToeCheat)
 
-export default function ChoiceTable() {
+export default function LegacyChoiceTable() {
   const {
     makeChoice,
     gameState,

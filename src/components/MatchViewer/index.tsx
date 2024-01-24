@@ -87,6 +87,7 @@ export default function MatchViewer({ match, referenceUid }: Props) {
         <Flex
           gap={['8px 5px', '14px 8px']}
           flexWrap="wrap"
+          w="full"
           justifyContent="center"
         >
           <MovesView moves={match.moves} />

@@ -3,12 +3,13 @@ import { useEffect, useRef } from 'react'
 import { GameStatus } from '@/types/types'
 import { useGame } from '@/contexts/GameContext'
 import PlayerCard from './components/PlayerCard'
-import ChoiceTable from './components/ChoiceTable'
 import { TimeCounter } from './components/TimeCounter'
 import ChatBox from './components/ChatBox'
+import ChoiceTable from '@/components/ChoiceTable'
 
 export default function GamePage() {
-  const { disconnect, gameState, oponentTimer, playerTimer } = useGame()
+  const { disconnect, makeChoice, gameState, oponentTimer, playerTimer } =
+    useGame()
 
   const playerTurn = gameState?.turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
@@ -36,19 +37,42 @@ export default function GamePage() {
       <VStack h="100%" justifyContent="space-between" w="500px">
         <PlayerCard player="opponent" chatInputRef={{ current: null }} />
         <Box pos="relative">
-          <Stack>
+          <VStack gap="0">
             <TimeCounter
-              fontSize="20px"
+              w="120px"
+              // border="solid 1px var(--chakra-colors-gray-200)"
+              borderBottomWidth="0"
+              rounded="10px 10px 0 0"
+              color="black"
+              textAlign="center"
+              p="3px 0"
+              fontSize="18px"
               timer={oponentTimer}
-              textAlign="center"
             />
-            <ChoiceTable />
+            <ChoiceTable
+              redMoves={gameState.oponent.choices}
+              blueMoves={gameState.player.choices}
+              state={
+                gameState.gameStatus === GameStatus.Playing
+                  ? gameState.turn
+                    ? 'selectable'
+                    : 'static'
+                  : 'disabled'
+              }
+              onSelect={makeChoice}
+            />
             <TimeCounter
-              fontSize="20px"
-              timer={playerTimer}
+              w="120px"
+              // border="solid 1px var(--chakra-colors-gray-200)"
+              borderTopWidth="0"
+              rounded="0 0 10px 10px"
+              color="black"
               textAlign="center"
+              p="3px 0"
+              fontSize="18px"
+              timer={playerTimer}
             />
-          </Stack>
+          </VStack>
           <Text
             userSelect="none"
             opacity={
