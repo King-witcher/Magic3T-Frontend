@@ -67,19 +67,20 @@ export function GameProvider({ children }: Props) {
   const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
   const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
   const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
-  const playerTimer = useRef(new Timer(0))
-  const oponentTimer = useRef(new Timer(0))
-  const socketRef = useRef<Socket | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const { push } = useLiveActivity()
+  const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
   const [ratingsVariation, setRatingsVariation] = useState<{
     player: number
     oponent: number
   } | null>(null)
-  const { getToken, authState } = useGuardedAuth()
-  const breakpoint = useBreakpoint()
 
-  const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
+  const playerTimer = useRef(new Timer(0))
+  const oponentTimer = useRef(new Timer(0))
+  const socketRef = useRef<Socket | null>(null)
+
+  const { getToken, authState } = useGuardedAuth()
+  const { push } = useLiveActivity()
+  const breakpoint = useBreakpoint()
 
   /** Limpa o estado do jogo, colocando os timers em 0. */
   const resetStates = useCallback(() => {
