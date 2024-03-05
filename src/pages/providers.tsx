@@ -1,8 +1,6 @@
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ConfigProvider } from '@/contexts/ConfigContext'
-import { GameProvider } from '@/contexts/GameContext'
 import { LiveActivityProvider } from '@/contexts/LiveActivityContext'
-import { QueueProvider } from '@/contexts/QueueContext'
 import { ServiceStatusProvider } from '@/contexts/ServiceStatusContext'
 import { chakraTheme } from '@/styles/chakraTheme'
 import { ChakraProvider } from '@chakra-ui/react'

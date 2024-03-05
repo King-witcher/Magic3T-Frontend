@@ -81,7 +81,6 @@ export default function ChoiceComponent({
       h="70px"
       alignItems="center"
       justifyContent="center"
-      bg="white"
       backgroundSize="200%"
       boxSizing="border-box"
       fontSize="25px"

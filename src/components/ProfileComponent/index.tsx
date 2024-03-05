@@ -89,7 +89,22 @@ export default function ProfileComponent({ user }: Props) {
             Bot
           </Badge>
         )}
-        <Text fontSize="30px">{user.nickname}</Text>
+        <Text
+          fontSize="30px"
+          lineHeight="39px"
+          contentEditable
+          textAlign="center"
+          fontWeight={300}
+          rounded="10px"
+          w="300px"
+          p="5px"
+          _focusVisible={{
+            outline: 'solid 1px var(--chakra-colors-gray-200)',
+            fontWeight: 500,
+          }}
+        >
+          {user.nickname}
+        </Text>
       </Flex>
       <Flex alignItems="center" userSelect="none" gap="5px">
         <Text

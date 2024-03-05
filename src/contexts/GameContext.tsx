@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react'
 import { Socket, io } from 'socket.io-client'
-import { AuthState, useAuth } from './AuthContext'
+import { AuthState } from './AuthContext'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 import { Unsubscribe } from 'firebase/auth'
@@ -25,12 +25,6 @@ import { useBreakpoint } from '@chakra-ui/react'
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 interface GameState {
-  player: {
-    choices: Choice[]
-  }
-  oponent: {
-    choices: Choice[]
-  }
   gameStatus: GameStatus
   turn: 'player' | 'oponent' | null
   matchId: string | null
@@ -39,6 +33,8 @@ interface GameState {
 interface GameData {
   gameState: GameState | null
   messages: Message[]
+  playerChoices: Choice[]
+  oponentChoices: Choice[]
   playerTimer: Timer
   oponentTimer: Timer
   availableChoices: Choice[]
@@ -68,6 +64,8 @@ const GameContext = createContext<GameData>({} as GameData)
 
 export function GameProvider({ children }: Props) {
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
+  const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
   const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
@@ -86,6 +84,8 @@ export function GameProvider({ children }: Props) {
   /** Limpa o estado do jogo, colocando os timers em 0. */
   const resetStates = useCallback(() => {
     setGameState(null)
+    setPlayerChoices([])
+    setOponentChoices([])
     setMessages([])
     setTriple(null)
     setRatingsVariation(null)
@@ -167,13 +167,10 @@ export function GameProvider({ children }: Props) {
         (current) =>
           current && {
             ...current,
-            player: {
-              ...current.player,
-              choices: [...current.player.choices, choice],
-            },
             turn: 'oponent',
           },
       )
+      setPlayerChoices((current) => [...current, choice])
 
       playerTimer.current.pause()
       oponentTimer.current.start()
@@ -197,14 +194,6 @@ export function GameProvider({ children }: Props) {
         current && {
           ...current,
           gameStatus: incomingGameState.status,
-          player: {
-            ...current.player,
-            choices: incomingGameState.playerChoices,
-          },
-          oponent: {
-            ...current.oponent,
-            choices: incomingGameState.oponentChoices,
-          },
           turn: incomingGameState.turn
             ? 'player'
             : incomingGameState.status === GameStatus.Playing
@@ -212,6 +201,8 @@ export function GameProvider({ children }: Props) {
             : null,
         },
     )
+    setPlayerChoices(incomingGameState.playerChoices)
+    setOponentChoices(incomingGameState.oponentChoices)
 
     // Muda qual timer está contando
     if (incomingGameState.turn) {
@@ -266,13 +257,9 @@ export function GameProvider({ children }: Props) {
         gameStatus: GameStatus.Waiting,
         matchId,
         turn: null,
-        player: {
-          choices: [],
-        },
-        oponent: {
-          choices: [],
-        },
       })
+      setOponentChoices([])
+      setPlayerChoices([])
       newSocket.emitWithAck('ready', {})
     },
     [gameState, getEventfulSocket, setGameState, resetStates],
@@ -291,14 +278,14 @@ export function GameProvider({ children }: Props) {
 
     for (let i = 1; i < 10; i++) {
       if (
-        !gameState.player.choices.includes(i as Choice) &&
-        !gameState.oponent.choices.includes(i as Choice)
+        !playerChoices.includes(i as Choice) &&
+        !oponentChoices.includes(i as Choice)
       )
         availableChoices.push(i as Choice)
     }
 
     return availableChoices
-  }, [gameState])
+  }, [gameState, playerChoices])
 
   // Auto connects the user to the current game that is being played.
   useEffect(() => {
@@ -359,6 +346,8 @@ export function GameProvider({ children }: Props) {
       value={{
         gameState,
         messages,
+        playerChoices,
+        oponentChoices,
         playerTimer: playerTimer.current,
         oponentTimer: oponentTimer.current,
         availableChoices,

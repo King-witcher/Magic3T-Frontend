@@ -25,6 +25,8 @@ export default function LegacyChoiceTable() {
   const {
     makeChoice,
     gameState,
+    playerChoices,
+    oponentChoices,
     availableChoices,
     winningTriple,
     sendMessage,
@@ -96,8 +98,8 @@ export default function LegacyChoiceTable() {
         const enabled = gameState.gameStatus === GameStatus.Playing
         const available =
           availableChoices.includes(choice) && gameState.turn === 'player'
-        const playerSelected = gameState.player.choices.includes(choice)
-        const oponentSelected = gameState.oponent.choices.includes(choice)
+        const playerSelected = playerChoices.includes(choice)
+        const oponentSelected = oponentChoices.includes(choice)
 
         return (
           <ChoiceComponent

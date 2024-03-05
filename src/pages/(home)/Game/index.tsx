@@ -8,8 +8,15 @@ import ChatBox from './components/ChatBox'
 import ChoiceTable from '@/components/ChoiceTable'
 
 export default function GamePage() {
-  const { disconnect, makeChoice, gameState, oponentTimer, playerTimer } =
-    useGame()
+  const {
+    disconnect,
+    makeChoice,
+    gameState,
+    playerChoices,
+    oponentChoices,
+    oponentTimer,
+    playerTimer,
+  } = useGame()
 
   const playerTurn = gameState?.turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
@@ -50,8 +57,8 @@ export default function GamePage() {
               timer={oponentTimer}
             />
             <ChoiceTable
-              redMoves={gameState.oponent.choices}
-              blueMoves={gameState.player.choices}
+              redMoves={oponentChoices}
+              blueMoves={playerChoices}
               state={
                 gameState.gameStatus === GameStatus.Playing
                   ? gameState.turn
@@ -90,8 +97,8 @@ export default function GamePage() {
           >
             Sua vez!
           </Text>
-          {gameState.player.choices.length === 0 &&
-            gameState.oponent.choices.length === 0 &&
+          {playerChoices.length === 0 &&
+            oponentChoices.length === 0 &&
             gameState.gameStatus === GameStatus.Playing && (
               <Text
                 width="400px"
