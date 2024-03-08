@@ -24,7 +24,9 @@ setCommand('ttt', initialTicTacToeCheat)
 export default function LegacyChoiceTable() {
   const {
     makeChoice,
-    gameState,
+    isActive,
+    turn,
+    gameStatus,
     playerChoices,
     oponentChoices,
     availableChoices,
@@ -63,9 +65,9 @@ export default function LegacyChoiceTable() {
     }
   }, [])
 
-  const playerTurn = gameState?.turn === 'player'
+  const playerTurn = turn === 'player'
 
-  if (!gameState) return null
+  if (!isActive) return null
 
   if (pugDance) {
     return (
@@ -95,9 +97,8 @@ export default function LegacyChoiceTable() {
       h="fit-content"
     >
       {allChoices.map((choice: Choice) => {
-        const enabled = gameState.gameStatus === GameStatus.Playing
-        const available =
-          availableChoices.includes(choice) && gameState.turn === 'player'
+        const enabled = gameStatus === GameStatus.Playing
+        const available = availableChoices.includes(choice) && turn === 'player'
         const playerSelected = playerChoices.includes(choice)
         const oponentSelected = oponentChoices.includes(choice)
 
@@ -109,7 +110,7 @@ export default function LegacyChoiceTable() {
             choiceStyle={
               available
                 ? enabled
-                  ? gameState.turn
+                  ? turn
                     ? 'selectable'
                     : 'normal'
                   : 'disabled'

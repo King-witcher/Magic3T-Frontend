@@ -57,7 +57,14 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
       ? 'Te amo, mãe <3'
       : ''
 
-  const { gameState, oponentProfile, ratingsVariation } = useGame()
+  const {
+    matchId,
+    isActive,
+    turn,
+    gameStatus,
+    oponentProfile,
+    ratingsVariation,
+  } = useGame()
 
   const currentPlayer = player === 'current'
 
@@ -76,7 +83,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   const integerVariation =
     ratingVariation && Math.round(Math.abs(ratingVariation))
 
-  if (!gameState) return null
+  if (!isActive) return null
 
   return (
     <Menu>
@@ -179,17 +186,17 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
         >
           Enviar mensagem
         </MenuItem>
-        {(gameState.gameStatus === GameStatus.Defeat ||
-          gameState.gameStatus === GameStatus.Draw ||
-          gameState.gameStatus === GameStatus.Victory) && (
-          <Link to={`/me/history/${gameState.matchId}`}>
+        {(gameStatus === GameStatus.Defeat ||
+          gameStatus === GameStatus.Draw ||
+          gameStatus === GameStatus.Victory) && (
+          <Link to={`/me/history/${matchId}`}>
             <MenuItem display={{ base: 'none', lg: 'block' }}>
               Ver no histórico
             </MenuItem>
           </Link>
         )}
         <MenuItem
-          hidden={gameState.gameStatus !== GameStatus.Playing}
+          hidden={gameStatus !== GameStatus.Playing}
           bg="red.200"
           _hover={{
             bg: 'red.400',

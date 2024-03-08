@@ -24,30 +24,53 @@ import { useBreakpoint } from '@chakra-ui/react'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
-interface GameState {
-  gameStatus: GameStatus
-  turn: 'player' | 'oponent' | null
-  matchId: string | null
-}
+const a: never[] = []
 
-interface GameData {
-  gameState: GameState | null
-  messages: Message[]
-  playerChoices: Choice[]
-  oponentChoices: Choice[]
-  playerTimer: Timer
-  oponentTimer: Timer
-  availableChoices: Choice[]
-  winningTriple: [Choice, Choice, Choice] | null
-  oponentProfile: UserData | null
-  ratingsVariation: { player: number; oponent: number } | null
+const b = a[3]
 
-  connectGame(matchId: string): Promise<void>
-  makeChoice(choice: Choice): void
-  sendMessage(message: string): void
-  forfeit(): Promise<void>
-  disconnect(): void
-}
+type GameData =
+  | {
+      matchId: null
+      isActive: false
+      turn: null
+      gameStatus: GameStatus.Waiting
+      messages: Message[]
+      playerChoices: Choice[]
+      oponentChoices: Choice[]
+      playerTimer: Timer
+      oponentTimer: Timer
+      availableChoices: Choice[]
+      winningTriple: null
+      oponentProfile: null
+      ratingsVariation: null
+
+      connectGame(matchId: string): Promise<void>
+      makeChoice(choice: Choice): void
+      sendMessage(message: string): void
+      forfeit(): Promise<void>
+      disconnect(): void
+    }
+  | {
+      matchId: string
+      isActive: true
+      turn: 'player' | 'oponent' | null
+      gameStatus: GameStatus
+      messages: Message[]
+      playerChoices: Choice[]
+      oponentChoices: Choice[]
+      playerTimer: Timer
+      oponentTimer: Timer
+      availableChoices: Choice[]
+      winningTriple: [Choice, Choice, Choice] | null
+      oponentProfile: UserData | null
+      ratingsVariation: { player: number; oponent: number } | null
+
+      connectGame(matchId: string): Promise<void>
+      makeChoice(choice: Choice): void
+      sendMessage(message: string): void
+      forfeit(): Promise<void>
+      disconnect(): void
+    }
 
 interface Profile {
   name: string
@@ -63,7 +86,10 @@ interface Props {
 const GameContext = createContext<GameData>({} as GameData)
 
 export function GameProvider({ children }: Props) {
-  const [gameState, setGameState] = useState<GameState | null>(null)
+  const [matchId, setMatchId] = useState<string | null>(null)
+  const isActive = !!matchId
+  const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
+  const [gameStatus, setGameStatus] = useState(GameStatus.Waiting)
   const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
   const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
   const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
@@ -84,7 +110,9 @@ export function GameProvider({ children }: Props) {
 
   /** Limpa o estado do jogo, colocando os timers em 0. */
   const resetStates = useCallback(() => {
-    setGameState(null)
+    setMatchId(null)
+    setTurn(null)
+    setGameStatus(GameStatus.Waiting)
     setPlayerChoices([])
     setOponentChoices([])
     setMessages([])
@@ -112,28 +140,6 @@ export function GameProvider({ children }: Props) {
     }
   }, [messages.length, breakpoint])
 
-  const getEventfulSocket = useCallback(
-    async (matchId: string) => {
-      const token = await getToken()
-      if (!token) throw new Error('No Id Token')
-
-      const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
-        auth: { matchId, token },
-      })
-
-      return socket
-        .on('gameState', handleServerGameState)
-        .on('disconnect', handleServerDisconnect)
-        .on('message', handleReceiveMessage)
-        .on('oponentUid', handleReceiveOponentUid)
-        .on('ratingsVariation', handleReceiveRatingsVariation)
-        .on('connect', () => {
-          socket.emit('getOponentProfile')
-        })
-    },
-    [getToken],
-  )
-
   const handleReceiveOponentUid = useCallback(async (uid: string) => {
     const oponentProfile = await models.users.getById(uid)
     setOponentProfile(oponentProfile)
@@ -160,29 +166,20 @@ export function GameProvider({ children }: Props) {
     [setMessages],
   )
 
-  const makeChoice = useCallback(
-    (choice: Choice) => {
-      socketRef.current?.emit('choice', choice)
+  const makeChoice = useCallback((choice: Choice) => {
+    socketRef.current?.emit('choice', choice)
 
-      setGameState(
-        (current) =>
-          current && {
-            ...current,
-            turn: 'oponent',
-          },
-      )
-      setPlayerChoices((current) => [...current, choice])
+    setTurn('oponent')
+    setPlayerChoices((current) => [...current, choice])
 
-      playerTimer.current.pause()
-      oponentTimer.current.start()
-    },
-    [setGameState],
-  )
+    playerTimer.current.pause()
+    oponentTimer.current.start()
+  }, [])
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
     console.warn('Socket disconnected because of', reason + '.')
-    if (reason === 'transport error' && gameState?.matchId) {
-      connectGame(gameState.matchId)
+    if (reason === 'transport error' && matchId) {
+      connectGame(matchId)
       console.log('Attempting to reconnect')
     }
     socketRef.current?.connect()
@@ -190,18 +187,14 @@ export function GameProvider({ children }: Props) {
 
   function handleServerGameState(stateString: string) {
     const incomingGameState = JSON.parse(stateString) as GameStateReport
-    setGameState(
-      (current) =>
-        current && {
-          ...current,
-          gameStatus: incomingGameState.status,
-          turn: incomingGameState.turn
-            ? 'player'
-            : incomingGameState.status === GameStatus.Playing
-            ? 'oponent'
-            : null,
-        },
+    setTurn(
+      incomingGameState.turn
+        ? 'player'
+        : incomingGameState.status === GameStatus.Playing
+        ? 'oponent'
+        : null,
     )
+    setGameStatus(incomingGameState.status)
     setPlayerChoices(incomingGameState.playerChoices)
     setOponentChoices(incomingGameState.oponentChoices)
 
@@ -227,7 +220,29 @@ export function GameProvider({ children }: Props) {
       setTriple(getTriple(incomingGameState.oponentChoices))
   }
 
-  function sendMessage(message: string) {
+  const getEventfulSocket = useCallback(
+    async (matchId: string) => {
+      const token = await getToken()
+      if (!token) throw new Error('No Id Token')
+
+      const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
+        auth: { matchId, token },
+      })
+
+      return socket
+        .on('gameState', handleServerGameState)
+        .on('disconnect', handleServerDisconnect)
+        .on('message', handleReceiveMessage)
+        .on('oponentUid', handleReceiveOponentUid)
+        .on('ratingsVariation', handleReceiveRatingsVariation)
+        .on('connect', () => {
+          socket.emit('getOponentProfile')
+        })
+    },
+    [getToken],
+  )
+
+  const sendMessage = useCallback((message: string) => {
     if (socketRef.current) {
       setMessages((current) => [
         ...current,
@@ -240,7 +255,7 @@ export function GameProvider({ children }: Props) {
 
       socketRef.current?.emit('message', message)
     }
-  }
+  }, [])
 
   const forfeit = useCallback(async () => {
     await socketRef.current?.emitWithAck('forfeit')
@@ -254,26 +269,26 @@ export function GameProvider({ children }: Props) {
 
       const newSocket = await getEventfulSocket(matchId)
       socketRef.current = newSocket
-      setGameState({
-        gameStatus: GameStatus.Waiting,
-        matchId,
-        turn: null,
-      })
+      setMatchId(matchId)
+      setTurn(null)
+      setGameStatus(GameStatus.Waiting)
       setOponentChoices([])
       setPlayerChoices([])
       newSocket.emitWithAck('ready', {})
     },
-    [gameState, getEventfulSocket, setGameState, resetStates],
+    [getEventfulSocket, resetStates],
   )
 
   function disconnect() {
     socketRef.current?.disconnect()
     socketRef.current = null
-    setGameState(null)
+    resetStates()
   }
 
   const availableChoices = useMemo(() => {
-    if (!gameState) return []
+    if (!matchId) {
+      return []
+    }
 
     const availableChoices: Choice[] = []
 
@@ -286,7 +301,7 @@ export function GameProvider({ children }: Props) {
     }
 
     return availableChoices
-  }, [gameState, playerChoices])
+  }, [playerChoices])
 
   // Auto connects the user to the current game that is being played.
   useEffect(() => {
@@ -330,39 +345,41 @@ export function GameProvider({ children }: Props) {
   }, [oponentProfile?._id])
 
   useEffect(() => {
-    let remove = () => {}
-    if (gameState) {
-      remove = push({
+    if (matchId) {
+      return push({
         content: <IoGameController size="16px" />,
         tooltip: 'Em jogo',
         url: '/',
       })
     }
-
-    return remove
-  }, [!!gameState])
+  }, [isActive])
 
   return (
     <GameContext.Provider
-      value={{
-        gameState,
-        messages,
-        playerChoices,
-        oponentChoices,
-        playerTimer: playerTimer.current,
-        oponentTimer: oponentTimer.current,
-        availableChoices,
-        winningTriple: triple,
-        oponentProfile,
-        ratingsVariation,
+      value={
+        {
+          matchId,
+          isActive,
+          turn,
+          gameStatus,
+          messages,
+          playerChoices,
+          oponentChoices,
+          playerTimer: playerTimer.current,
+          oponentTimer: oponentTimer.current,
+          availableChoices,
+          winningTriple: triple,
+          oponentProfile,
+          ratingsVariation,
 
-        /** Se conecta a um jogo a partir de um token. */
-        connectGame,
-        makeChoice,
-        disconnect,
-        sendMessage,
-        forfeit,
-      }}
+          /** Se conecta a um jogo a partir de um token. */
+          connectGame,
+          makeChoice,
+          disconnect,
+          sendMessage,
+          forfeit,
+        } as GameData
+      }
     >
       {children}
     </GameContext.Provider>

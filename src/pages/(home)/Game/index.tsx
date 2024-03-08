@@ -9,29 +9,31 @@ import ChoiceTable from '@/components/ChoiceTable'
 
 export default function GamePage() {
   const {
+    isActive,
+    turn,
     disconnect,
     makeChoice,
-    gameState,
+    gameStatus,
     playerChoices,
     oponentChoices,
     oponentTimer,
     playerTimer,
   } = useGame()
 
-  const playerTurn = gameState?.turn === 'player'
+  const playerTurn = turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     return () => {
       if (
-        gameState?.gameStatus !== GameStatus.Playing &&
-        gameState?.gameStatus !== GameStatus.Waiting
+        gameStatus !== GameStatus.Playing &&
+        gameStatus !== GameStatus.Waiting
       )
         disconnect()
     }
-  }, [gameState?.gameStatus])
+  }, [gameStatus])
 
-  if (!gameState) return null // Improve
+  if (!isActive) return null // Improve
 
   return (
     <Flex
@@ -60,8 +62,8 @@ export default function GamePage() {
               redMoves={oponentChoices}
               blueMoves={playerChoices}
               state={
-                gameState.gameStatus === GameStatus.Playing
-                  ? gameState.turn
+                gameStatus === GameStatus.Playing
+                  ? turn
                     ? 'selectable'
                     : 'static'
                   : 'disabled'
@@ -83,9 +85,7 @@ export default function GamePage() {
           <Text
             userSelect="none"
             opacity={
-              playerTurn && gameState.gameStatus === GameStatus.Playing
-                ? '1'
-                : '0'
+              playerTurn && gameStatus === GameStatus.Playing ? '1' : '0'
             }
             transition="opacity 200ms"
             fontWeight="semibold"
@@ -99,7 +99,7 @@ export default function GamePage() {
           </Text>
           {playerChoices.length === 0 &&
             oponentChoices.length === 0 &&
-            gameState.gameStatus === GameStatus.Playing && (
+            gameStatus === GameStatus.Playing && (
               <Text
                 width="400px"
                 textAlign="center"
@@ -116,7 +116,7 @@ export default function GamePage() {
                 Aguarde a escolha do oponente.
               </Text>
             )}
-          {gameState.gameStatus === GameStatus.Victory && (
+          {gameStatus === GameStatus.Victory && (
             <Text
               width="400px"
               textAlign="center"
@@ -133,7 +133,7 @@ export default function GamePage() {
               Você venceu!
             </Text>
           )}
-          {gameState.gameStatus === GameStatus.Defeat && (
+          {gameStatus === GameStatus.Defeat && (
             <Text
               width="400px"
               textAlign="center"
@@ -150,7 +150,7 @@ export default function GamePage() {
               Você perdeu.
             </Text>
           )}
-          {gameState.gameStatus === GameStatus.Draw && (
+          {gameStatus === GameStatus.Draw && (
             <Text
               width="400px"
               textAlign="center"
@@ -167,9 +167,9 @@ export default function GamePage() {
               Empate
             </Text>
           )}
-          {(gameState.gameStatus === GameStatus.Victory ||
-            gameState.gameStatus === GameStatus.Defeat ||
-            gameState.gameStatus === GameStatus.Draw) && (
+          {(gameStatus === GameStatus.Victory ||
+            gameStatus === GameStatus.Defeat ||
+            gameStatus === GameStatus.Draw) && (
             <Center
               w="200px"
               cursor="pointer"
