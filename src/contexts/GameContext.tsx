@@ -24,10 +24,6 @@ import { useBreakpoint } from '@chakra-ui/react'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
-const a: never[] = []
-
-const b = a[3]
-
 type GameData =
   | {
       matchId: null

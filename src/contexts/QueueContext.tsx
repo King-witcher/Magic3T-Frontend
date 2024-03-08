@@ -7,10 +7,9 @@ import {
   useState,
 } from 'react'
 import { io } from 'socket.io-client'
-import { useAuth } from './AuthContext'
 import { useGame } from './GameContext'
 import { useLiveActivity } from './LiveActivityContext'
-import { IoGameController, IoSearch } from 'react-icons/io5'
+import { IoSearch } from 'react-icons/io5'
 import { useGuardedAuth } from './GuardedAuthContext'
 
 export enum GameMode {
