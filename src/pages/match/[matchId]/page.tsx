@@ -2,8 +2,7 @@ import MatchViewer from '@/components/MatchViewer'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
 import { Center } from '@chakra-ui/react'
-import { useCallback } from 'react'
-import { redirect, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export default function MatchPage() {
   const { matchId } = useParams() as { matchId: string }

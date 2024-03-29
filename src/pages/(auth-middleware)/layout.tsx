@@ -1,9 +1,9 @@
-import { AuthState, useAuth } from '@/contexts/AuthContext'
-import { GuardedAuthProvider } from '@/contexts/GuardedAuthContext'
+import { AuthState, useAuth } from '@/contexts/AuthContext.tsx'
+import { GuardedAuthProvider } from '@/contexts/GuardedAuthContext.tsx'
 import { Center, Spinner, VStack, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import GuardedProviders from './guarded-providers'
+import GuardedProviders from './guarded-providers.tsx'
 
 export default function AuthMiddleware() {
   const { user, authState, getToken, signOut } = useAuth()

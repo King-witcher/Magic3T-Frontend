@@ -1,5 +1,5 @@
-import { GameProvider } from '@/contexts/GameContext'
-import { QueueProvider } from '@/contexts/QueueContext'
+import { GameProvider } from '@/contexts/GameContext.tsx'
+import { QueueProvider } from '@/contexts/QueueContext.tsx'
 import { ReactNode } from 'react'
 
 interface Props {
