@@ -1,5 +1,5 @@
 import { PlayerMove } from '@/models/matches/Match'
-import { Choice } from '@/types/types'
+import { Choice } from '@/types/game.ts'
 import { Box, Center, Flex, Grid, Stack, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import {

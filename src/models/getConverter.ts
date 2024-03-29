@@ -5,7 +5,7 @@ import {
   Timestamp,
 } from 'firebase/firestore'
 import { Firestorify } from './Firestorify'
-import { WithId } from '@/types/WithId'
+import { WithId } from '@/types/withId.ts'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convert(data: Record<string, any>) {

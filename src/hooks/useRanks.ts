@@ -1,5 +1,5 @@
 import { useConfig } from '@/contexts/ConfigContext'
-import { Glicko } from '@/types/Glicko'
+import { Glicko } from '@/types/glicko.ts'
 import { Division, Tier, tiers } from '@/utils/ranks'
 import { ThemeTypings } from '@chakra-ui/react'
 import { useCallback } from 'react'

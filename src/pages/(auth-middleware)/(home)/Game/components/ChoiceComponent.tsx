@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 export type ChoiceStyle =
   | 'normal'
   | 'selectable'
-  | 'blueSelected'
+  | 'playerSelected'
   | 'oponentSelected'
   | 'disabled'
 
@@ -19,8 +19,7 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
   switch (choiceStyle) {
     case 'normal':
       return {
-        opacity: 1,
-        bg: 'white',
+        opacity: '0.6',
       }
     case 'selectable':
       return {
@@ -35,7 +34,7 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
         bg: 'red.400',
         color: 'white',
       }
-    case 'blueSelected':
+    case 'playerSelected':
       return {
         //opacity: 0.5,
         bg: 'blue.400',
@@ -77,15 +76,16 @@ export default function ChoiceComponent({
   return (
     <Flex
       key={choice}
-      w="70px"
-      h="70px"
+      w="60px"
+      h="60px"
       alignItems="center"
       justifyContent="center"
+      bg={highlight ? 'gray.200' : 'gray.200'}
       backgroundSize="200%"
       boxSizing="border-box"
-      fontSize="25px"
-      fontWeight="300"
-      m="0"
+      fontSize="21px"
+      fontWeight="bold"
+      rounded="10px"
       animation={`${highlightAnimation} infinite 3s linear`}
       userSelect="none"
       transition="opacity 300ms linear, background-color 80ms linear"
@@ -94,6 +94,7 @@ export default function ChoiceComponent({
         highlight
           ? {
               transition: 'opacity 1s linear',
+              rounded: '10px',
               content: '""',
               inset: '0',
               pos: 'absolute',

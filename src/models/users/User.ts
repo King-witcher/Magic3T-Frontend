@@ -1,5 +1,5 @@
-import { Glicko } from '@/types/Glicko'
-import { WithId } from '@/types/WithId'
+import { Glicko } from '@/types/glicko.ts'
+import { WithId } from '@/types/withId.ts'
 
 export type UserData = WithId & {
   nickname: string

@@ -1,5 +1,5 @@
 import { Timer } from '@/lib/Timer'
-import { Choice, GameStateReport, GameStatus } from '@/types/types'
+import { Choice, GameStateReport, GameStatus } from '@/types/game.ts'
 import {
   ReactNode,
   createContext,

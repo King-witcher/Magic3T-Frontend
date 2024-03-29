@@ -1,5 +1,5 @@
-import { WithId } from '@/types/WithId'
-import { Choice } from '@/types/types'
+import { WithId } from '@/types/withId.ts'
+import { Choice } from '@/types/game.ts'
 
 export interface PlayerMove {
   player: 'white' | 'black'

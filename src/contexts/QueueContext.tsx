@@ -11,36 +11,7 @@ import { useGame } from './GameContext'
 import { useLiveActivity } from './LiveActivityContext'
 import { IoSearch } from 'react-icons/io5'
 import { useGuardedAuth } from './GuardedAuthContext'
-
-export enum GameMode {
-  Bot0 = 'bot-0',
-  Bot1 = 'bot-1',
-  Bot2 = 'bot-2',
-  Bot3 = 'bot-3',
-  Casual = 'casual',
-  Ranked = 'ranked',
-}
-
-type QueueModesType = {
-  'bot-0'?: boolean
-  'bot-1'?: boolean
-  'bot-2'?: boolean
-  'bot-3'?: boolean
-  casual?: boolean
-  ranked?: boolean
-}
-
-interface QueueUserCount {
-  casual: {
-    inGame: number
-    queue: number
-  }
-  connected: number
-  ranked: {
-    inGame: number
-    queue: number
-  }
-}
+import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void
