@@ -1,5 +1,4 @@
 import { inputAnatomy } from '@chakra-ui/anatomy'
-import { extendTheme } from '@chakra-ui/react'
 import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system'
 
 const { definePartsStyle, defineMultiStyleConfig } =

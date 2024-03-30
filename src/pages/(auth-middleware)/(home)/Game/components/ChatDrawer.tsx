@@ -1,4 +1,3 @@
-import { useGame } from '@/contexts/GameContext'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
   Box,
@@ -12,7 +11,6 @@ import {
   Text,
   DrawerCloseButton,
 } from '@chakra-ui/react'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { useChatHandler } from '@/pages/(auth-middleware)/(home)/Game/hooks/useChatHandler.ts'
 
 interface Props extends Omit<DrawerProps, 'children'> {}

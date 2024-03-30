@@ -1,6 +1,6 @@
 import { PlayerMove } from '@/models/matches/Match'
 import { Choice } from '@/types/game.ts'
-import { Box, Center, Flex, Grid, Stack, VStack } from '@chakra-ui/react'
+import { Flex, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import {
   FaBackwardFast,
@@ -8,7 +8,6 @@ import {
   FaForwardFast,
   FaForwardStep,
 } from 'react-icons/fa6'
-import ChoiceComponent from '@/components/ChoiceComponent'
 import { getTriple } from '@/utils/getTriple'
 import Control from './Control'
 import ChoiceTable from '@/components/ChoiceTable'

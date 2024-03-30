@@ -5,8 +5,6 @@ import {
   Text,
   useDisclosure,
   Popover,
-  PopoverAnchor,
-  PopoverBody,
   PopoverTrigger,
   PopoverContent,
 } from '@chakra-ui/react'

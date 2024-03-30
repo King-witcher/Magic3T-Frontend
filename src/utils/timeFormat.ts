@@ -27,9 +27,7 @@ export function formatMinutes(timestamp: number) {
   const mins = date.getMinutes()
 
   // Cria a string formatada
-  const result = `${hours}:${mins.toString().padStart(2, '0')}`
-
-  return result
+  return `${hours}:${mins.toString().padStart(2, '0')}`
 }
 
 // Função auxiliar para adicionar zero à esquerda se necessário

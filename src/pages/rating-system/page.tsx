@@ -11,7 +11,6 @@ import {
   Stack,
   Table,
   Text,
-  Th,
 } from '@chakra-ui/react'
 
 export default function RatingSystemPage() {

@@ -48,12 +48,12 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  const easterEgg =
-    user._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
-      ? 'não é burmor, é morbur c:'
-      : user.nickname.includes('Marileia Almeida')
-      ? 'Te amo, mãe <3'
-      : ''
+  // const easterEgg =
+  //   user._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
+  //     ? 'não é burmor, é morbur c:'
+  //     : user.nickname.includes('Marileia Almeida')
+  //     ? 'Te amo, mãe <3'
+  //     : ''
 
   const { matchId, isActive, gameStatus, oponentProfile, ratingsVariation } =
     useGame()

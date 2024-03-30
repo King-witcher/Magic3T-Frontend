@@ -1,8 +1,6 @@
-import { LazyLoadData, useLazy } from '@/hooks/useLazy'
-import { models } from '@/models'
+import { LazyLoadData } from '@/hooks/useLazy'
 import { UserData } from '@/models/users/User'
 import {
-  Center,
   Tab,
   TabIndicator,
   TabList,

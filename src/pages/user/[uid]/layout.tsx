@@ -25,8 +25,7 @@ export default function UserPageLayout() {
 
   const lazyMatchLoader = useLazy(async () => {
     if (user) {
-      const matches = await models.matches.listByPlayerId(user._id)
-      return matches
+      return await models.matches.listByPlayerId(user._id)
     }
     return []
   }, [user])

@@ -1,14 +1,11 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useConfig } from '@/contexts/ConfigContext'
-import { useAsync } from '@/hooks/useAsync'
 import { useRankInfo } from '@/hooks/useRanks'
-import { models } from '@/models'
 import { UserData } from '@/models/users/User'
 import {
   Badge,
   Box,
   Center,
-  Checkbox,
   Flex,
   Image,
   Select,

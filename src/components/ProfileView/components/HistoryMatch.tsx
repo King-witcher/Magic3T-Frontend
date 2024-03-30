@@ -1,4 +1,3 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { Center, Flex, FlexProps, Text } from '@chakra-ui/react'
 import { formatDate } from '@/utils/timeFormat'
 import { Match } from '@/models/matches/Match'

@@ -1,4 +1,3 @@
-import { useAuth } from '@/contexts/AuthContext'
 import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
@@ -19,8 +18,7 @@ export default function MeLayout() {
 
   const lazyMatchLoader = useLazy(async () => {
     if (user) {
-      const matches = await models.matches.listByPlayerId(user._id)
-      return matches
+      return await models.matches.listByPlayerId(user._id)
     }
     return []
   }, [user._id])

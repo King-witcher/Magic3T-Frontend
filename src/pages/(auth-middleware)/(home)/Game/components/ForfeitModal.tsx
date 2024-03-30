@@ -1,6 +1,5 @@
 import { useGame } from '@/contexts/GameContext'
 import {
-  AlertProps,
   Button,
   Modal,
   ModalBody,

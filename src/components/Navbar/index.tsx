@@ -8,7 +8,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ProfileMenu from '../MainMenu/MainMenu'
 import { useMemo } from 'react'
 import { useRankInfo } from '@/hooks/useRanks'

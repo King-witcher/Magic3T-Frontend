@@ -1,22 +1,6 @@
 import ProfileComponent from '@/components/ProfileComponent'
-import { useConfig } from '@/contexts/ConfigContext'
-import { useServiceStatus } from '@/contexts/ServiceStatusContext'
-import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
-import {
-  Avatar,
-  Center,
-  Flex,
-  Text,
-  VStack,
-  Image,
-  Tooltip,
-  Badge,
-  Box,
-  Divider,
-  Stack,
-} from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { Center } from '@chakra-ui/react'
 
 interface Props {
   user: UserData

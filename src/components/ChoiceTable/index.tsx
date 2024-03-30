@@ -1,5 +1,5 @@
 import { Choice } from '@/types/game.ts'
-import { Grid, Stack, VStack, Image, Text } from '@chakra-ui/react'
+import { Grid, VStack, Image, Text } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ChoiceComponent from '@/components/ChoiceComponent'
 import { getTriple } from '@/utils/getTriple'

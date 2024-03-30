@@ -1,7 +1,6 @@
 import { Match } from '@/models/matches/Match'
 import { formatDate } from '@/utils/timeFormat'
 import { Flex, Stack, Text } from '@chakra-ui/react'
-import { IoMdArrowRoundBack } from 'react-icons/io'
 
 interface Props {
   match: Match

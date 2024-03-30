@@ -39,26 +39,6 @@ setInterval(() => {
   queryCount = 0
 }, PERIOD)
 
-setInterval(() => {
-  if (readCount > MAX_READS || queryCount > MAX_QUERIES) {
-    BLOCK_TIME *= 2
-    console.log(
-      `${readCount} document reads and ${queryCount} queries were detected within ${
-        PERIOD / 1000
-      } seconds.`,
-    )
-    console.error(
-      `Firestore access blocked for ${BLOCK_TIME}ms due to excessive requests.`,
-    )
-    blocked = true
-    setTimeout(() => {
-      blocked = false
-    }, BLOCK_TIME)
-  }
-  readCount = 0
-  queryCount = 0
-}, PERIOD)
-
 export async function getDoc<AppModelType, DbModelType extends DocumentData>(
   ...params: Parameters<typeof firestoreGetDoc<AppModelType, DbModelType>>
 ): ReturnType<typeof firestoreGetDoc<AppModelType, DbModelType>> {
@@ -82,7 +62,7 @@ export function onSnapshot<AppModelType, DbModelType extends DocumentData>(
   ...params: Parameters<typeof firestoreOnSnapshot<AppModelType, DbModelType>>
 ): ReturnType<typeof firestoreOnSnapshot<AppModelType, DbModelType>> {
   if (blocked) throw new Error('Firestore access blocked.')
-  const result = onSnapshot(...params)
+  const result = firestoreOnSnapshot(...params)
   readCount++
   queryCount++
   return result

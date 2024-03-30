@@ -1,5 +1,4 @@
 import { Flex, Tooltip } from '@chakra-ui/react'
-import { BiSolidErrorCircle } from 'react-icons/bi'
 import { WarningIcon } from '@chakra-ui/icons'
 
 interface Props {

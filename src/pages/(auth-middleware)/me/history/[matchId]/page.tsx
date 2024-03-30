@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useMeContext } from '../../layout'
 import MatchViewer from '@/components/MatchViewer'
-import { useAuth } from '@/contexts/AuthContext'
-import { redirect, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { models } from '@/models'
 import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
