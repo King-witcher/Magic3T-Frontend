@@ -313,7 +313,7 @@ export function GameProvider({ children }: Props) {
         })
 
         if (response.status === 200) {
-          connectGame(response.data.id)
+          await connectGame(response.data.id)
         }
       } catch (e) {
         console.error(e)

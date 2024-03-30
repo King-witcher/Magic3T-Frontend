@@ -55,10 +55,7 @@ type RatingInfo = {
 }
 
 function getC(inflationTime: number) {
-  const c = Math.sqrt(
-    (350 ** 2 - 40 ** 2) / (inflationTime * 24 * 60 * 60 * 1000),
-  )
-  return c
+  return Math.sqrt((350 ** 2 - 40 ** 2) / (inflationTime * 24 * 60 * 60 * 1000))
 }
 
 function getThumbnailByTierAndDivision(tier: number, division: number) {

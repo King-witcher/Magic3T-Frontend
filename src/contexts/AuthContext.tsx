@@ -15,7 +15,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  confirmPasswordReset,
 } from 'firebase/auth'
 import { auth, provider } from '@/services/firebase'
 import { models } from '@/models'
@@ -59,7 +58,6 @@ export function AuthProvider({ children }: Props) {
   const [authData, setAuthData] = useState<User | null>(null)
   const [authState, setAuthState] = useState(AuthState.Loading)
   const [user, setUser] = useState<UserData | null>(null)
-  const [error, setError] = useState<string | null>(null)
 
   const signInGoogle = useCallback(async () => {
     try {
@@ -110,8 +108,7 @@ export function AuthProvider({ children }: Props) {
 
   const getToken = useCallback(async () => {
     if (authData) {
-      const token = await getIdToken(authData, true)
-      return token
+      return await getIdToken(authData, true)
     } else throw new Error('No user connected')
   }, [authData])
 

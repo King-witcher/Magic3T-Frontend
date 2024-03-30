@@ -1,5 +1,4 @@
 import { Box, keyframes } from '@chakra-ui/react'
-import { wrap } from 'framer-motion'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 
 interface Props {

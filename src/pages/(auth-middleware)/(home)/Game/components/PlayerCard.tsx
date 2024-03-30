@@ -16,14 +16,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { RefObject } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
 import ForfeitModal from './ForfeitModal'
 import { GameStatus } from '@/types/game.ts'
 import { Avatar } from '@chakra-ui/react'
 import ChatDrawer from './ChatDrawer'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
-import { useConfig } from '@/contexts/ConfigContext'
 import SmoothNumber from '@/components/SmoothNumber'
 import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
 
@@ -57,14 +55,8 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
       ? 'Te amo, mãe <3'
       : ''
 
-  const {
-    matchId,
-    isActive,
-    turn,
-    gameStatus,
-    oponentProfile,
-    ratingsVariation,
-  } = useGame()
+  const { matchId, isActive, gameStatus, oponentProfile, ratingsVariation } =
+    useGame()
 
   const currentPlayer = player === 'current'
 

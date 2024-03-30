@@ -5,7 +5,6 @@ import {
   onSnapshot,
   orderBy,
   query,
-  where,
 } from 'firebase/firestore'
 import { getConverter } from '../getConverter'
 import { UserData } from './User'
@@ -36,9 +35,7 @@ async function getStandings(): Promise<UserData[]> {
       'color: #FFCA28',
     )
 
-  const result = snap.docs.map((doc) => doc.data())
-
-  return result
+  return snap.docs.map((doc) => doc.data())
 }
 
 function subscribe(uid: string, callback: (data: UserData) => void) {
