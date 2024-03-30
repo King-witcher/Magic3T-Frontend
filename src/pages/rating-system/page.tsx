@@ -183,7 +183,7 @@ export default function RatingSystemPage() {
           causado por acaso ou por imprecisão na pontuação do outro jogador.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
-          Por outro lado, consdierando a pontuação do seu oponente, ganhar ou
+          Por outro lado, considerando a pontuação do seu oponente, ganhar ou
           perder de um oponente com RD baixo também fará com que sua pontuação
           seja reajustada em maior intensidade, uma vez que o sistema tem
           certeza de que você ganhou de alguém muito bom. Da mesma forma, o
@@ -194,7 +194,7 @@ export default function RatingSystemPage() {
           Como seu desvio evolui
         </Heading>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
-          O RD diminui a cada partida concluida, diminuindo mais quanto mais
+          O RD diminui a cada partida concluída, diminuindo mais quanto mais
           alto o seu RD for. No entanto, o desvio aumenta lentamente com o
           passar do tempo, até um máximo de {ratingConfig.initialRD}.
         </Text>

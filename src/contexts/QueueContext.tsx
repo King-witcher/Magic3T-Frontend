@@ -119,7 +119,7 @@ export function QueueProvider({ children }: QueueContextProps) {
     if (queueModes.casual || queueModes.ranked) {
       return push({
         content: <IoSearch size="16px" />,
-        tooltip: 'Procurnado partida',
+        tooltip: 'Procurando partida',
         url: '/',
       })
     }

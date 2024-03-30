@@ -37,7 +37,7 @@ export default function RegisterPage() {
 
   const errorMap: Record<string, string> = {
     'auth/email-already-in-use': 'Já existe uma conta com o este email.',
-    'auth/invaid-email': 'Email inválido',
+    'auth/invalid-email': 'Email inválido',
     'auth/weak-password': 'Senha muito fraca',
   }
 
