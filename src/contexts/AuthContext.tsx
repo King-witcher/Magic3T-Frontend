@@ -14,7 +14,6 @@ import {
   getIdToken,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth, provider } from '@/services/firebase'
 import { models } from '@/models'
@@ -76,9 +75,8 @@ export function AuthProvider({ children }: Props) {
     async (email: string, password: string): Promise<string | null> => {
       try {
         await signInWithEmailAndPassword(auth, email, password)
-      } catch (e: any) {
+      } catch (e: unknown) {
         import.meta.env.DEV && alert(e)
-        return e.code
       } finally {
         setAuthState(AuthState.NotSignedIn)
       }
@@ -90,9 +88,8 @@ export function AuthProvider({ children }: Props) {
   const registerEmail = useCallback(async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password)
-    } catch (e: any) {
+    } catch (e: unknown) {
       import.meta.env.DEV && alert(e)
-      return e.code
     } finally {
       setAuthState(AuthState.NotSignedIn)
     }
@@ -100,10 +97,6 @@ export function AuthProvider({ children }: Props) {
 
   const signOut = useCallback(async () => {
     await firebaseSignOut(auth)
-  }, [])
-
-  const recoverPassword = useCallback((email: string) => {
-    sendPasswordResetEmail(auth, email)
   }, [])
 
   const getToken = useCallback(async () => {

@@ -21,6 +21,7 @@ import { useGuardedAuth } from './GuardedAuthContext'
 import { useLiveActivity } from './LiveActivityContext'
 import { IoChatbox, IoGameController } from 'react-icons/io5'
 import { useBreakpoint } from '@chakra-ui/react'
+import { GameSocket } from '@/types/GameSocket.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -98,7 +99,7 @@ export function GameProvider({ children }: Props) {
 
   const playerTimer = useRef(new Timer(0))
   const oponentTimer = useRef(new Timer(0))
-  const socketRef = useRef<Socket | null>(null)
+  const socketRef = useRef<GameSocket | null>(null)
 
   const { getToken, authState } = useGuardedAuth()
   const { push } = useLiveActivity()
@@ -216,12 +217,12 @@ export function GameProvider({ children }: Props) {
       setTriple(getTriple(incomingGameState.oponentChoices))
   }
 
-  const getEventfulSocket = useCallback(
-    async (matchId: string) => {
+  const getGameSocket = useCallback(
+    async (matchId: string): Promise<GameSocket> => {
       const token = await getToken()
       if (!token) throw new Error('No Id Token')
 
-      const socket = io(`${import.meta.env.VITE_API_URL}/match`, {
+      const socket: GameSocket = io(`${import.meta.env.VITE_API_URL}/match`, {
         auth: { matchId, token },
       })
 
@@ -263,7 +264,7 @@ export function GameProvider({ children }: Props) {
 
       resetStates()
 
-      const newSocket = await getEventfulSocket(matchId)
+      const newSocket = await getGameSocket(matchId)
       socketRef.current = newSocket
       setMatchId(matchId)
       setTurn(null)
@@ -272,7 +273,7 @@ export function GameProvider({ children }: Props) {
       setPlayerChoices([])
       newSocket.emitWithAck('ready', {})
     },
-    [getEventfulSocket, resetStates],
+    [getGameSocket, resetStates],
   )
 
   function disconnect() {
