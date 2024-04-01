@@ -12,6 +12,7 @@ import { useLiveActivity } from './LiveActivityContext'
 import { IoSearch } from 'react-icons/io5'
 import { useGuardedAuth } from './GuardedAuthContext'
 import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
+import { QueueSocket } from '@/types/QueueSocket.ts'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void
@@ -45,7 +46,7 @@ export function QueueProvider({ children }: QueueContextProps) {
   const { connectGame } = useGame()
 
   useEffect(() => {
-    let newSocket: ReturnType<typeof io>
+    let newSocket: QueueSocket
     async function init() {
       const token = await getToken()
       newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
@@ -57,7 +58,7 @@ export function QueueProvider({ children }: QueueContextProps) {
         setQueueModes({})
         connectGame(data.matchId)
       })
-      newSocket.on('updateUserCount', (data: any) => {
+      newSocket.on('updateUserCount', (data) => {
         setQueueUserCount(data)
       })
       newSocket.on('disconnect', () => {
@@ -74,7 +75,7 @@ export function QueueProvider({ children }: QueueContextProps) {
           connected: 0,
         })
       })
-      newSocket.on('queueModes', (data: any) => {
+      newSocket.on('queueModes', (data) => {
         setQueueModes(data)
       })
 

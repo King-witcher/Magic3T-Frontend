@@ -11,20 +11,14 @@ interface Props {
   referenceUid?: string
 }
 
-const rowColors = {
-  victory: 'green.200',
-  draw: 'gray.200',
-  defeat: 'red.200',
-}
-
 export default function MatchViewer({ match, referenceUid }: Props) {
   const [whiteProfile] = useAsync(async () => {
     try {
       if (match) {
         return await models.users.getById(match.white.uid)
       }
-    } catch (e: any) {
-      console.error(e.message)
+    } catch (e: unknown) {
+      console.error(e)
     }
   }, [match])
 
@@ -32,8 +26,8 @@ export default function MatchViewer({ match, referenceUid }: Props) {
     if (match) {
       try {
         return await models.users.getById(match.black.uid)
-      } catch (e: any) {
-        console.error(e.message)
+      } catch (e: unknown) {
+        console.error(e)
       }
     }
   }, [match])
@@ -56,8 +50,6 @@ export default function MatchViewer({ match, referenceUid }: Props) {
       : 'defeat'
     : null
 
-  const referenceMatchPlayer =
-    match.black.uid === referenceUid ? match.black : match.white
   const borderColor =
     referenceResult === 'victory'
       ? 'green.400'

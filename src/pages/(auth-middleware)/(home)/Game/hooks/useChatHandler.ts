@@ -1,18 +1,26 @@
 import { useGame } from '@/contexts/GameContext.tsx'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { FormSubmitHandler } from 'react-hook-form'
 
 export function useChatHandler() {
   const { messages, sendMessage } = useGame()
   const [currentMessage, setCurrentMessage] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  function handleSubmitMessage(e: any) {
+  function handleSubmitMessage(e: FormEvent) {
     e.preventDefault()
     sendMessage(currentMessage)
     setCurrentMessage('')
   }
 
-  function handleChangeMessageField(e: any) {
+  function handleChangeMessageField(e: ChangeEvent<HTMLInputElement>) {
     setCurrentMessage(e.target.value)
   }
 
