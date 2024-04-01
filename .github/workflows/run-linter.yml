@@ -1,0 +1,14 @@
+name: run-linter
+
+on: [push]
+
+jobs:
+  run-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: yarn
+      - run: yarn lint
