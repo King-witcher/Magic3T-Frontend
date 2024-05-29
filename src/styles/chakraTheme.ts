@@ -32,7 +32,7 @@ export const chakraTheme = extendTheme({
         },
       },
       body: {
-        bg: 'blue.100',
+        bg: 'gray.400',
         color: 'blackAlpha.800',
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {

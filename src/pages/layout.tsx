@@ -16,7 +16,7 @@ export default function Layout() {
             pos="relative"
             rounded="10px"
             h="100%"
-            bg="white"
+            bg="gray.200"
             p="10px"
             overflow="hidden"
           >

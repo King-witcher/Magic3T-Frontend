@@ -38,16 +38,10 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
       flexDir="column"
       gap="10px"
       p={['10px 15px', '10px 20px']}
-      borderRadius="10px"
-      bg={rowColors[result]}
+      bg={'gray.100'}
       transition="background 80ms linear"
       _hover={{
-        bgColor:
-          result === 'defeat'
-            ? 'red.100'
-            : result === 'draw'
-            ? 'gray.100'
-            : 'green.100',
+        bgColor: 'gray.300',
         borderColor:
           result === 'defeat'
             ? 'red.300'
@@ -55,7 +49,7 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
             ? 'gray.300'
             : 'green.300',
       }}
-      borderLeft="solid 5px"
+      borderLeft="solid 10px"
       borderLeftColor={
         result === 'defeat'
           ? 'red.400'
