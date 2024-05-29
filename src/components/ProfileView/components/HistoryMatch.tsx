@@ -41,7 +41,7 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
       bg={'gray.100'}
       transition="background 80ms linear"
       _hover={{
-        bgColor: 'gray.300',
+        bgColor: 'gray.200',
         borderColor:
           result === 'defeat'
             ? 'red.300'
