@@ -1,5 +1,5 @@
-import { useQueue } from '@/contexts/QueueContext'
-import { ServerStatus, useServiceStatus } from '@/contexts/ServiceStatusContext'
+import { useQueue } from '@/contexts/queue.context.tsx'
+import { ServerStatus, useServiceStatus } from '@/contexts/service-status.context.tsx'
 import {
   Center,
   Divider,
@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import ProfileComponent from '@/components/ProfileComponent'
 import { Link } from 'react-router-dom'
-import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { GameMode } from '@/types/queue.ts'
 
 export default function Lobby() {

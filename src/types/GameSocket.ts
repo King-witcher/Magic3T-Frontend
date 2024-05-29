@@ -1,20 +1,37 @@
 import { Socket } from 'socket.io-client'
-import { Choice } from '@/types/game.ts'
+import { Choice, GameStateReport } from '@/types/game.ts'
+
+export enum GameListenedEvent {
+  OpponentUid = 'opponent-uid',
+  Message = 'message',
+  GameState = 'game-state',
+  RatingsVariation = 'ratings-variation',
+}
+
+export enum GameEmittedEvents {
+  GetState = 'get-state',
+  GetOpponent = 'get-opponent',
+  Choice = 'choice',
+  Forfeit = 'forfeit',
+  Message = 'message',
+}
 
 interface ListenEventsMap {
-  oponentUid(uid: string): void
-  // TODO: type this!!!
-  gameState(stateReport: string): void
-  message(message: string): void
-  ratingsVariation(data: { player: number; oponent: number }): void
+  [GameListenedEvent.OpponentUid](uid: string): void
+  [GameListenedEvent.GameState](stateReport: GameStateReport): void
+  [GameListenedEvent.Message](message: string): void
+  [GameListenedEvent.RatingsVariation](data: {
+    player: number
+    opponent: number
+  }): void
 }
 
 interface EmitEventsMap {
-  getOponentProfile(): void
-  message(message: string): void
-  choice(choice: Choice): void
-  ready(): void
-  forfeit(): void
+  [GameEmittedEvents.GetOpponent](): void
+  [GameEmittedEvents.GetState](): void
+  [GameEmittedEvents.Message](message: string): void
+  [GameEmittedEvents.Choice](choice: Choice): void
+  [GameEmittedEvents.Forfeit](): void
 }
 
 export type GameSocket = Socket<ListenEventsMap, EmitEventsMap>

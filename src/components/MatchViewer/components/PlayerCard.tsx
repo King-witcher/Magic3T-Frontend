@@ -1,6 +1,6 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
-import { MatchPlayer } from '@/models/matches/Match'
+import { HistoryMatchPlayer } from '@/models/matches/Match'
 import { UserData } from '@/models/users/User'
 import {
   Avatar,
@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 
 interface Props {
   user?: UserData | null
-  matchPlayer: MatchPlayer
+  matchPlayer: HistoryMatchPlayer
   highlight?: 'blue' | 'red' | null
 }
 
@@ -64,24 +64,24 @@ export default function PlayerCard({ user, matchPlayer, highlight }: Props) {
         <Flex gap="5px" alignItems="center">
           <Image
             ml="3px"
-            src={getRankThumbnail(matchPlayer.rating)}
+            src={getRankThumbnail(matchPlayer.score)}
             alt="rank"
             draggable={false}
           />
-          {Math.round(matchPlayer.rating)}{' '}
+          {Math.round(matchPlayer.score)}{' '}
           <Text
             fontSize="14px"
             fontWeight={800}
             color={
-              matchPlayer.rv > 0
+              matchPlayer.gain > 0
                 ? 'green.400'
-                : matchPlayer.rv === 0
+                : matchPlayer.gain === 0
                 ? 'gray.400'
                 : 'red.400'
             }
           >
-            {matchPlayer.rv < 0 ? '-' : '+'}
-            {Math.round(Math.abs(matchPlayer.rv))}
+            {matchPlayer.gain < 0 ? '-' : '+'}
+            {Math.round(Math.abs(matchPlayer.gain))}
           </Text>
         </Flex>
       </Flex>

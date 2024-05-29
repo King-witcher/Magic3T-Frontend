@@ -15,6 +15,7 @@ import Home from './pages/(auth-middleware)/(home)/page'
 import MeLayout from '@/pages/(auth-middleware)/me/layout.tsx'
 import MePage from '@/pages/(auth-middleware)/me/page.tsx'
 import MeMatchPage from '@/pages/(auth-middleware)/me/history/[matchId]/page.tsx'
+import Error from './pages/error'
 
 console.clear()
 
@@ -24,92 +25,96 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       {
         path: '/',
         element: <Layout />,
-        errorElement: <Layout />,
         children: [
           {
-            path: 'sign-in',
-            element: <SignInPage />,
-          },
-          {
-            path: 'register',
-            element: <RegisterPage />,
-          },
-          {
-            path: 'tutorial',
-            element: <TutorialPage />,
-          },
-          {
-            path: 'rating-system',
-            element: <RatingSystemPage />,
-          },
-          {
-            path: 'user/:uid',
-            element: <UserPageLayout />,
+            errorElement: <Error />,
             children: [
               {
-                path: '',
-                element: <UserPage index={0} />,
+                path: 'sign-in',
+                element: <SignInPage />,
               },
               {
-                path: 'profile',
-                element: <UserPage index={0} />,
+                path: 'register',
+                element: <RegisterPage />,
               },
               {
-                path: 'history',
-                element: <UserPage index={1} />,
+                path: 'tutorial',
+                element: <TutorialPage />,
               },
               {
-                path: 'history/:matchId',
-                element: <UserMatchPage />,
-              },
-              {
-                path: 'standings',
-                element: <UserPage index={2} />,
-              },
-            ],
-          },
-          // Guarded routes
-          {
-            path: '',
-            element: <AuthMiddleware />,
-            children: [
-              {
-                path: '',
-                element: <Home />,
+                path: 'rating-system',
+                element: <RatingSystemPage />,
               },
               {
                 path: 'match/:matchId',
                 element: <MatchPage />,
               },
               {
-                path: 'me',
-                element: <MeLayout />,
+                path: 'user/:uid',
+                element: <UserPageLayout />,
                 children: [
                   {
                     path: '',
-                    element: <MePage index={0} />,
+                    element: <UserPage index={0} />,
                   },
                   {
                     path: 'profile',
-                    element: <MePage index={0} />,
+                    element: <UserPage index={0} />,
                   },
                   {
                     path: 'history',
-                    element: <MePage index={1} />,
+                    element: <UserPage index={1} />,
                   },
                   {
                     path: 'history/:matchId',
-                    element: <MeMatchPage />,
+                    element: <UserMatchPage />,
                   },
                   {
                     path: 'standings',
-                    element: <MePage index={2} />,
+                    element: <UserPage index={2} />,
                   },
                 ],
               },
+              // Guarded routes
               {
-                path: '*',
-                element: <NotFound />,
+                path: '',
+                element: <AuthMiddleware />,
+                children: [
+                  {
+                    path: '',
+                    element: <Home />,
+                  },
+                  {
+                    path: 'me',
+                    element: <MeLayout />,
+                    children: [
+                      {
+                        path: '',
+                        element: <MePage index={0} />,
+                      },
+                      {
+                        path: 'profile',
+                        element: <MePage index={0} />,
+                      },
+                      {
+                        path: 'history',
+                        element: <MePage index={1} />,
+                      },
+                      {
+                        path: 'history/:matchId',
+                        element: <MeMatchPage />,
+                      },
+                      {
+                        path: 'standings',
+                        element: <MePage index={2} />,
+                      },
+                    ],
+                  },
+                  {
+                    path: '*',
+                    element: <NotFound />,
+                  },
+                ],
               },
             ],
           },

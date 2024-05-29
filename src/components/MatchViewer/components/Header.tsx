@@ -1,4 +1,4 @@
-import { Match } from '@/models/matches/Match'
+import { Match, SidesEnum } from '@/models/matches/Match'
 import { formatDate } from '@/utils/timeFormat'
 import { Flex, Stack, Text } from '@chakra-ui/react'
 
@@ -31,9 +31,9 @@ export default function Header({ match, referenceSide }: Props) {
     )
 
   const referenceResult =
-    match.winner === 'none'
+    match.winner === null
       ? 'draw'
-      : referenceSide === match.winner
+      : referenceSide === 'white' && match.winner === SidesEnum.White
       ? 'victory'
       : 'defeat'
 
@@ -67,15 +67,15 @@ export default function Header({ match, referenceSide }: Props) {
           fontSize={['14px', '16px']}
           fontWeight={600}
           color={
-            referenceMatchPlayer.rv > 0
+            referenceMatchPlayer.gain > 0
               ? 'green.500'
-              : referenceMatchPlayer.rv === 0
+              : referenceMatchPlayer.gain === 0
               ? 'gray.500'
               : 'red.500'
           }
         >
-          ({referenceMatchPlayer.rv < 0 ? '-' : '+'}
-          {Math.abs(referenceMatchPlayer.rv).toFixed()} SR)
+          ({referenceMatchPlayer.gain < 0 ? '-' : '+'}
+          {Math.abs(referenceMatchPlayer.gain).toFixed()} SR)
         </Text>
       </Flex>
       <Text fontWeight={500} fontSize={['18px', '20px']}>

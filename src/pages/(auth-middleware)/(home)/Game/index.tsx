@@ -1,7 +1,7 @@
 import { VStack, Text, Center, Box, Flex } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { GameStatus } from '@/types/game.ts'
-import { useGame } from '@/contexts/GameContext'
+import { useGame } from '@/contexts/game.context.tsx'
 import PlayerCard from './components/PlayerCard'
 import { TimeCounter } from './components/TimeCounter'
 import ChatBox from './components/ChatBox'

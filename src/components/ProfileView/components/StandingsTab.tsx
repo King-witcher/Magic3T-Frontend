@@ -1,5 +1,5 @@
-import { useAuth } from '@/contexts/AuthContext'
-import { useConfig } from '@/contexts/ConfigContext'
+import { useAuth } from '@/contexts/auth.context.tsx'
+import { useConfig } from '@/contexts/config.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
 import {

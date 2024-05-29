@@ -1,4 +1,4 @@
-import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
 import { Match } from '@/models/matches/Match'

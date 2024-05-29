@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/contexts/auth.context.tsx'
 import {
   Button,
   Modal,

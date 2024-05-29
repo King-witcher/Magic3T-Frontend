@@ -1,7 +1,7 @@
 import MatchViewer from '@/components/MatchViewer'
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
-import { Center } from '@chakra-ui/react'
+import { Center, Spinner } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 export default function MatchPage() {
@@ -12,11 +12,15 @@ export default function MatchPage() {
   }, [matchId])
 
   if (loading) {
-    return <Center>Carregando partida</Center>
+    return (
+      <Center h="full">
+        <Spinner />
+      </Center>
+    )
   }
 
   if (!match) {
-    return <Center>Partida não encontrada.</Center>
+    return <Center h="full">Partida não encontrada</Center>
   }
 
   return <MatchViewer match={match} />

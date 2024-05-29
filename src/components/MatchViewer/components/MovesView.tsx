@@ -1,4 +1,3 @@
-import { PlayerMove } from '@/models/matches/Match'
 import { Choice } from '@/types/game.ts'
 import { Flex, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
@@ -8,12 +7,12 @@ import {
   FaForwardFast,
   FaForwardStep,
 } from 'react-icons/fa6'
-import { getTriple } from '@/utils/getTriple'
 import Control from './Control'
 import ChoiceTable from '@/components/ChoiceTable'
+import { HistoryMatchEvent, SidesEnum } from '@/models/matches/Match'
 
 interface Props {
-  moves: PlayerMove[]
+  moves: HistoryMatchEvent[]
 }
 
 const allNumbers: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -23,23 +22,23 @@ export default function MovesView({ moves }: Props) {
 
   const whiteMoves = useMemo<Choice[]>(() => {
     return moves
-      .filter((move, idx) => move.player === 'white' && idx < index)
-      .map((move) => move.move)
+      .filter((move, idx) => move.side === SidesEnum.White && idx < index)
+      .map((move) => move.choice)
       .filter((move) => typeof move === 'number') as Choice[]
   }, [moves, index])
 
   const blackMoves = useMemo<Choice[]>(() => {
     return moves
-      .filter((move, idx) => move.player === 'black' && idx < index)
-      .map((move) => move.move)
+      .filter((move, idx) => move.side === SidesEnum.Black && idx < index)
+      .map((move) => move.choice)
       .filter((move) => typeof move === 'number') as Choice[]
   }, [moves, index])
 
-  const triple = useMemo(() => {
-    if (index === moves.length) {
-      return getTriple(whiteMoves) || getTriple(blackMoves)
-    }
-  }, [index, whiteMoves, blackMoves])
+  // const triple = useMemo(() => {
+  //   if (index === moves.length) {
+  //     return getTriple(whiteMoves) || getTriple(blackMoves)
+  //   }
+  // }, [index, whiteMoves, blackMoves])
 
   const go = useCallback(
     (amount: number) => {

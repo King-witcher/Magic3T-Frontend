@@ -1,8 +1,8 @@
 import { Timer } from '@/lib/Timer'
 import { Choice, GameStateReport, GameStatus } from '@/types/game.ts'
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -10,18 +10,22 @@ import {
   useRef,
   useState,
 } from 'react'
-import { Socket, io } from 'socket.io-client'
-import { AuthState } from './AuthContext'
+import { io, Socket } from 'socket.io-client'
+import { AuthState } from './auth.context.tsx'
 import { UserData } from '@/models/users/User'
 import { models } from '@/models'
 import { Unsubscribe } from 'firebase/auth'
 import { Api } from '@/services/api'
 import { getTriple } from '@/utils/getTriple'
-import { useGuardedAuth } from './GuardedAuthContext'
-import { useLiveActivity } from './LiveActivityContext'
+import { useGuardedAuth } from './guarded-auth.context.tsx'
+import { useLiveActivity } from './live-activity.context.tsx'
 import { IoChatbox, IoGameController } from 'react-icons/io5'
 import { useBreakpoint } from '@chakra-ui/react'
-import { GameSocket } from '@/types/GameSocket.ts'
+import {
+  GameEmittedEvents,
+  GameListenedEvent,
+  GameSocket,
+} from '@/types/GameSocket.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -69,13 +73,6 @@ type GameData =
       disconnect(): void
     }
 
-interface Profile {
-  name: string
-  uid: string
-  rating: number
-  photoUrl: string
-}
-
 interface Props {
   children?: ReactNode
 }
@@ -88,17 +85,17 @@ export function GameProvider({ children }: Props) {
   const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
   const [gameStatus, setGameStatus] = useState(GameStatus.Waiting)
   const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
-  const [oponentChoices, setOponentChoices] = useState<Choice[]>([])
+  const [opponentChoices, setOpponentChoices] = useState<Choice[]>([])
   const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [oponentProfile, setOponentProfile] = useState<UserData | null>(null)
+  const [opponentProfile, setOpponentProfile] = useState<UserData | null>(null)
   const [ratingsVariation, setRatingsVariation] = useState<{
     player: number
-    oponent: number
+    opponent: number
   } | null>(null)
 
   const playerTimer = useRef(new Timer(0))
-  const oponentTimer = useRef(new Timer(0))
+  const opponentTimer = useRef(new Timer(0))
   const socketRef = useRef<GameSocket | null>(null)
 
   const { getToken, authState } = useGuardedAuth()
@@ -111,15 +108,15 @@ export function GameProvider({ children }: Props) {
     setTurn(null)
     setGameStatus(GameStatus.Waiting)
     setPlayerChoices([])
-    setOponentChoices([])
+    setOpponentChoices([])
     setMessages([])
     setTriple(null)
     setRatingsVariation(null)
     playerTimer.current.pause()
-    oponentTimer.current.pause()
+    opponentTimer.current.pause()
     playerTimer.current.setRemaining(0)
-    oponentTimer.current.setRemaining(0)
-    setOponentProfile(null)
+    opponentTimer.current.setRemaining(0)
+    setOpponentProfile(null)
   }, [])
 
   useEffect(() => {
@@ -137,40 +134,37 @@ export function GameProvider({ children }: Props) {
     }
   }, [messages.length, breakpoint])
 
-  const handleReceiveOponentUid = useCallback(async (uid: string) => {
-    const oponentProfile = await models.users.getById(uid)
-    setOponentProfile(oponentProfile)
+  const handleReceiveOpponentUid = useCallback(async (uid: string) => {
+    const opponentProfile = await models.users.getById(uid)
+    setOpponentProfile(opponentProfile)
   }, [])
 
   const handleReceiveRatingsVariation = useCallback(
-    (data: { player: number; oponent: number }) => {
+    (data: { player: number; opponent: number }) => {
       setRatingsVariation(data)
     },
     [setRatingsVariation],
   )
 
-  const handleReceiveMessage = useCallback(
-    (message: string) => {
-      setMessages((current) => [
-        ...current,
-        {
-          timestamp: Date.now(),
-          content: message,
-          sender: 'him',
-        },
-      ])
-    },
-    [setMessages],
-  )
+  const handleReceiveMessage = useCallback((message: string) => {
+    setMessages((current) => [
+      ...current,
+      {
+        timestamp: Date.now(),
+        content: message,
+        sender: 'him',
+      },
+    ])
+  }, [])
 
   const makeChoice = useCallback((choice: Choice) => {
-    socketRef.current?.emit('choice', choice)
+    socketRef.current?.emit(GameEmittedEvents.Choice, choice)
 
     setTurn('oponent')
     setPlayerChoices((current) => [...current, choice])
 
     playerTimer.current.pause()
-    oponentTimer.current.start()
+    opponentTimer.current.start()
   }, [])
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
@@ -182,34 +176,27 @@ export function GameProvider({ children }: Props) {
     socketRef.current?.connect()
   }
 
-  function handleServerGameState(stateString: string) {
-    const incomingGameState = JSON.parse(stateString) as GameStateReport
-    setTurn(
-      incomingGameState.turn
-        ? 'player'
-        : incomingGameState.status === GameStatus.Playing
-        ? 'oponent'
-        : null,
-    )
+  function handleServerGameState(incomingGameState: GameStateReport) {
+    setTurn(incomingGameState.turn)
     setGameStatus(incomingGameState.status)
     setPlayerChoices(incomingGameState.playerChoices)
-    setOponentChoices(incomingGameState.oponentChoices)
+    setOpponentChoices(incomingGameState.oponentChoices)
 
     // Muda qual timer está contando
     if (incomingGameState.turn) {
       playerTimer.current.start()
-      oponentTimer.current.pause()
+      opponentTimer.current.pause()
     } else if (incomingGameState.status === GameStatus.Playing) {
       playerTimer.current.pause()
-      oponentTimer.current.start()
+      opponentTimer.current.start()
     } else {
       playerTimer.current.pause()
-      oponentTimer.current.pause()
+      opponentTimer.current.pause()
     }
 
     // Sincroniza os timers com os dados recebidos do servidor
     playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
-    oponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
+    opponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
 
     if (incomingGameState.status === GameStatus.Victory)
       setTriple(getTriple(incomingGameState.playerChoices))
@@ -227,13 +214,14 @@ export function GameProvider({ children }: Props) {
       })
 
       return socket
-        .on('gameState', handleServerGameState)
+        .on(GameListenedEvent.GameState, handleServerGameState)
         .on('disconnect', handleServerDisconnect)
-        .on('message', handleReceiveMessage)
-        .on('oponentUid', handleReceiveOponentUid)
-        .on('ratingsVariation', handleReceiveRatingsVariation)
+        .on(GameListenedEvent.Message, handleReceiveMessage)
+        .on(GameListenedEvent.OpponentUid, handleReceiveOpponentUid)
+        .on(GameListenedEvent.RatingsVariation, handleReceiveRatingsVariation)
         .on('connect', () => {
-          socket.emit('getOponentProfile')
+          socket.emit(GameEmittedEvents.GetOpponent)
+          socket.emit(GameEmittedEvents.GetState)
         })
     },
     [getToken],
@@ -250,12 +238,12 @@ export function GameProvider({ children }: Props) {
         },
       ])
 
-      socketRef.current?.emit('message', message)
+      socketRef.current?.emit(GameEmittedEvents.Message, message)
     }
   }, [])
 
   const forfeit = useCallback(async () => {
-    await socketRef.current?.emitWithAck('forfeit')
+    await socketRef.current?.emitWithAck(GameEmittedEvents.Forfeit)
   }, [])
 
   const connectGame = useCallback(
@@ -269,9 +257,8 @@ export function GameProvider({ children }: Props) {
       setMatchId(matchId)
       setTurn(null)
       setGameStatus(GameStatus.Waiting)
-      setOponentChoices([])
+      setOpponentChoices([])
       setPlayerChoices([])
-      newSocket.emitWithAck('ready', {})
     },
     [getGameSocket, resetStates],
   )
@@ -292,7 +279,7 @@ export function GameProvider({ children }: Props) {
     for (let i = 1; i < 10; i++) {
       if (
         !playerChoices.includes(i as Choice) &&
-        !oponentChoices.includes(i as Choice)
+        !opponentChoices.includes(i as Choice)
       )
         availableChoices.push(i as Choice)
     }
@@ -332,14 +319,14 @@ export function GameProvider({ children }: Props) {
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null
-    if (oponentProfile)
-      unsubscribe = models.users.subscribe(oponentProfile?._id, (data) => {
-        setOponentProfile(data)
+    if (opponentProfile)
+      unsubscribe = models.users.subscribe(opponentProfile?._id, (data) => {
+        setOpponentProfile(data)
       })
     return () => {
       if (unsubscribe) unsubscribe()
     }
-  }, [oponentProfile?._id])
+  }, [opponentProfile?._id])
 
   useEffect(() => {
     if (matchId) {
@@ -361,12 +348,12 @@ export function GameProvider({ children }: Props) {
           gameStatus,
           messages,
           playerChoices,
-          oponentChoices,
+          oponentChoices: opponentChoices,
           playerTimer: playerTimer.current,
-          oponentTimer: oponentTimer.current,
+          oponentTimer: opponentTimer.current,
           availableChoices,
           winningTriple: triple,
-          oponentProfile,
+          oponentProfile: opponentProfile,
           ratingsVariation,
 
           /** Se conecta a um jogo a partir de um token. */

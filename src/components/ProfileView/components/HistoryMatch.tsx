@@ -1,6 +1,10 @@
 import { Center, Flex, FlexProps, Text } from '@chakra-ui/react'
 import { formatDate } from '@/utils/timeFormat'
-import { Match } from '@/models/matches/Match'
+import {
+  HistoryMatchEventsEnum,
+  Match,
+  SidesEnum,
+} from '@/models/matches/Match'
 
 interface Props extends FlexProps {
   match: Match
@@ -15,18 +19,19 @@ const rowColors = {
 
 export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
   const result =
-    match.winner === 'none'
+    match.winner === null
       ? 'draw'
-      : match[match.winner].uid === referenceUid
+      : [match.white, match.black][match.winner].uid === referenceUid
       ? 'victory'
       : 'defeat'
 
   //const timeMs = match.moves[match.moves.length - 1].time
   //const timeFmt = formatTime(timeMs)
 
-  const playerSide = match.white.uid === referenceUid ? 'white' : 'black'
-  const player = match[playerSide]
-  const oponent = player === match.white ? match.black : match.white
+  const playerSide =
+    match.white.uid === referenceUid ? SidesEnum.White : SidesEnum.Black
+  const player = [match.white, match.black][playerSide]
+  const oponent = [match.white, match.black][1 - playerSide]
 
   return (
     <Flex
@@ -94,11 +99,11 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
               ? 'Empate'
               : 'Derrota'}
 
-            {player.rv !== 0 && (
+            {player.gain !== 0 && (
               <>
                 {' '}
-                ({player.rv > 0 ? '+' : '-'}
-                {Math.abs(Math.round(player.rv))})
+                ({player.gain > 0 ? '+' : '-'}
+                {Math.abs(Math.round(player.gain))})
               </>
             )}
           </Text>
@@ -107,7 +112,7 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
         <Text fontSize={['10px', '16px']}>{formatDate(match.timestamp)}</Text>
       </Flex>
       <Flex gap="5px">
-        {match.moves.map((move, index) => (
+        {match.events.map((event, index) => (
           <Center
             px="6px"
             key={index}
@@ -115,16 +120,18 @@ export default function HistoryMatch({ match, referenceUid, ...rest }: Props) {
             minW="20px"
             h="20px"
             bg={
-              move.move === 'forfeit'
+              event.event === HistoryMatchEventsEnum.Forfeit
                 ? 'red.500'
-                : move.move === 'timeout'
+                : event.event === HistoryMatchEventsEnum.Timeout
                 ? 'yellow.500'
-                : move.player === playerSide
+                : event.side === playerSide
                 ? 'blue.300'
                 : 'red.300'
             }
           >
-            {move.move}
+            {event.event === HistoryMatchEventsEnum.Choice && event.choice}
+            {event.event === HistoryMatchEventsEnum.Forfeit && 'Forfeit'}
+            {event.event === HistoryMatchEventsEnum.Timeout && 'Timeout'}
           </Center>
         ))}
       </Flex>

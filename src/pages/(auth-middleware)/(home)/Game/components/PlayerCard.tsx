@@ -7,7 +7,7 @@ import {
   Badge,
   keyframes,
 } from '@chakra-ui/react'
-import { useGame } from '@/contexts/GameContext'
+import { useGame } from '@/contexts/game.context.tsx'
 import {
   Menu,
   MenuButton,
@@ -23,7 +23,7 @@ import ChatDrawer from './ChatDrawer'
 import { Link } from 'react-router-dom'
 import { useRankInfo } from '@/hooks/useRanks'
 import SmoothNumber from '@/components/SmoothNumber'
-import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 
 interface Props {
   player: 'current' | 'opponent'

@@ -1,4 +1,4 @@
-import { AuthState, useAuth } from '@/contexts/AuthContext'
+import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import {
   Avatar,
   Flex,
@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 import ProfileMenu from '../MainMenu/MainMenu'
 import { useMemo } from 'react'
 import { useRankInfo } from '@/hooks/useRanks'
-import { useLiveActivity } from '@/contexts/LiveActivityContext'
+import { useLiveActivity } from '@/contexts/live-activity.context.tsx'
 import ActivityBadge from './components/ActivityBadge'
 
 export default function Navbar() {

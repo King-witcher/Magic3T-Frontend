@@ -1,6 +1,6 @@
 import ProfileView from '@/components/ProfileView'
 import { useMeContext } from './layout'
-import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 
 interface Props {
   index: 0 | 1 | 2

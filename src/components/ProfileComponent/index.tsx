@@ -1,4 +1,4 @@
-import { useConfig } from '@/contexts/ConfigContext'
+import { useConfig } from '@/contexts/config.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import { UserData } from '@/models/users/User'
 import { Avatar, Badge, Flex, VStack, Text, Image, Box } from '@chakra-ui/react'

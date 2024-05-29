@@ -42,13 +42,12 @@ export default function MatchViewer({ match, referenceUid }: Props) {
       : null
     : null
 
-  const referenceResult = referenceSide
-    ? match.winner === 'none'
+  const referenceResult =
+    match.winner === null
       ? 'draw'
-      : match[match.winner].uid === referenceUid
+      : [match.white, match.black][match.winner].uid === referenceUid
       ? 'victory'
       : 'defeat'
-    : null
 
   const borderColor =
     referenceResult === 'victory'
@@ -82,7 +81,7 @@ export default function MatchViewer({ match, referenceUid }: Props) {
           w="full"
           justifyContent="center"
         >
-          <MovesView moves={match.moves} />
+          <MovesView moves={match.events} />
         </Flex>
         <PlayerCard
           user={whiteProfile}

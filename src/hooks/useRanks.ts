@@ -1,4 +1,4 @@
-import { useConfig } from '@/contexts/ConfigContext'
+import { useConfig } from '@/contexts/config.context.tsx'
 import { Glicko } from '@/types/glicko.ts'
 import { Division, Tier, tiers } from '@/utils/ranks'
 import { ThemeTypings } from '@chakra-ui/react'

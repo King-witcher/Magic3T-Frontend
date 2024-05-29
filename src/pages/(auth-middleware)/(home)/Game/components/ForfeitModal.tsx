@@ -1,4 +1,4 @@
-import { useGame } from '@/contexts/GameContext'
+import { useGame } from '@/contexts/game.context.tsx'
 import {
   Button,
   Modal,

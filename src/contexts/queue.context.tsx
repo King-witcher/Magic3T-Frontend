@@ -7,10 +7,10 @@ import {
   useState,
 } from 'react'
 import { io } from 'socket.io-client'
-import { useGame } from './GameContext'
-import { useLiveActivity } from './LiveActivityContext'
+import { useGame } from './game.context.tsx'
+import { useLiveActivity } from './live-activity.context.tsx'
 import { IoSearch } from 'react-icons/io5'
-import { useGuardedAuth } from './GuardedAuthContext'
+import { useGuardedAuth } from './guarded-auth.context.tsx'
 import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
 import { QueueSocket } from '@/types/QueueSocket.ts'
 

@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/react'
 import { Link, useNavigate } from 'react-router-dom'
 import LogoutModal from '@/components/modals/LogoutModal'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/contexts/auth.context.tsx'
 import SecretCodeModal from '@/components/modals/SecretCodeModal'
 
 export default function ProfileMenu() {

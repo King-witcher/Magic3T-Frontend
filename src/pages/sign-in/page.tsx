@@ -1,4 +1,4 @@
-import { AuthState, useAuth } from '@/contexts/AuthContext'
+import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { auth } from '@/services/firebase'
 import { isValidEmail } from '@/utils/isValidEmail'

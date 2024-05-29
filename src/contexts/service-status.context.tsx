@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useLiveActivity } from './LiveActivityContext'
+import { useLiveActivity } from './live-activity.context.tsx'
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
 
 export enum ServerStatus {

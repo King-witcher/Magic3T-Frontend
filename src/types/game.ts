@@ -14,5 +14,5 @@ export type GameStateReport = {
   status: GameStatus
   playerTimeLeft: number
   oponentTimeLeft: number
-  turn: boolean
+  turn: 'player' | 'oponent' | null
 }

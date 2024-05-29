@@ -1,4 +1,4 @@
-import { LiveActivity } from '@/contexts/LiveActivityContext'
+import { LiveActivity } from '@/contexts/live-activity.context.tsx'
 import {
   Flex,
   Tooltip,

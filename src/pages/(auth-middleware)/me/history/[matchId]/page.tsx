@@ -3,7 +3,7 @@ import { useMeContext } from '../../layout'
 import MatchViewer from '@/components/MatchViewer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { models } from '@/models'
-import { useGuardedAuth } from '@/contexts/GuardedAuthContext'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 
 export default function MeMatchPage() {
   const { user } = useGuardedAuth()

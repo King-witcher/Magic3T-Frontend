@@ -1,4 +1,4 @@
-import { useGame } from '@/contexts/GameContext.tsx'
+import { useGame } from '@/contexts/game.context.tsx'
 import {
   ChangeEvent,
   FormEvent,

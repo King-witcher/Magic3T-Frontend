@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  documentId,
   limit,
   or,
   orderBy,
@@ -20,7 +21,7 @@ async function listByPlayerId(uid: string): Promise<Match[]> {
   const q = query(
     col,
     or(where('black.uid', '==', uid), where('white.uid', '==', uid)),
-    orderBy('timestamp', 'desc'),
+    orderBy(documentId()),
     limit(20),
   )
   const snap = await getDocs(q)

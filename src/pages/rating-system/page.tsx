@@ -1,4 +1,4 @@
-import { useConfig } from '@/contexts/ConfigContext'
+import { useConfig } from '@/contexts/config.context.tsx'
 import { RatingColorSchemes } from '@/hooks/useRanks'
 import { tiers } from '@/utils/ranks'
 import {
