@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import { FormSubmitHandler } from 'react-hook-form'
 
 export function useChatHandler() {
   const { messages, sendMessage } = useGame()

@@ -31,7 +31,7 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
   return (
     <Modal isCentered {...props}>
       <ModalOverlay />
-      <ModalContent as={'form'} onSubmit={handleSubmit}>
+      <ModalContent as="form" onSubmit={handleSubmit}>
         <ModalHeader>Códigos secretos</ModalHeader>
         <ModalBody>
           <Stack>

@@ -8,7 +8,7 @@ export interface HistoryMatchPlayer {
   gain: number
 }
 
-export enum SidesEnum {
+export enum MatchSide {
   White = 0,
   Black = 1,
 }
@@ -29,7 +29,7 @@ export enum HistoryMatchEventsEnum {
 
 type BaseMatchEvent = {
   event: HistoryMatchEventsEnum
-  side: SidesEnum
+  side: MatchSide
   time: number
 }
 
@@ -53,11 +53,11 @@ export type HistoryMatchEvent = BaseMatchEvent &
   )
 
 /** Represents a match registry in the History. */
-export interface Match extends WithId {
+export interface MatchModel extends WithId {
   white: HistoryMatchPlayer
   black: HistoryMatchPlayer
   events: HistoryMatchEvent[]
-  winner: SidesEnum | null
+  winner: MatchSide | null
   gameMode: GameMode
   timestamp: Date
 }

@@ -1,4 +1,4 @@
-import ProfileView from '@/components/ProfileView'
+import { ProfileView } from '@/components'
 import { useMeContext } from './layout'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 

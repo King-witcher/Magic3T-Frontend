@@ -66,7 +66,7 @@ export default function RatingSystemPage() {
                 <Image
                   w="32px"
                   h="32px"
-                  src={'https://quake-stats.bethesda.net/ranks/Zero_01.png'}
+                  src="https://quake-stats.bethesda.net/ranks/Zero_01.png"
                 />
                 <Text>Unranked</Text>
               </Flex>
@@ -132,7 +132,7 @@ export default function RatingSystemPage() {
                 <Image
                   w="32px"
                   h="32px"
-                  src={'https://quake-stats.bethesda.net/ranks/Elite_01.png'}
+                  src="https://quake-stats.bethesda.net/ranks/Elite_01.png"
                 />
                 <Text>Elite</Text>
               </Flex>

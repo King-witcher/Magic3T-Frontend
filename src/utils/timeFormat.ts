@@ -29,8 +29,3 @@ export function formatMinutes(timestamp: number) {
   // Cria a string formatada
   return `${hours}:${mins.toString().padStart(2, '0')}`
 }
-
-// Função auxiliar para adicionar zero à esquerda se necessário
-function adicionarZero(numero: number) {
-  return numero < 10 ? '0' + numero : numero
-}

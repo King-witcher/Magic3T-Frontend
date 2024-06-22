@@ -139,7 +139,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                   <Image src={rinfo?.thumbnail} w="32px" />
 
                   <Text fontWeight={600} fontSize="16px">
-                    {<SmoothNumber value={rinfo!.rating} />}
+                    <SmoothNumber value={rinfo!.rating} />
                     {!rinfo!.reliable && '?'}
                     {rinfo!.precise && '!'}
                   </Text>

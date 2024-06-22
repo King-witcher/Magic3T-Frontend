@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useUserPageContext } from '../../layout'
-import MatchViewer from '@/components/MatchViewer'
 import { useParams } from 'react-router-dom'
+import { MatchTemplate } from '@/components/match-template'
 
 export default function UserMatchPage() {
   const {
@@ -18,13 +18,13 @@ export default function UserMatchPage() {
     if (!matches && !loading) load()
   }, [matches, load])
 
-  if (!user) return <></>
+  if (!user) return null
 
   if (loading || !matches) return 'loading'
 
   for (const match of matches) {
     if (match._id === matchId) {
-      return <MatchViewer match={match} referenceUid={user._id} />
+      return <MatchTemplate match={match} viewAs={user._id} />
     }
   }
 

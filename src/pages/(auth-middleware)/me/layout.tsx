@@ -1,13 +1,13 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
-import { Match } from '@/models/matches/Match'
+import { MatchModel } from '@/models/matches/Match'
 import { UserData } from '@/models/users/User'
 import { createContext, useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 
 interface MeContextData {
-  lazyMatchLoader: LazyLoadData<Match[]>
+  lazyMatchLoader: LazyLoadData<MatchModel[]>
   lazyStandingsLoader: LazyLoadData<UserData[]>
 }
 

@@ -13,7 +13,6 @@ interface Props {
   onSelect?(choice: Choice): void
 }
 
-const allChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 let initialAllChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const cheatAllChoices: Choice[] = [2, 9, 4, 7, 5, 3, 6, 1, 8]
 let initialPugDance = false

@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
 import { useMeContext } from '../../layout'
-import MatchViewer from '@/components/MatchViewer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { models } from '@/models'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
+import { MatchTemplate } from '@/components/match-template'
 
 export default function MeMatchPage() {
   const { user } = useGuardedAuth()
@@ -32,7 +32,7 @@ export default function MeMatchPage() {
 
   for (const match of matches) {
     if (match._id === matchId) {
-      return <MatchViewer match={match} referenceUid={user._id} />
+      return <MatchTemplate match={match} viewAs={user._id} />
     }
   }
 

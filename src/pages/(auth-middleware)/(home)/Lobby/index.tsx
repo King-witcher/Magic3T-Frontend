@@ -1,5 +1,8 @@
 import { useQueue } from '@/contexts/queue.context.tsx'
-import { ServerStatus, useServiceStatus } from '@/contexts/service-status.context.tsx'
+import {
+  ServerStatus,
+  useServiceStatus,
+} from '@/contexts/service-status.context.tsx'
 import {
   Center,
   Divider,
@@ -13,10 +16,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import ProfileComponent from '@/components/ProfileComponent'
 import { Link } from 'react-router-dom'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { GameMode } from '@/types/queue.ts'
+import { ProfileComponent } from '@/components'
 
 export default function Lobby() {
   const { enqueue, dequeue, queueModes, queueUserCount } = useQueue()
@@ -30,7 +33,7 @@ export default function Lobby() {
           <ProfileComponent user={user} />
         </Link>
       </Center>
-      <Divider orientation="vertical" hideBelow={'sm'} />
+      <Divider orientation="vertical" hideBelow="sm" />
       <VStack flex="1">
         <Heading fontFamily="nunito variable">Jogar contra</Heading>
 

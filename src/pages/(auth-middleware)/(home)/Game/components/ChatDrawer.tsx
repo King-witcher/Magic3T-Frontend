@@ -94,7 +94,7 @@ export default function ChatDrawer(props: Props) {
             rounded="0"
             value={currentMessage}
             onChange={handleChangeMessageField}
-            placeholder={'Escreva uma mensagem'}
+            placeholder="Escreva uma mensagem"
             maxLength={1024}
           />
         </Box>

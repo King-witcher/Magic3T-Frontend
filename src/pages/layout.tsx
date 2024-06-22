@@ -1,43 +1,13 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar'
 import Providers from './providers'
-import Sticky from '@/components/Sticky'
+import { RootLayout } from '@/components/root-layout/root-layout'
 
 export default function Layout() {
   return (
     <Providers>
-      <Stack alignItems="center" h="100dvh" gap="0">
-        <Sticky>
-          <Navbar />
-        </Sticky>
-        <Box flex="1" boxSizing="border-box" padding="10px" w="100%" gap="10px">
-          <Box
-            pos="relative"
-            rounded="10px"
-            h="100%"
-            bg="gray.200"
-            p="10px"
-            overflow="hidden"
-          >
-            <Outlet />
-            <Stack
-              position="absolute"
-              bottom="8px"
-              right="8px"
-              gap="0"
-              alignItems="flex-end"
-            >
-              <Text fontSize="11px" color="blackAlpha.100">
-                Powered by Giuseppe Lanna
-              </Text>
-              <Text fontSize="11px" color="blackAlpha.200">
-                Motivated by you
-              </Text>
-            </Stack>
-          </Box>
-        </Box>
-      </Stack>
+      <RootLayout>
+        <Outlet />
+      </RootLayout>
     </Providers>
   )
 }

@@ -9,20 +9,20 @@ import {
   where,
 } from 'firebase/firestore'
 import { getConverter } from '../getConverter'
-import { Match } from './Match'
+import { MatchModel } from './Match'
 import { NotFoundError } from '../errors/NotFoundError'
 import { firestore, getDoc, getDocs } from '@/services/firestore'
 
-const converter = getConverter<Match>()
+const converter = getConverter<MatchModel>()
 
 const col = collection(firestore, 'matches').withConverter(converter)
 
-async function listByPlayerId(uid: string): Promise<Match[]> {
+async function listByPlayerId(uid: string): Promise<MatchModel[]> {
   const q = query(
     col,
     or(where('black.uid', '==', uid), where('white.uid', '==', uid)),
     orderBy(documentId()),
-    limit(20),
+    limit(15),
   )
   const snap = await getDocs(q)
 

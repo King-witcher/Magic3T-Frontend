@@ -22,7 +22,7 @@ interface FormData {
 }
 
 export default function RegisterPage() {
-  const { authState, signInGoogle, signInEmail, registerEmail } = useAuth()
+  const { authState, signInGoogle, registerEmail } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [waiting, setWaiting] = useState(false)
   const params = useQueryParams()

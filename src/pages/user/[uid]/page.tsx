@@ -1,4 +1,4 @@
-import ProfileView from '@/components/ProfileView'
+import { ProfileView } from '@/components'
 import { useUserPageContext } from './layout'
 import { useParams } from 'react-router-dom'
 
