@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 export function useLocalStorage<T>(
   key: string,
-  initialValue: T,
+  initialValue: T
 ): [value: T, setValue: (value: T) => void] {
   const [value, setValue] = useState<T>(() => {
     const data = localStorage.getItem(`magic3t.${key}`)

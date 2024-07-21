@@ -1,5 +1,5 @@
-import { Socket } from 'socket.io-client'
-import { QueueModesType, QueueUserCount } from '@/types/queue.ts'
+import type { QueueModesType, QueueUserCount } from '@/types/queue.ts'
+import type { Socket } from 'socket.io-client'
 
 interface ListenEventsMap {
   matchFound(data: { matchId: string }): void

@@ -1,13 +1,13 @@
+import type { WithId } from '@/types/withId.ts'
 import {
-  DocumentData,
-  FirestoreDataConverter,
-  QueryDocumentSnapshot,
+  type DocumentData,
+  type FirestoreDataConverter,
+  type QueryDocumentSnapshot,
   Timestamp,
 } from 'firebase/firestore'
-import { Firestorify } from './Firestorify'
-import { WithId } from '@/types/withId.ts'
+import type { Firestorify } from './Firestorify'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function convert(data: Record<string, any>) {
   for (const [key, value] of Object.entries(data)) {
     if (value instanceof Timestamp) {

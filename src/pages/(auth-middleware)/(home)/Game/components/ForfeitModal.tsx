@@ -8,7 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ModalProps,
+  type ModalProps,
 } from '@chakra-ui/react'
 
 export default function ForfeitModal(props: Omit<ModalProps, 'children'>) {

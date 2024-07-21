@@ -1,6 +1,6 @@
 import { GameProvider } from '@/contexts/game.context.tsx'
 import { QueueProvider } from '@/contexts/queue.context.tsx'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface Props {
   children: ReactNode

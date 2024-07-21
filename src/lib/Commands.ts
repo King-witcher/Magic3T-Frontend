@@ -5,5 +5,5 @@ export function setCommand(command: string, func: () => void) {
 }
 
 export function runCommand(command: string) {
-  cmdlist[command] && cmdlist[command]()
+  cmdlist[command]?.()
 }

@@ -1,3 +1,4 @@
+import { firestore, getDoc, getDocs } from '@/services/firestore'
 import {
   collection,
   doc,
@@ -6,10 +7,9 @@ import {
   orderBy,
   query,
 } from 'firebase/firestore'
-import { getConverter } from '../getConverter'
-import { UserData } from './User'
 import { NotFoundError } from '../errors/NotFoundError'
-import { firestore, getDoc, getDocs } from '@/services/firestore'
+import { getConverter } from '../getConverter'
+import type { UserData } from './User'
 
 const converter = getConverter<UserData>()
 
@@ -32,7 +32,7 @@ async function getStandings(): Promise<UserData[]> {
   import.meta.env.DEV &&
     console.info(
       `%cFirestore: Get ${snap.docs.length} users.`,
-      'color: #FFCA28',
+      'color: #FFCA28'
     )
 
   return snap.docs.map((doc) => doc.data())
@@ -46,7 +46,7 @@ function subscribe(uid: string, callback: (data: UserData) => void) {
         console.info('%cFirestore: Snap user', 'color: #FFCA28')
       const userData = snap.data()
       if (userData) callback(userData)
-    },
+    }
   )
 }
 

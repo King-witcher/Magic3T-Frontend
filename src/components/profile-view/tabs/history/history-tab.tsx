@@ -1,7 +1,7 @@
-import { Center, chakra, Stack, keyframes } from '@chakra-ui/react'
-import { HistoryRow } from './history-row'
-import { MatchModel, MatchSide } from '@/models/matches/Match'
+import { type MatchModel, MatchSide } from '@/models/matches/Match'
+import { Center, Stack, chakra, keyframes } from '@chakra-ui/react'
 import { useState } from 'react'
+import { HistoryRow } from './history-row'
 
 interface Props {
   matches: MatchModel[]

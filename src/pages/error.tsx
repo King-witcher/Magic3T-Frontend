@@ -2,7 +2,7 @@ import { Flex, Link, Text } from '@chakra-ui/react'
 import { BiErrorAlt } from 'react-icons/bi'
 import { Link as RouterDomLink } from 'react-router-dom'
 
-export default function Error() {
+export function ErrorPage() {
   return (
     <Flex h="full" align="center" justify="center" gap="10px" flexDir="column">
       <BiErrorAlt size="240px" />

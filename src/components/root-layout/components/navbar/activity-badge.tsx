@@ -1,10 +1,10 @@
-import { LiveActivity } from '@/contexts/live-activity.context.tsx'
+import type { LiveActivity } from '@/contexts/live-activity.context.tsx'
 import {
-  Tooltip,
-  Text,
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { BadgeContainer } from './badge-container'

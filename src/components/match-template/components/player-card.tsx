@@ -1,15 +1,15 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
-import { HistoryMatchPlayer } from '@/models/matches/Match'
+import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { getUserQueryOptions } from '@/query-helpers'
 import {
   Avatar,
   Badge,
   Flex,
+  Image,
   LinkBox,
   LinkOverlay,
   Text,
-  Image,
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'

@@ -1,8 +1,8 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
-import { LazyLoadData, useLazy } from '@/hooks/useLazy'
+import { type LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
-import { MatchModel } from '@/models/matches/Match'
-import { UserData } from '@/models/users/User'
+import type { MatchModel } from '@/models/matches/Match'
+import type { UserData } from '@/models/users/User'
 import { createContext, useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 

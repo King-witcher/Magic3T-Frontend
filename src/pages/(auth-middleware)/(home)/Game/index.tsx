@@ -1,11 +1,11 @@
-import { VStack, Text, Center, Box, Flex } from '@chakra-ui/react'
-import { useEffect, useRef } from 'react'
-import { GameStatus } from '@/types/game.ts'
+import { ChoiceTable } from '@/components'
 import { useGame } from '@/contexts/game.context.tsx'
+import { GameStatus } from '@/types/game.ts'
+import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useRef } from 'react'
+import ChatBox from './components/ChatBox'
 import PlayerCard from './components/PlayerCard'
 import { TimeCounter } from './components/TimeCounter'
-import ChatBox from './components/ChatBox'
-import ChoiceTable from '@/components/ChoiceTable'
 
 export default function GamePage() {
   const {

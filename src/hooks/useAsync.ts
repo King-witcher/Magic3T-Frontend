@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useState } from 'react'
+import { type DependencyList, useEffect, useState } from 'react'
 
 export type Loader<T> =
   | [data: T, loading: false]
@@ -6,7 +6,7 @@ export type Loader<T> =
 
 export function useAsync<T>(
   loader: () => Promise<T>,
-  deps: DependencyList = [],
+  deps: DependencyList = []
 ): Loader<T> {
   const [data, setData] = useState<T | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -20,5 +20,5 @@ export function useAsync<T>(
   }, deps)
 
   if (data) return [data, false]
-  else return [null, isLoading]
+  return [null, isLoading]
 }

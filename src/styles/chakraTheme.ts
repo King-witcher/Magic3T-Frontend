@@ -1,14 +1,14 @@
 import { extendTheme, keyframes } from '@chakra-ui/react'
+import { buttonTheme } from './button'
+import { inputTheme } from './input'
+import { menuTheme } from './menu'
 import { modalTheme } from './modal'
 import { popoverTheme } from './popover'
-import { tooltipTheme } from './tooltip'
-import { buttonTheme } from './button'
-import { menuTheme } from './menu'
-import { inputTheme } from './input'
 import { textareaTheme } from './textarea'
+import { tooltipTheme } from './tooltip'
 import '@fontsource-variable/nunito'
-import { tabsTheme } from './tabs'
 import { headingTheme } from './heading'
+import { tabsTheme } from './tabs'
 
 const scrollbarAnimation = keyframes`
   from {

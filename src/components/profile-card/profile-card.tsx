@@ -1,7 +1,7 @@
 import { useConfig } from '@/contexts/config.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
-import { UserData } from '@/models/users/User'
-import { Avatar, Badge, Flex, VStack, Text, Image, Box } from '@chakra-ui/react'
+import type { UserData } from '@/models/users/User'
+import { Avatar, Badge, Box, Flex, Image, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 interface Props {
@@ -76,7 +76,7 @@ export function ProfileComponent({ user }: Props) {
           pos: 'absolute',
         }}
         sx={{
-          '--bg': rinfo ? 'colors.' + rinfo.colorScheme.lighter : 'white',
+          '--bg': rinfo ? `colors.${rinfo.colorScheme.lighter}` : 'white',
           '& img': {
             rounded: '14px',
             bg: 'linear-gradient(white, var(--bg))',

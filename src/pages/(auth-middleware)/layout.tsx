@@ -1,6 +1,6 @@
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { GuardedAuthProvider } from '@/contexts/guarded-auth.context.tsx'
-import { Center, Spinner, VStack, Text } from '@chakra-ui/react'
+import { Center, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import GuardedProviders from './guarded-providers.tsx'

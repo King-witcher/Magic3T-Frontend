@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
-import { useUserPageContext } from '../../layout'
-import { useParams } from 'react-router-dom'
 import { MatchTemplate } from '@/components/match-template'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useUserPageContext } from '../../layout'
 
 export default function UserMatchPage() {
   const {

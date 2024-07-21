@@ -1,7 +1,7 @@
 import { useGame } from '@/contexts/game.context.tsx'
 import {
-  ChangeEvent,
-  FormEvent,
+  type ChangeEvent,
+  type FormEvent,
   useCallback,
   useEffect,
   useRef,

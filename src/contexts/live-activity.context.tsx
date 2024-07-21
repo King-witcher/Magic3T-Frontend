@@ -1,5 +1,5 @@
 import {
-  ReactNode,
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const LiveActivityContext = createContext<LiveActivityData>(
-  {} as LiveActivityData,
+  {} as LiveActivityData
 )
 
 export function LiveActivityProvider({ children }: Props) {
@@ -45,7 +45,7 @@ export function LiveActivityProvider({ children }: Props) {
         })
       }
     },
-    [setActivities],
+    [setActivities]
   )
 
   return (

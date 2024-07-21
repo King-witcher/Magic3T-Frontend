@@ -1,17 +1,17 @@
+import { useChatHandler } from '@/pages/(auth-middleware)/(home)/game/hooks/useChatHandler'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
   Box,
   Drawer,
+  DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
-  DrawerProps,
+  type DrawerProps,
   Input,
   Stack,
-  VStack,
   Text,
-  DrawerCloseButton,
+  VStack,
 } from '@chakra-ui/react'
-import { useChatHandler } from '@/pages/(auth-middleware)/(home)/Game/hooks/useChatHandler.ts'
 
 interface Props extends Omit<DrawerProps, 'children'> {}
 

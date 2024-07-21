@@ -1,13 +1,17 @@
+import SmoothNumber from '@/components/SmoothNumber'
+import { useGame } from '@/contexts/game.context.tsx'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
+import { useRankInfo } from '@/hooks/useRanks'
+import { GameStatus } from '@/types/game.ts'
 import {
-  Flex,
-  Text,
-  Center,
-  Stack,
-  Image,
   Badge,
+  Center,
+  Flex,
+  Image,
+  Stack,
+  Text,
   keyframes,
 } from '@chakra-ui/react'
-import { useGame } from '@/contexts/game.context.tsx'
 import {
   Menu,
   MenuButton,
@@ -15,15 +19,11 @@ import {
   MenuList,
   useDisclosure,
 } from '@chakra-ui/react'
-import { RefObject } from 'react'
-import ForfeitModal from './ForfeitModal'
-import { GameStatus } from '@/types/game.ts'
 import { Avatar } from '@chakra-ui/react'
-import ChatDrawer from './ChatDrawer'
+import type { RefObject } from 'react'
 import { Link } from 'react-router-dom'
-import { useRankInfo } from '@/hooks/useRanks'
-import SmoothNumber from '@/components/SmoothNumber'
-import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
+import ChatDrawer from './ChatDrawer'
+import ForfeitModal from './ForfeitModal'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -70,7 +70,7 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
   const rinfo = profile && getRankInfo(profile.glicko)
 
   const ratingVariation =
-    ratingsVariation && ratingsVariation[currentPlayer ? 'player' : 'oponent']
+    ratingsVariation?.[currentPlayer ? 'player' : 'oponent']
 
   const integerVariation =
     ratingVariation && Math.round(Math.abs(ratingVariation))
@@ -152,8 +152,8 @@ export default function PlayerCard({ player, chatInputRef }: Props) {
                         ratingVariation < 0
                           ? 'red.500'
                           : ratingVariation > 0
-                          ? 'green.500'
-                          : 'gray.500'
+                            ? 'green.500'
+                            : 'gray.500'
                       }
                     >
                       {ratingVariation < 0 ? '-' : '+'}

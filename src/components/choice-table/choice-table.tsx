@@ -1,10 +1,10 @@
-import { Choice } from '@/types/game.ts'
-import { Grid, VStack, Image, Text } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import ChoiceComponent from '@/components/ChoiceComponent'
-import { getTriple } from '@/utils/getTriple'
-import { setCommand } from '@/lib/Commands'
 import PugDanceGif from '@/assets/pug-dance.gif'
+import ChoiceComponent from '@/components/ChoiceComponent'
+import { setCommand } from '@/lib/Commands'
+import type { Choice } from '@/types/game.ts'
+import { getTriple } from '@/utils/getTriple'
+import { Grid, Image, Text, VStack } from '@chakra-ui/react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface Props {
   redMoves: Choice[]
@@ -22,7 +22,7 @@ function randomizeCheatTable() {
   rotate(Math.random() * 4)
 
   function rotate(amount: number) {
-    for (; amount >= 1; amount--) {
+    for (let count = amount; count >= 1; count--) {
       let memo = cheatAllChoices[0]
       cheatAllChoices[0] = cheatAllChoices[6]
       cheatAllChoices[6] = cheatAllChoices[8]
@@ -64,12 +64,7 @@ function initialSetPugDanceCheat() {
 setCommand('3tmode', initialSetPugDanceCheat)
 setCommand('ttt', initialTicTacToeCheat)
 
-export default function ChoiceTable({
-  redMoves,
-  blueMoves,
-  state,
-  onSelect,
-}: Props) {
+export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
   const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
   const [pugDance, setPugDance] = useState(initialPugDance)
 
@@ -147,12 +142,12 @@ export default function ChoiceTable({
               blueChoice
                 ? 'blueSelected'
                 : redChoice
-                ? 'oponentSelected'
-                : state === 'selectable'
-                ? 'selectable'
-                : state === 'disabled'
-                ? 'disabled'
-                : 'normal'
+                  ? 'oponentSelected'
+                  : state === 'selectable'
+                    ? 'selectable'
+                    : state === 'disabled'
+                      ? 'disabled'
+                      : 'normal'
             }
             onClick={available && onSelect ? () => onSelect(number) : undefined}
             highlight={triple?.includes(number)}

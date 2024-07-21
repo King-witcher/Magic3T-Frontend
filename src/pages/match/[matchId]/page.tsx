@@ -9,7 +9,7 @@ export default function MatchPage() {
 
   const matchQuery = useQuery({
     queryKey: ['match', matchId],
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     queryFn: getMatch,
   })
 

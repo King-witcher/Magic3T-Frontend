@@ -1,5 +1,10 @@
-import { Choice } from '@/types/game.ts'
-import { ChakraProps, Flex, FlexProps, keyframes } from '@chakra-ui/react'
+import type { Choice } from '@/types/game.ts'
+import {
+  type ChakraProps,
+  Flex,
+  type FlexProps,
+  keyframes,
+} from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 export type ChoiceStyle =

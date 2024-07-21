@@ -1,8 +1,8 @@
-import { Loader, useAsync } from '@/hooks/useAsync'
-import { LazyLoadData, useLazy } from '@/hooks/useLazy'
+import { type Loader, useAsync } from '@/hooks/useAsync'
+import { type LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
-import { MatchModel } from '@/models/matches/Match'
-import { UserData } from '@/models/users/User'
+import type { MatchModel } from '@/models/matches/Match'
+import type { UserData } from '@/models/users/User'
 import { createContext, useContext } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ interface UserPageContextData {
 }
 
 const UserPageContext = createContext<UserPageContextData>(
-  {} as UserPageContextData,
+  {} as UserPageContextData
 )
 
 export default function UserPageLayout() {

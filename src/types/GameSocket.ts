@@ -1,5 +1,5 @@
-import { Socket } from 'socket.io-client'
-import { Choice, GameStateReport } from '@/types/game.ts'
+import type { Choice, GameStateReport } from '@/types/game.ts'
+import type { Socket } from 'socket.io-client'
 
 export enum GameListenedEvent {
   OpponentUid = 'opponent-uid',

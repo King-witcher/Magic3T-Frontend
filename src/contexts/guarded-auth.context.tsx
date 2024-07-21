@@ -1,5 +1,5 @@
-import { UserData } from '@/models/users/User'
-import { ReactNode, createContext, useContext } from 'react'
+import type { UserData } from '@/models/users/User'
+import { type ReactNode, createContext, useContext } from 'react'
 import { AuthState } from './auth.context.tsx'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in

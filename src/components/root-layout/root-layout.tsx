@@ -1,5 +1,5 @@
 import { Flex, Stack } from '@chakra-ui/react'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Credits, LayoutPanel, Navbar } from './components'
 
 interface Props {

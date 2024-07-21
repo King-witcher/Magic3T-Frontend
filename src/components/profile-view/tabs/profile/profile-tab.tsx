@@ -1,5 +1,5 @@
 import { ProfileComponent } from '@/components'
-import { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/User'
 import { Center } from '@chakra-ui/react'
 
 interface Props {

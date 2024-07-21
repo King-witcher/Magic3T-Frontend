@@ -1,7 +1,7 @@
 import { useConfig } from '@/contexts/config.context.tsx'
-import { Glicko } from '@/types/glicko.ts'
-import { Division, Tier, tiers } from '@/utils/ranks'
-import { ThemeTypings } from '@chakra-ui/react'
+import type { Glicko } from '@/types/glicko.ts'
+import { type Division, type Tier, tiers } from '@/utils/ranks'
+import type { ThemeTypings } from '@chakra-ui/react'
 import { useCallback } from 'react'
 
 export type RatingColorScheme = {
@@ -82,7 +82,7 @@ export function useRankInfo() {
       const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
       return Math.min(candidate, initialRD)
     },
-    [deviationInflationTime],
+    [deviationInflationTime]
   )
 
   const getRankThumbnail = useCallback(
@@ -94,7 +94,7 @@ export function useRankInfo() {
 
       return getThumbnailByTierAndDivision(tierINdex, division)
     },
-    [initialRating, tierSize, initialTier],
+    [initialRating, tierSize, initialTier]
   )
 
   const getRankInfo = useCallback(
@@ -129,7 +129,7 @@ export function useRankInfo() {
             },
       }
     },
-    [initialTier, tierSize, initialRating, getRD],
+    [initialTier, tierSize, initialRating, getRD]
   )
 
   return {

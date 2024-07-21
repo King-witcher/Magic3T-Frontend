@@ -1,18 +1,18 @@
+import type { QueueSocket } from '@/types/QueueSocket.ts'
+import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
 import {
-  ReactNode,
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react'
+import { IoSearch } from 'react-icons/io5'
 import { io } from 'socket.io-client'
 import { useGame } from './game.context.tsx'
-import { useLiveActivity } from './live-activity.context.tsx'
-import { IoSearch } from 'react-icons/io5'
 import { useGuardedAuth } from './guarded-auth.context.tsx'
-import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
-import { QueueSocket } from '@/types/QueueSocket.ts'
+import { useLiveActivity } from './live-activity.context.tsx'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void
@@ -33,12 +33,12 @@ export function QueueProvider({ children }: QueueContextProps) {
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
   const [queueUserCount, setQueueUserCount] = useState<QueueUserCount>({
     casual: {
-      inGame: NaN,
+      inGame: Number.NaN,
       queue: 0,
     },
     connected: 0,
     ranked: {
-      inGame: NaN,
+      inGame: Number.NaN,
       queue: 0,
     },
   })
@@ -102,7 +102,7 @@ export function QueueProvider({ children }: QueueContextProps) {
 
       socket?.emit(mode)
     },
-    [socket, user, setQueueModes],
+    [socket, user, setQueueModes]
   )
 
   const dequeue = useCallback(
@@ -113,7 +113,7 @@ export function QueueProvider({ children }: QueueContextProps) {
         [mode]: false,
       }))
     },
-    [socket],
+    [socket]
   )
 
   useEffect(() => {

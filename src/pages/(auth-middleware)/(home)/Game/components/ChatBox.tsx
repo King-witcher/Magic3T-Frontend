@@ -1,15 +1,15 @@
+import { useChatHandler } from '@/pages/(auth-middleware)/(home)/game/hooks/useChatHandler'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
   Box,
   Center,
   Input,
   Stack,
-  StackProps,
-  VStack,
+  type StackProps,
   Text,
+  VStack,
 } from '@chakra-ui/react'
-import { RefObject } from 'react'
-import { useChatHandler } from '@/pages/(auth-middleware)/(home)/Game/hooks/useChatHandler.ts'
+import type { RefObject } from 'react'
 
 interface Props extends StackProps {
   inputRef: RefObject<HTMLInputElement>

@@ -1,4 +1,8 @@
-import { ChakraProps, defineStyle, defineStyleConfig } from '@chakra-ui/react'
+import {
+  type ChakraProps,
+  defineStyle,
+  defineStyleConfig,
+} from '@chakra-ui/react'
 
 const baseStyle = defineStyle<ChakraProps>({
   bgColor: 'white',

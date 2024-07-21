@@ -9,11 +9,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ModalProps,
+  type ModalProps,
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { FormEvent, useCallback, useState } from 'react'
+import { type FormEvent, useCallback, useState } from 'react'
 
 export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
   const [input, setInput] = useState('')
@@ -25,7 +25,7 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
       setInput('')
       props.onClose()
     },
-    [input],
+    [input]
   )
 
   return (

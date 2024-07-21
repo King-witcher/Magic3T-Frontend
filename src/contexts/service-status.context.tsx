@@ -1,19 +1,19 @@
 import axios from 'axios'
 import {
-  ReactNode,
+  type ReactNode,
   createContext,
   useContext,
   useEffect,
   useRef,
   useState,
 } from 'react'
-import { useLiveActivity } from './live-activity.context.tsx'
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
+import { useLiveActivity } from './live-activity.context.tsx'
 
 export enum ServerStatus {
-  Off,
-  Loading,
-  On,
+  Off = 0,
+  Loading = 1,
+  On = 2,
 }
 
 interface ServiceStatusData {
@@ -30,7 +30,7 @@ const ServiceStatusContext = createContext<ServiceStatusData>({
 
 export function ServiceStatusProvider({ children }: Props) {
   const [serverStatus, setServerStatus] = useState<ServerStatus>(
-    ServerStatus.Loading,
+    ServerStatus.Loading
   )
   const { push } = useLiveActivity()
   const timeoutRef = useRef<NodeJS.Timeout>()

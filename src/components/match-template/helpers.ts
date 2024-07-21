@@ -1,4 +1,4 @@
-import { MatchModel, MatchSide } from '@/models'
+import { type MatchModel, MatchSide } from '@/models'
 import { MatchResult } from '@/types'
 
 export function getSide(match: MatchModel, id: string) {

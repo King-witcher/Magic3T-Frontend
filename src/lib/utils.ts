@@ -16,7 +16,6 @@ export function formatTime(timeMs: number): string {
     return `${Math.floor(timeMins)}:${Math.floor(timeSecs)
       .toFixed()
       .padStart(2, '0')}`
-  } else {
-    return `${timeSecs.toFixed(1)}`
   }
+  return `${timeSecs.toFixed(1)}`
 }

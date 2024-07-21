@@ -1,8 +1,8 @@
-import { Flex, Stack, VStack } from '@chakra-ui/react'
-import { MatchModel, MatchSide } from '@/models/matches/Match'
+import { type MatchModel, MatchSide } from '@/models/matches/Match'
 import { MatchResult } from '@/types'
-import { getResult, getSide } from './helpers'
+import { Stack, VStack } from '@chakra-ui/react'
 import { Header, MovesView, PlayerCard } from './components'
+import { getResult, getSide } from './helpers'
 
 interface Props {
   match: MatchModel
@@ -38,14 +38,9 @@ export function MatchTemplate({ match, viewAs }: Props) {
           matchPlayer={match.black}
           highlight={viewerSide !== MatchSide.White ? 'red' : null}
         />
-        <Flex
-          gap={['8px 5px', '14px 8px']}
-          flexWrap="wrap"
-          w="full"
-          justifyContent="center"
-        >
-          <MovesView moves={match.events} />
-        </Flex>
+
+        <MovesView moves={match.events} />
+
         <PlayerCard
           matchPlayer={match.white}
           highlight={viewerSide !== MatchSide.Black ? 'blue' : null}

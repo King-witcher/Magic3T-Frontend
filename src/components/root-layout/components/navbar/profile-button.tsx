@@ -1,3 +1,7 @@
+import LogoutModal from '@/components/modals/LogoutModal'
+import SecretCodeModal from '@/components/modals/SecretCodeModal'
+import { useAuth } from '@/contexts/auth.context.tsx'
+import { useRankInfo } from '@/hooks/useRanks'
 import {
   Avatar,
   Menu,
@@ -8,12 +12,8 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Link, useNavigate } from 'react-router-dom'
-import LogoutModal from '@/components/modals/LogoutModal'
-import { useAuth } from '@/contexts/auth.context.tsx'
-import SecretCodeModal from '@/components/modals/SecretCodeModal'
 import { useMemo } from 'react'
-import { useRankInfo } from '@/hooks/useRanks'
+import { Link, useNavigate } from 'react-router-dom'
 
 export function ProfileButton() {
   const navigate = useNavigate()

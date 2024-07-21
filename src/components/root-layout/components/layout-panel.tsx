@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@chakra-ui/react'
-import { ReactNode } from 'react'
+import { Box, type BoxProps } from '@chakra-ui/react'
+import type { ReactNode } from 'react'
 
 interface Props extends BoxProps {
   overlay?: ReactNode

@@ -1,10 +1,10 @@
-import { DependencyList, useCallback, useEffect, useState } from 'react'
+import { type DependencyList, useCallback, useEffect, useState } from 'react'
 
 export type LazyLoadData<ReturnType> = [ReturnType | null, boolean, () => void]
 
 export function useLazy<ReturnType>(
   loadFunction: () => Promise<ReturnType>,
-  deps: DependencyList = [],
+  deps: DependencyList = []
 ): LazyLoadData<ReturnType> {
   const [loading, setLoading] = useState(false)
   const [resource, setResource] = useState<ReturnType | null>(null)

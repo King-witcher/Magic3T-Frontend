@@ -28,10 +28,9 @@ export class Timer {
     if (this.remainingAt) {
       const result = this.remainingMs + (this.remainingAt - Date.now())
       return result >= 0 ? result : 0
-    } else {
-      const result = this.remainingMs
-      return result >= 0 ? result : 0
     }
+    const result = this.remainingMs
+    return result >= 0 ? result : 0
   }
 
   reset(remainingMs: number) {

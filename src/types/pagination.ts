@@ -9,7 +9,7 @@ export type PaginatedResponse<DataType, CursorType = string> = {
  */
 export type PaginatedFetchFunction<DataType, CursorType = string> = (
   pageSize: number,
-  cursor: CursorType | null,
+  cursor: CursorType | null
 ) => Promise<PaginatedResponse<DataType, CursorType>>
 
 export type UsePaginatedReturnType<DataType> = {

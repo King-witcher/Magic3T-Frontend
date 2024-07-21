@@ -1,4 +1,4 @@
-import { MatchModel, MatchSide } from '@/models/matches/Match'
+import { type MatchModel, MatchSide } from '@/models/matches/Match'
 import { formatDate } from '@/utils/timeFormat'
 import { Flex, Stack, Text } from '@chakra-ui/react'
 import { getResult } from '../helpers'

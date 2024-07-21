@@ -1,4 +1,4 @@
-import { Choice } from '@/types/game.ts'
+import type { Choice } from '@/types/game.ts'
 import { Center } from '@chakra-ui/react'
 
 interface Props {

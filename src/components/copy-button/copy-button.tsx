@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons'
-import { IconProps, useClipboard } from '@chakra-ui/react'
+import { type IconProps, useClipboard } from '@chakra-ui/react'
 
 interface Props extends IconProps {
   value: string

@@ -53,7 +53,7 @@ export default function SignInPage() {
       }
       setWaiting(false)
     },
-    [],
+    []
   )
 
   const handleRecover = useCallback(async () => {

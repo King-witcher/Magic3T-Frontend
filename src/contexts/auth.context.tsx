@@ -1,29 +1,29 @@
+import { models } from '@/models'
+import type { UserData } from '@/models/users/User'
+import { auth, provider } from '@/services/firebase'
 import {
-  ReactNode,
+  type User,
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  getIdToken,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth'
+import type { Unsubscribe } from 'firebase/firestore'
+import {
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react'
-import {
-  User,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut as firebaseSignOut,
-  getIdToken,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from 'firebase/auth'
-import { auth, provider } from '@/services/firebase'
-import { models } from '@/models'
-import { UserData } from '@/models/users/User'
-import { Unsubscribe } from 'firebase/firestore'
 
 export enum AuthState {
-  NotSignedIn,
-  Loading,
-  SignedIn,
+  NotSignedIn = 0,
+  Loading = 1,
+  SignedIn = 2,
 }
 
 type AuthData = {
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: Props) {
       }
       return null
     },
-    [],
+    []
   )
 
   const registerEmail = useCallback(async (email: string, password: string) => {
@@ -102,7 +102,8 @@ export function AuthProvider({ children }: Props) {
   const getToken = useCallback(async () => {
     if (authData) {
       return await getIdToken(authData, true)
-    } else throw new Error('No user connected')
+    }
+    throw new Error('No user connected')
   }, [authData])
 
   const handleUserSnapshot = useCallback((user: UserData | null) => {
@@ -120,7 +121,7 @@ export function AuthProvider({ children }: Props) {
       if (authUser) {
         unsubscribe = models.users.subscribe(authUser.uid, handleUserSnapshot)
       } else {
-        unsubscribe && unsubscribe()
+        unsubscribe?.()
         setUser(null)
         setAuthState(AuthState.NotSignedIn)
       }

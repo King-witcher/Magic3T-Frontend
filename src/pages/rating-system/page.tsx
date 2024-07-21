@@ -6,8 +6,8 @@ import {
   Center,
   Divider,
   Flex,
-  Image,
   Heading,
+  Image,
   Stack,
   Table,
   Text,
@@ -116,12 +116,12 @@ export default function RatingSystemPage() {
                     </Flex>
                   ))}
                 </Stack>
-              ),
+              )
           )}
           <Stack
-            bg={RatingColorSchemes['Elite'].normal}
+            bg={RatingColorSchemes.Elite.normal}
             border="solid 1px"
-            borderColor={RatingColorSchemes['Elite'].darker}
+            borderColor={RatingColorSchemes.Elite.darker}
             fontSize="18px"
             rounded="5px"
             flexDir="column-reverse"
@@ -149,7 +149,7 @@ export default function RatingSystemPage() {
           outros rankings.
         </Text>
 
-        <Table rounded="10px" overflow="hidden"></Table>
+        <Table rounded="10px" overflow="hidden" />
 
         <Heading as="h3" fontSize="28px" mt="15px">
           Como sua pontuação evolui

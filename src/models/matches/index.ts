@@ -1,3 +1,4 @@
+import { firestore, getDoc, getDocs } from '@/services/firestore'
 import {
   collection,
   doc,
@@ -8,10 +9,9 @@ import {
   query,
   where,
 } from 'firebase/firestore'
-import { getConverter } from '../getConverter'
-import { MatchModel } from './Match'
 import { NotFoundError } from '../errors/NotFoundError'
-import { firestore, getDoc, getDocs } from '@/services/firestore'
+import { getConverter } from '../getConverter'
+import type { MatchModel } from './Match'
 
 const converter = getConverter<MatchModel>()
 
@@ -22,14 +22,14 @@ async function listByPlayerId(uid: string): Promise<MatchModel[]> {
     col,
     or(where('black.uid', '==', uid), where('white.uid', '==', uid)),
     orderBy(documentId()),
-    limit(15),
+    limit(15)
   )
   const snap = await getDocs(q)
 
   if (import.meta.env.DEV)
     console.info(
       `%cFirestore: Get ${snap.docs.length} matches`,
-      'color: #FFCA28',
+      'color: #FFCA28'
     )
 
   return snap.docs.map((doc) => doc.data())

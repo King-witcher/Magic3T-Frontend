@@ -6,7 +6,7 @@ export const Api = axios.create({
 })
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export module SessionRequests {
+export namespace SessionRequests {
   type validateSessionResponse = {
     authenticated: boolean
   }

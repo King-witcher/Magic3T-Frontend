@@ -1,4 +1,4 @@
-import { RefCallback, useCallback, useRef, useState } from 'react'
+import { type RefCallback, useCallback, useRef, useState } from 'react'
 
 export type UseInfiniteScrollReturnType = {
   lastElementRef: RefCallback<Element>
@@ -18,7 +18,7 @@ export type UseInfiniteScrollReturnType = {
  */
 export function useInfiniteScroll(
   loadFn: () => Promise<unknown>,
-  enabled: boolean,
+  enabled: boolean
 ): UseInfiniteScrollReturnType {
   const [isLoading, setIsLoading] = useState(false)
   const observerRef = useRef<IntersectionObserver>()
@@ -31,20 +31,20 @@ export function useInfiniteScroll(
       if (isLoading) return
       if (!enabled) return
 
-      const observer = (observerRef.current = new IntersectionObserver(
-        async (entries) => {
-          const entry = entries[0]
-          if (entry.isIntersecting) {
-            setIsLoading(true)
-            await loadFn()
-            setIsLoading(false)
-          }
-        },
-      ))
+      const observer = new IntersectionObserver(async (entries) => {
+        const entry = entries[0]
+        if (entry.isIntersecting) {
+          setIsLoading(true)
+          await loadFn()
+          setIsLoading(false)
+        }
+      })
+
+      observerRef.current = observer
 
       observer.observe(node)
     },
-    [loadFn, enabled, isLoading],
+    [loadFn, enabled, isLoading]
   )
 
   return { isLoading, lastElementRef }

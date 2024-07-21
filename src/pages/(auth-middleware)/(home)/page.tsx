@@ -1,6 +1,6 @@
 import { useGame } from '@/contexts/game.context.tsx'
-import Lobby from './Lobby'
-import Game from './Game'
+import Game from './game'
+import { Lobby } from './lobby/lobby'
 
 export default function Home() {
   const { isActive } = useGame()

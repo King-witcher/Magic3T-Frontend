@@ -1,8 +1,8 @@
-import { Collapse, Stack, StackProps } from '@chakra-ui/react'
-import { MatchModel, MatchSide } from '@/models/matches/Match'
+import type { MatchModel, MatchSide } from '@/models/matches/Match'
 import { MatchResult } from '@/types'
-import { MatchHeader } from './match-header'
+import { Collapse, Stack, type StackProps } from '@chakra-ui/react'
 import MatchBody from './match-body'
+import { MatchHeader } from './match-header'
 
 interface Props extends StackProps {
   match: MatchModel

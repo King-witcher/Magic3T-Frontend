@@ -1,4 +1,6 @@
-import { Choice } from '@/types/game.ts'
+import { ChoiceTable } from '@/components'
+import { type HistoryMatchEvent, MatchSide } from '@/models/matches/Match'
+import type { Choice } from '@/types/game.ts'
 import { Flex, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import {
@@ -7,8 +9,6 @@ import {
   FaForwardFast,
   FaForwardStep,
 } from 'react-icons/fa6'
-import ChoiceTable from '@/components/ChoiceTable'
-import { HistoryMatchEvent, MatchSide } from '@/models/matches/Match'
 import { ControlButton } from './control-button'
 
 interface Props {
@@ -45,7 +45,7 @@ export function MovesView({ moves }: Props) {
         return Math.max(0, Math.min(candidate, moves.length))
       })
     },
-    [setIndex, moves],
+    [setIndex, moves]
   )
 
   return (

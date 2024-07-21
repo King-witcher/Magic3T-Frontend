@@ -1,4 +1,4 @@
-import { Center, CenterProps } from '@chakra-ui/react'
+import { Center, type CenterProps } from '@chakra-ui/react'
 
 interface Props extends CenterProps {
   disabled?: boolean

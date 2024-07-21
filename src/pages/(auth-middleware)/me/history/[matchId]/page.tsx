@@ -1,9 +1,9 @@
-import { useCallback, useEffect } from 'react'
-import { useMeContext } from '../../layout'
-import { useNavigate, useParams } from 'react-router-dom'
-import { models } from '@/models'
-import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { MatchTemplate } from '@/components/match-template'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
+import { models } from '@/models'
+import { useCallback, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useMeContext } from '../../layout'
 
 export default function MeMatchPage() {
   const { user } = useGuardedAuth()

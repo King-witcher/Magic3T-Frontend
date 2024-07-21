@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
-import { LazyLoadData } from '@/hooks/useLazy'
-import { UserData } from '@/models/users/User'
+import type { LazyLoadData } from '@/hooks/useLazy'
+import type { MatchModel } from '@/models/matches/Match'
+import type { UserData } from '@/models/users/User'
 import {
   Tab,
   TabIndicator,
@@ -9,9 +9,9 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react'
-import { MatchModel } from '@/models/matches/Match'
-import { HistoryTab, ProfileTab, RankingTab } from './tabs'
+import { Link } from 'react-router-dom'
 import { LazyLoadingPage } from './components'
+import { HistoryTab, ProfileTab, RankingTab } from './tabs'
 
 interface Props {
   user: UserData

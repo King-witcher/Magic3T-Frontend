@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
-import { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/User'
 import {
   Badge,
   Box,
@@ -41,11 +41,11 @@ export function RankingTab({ standings }: Props) {
   const filtered =
     filter === 'valid'
       ? standings.filter(
-          (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation,
+          (user) => getRD(user.glicko) < ratingConfig.maxReliableDeviation
         )
       : filter === 'modified'
-      ? standings.filter((user) => getRD(user.glicko) < 350)
-      : standings
+        ? standings.filter((user) => getRD(user.glicko) < 350)
+        : standings
 
   return (
     <Stack gap="20px" p={{ base: '0', lg: '20px 0' }}>

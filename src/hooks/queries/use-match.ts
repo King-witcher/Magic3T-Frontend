@@ -7,6 +7,6 @@ export function useMatch(id: string) {
     queryFn: async () => {
       return await models.matches.getById(id)
     },
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
   })
 }

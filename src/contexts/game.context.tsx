@@ -1,8 +1,19 @@
 import { Timer } from '@/lib/Timer'
-import { Choice, GameStateReport, GameStatus } from '@/types/game.ts'
+import { models } from '@/models'
+import type { UserData } from '@/models/users/User'
+import { Api } from '@/services/api'
 import {
+  GameEmittedEvents,
+  GameListenedEvent,
+  type GameSocket,
+} from '@/types/GameSocket.ts'
+import { type Choice, type GameStateReport, GameStatus } from '@/types/game.ts'
+import { getTriple } from '@/utils/getTriple'
+import { useBreakpoint } from '@chakra-ui/react'
+import type { Unsubscribe } from 'firebase/auth'
+import {
+  type ReactNode,
   createContext,
-  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -10,22 +21,11 @@ import {
   useRef,
   useState,
 } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { IoChatbox, IoGameController } from 'react-icons/io5'
+import { type Socket, io } from 'socket.io-client'
 import { AuthState } from './auth.context.tsx'
-import { UserData } from '@/models/users/User'
-import { models } from '@/models'
-import { Unsubscribe } from 'firebase/auth'
-import { Api } from '@/services/api'
-import { getTriple } from '@/utils/getTriple'
 import { useGuardedAuth } from './guarded-auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { IoChatbox, IoGameController } from 'react-icons/io5'
-import { useBreakpoint } from '@chakra-ui/react'
-import {
-  GameEmittedEvents,
-  GameListenedEvent,
-  GameSocket,
-} from '@/types/GameSocket.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -143,7 +143,7 @@ export function GameProvider({ children }: Props) {
     (data: { player: number; opponent: number }) => {
       setRatingsVariation(data)
     },
-    [setRatingsVariation],
+    [setRatingsVariation]
   )
 
   const handleReceiveMessage = useCallback((message: string) => {
@@ -168,7 +168,7 @@ export function GameProvider({ children }: Props) {
   }, [])
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
-    console.warn('Socket disconnected because of', reason + '.')
+    console.warn('Socket disconnected because of', `${reason}.`)
     if (reason === 'transport error' && matchId) {
       connectGame(matchId)
       console.log('Attempting to reconnect')
@@ -224,7 +224,7 @@ export function GameProvider({ children }: Props) {
           socket.emit(GameEmittedEvents.GetState)
         })
     },
-    [getToken],
+    [getToken]
   )
 
   const sendMessage = useCallback((message: string) => {
@@ -260,7 +260,7 @@ export function GameProvider({ children }: Props) {
       setOpponentChoices([])
       setPlayerChoices([])
     },
-    [getGameSocket, resetStates],
+    [getGameSocket, resetStates]
   )
 
   function disconnect() {

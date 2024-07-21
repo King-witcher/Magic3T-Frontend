@@ -1,21 +1,21 @@
-import ReactDOM from 'react-dom/client'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Layout from './pages/layout'
-import NotFound from './pages/not-found'
-import TutorialPage from './pages/tutorial/page'
-import RatingSystemPage from './pages/rating-system/page'
-import UserPageLayout from './pages/user/[uid]/layout'
-import UserPage from './pages/user/[uid]/page'
-import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
-import MatchPage from './pages/match/[matchId]/page'
-import AuthMiddleware from './pages/(auth-middleware)/layout'
-import SignInPage from './pages/sign-in/page'
-import RegisterPage from './pages/register/page'
-import Home from './pages/(auth-middleware)/(home)/page'
+import MeMatchPage from '@/pages/(auth-middleware)/me/history/[matchId]/page.tsx'
 import MeLayout from '@/pages/(auth-middleware)/me/layout.tsx'
 import MePage from '@/pages/(auth-middleware)/me/page.tsx'
-import MeMatchPage from '@/pages/(auth-middleware)/me/history/[matchId]/page.tsx'
-import Error from './pages/error'
+import ReactDOM from 'react-dom/client'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Home from './pages/(auth-middleware)/(home)/page'
+import AuthMiddleware from './pages/(auth-middleware)/layout'
+import { ErrorPage } from './pages/error'
+import Layout from './pages/layout'
+import MatchPage from './pages/match/[matchId]/page'
+import NotFound from './pages/not-found'
+import RatingSystemPage from './pages/rating-system/page'
+import RegisterPage from './pages/register/page'
+import SignInPage from './pages/sign-in/page'
+import TutorialPage from './pages/tutorial/page'
+import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
+import UserPageLayout from './pages/user/[uid]/layout'
+import UserPage from './pages/user/[uid]/page'
 
 console.clear()
 
@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         element: <Layout />,
         children: [
           {
-            errorElement: <Error />,
+            errorElement: <ErrorPage />,
             children: [
               {
                 path: 'sign-in',
@@ -121,5 +121,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         ],
       },
     ])}
-  />,
+  />
 )

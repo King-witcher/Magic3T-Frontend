@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { ReactNode } from 'react'
-import { IconType } from 'react-icons'
+import type { ReactNode } from 'react'
+import type { IconType } from 'react-icons'
 
 interface Props {
   Icon: IconType

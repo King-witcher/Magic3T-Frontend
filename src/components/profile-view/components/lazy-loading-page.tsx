@@ -1,4 +1,4 @@
-import { LazyLoadData } from '@/hooks/useLazy'
+import type { LazyLoadData } from '@/hooks/useLazy'
 import { Center } from '@chakra-ui/react'
 import { useEffect } from 'react'
 

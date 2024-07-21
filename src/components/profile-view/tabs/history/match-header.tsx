@@ -1,4 +1,8 @@
-import { HistoryMatchEventsEnum, MatchModel, MatchSide } from '@/models'
+import {
+  HistoryMatchEventsEnum,
+  type MatchModel,
+  type MatchSide,
+} from '@/models'
 import { MatchResult } from '@/types'
 import { formatDate } from '@/utils/timeFormat'
 import { Center, Flex, Text } from '@chakra-ui/react'
@@ -58,10 +62,10 @@ export function MatchHeader({ match, referenceSide }: Props) {
         <Text fontSize={['10px', '16px']}>{formatDate(match.timestamp)}</Text>
       </Flex>
       <Flex gap="5px">
-        {match.events.map((event, index) => (
+        {match.events.map((event) => (
           <Center
             px="6px"
-            key={index}
+            key={`${event.event}-${event.choice}`}
             borderRadius="3px"
             minW="20px"
             h="20px"

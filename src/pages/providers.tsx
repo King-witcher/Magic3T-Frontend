@@ -5,7 +5,7 @@ import { ServiceStatusProvider } from '@/contexts/service-status.context.tsx'
 import { chakraTheme } from '@/styles/chakraTheme'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface Props {
   children: ReactNode

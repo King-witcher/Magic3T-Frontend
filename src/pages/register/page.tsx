@@ -3,12 +3,12 @@ import { useQueryParams } from '@/hooks/useQueryParams'
 import {
   Button,
   Center,
+  Flex,
   Heading,
   Input,
-  VStack,
-  Text,
-  Flex,
   Spinner,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -52,7 +52,7 @@ export default function RegisterPage() {
       if (error) setError(errorMap[error] || 'Erro desconhecido')
       setWaiting(false)
     },
-    [],
+    []
   )
 
   useEffect(() => {

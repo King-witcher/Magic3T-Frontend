@@ -1,6 +1,6 @@
 import { ProfileView } from '@/components'
-import { useUserPageContext } from './layout'
 import { useParams } from 'react-router-dom'
+import { useUserPageContext } from './layout'
 
 interface Props {
   index: 0 | 1 | 2

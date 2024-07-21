@@ -1,7 +1,7 @@
 import { useAsync } from '@/hooks/useAsync'
 import { models } from '@/models'
-import { RatingConfig } from '@/models/configs/RatingConfig'
-import { ReactNode, createContext, useContext } from 'react'
+import type { RatingConfig } from '@/models/configs/RatingConfig'
+import { type ReactNode, createContext, useContext } from 'react'
 
 // Config Context
 
