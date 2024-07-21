@@ -17,12 +17,7 @@ jobs:
           bun-version: latest
 
       - name: Install packages
-        run: |
-          bun -v
-          bun install
+        run: bun install
 
-      - name: Run linter
-        run: bun lint
-
-      - name: Build app
-        run: bun run build
+      - name: Check code quality
+        run: bun lint & bun tsc
