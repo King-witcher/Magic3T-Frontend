@@ -1,4 +1,4 @@
-import { useChatHandler } from '@/pages/(auth-middleware)/(home)/game/hooks/useChatHandler'
+import { useChatHandler } from '@/pages/(auth-middleware)/(home)/game2/hooks/useChatHandler'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
   Box,
