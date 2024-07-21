@@ -1,0 +1,25 @@
+name: Sync staging with main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-staging:
+    name: Sync staging with main
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "staging"
+
+      - name: Sync staging with main locally
+        run: |
+          git fetch origin main
+          git reset --hard FETCH_HEAD
+
+      - name: Force push new staging reference
+        run: git push --force

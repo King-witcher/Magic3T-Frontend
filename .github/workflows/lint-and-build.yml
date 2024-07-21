@@ -11,16 +11,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#     - name: Setup Node
-#       uses: actions/setup-node@v4
-#       with:
-#         node-version: '20'
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install packages
-        run: yarn
+        run: |
+          bun -v
+          bun install
 
       - name: Run linter
-        run: yarn lint
+        run: bun lint
 
       - name: Build app
-        run: yarn build
+        run: bun run build
