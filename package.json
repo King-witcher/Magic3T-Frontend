@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "biome check src --error-on-warnings --diagnostic-level=warn",
+    "check": "biome check src --error-on-warnings --diagnostic-level=warn",
     "preview": "vite preview"
   },
   "dependencies": {

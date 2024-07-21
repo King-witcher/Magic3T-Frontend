@@ -7,7 +7,7 @@ import ChatBox from './components/ChatBox'
 import PlayerCard from './components/PlayerCard'
 import { TimeCounter } from './components/TimeCounter'
 
-export default function GamePage() {
+export function GamePage() {
   const {
     isActive,
     turn,

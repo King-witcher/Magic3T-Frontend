@@ -6,8 +6,8 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noDefaultExport": "off",
-        "noUselessElse": "warn",
+        "noDefaultExport": "info",
+        "noUselessElse": "error",
         "noNonNullAssertion": "off"
       },
       "correctness": {
