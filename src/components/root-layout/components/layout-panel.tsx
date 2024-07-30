@@ -8,6 +8,7 @@ interface Props extends BoxProps {
 export function LayoutPanel({ children, overlay, ...props }: Props) {
   return (
     <Box
+      className="layout-panel"
       pos="relative"
       overflow="hidden"
       h="full"
@@ -16,7 +17,7 @@ export function LayoutPanel({ children, overlay, ...props }: Props) {
       shadow="0 0 10px 0 #00000040"
       {...props}
     >
-      <Box pos="absolute" inset={0} overflow="auto">
+      <Box pos="absolute" inset={0} overflow="hidden scroll">
         {children}
       </Box>
       {overlay}

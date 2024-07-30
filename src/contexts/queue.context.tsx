@@ -95,6 +95,7 @@ export function QueueProvider({ children }: QueueContextProps) {
 
   const enqueue = useCallback(
     async (mode: GameMode) => {
+      console.log('mode')
       setQueueModes((current) => ({
         ...current,
         [mode]: true,

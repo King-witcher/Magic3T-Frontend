@@ -35,7 +35,7 @@ export function TimeCounter({ timer, ...rest }: Props) {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [timer])
 
   return <Text {...rest}>{time}</Text>
 }

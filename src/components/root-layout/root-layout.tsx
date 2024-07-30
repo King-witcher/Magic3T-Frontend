@@ -8,7 +8,7 @@ interface Props {
 
 export function RootLayout({ children }: Props) {
   return (
-    <Stack alignItems="center" h="100dvh" gap="0">
+    <Stack className="root-layout" alignItems="center" h="100dvh" gap="0">
       <Navbar />
       <Flex
         flex="1"

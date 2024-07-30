@@ -11,7 +11,7 @@ export function Lobby() {
   const { serverStatus } = useServiceStatus()
 
   return (
-    <Center h="full">
+    <Center className="lobby" h="full">
       <Stack gap="20px">
         <Heading textAlign="center">Select a game mode</Heading>
         <GameModesMenu />

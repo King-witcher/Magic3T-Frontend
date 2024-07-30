@@ -19,6 +19,7 @@ export function QueueModeButton({ children, gameMode, ...props }: Props) {
   const isLoading = !!queueModes[gameMode]
 
   const handleClick = () => {
+    console.log('clicked')
     if (!isLoading) {
       enqueue(gameMode)
     } else {
@@ -36,7 +37,7 @@ export function QueueModeButton({ children, gameMode, ...props }: Props) {
       transition="all 200ms"
       pos="relative"
       userSelect="none"
-      onClick={isDisabled ? handleClick : undefined}
+      onClick={isDisabled ? undefined : handleClick}
       _hover={
         isDisabled
           ? undefined
