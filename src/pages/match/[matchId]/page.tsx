@@ -4,18 +4,18 @@ import { Center, Spinner } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-export default function MatchPage() {
+export function MatchPage() {
   const { matchId } = useParams() as { matchId: string }
+
+  async function getMatch() {
+    return await models.matches.getById(matchId)
+  }
 
   const matchQuery = useQuery({
     queryKey: ['match', matchId],
     staleTime: Number.POSITIVE_INFINITY,
     queryFn: getMatch,
   })
-
-  async function getMatch() {
-    return await models.matches.getById(matchId)
-  }
 
   if (matchQuery.isPending) {
     return (

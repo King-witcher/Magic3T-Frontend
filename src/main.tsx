@@ -7,7 +7,6 @@ import { Home } from './pages/(auth-middleware)/(home)/page'
 import AuthMiddleware from './pages/(auth-middleware)/layout'
 import { ErrorPage } from './pages/error'
 import Layout from './pages/layout'
-import MatchPage from './pages/match/[matchId]/page'
 import NotFound from './pages/not-found'
 import RatingSystemPage from './pages/rating-system/page'
 import RegisterPage from './pages/register/page'
@@ -16,6 +15,7 @@ import TutorialPage from './pages/tutorial/page'
 import UserMatchPage from './pages/user/[uid]/history/[matchId]/page'
 import UserPageLayout from './pages/user/[uid]/layout'
 import UserPage from './pages/user/[uid]/page'
+import { MatchPage } from './pages/match/[matchId]/page'
 
 console.clear()
 
