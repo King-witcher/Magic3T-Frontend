@@ -1,4 +1,4 @@
-import { MatchTemplate } from '@/components/match-template'
+import { MatchTemplate } from '@/components/templates/match'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useUserPageContext } from '../../layout'

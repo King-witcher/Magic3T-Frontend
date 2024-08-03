@@ -1,6 +1,6 @@
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { auth } from '@/services/firebase'
+import { auth } from '@/routes/guarded_/services/firebase'
 import { isValidEmail } from '@/utils/isValidEmail'
 import {
   Button,

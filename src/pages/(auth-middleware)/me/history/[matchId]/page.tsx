@@ -1,4 +1,4 @@
-import { MatchTemplate } from '@/components/match-template'
+import { MatchTemplate } from '@/components/templates/match'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { models } from '@/models'
 import { useCallback, useEffect } from 'react'

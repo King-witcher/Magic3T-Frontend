@@ -1,4 +1,4 @@
-import { MatchTemplate } from '@/components/match-template'
+import { MatchTemplate } from '@/components/templates/match'
 import { models } from '@/models'
 import { Center, Spinner } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'

@@ -1,4 +1,4 @@
-import { ProfileView } from '@/components'
+import { ProfileTemplate } from '@/components'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { useMeContext } from './layout'
 
@@ -11,7 +11,7 @@ export default function MePage({ index }: Props) {
   const { lazyMatchLoader, lazyStandingsLoader } = useMeContext()
 
   return (
-    <ProfileView
+    <ProfileTemplate
       baseUrl="/me"
       index={index}
       user={user}

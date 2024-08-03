@@ -1,4 +1,3 @@
-import { firestore, getDoc, getDocs } from '@/services/firestore'
 import {
   collection,
   doc,
@@ -10,6 +9,7 @@ import {
 import { NotFoundError } from '../errors/NotFoundError'
 import { getConverter } from '../getConverter'
 import type { UserData } from './User'
+import { firestore, getDoc, getDocs } from '@/services/firestore'
 
 const converter = getConverter<UserData>()
 

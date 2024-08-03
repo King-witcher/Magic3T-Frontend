@@ -3,6 +3,7 @@ import { type LazyLoadData, useLazy } from '@/hooks/useLazy'
 import { models } from '@/models'
 import type { MatchModel } from '@/models/matches/Match'
 import type { UserData } from '@/models/users/User'
+import { useQuery } from '@tanstack/react-query'
 import { createContext, useContext } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 
@@ -16,25 +17,36 @@ const UserPageContext = createContext<UserPageContextData>(
   {} as UserPageContextData
 )
 
-export default function UserPageLayout() {
+export function UserPageLayout() {
   const { uid } = useParams() as { uid: string }
 
-  const [user, loadingUser] = useAsync(async () => {
-    return await models.users.getById(uid)
-  }, [uid])
+  const userQuery = useQuery({
+    queryKey: ['user', uid],
+    staleTime: 2 * 1000 * 60,
+    queryFn: async () => {
+      return await models.users.getById(uid)
+    },
+  })
 
-  const lazyMatchLoader = useLazy(async () => {
-    if (user) {
-      return await models.matches.listByPlayerId(user._id)
-    }
-    return []
-  }, [user])
+  useQuery({
+    queryKey: ['matches', uid],
+    enabled: false,
+    staleTime: 2 * 1000 * 60,
+    queryFn: async () => {
+      return await models.matches.listByPlayerId(uid)
+    },
+  })
 
-  const lazyStandingsLoader = useLazy(async () => {
-    return await models.users.getStandings()
-  }, [])
+  useQuery({
+    queryKey: ['standings'],
+    enabled: false,
+    staleTime: 1000 * 60 * 5,
+    queryFn: async () => {
+      return await models.users.getStandings()
+    },
+  })
 
-  if (!user) {
+  if (!userQuery.data) {
     return null
   }
 

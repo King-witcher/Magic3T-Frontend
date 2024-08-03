@@ -5,7 +5,6 @@ export const Api = axios.create({
   validateStatus: () => true,
 })
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace SessionRequests {
   type validateSessionResponse = {
     authenticated: boolean

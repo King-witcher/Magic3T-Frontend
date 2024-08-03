@@ -1,13 +1,15 @@
-import { ProfileView } from '@/components'
-import { useParams } from 'react-router-dom'
+import { ProfileTemplate } from '@/components'
 import { useUserPageContext } from './layout'
+import { useParams } from '@tanstack/react-router'
 
 interface Props {
   index: 0 | 1 | 2
 }
 
-export default function UserPage({ index }: Props) {
-  const { uid } = useParams() as { uid: string }
+export function UserPage({ index }: Props) {
+  const { userId } = useParams({
+    strict: false,
+  })
 
   const {
     lazyMatchLoader,
@@ -20,8 +22,8 @@ export default function UserPage({ index }: Props) {
   }
 
   return (
-    <ProfileView
-      baseUrl={`/user/${uid}`}
+    <ProfileTemplate
+      baseUrl={`/user/${userId}`}
       index={index}
       user={user}
       lazyStandingsLoader={lazyStandingsLoader}
