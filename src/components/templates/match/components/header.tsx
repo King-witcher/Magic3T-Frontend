@@ -38,7 +38,7 @@ export function Header({ match, viewerSide }: Props) {
 
   const viewerResult = getResult(match, viewerSide)
   const viewerMatchPlayer = match[sides[viewerSide]]
-  const oponentMatchPlayer = match[sides[(1 - viewerSide) as MatchSide]]
+  const opponentMatchPlayer = match[sides[(1 - viewerSide) as MatchSide]]
 
   return (
     <Stack gap="0">
@@ -60,7 +60,7 @@ export function Header({ match, viewerSide }: Props) {
                 ? 'Empate'
                 : 'Derrota'}
           </Text>{' '}
-          contra {oponentMatchPlayer.name}
+          contra {opponentMatchPlayer.name}
         </Text>
         <Text
           fontSize={['14px', '16px']}

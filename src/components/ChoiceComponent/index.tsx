@@ -11,7 +11,7 @@ export type ChoiceStyle =
   | 'normal'
   | 'selectable'
   | 'blueSelected'
-  | 'oponentSelected'
+  | 'opponentSelected'
   | 'disabled'
 
 interface Props extends FlexProps {
@@ -34,7 +34,7 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
           bg: 'blue.100',
         },
       }
-    case 'oponentSelected':
+    case 'opponentSelected':
       return {
         //opacity: 0.5,
         bg: 'red.400',

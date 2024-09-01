@@ -38,7 +38,7 @@ export default function RatingSystemPage() {
           Todo novo jogador começa com uma pontuação{' '}
           {ratingConfig.initialRating} SR e um RD de {ratingConfig.initialRD}, e
           ganha/perde pontos dependendo do resultado de cada partida e do
-          oponente, enquanto que seu RD diminui conforme partidas são jogadas.
+          opponente, enquanto que seu RD diminui conforme partidas são jogadas.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
           Todo jogador que tiver desvio acima de{' '}
@@ -159,12 +159,12 @@ export default function RatingSystemPage() {
           resultado, bem como das pontuações e dos RD&apos;s de cada jogador.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
-          Caso você derrote um oponente com pontuação maior que a sua, o sistema
-          considerara como evidência de que sua pontuação está muito abaixo do
-          que deveria e você ganhará mais pontos que o normal, enquanto que o
-          seu oponente perderá mais. Caso seu oponente tenha menos pontos do que
-          você, o sistema assume que suas pontuações estão próximas da realidade
-          e seu ganho será menor.
+          Caso você derrote um opponente com pontuação maior que a sua, o
+          sistema considerara como evidência de que sua pontuação está muito
+          abaixo do que deveria e você ganhará mais pontos que o normal,
+          enquanto que o seu opponente perderá mais. Caso seu opponente tenha
+          menos pontos do que você, o sistema assume que suas pontuações estão
+          próximas da realidade e seu ganho será menor.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
           No caso dos empates, a diferença entre as pontuações também é
@@ -183,12 +183,12 @@ export default function RatingSystemPage() {
           causado por acaso ou por imprecisão na pontuação do outro jogador.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
-          Por outro lado, considerando a pontuação do seu oponente, ganhar ou
-          perder de um oponente com RD baixo também fará com que sua pontuação
+          Por outro lado, considerando a pontuação do seu opponente, ganhar ou
+          perder de um opponente com RD baixo também fará com que sua pontuação
           seja reajustada em maior intensidade, uma vez que o sistema tem
           certeza de que você ganhou de alguém muito bom. Da mesma forma, o
-          reajuste será menor caso o oponente tenha RD alto pois o Glicko não
-          tem evidências suficientes de que você ganhou de um oponente bom.
+          reajuste será menor caso o opponente tenha RD alto pois o Glicko não
+          tem evidências suficientes de que você ganhou de um opponente bom.
         </Text>
         <Heading as="h3" fontSize="28px" mt="15px">
           Como seu desvio evolui

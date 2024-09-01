@@ -21,7 +21,7 @@ export function MatchHeader({ match, referenceSide }: Props) {
         : MatchResult.Defeat
 
   const player = [match.white, match.black][referenceSide]
-  const oponent = [match.white, match.black][1 - referenceSide]
+  const opponent = [match.white, match.black][1 - referenceSide]
 
   return (
     <Flex flexDir="column" gap="10px">
@@ -57,7 +57,7 @@ export function MatchHeader({ match, referenceSide }: Props) {
               </>
             )}
           </Text>
-          •<Text fontSize={['10px', '16px']}>{oponent.name}</Text>
+          •<Text fontSize={['10px', '16px']}>{opponent.name}</Text>
         </Flex>
         <Text fontSize={['10px', '16px']}>{formatDate(match.timestamp)}</Text>
       </Flex>

@@ -1,4 +1,4 @@
-import { ChoiceTable } from '@/components'
+import { ChoiceTable } from '@/components/organisms'
 import { type HistoryMatchEvent, MatchSide } from '@/models/matches/Match'
 import type { Choice } from '@/types/game.ts'
 import { Flex, VStack } from '@chakra-ui/react'

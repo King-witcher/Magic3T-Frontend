@@ -6,7 +6,7 @@ import {
 import { Center, Heading, Stack, Text } from '@chakra-ui/react'
 import { GameModesMenu } from './options-menu'
 
-export function Lobby() {
+export function LobbyTemplate() {
   const { queueUserCount } = useQueue()
   const { serverStatus } = useServiceStatus()
 

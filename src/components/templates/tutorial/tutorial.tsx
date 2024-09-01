@@ -1,5 +1,5 @@
 import { Box, Center, Divider, Heading, Text } from '@chakra-ui/react'
-import Choice from './choice'
+import { Choice } from './choice'
 
 export function TutorialTemplate() {
   return (
@@ -14,7 +14,7 @@ export function TutorialTemplate() {
           número da tabela principal, trazendo para o seu conjunto de escolhas.
           O objetivo é extremamente simples: você precisa que, entre todos os
           números escolhidos, exista algum subconjunto de <b>três</b> cuja soma
-          seja igual a <b>15</b>, antes que o seu oponente o faça.
+          seja igual a <b>15</b>, antes que o seu opponente o faça.
         </Text>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
           Por exemplo, vamos supor que você tenha em mãos os números{' '}
@@ -35,17 +35,17 @@ export function TutorialTemplate() {
         </Heading>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
           Note que, ao mesmo tempo que você busca formar um trio vencedor para
-          si, você também deve tentar prejudicar o seu oponente e impedir que
+          si, você também deve tentar prejudicar o seu opponente e impedir que
           ele forme os próprios trios, roubando os números de que ele precisa
           para vencer. Na partida acima, por exemplo, uma boa tentativa de fazer
-          isso seria se o oponente tivesse escolhido o número{' '}
+          isso seria se o opponente tivesse escolhido o número{' '}
           <Choice choice={5} />, o que te impediria de escolhe-lo.
         </Text>
         <Heading as="h3" fontSize="28px" mt="15px">
           Cravadas
         </Heading>
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
-          Você pode não ter notado, mas o oponente realmente tentou te impedir
+          Você pode não ter notado, mas o opponente realmente tentou te impedir
           de escolher um número! Ele havia escolhido o número{' '}
           <Choice choice={8} /> para que você não vencesse com o trio{' '}
           <Choice choice={1} />, <Choice choice={6} /> e <Choice choice={8} />.
@@ -53,7 +53,7 @@ export function TutorialTemplate() {
           duas possibilidades que te fariam ganhar ao mesmo tempo e ele não
           poderia bloquear as duas ao mesmo tempo. Assim como no xadrez,
           chamamos isso de uma <b>cravada</b>, que é uma estratégia importante
-          para vencer seu oponente de maneiras menos óbvias e evitar que ele
+          para vencer seu opponente de maneiras menos óbvias e evitar que ele
           sempre consiga te impedir.
         </Text>
         <Heading as="h3" fontSize="28px" mt="15px">

@@ -10,9 +10,9 @@ export enum GameStatus {
 
 export type GameStateReport = {
   playerChoices: Choice[]
-  oponentChoices: Choice[]
+  opponentChoices: Choice[]
   status: GameStatus
   playerTimeLeft: number
-  oponentTimeLeft: number
-  turn: 'player' | 'oponent' | null
+  opponentTimeLeft: number
+  turn: 'player' | 'opponent' | null
 }

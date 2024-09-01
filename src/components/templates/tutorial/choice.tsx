@@ -4,7 +4,7 @@ interface Props {
   choice: number
 }
 
-export default function Choice({ choice }: Props) {
+export function Choice({ choice }: Props) {
   return (
     <Box
       as="span"

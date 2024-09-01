@@ -16,6 +16,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TutorialImport } from './routes/tutorial'
 import { Route as RatingSystemImport } from './routes/rating-system'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
+import { Route as SignInIndexImport } from './routes/sign-in/index'
+import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
 import { Route as UserUserIdUserLayoutImport } from './routes/user/$userId/_user-layout'
 import { Route as AuthGuardedMeMeLayoutImport } from './routes/_auth-guarded/me/_me-layout'
@@ -54,6 +56,16 @@ const UserUserIdRoute = UserUserIdImport.update({
 const AuthGuardedMeRoute = AuthGuardedMeImport.update({
   path: '/me',
   getParentRoute: () => AuthGuardedRoute,
+} as any)
+
+const SignInIndexRoute = SignInIndexImport.update({
+  path: '/sign-in/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RegisterIndexRoute = RegisterIndexImport.update({
+  path: '/register/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthGuardedIndexRoute = AuthGuardedIndexImport.update({
@@ -124,6 +136,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthGuardedIndexImport
       parentRoute: typeof AuthGuardedImport
+    }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInIndexImport
+      parentRoute: typeof rootRoute
     }
     '/_auth-guarded/me': {
       id: '/_auth-guarded/me'
@@ -198,6 +224,8 @@ export const routeTree = rootRoute.addChildren({
   }),
   RatingSystemRoute,
   TutorialRoute,
+  RegisterIndexRoute,
+  SignInIndexRoute,
   UserUserIdRoute: UserUserIdRoute.addChildren({
     UserUserIdUserLayoutRoute: UserUserIdUserLayoutRoute.addChildren({
       UserUserIdUserLayoutTabRoute,
@@ -217,6 +245,8 @@ export const routeTree = rootRoute.addChildren({
         "/_auth-guarded",
         "/rating-system",
         "/tutorial",
+        "/register/",
+        "/sign-in/",
         "/user/$userId"
       ]
     },
@@ -236,6 +266,12 @@ export const routeTree = rootRoute.addChildren({
     "/_auth-guarded/": {
       "filePath": "_auth-guarded/index.tsx",
       "parent": "/_auth-guarded"
+    },
+    "/register/": {
+      "filePath": "register/index.tsx"
+    },
+    "/sign-in/": {
+      "filePath": "sign-in/index.tsx"
     },
     "/_auth-guarded/me": {
       "filePath": "_auth-guarded/me",

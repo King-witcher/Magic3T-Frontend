@@ -1,1 +1,1 @@
-export * from './lobby'
+export * from './lobby-template'

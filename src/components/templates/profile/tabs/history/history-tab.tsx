@@ -1,10 +1,9 @@
-import { type MatchModel, MatchSide } from '@/models/matches/Match'
+import { MatchSide } from '@/models/matches/Match'
 import { Center, Stack, chakra, keyframes } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { HistoryRow } from './history-row'
 import { useQuery } from '@tanstack/react-query'
 import { matchesQueryOptions } from '@/utils/query-options'
-import { useParams } from '@tanstack/react-router'
 
 interface Props {
   referenceUid: string

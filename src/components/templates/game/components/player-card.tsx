@@ -19,8 +19,8 @@ import {
   Avatar,
 } from '@chakra-ui/react'
 import type { RefObject } from 'react'
-import { Link } from 'react-router-dom'
 import { ChatDrawer, ForfeitModal } from '.'
+import { Link } from '@tanstack/react-router'
 
 interface Props {
   player: 'current' | 'opponent'
@@ -45,14 +45,7 @@ export function PlayerCard({ player, chatInputRef }: Props) {
     onOpen: openForfeitModal,
   } = useDisclosure()
 
-  // const easterEgg =
-  //   user._id === 'Yrh2QzILK5XWAVitOMj42NSHySJ3'
-  //     ? 'não é burmor, é morbur c:'
-  //     : user.nickname.includes('Marileia Almeida')
-  //     ? 'Te amo, mãe <3'
-  //     : ''
-
-  const { matchId, isActive, gameStatus, oponentProfile, ratingsVariation } =
+  const { matchId, isActive, gameStatus, opponentProfile, ratingsVariation } =
     useGame()
 
   const currentPlayer = player === 'current'
@@ -63,11 +56,11 @@ export function PlayerCard({ player, chatInputRef }: Props) {
     onOpen: chatOnOpen,
   } = useDisclosure()
 
-  const profile = currentPlayer ? user : oponentProfile
+  const profile = currentPlayer ? user : opponentProfile
   const rinfo = profile && getRankInfo(profile.glicko)
 
   const ratingVariation =
-    ratingsVariation?.[currentPlayer ? 'player' : 'oponent']
+    ratingsVariation?.[currentPlayer ? 'player' : 'opponent']
 
   const integerVariation =
     ratingVariation && Math.round(Math.abs(ratingVariation))

@@ -3,7 +3,7 @@ import { Center } from '@chakra-ui/react'
 
 interface Props {
   number: Choice
-  side: 'reference' | 'oponent' | 'none'
+  side: 'reference' | 'opponent' | 'none'
   highlight?: boolean
 }
 
@@ -18,7 +18,7 @@ export function NumberBox({ number, side }: Props) {
       bg={
         side === 'reference'
           ? 'blue.300'
-          : side === 'oponent'
+          : side === 'opponent'
             ? 'red.300'
             : 'gray.300'
       }

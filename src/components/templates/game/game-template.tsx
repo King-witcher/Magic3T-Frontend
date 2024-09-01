@@ -1,11 +1,11 @@
-import { ChoiceTable } from '@/components'
 import { useGame } from '@/contexts/game.context.tsx'
 import { GameStatus } from '@/types/game.ts'
 import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { ChatBox, PlayerCard, TimeCounter } from './components'
+import { ChoiceTable } from '@/components/organisms'
 
-export function GamePage() {
+export function GameTemplate() {
   const {
     isActive,
     turn,
@@ -13,23 +13,23 @@ export function GamePage() {
     makeChoice,
     gameStatus,
     playerChoices,
-    oponentChoices,
-    oponentTimer,
+    opponentChoices,
+    opponentTimer,
     playerTimer,
   } = useGame()
 
   const playerTurn = turn === 'player'
   const chatInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    return () => {
-      if (
-        gameStatus !== GameStatus.Playing &&
-        gameStatus !== GameStatus.Waiting
-      )
-        disconnect()
-    }
-  }, [gameStatus, disconnect])
+  // useEffect(() => {
+  //   return () => {
+  //     if (
+  //       gameStatus !== GameStatus.Playing &&
+  //       gameStatus !== GameStatus.Waiting
+  //     )
+  //       disconnect()
+  //   }
+  // }, [gameStatus, disconnect])
 
   if (!isActive) return null // Improve
 
@@ -54,10 +54,10 @@ export function GamePage() {
               textAlign="center"
               p="3px 0"
               fontSize="18px"
-              timer={oponentTimer}
+              timer={opponentTimer}
             />
             <ChoiceTable
-              redMoves={oponentChoices}
+              redMoves={opponentChoices}
               blueMoves={playerChoices}
               state={
                 gameStatus === GameStatus.Playing
@@ -96,7 +96,7 @@ export function GamePage() {
             Sua vez!
           </Text>
           {playerChoices.length === 0 &&
-            oponentChoices.length === 0 &&
+            opponentChoices.length === 0 &&
             gameStatus === GameStatus.Playing && (
               <Text
                 width="400px"
@@ -111,7 +111,7 @@ export function GamePage() {
                 left="50%"
                 transform="translate(-50%, 100%)"
               >
-                Aguarde a escolha do oponente.
+                Aguarde a escolha do opponente.
               </Text>
             )}
           {gameStatus === GameStatus.Victory && (

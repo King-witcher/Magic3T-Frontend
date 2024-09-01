@@ -1,7 +1,7 @@
 import type { MatchModel, MatchSide } from '@/models/matches/Match'
 import { MatchResult } from '@/types'
 import { Collapse, Stack, type StackProps } from '@chakra-ui/react'
-import MatchBody from './match-body'
+import { MatchBody } from './match-body'
 import { MatchHeader } from './match-header'
 
 interface Props extends StackProps {

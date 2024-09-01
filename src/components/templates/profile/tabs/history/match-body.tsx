@@ -9,7 +9,7 @@ interface Props {
   match: MatchModel
 }
 
-export default function MatchBody({ match }: Props) {
+export function MatchBody({ match }: Props) {
   return (
     <Stack gap="20px">
       <Flex mt="10px" gap="8px" align="center" justify="right">

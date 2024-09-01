@@ -16,7 +16,6 @@ export function QueueModeButton({ children, gameMode, ...props }: Props) {
   const { queueModes, enqueue, dequeue } = useQueue()
   const { serverStatus } = useServiceStatus()
   const isDisabled = serverStatus !== ServerStatus.On
-  console.log(queueModes)
   const isLoading = !!queueModes[gameMode]
 
   const handleClick = () => {

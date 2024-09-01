@@ -126,6 +126,7 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
       overflow="hidden"
       w="fit-content"
       h="fit-content"
+      bg="gray.100"
       // border="solid 1px var(--chakra-colors-gray-200)"
       // bg="gray.200"
     >
@@ -142,7 +143,7 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
               blueChoice
                 ? 'blueSelected'
                 : redChoice
-                  ? 'oponentSelected'
+                  ? 'opponentSelected'
                   : state === 'selectable'
                     ? 'selectable'
                     : state === 'disabled'
