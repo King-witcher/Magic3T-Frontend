@@ -1,20 +1,19 @@
-import { MatchTemplate } from '@/components/templates/match'
-import { models } from '@/models'
+import { MatchTemplate } from '@/components/templates'
+import { matchQueryOptions } from '@/utils/query-options'
 import { Center, Spinner } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { createFileRoute } from '@tanstack/react-router'
 
-export function MatchPage() {
-  const { matchId } = useParams() as { matchId: string }
+export const Route = createFileRoute('/match/$matchId')({
+  component: Page,
+})
 
-  async function getMatch() {
-    return await models.matches.getById(matchId)
-  }
+export function Page() {
+  const { matchId } = Route.useParams() as { matchId: string }
 
   const matchQuery = useQuery({
-    queryKey: ['match', matchId],
+    ...matchQueryOptions(matchId),
     staleTime: Number.POSITIVE_INFINITY,
-    queryFn: getMatch,
   })
 
   if (matchQuery.isPending) {

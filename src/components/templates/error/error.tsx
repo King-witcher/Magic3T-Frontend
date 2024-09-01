@@ -1,6 +1,6 @@
 import { Flex, Link, Text } from '@chakra-ui/react'
 import { BiErrorAlt } from 'react-icons/bi'
-import { Link as RouterDomLink } from 'react-router-dom'
+import { Link as TanStackLink } from '@tanstack/react-router'
 
 export function ErrorTemplate() {
   return (
@@ -9,7 +9,7 @@ export function ErrorTemplate() {
       <Text size="20px" align="center">
         Um erro de execução impediu o Magic3T de mostrar esta página.
         <br />
-        <Link as={RouterDomLink} to="/" fontWeight={700} color="blue.400">
+        <Link as={TanStackLink} to="/" fontWeight={700} color="blue.400">
           Retornar à página inicial
         </Link>
       </Text>

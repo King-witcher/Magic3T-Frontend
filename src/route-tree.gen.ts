@@ -19,6 +19,7 @@ import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
+import { Route as MatchMatchIdImport } from './routes/match/$matchId'
 import { Route as UserUserIdUserLayoutImport } from './routes/user/$userId/_user-layout'
 import { Route as AuthGuardedMeMeLayoutImport } from './routes/_auth-guarded/me/_me-layout'
 import { Route as UserUserIdUserLayoutIndexImport } from './routes/user/$userId/_user-layout/index'
@@ -71,6 +72,11 @@ const RegisterIndexRoute = RegisterIndexImport.update({
 const AuthGuardedIndexRoute = AuthGuardedIndexImport.update({
   path: '/',
   getParentRoute: () => AuthGuardedRoute,
+} as any)
+
+const MatchMatchIdRoute = MatchMatchIdImport.update({
+  path: '/match/$matchId',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const UserUserIdUserLayoutRoute = UserUserIdUserLayoutImport.update({
@@ -128,6 +134,13 @@ declare module '@tanstack/react-router' {
       path: '/tutorial'
       fullPath: '/tutorial'
       preLoaderRoute: typeof TutorialImport
+      parentRoute: typeof rootRoute
+    }
+    '/match/$matchId': {
+      id: '/match/$matchId'
+      path: '/match/$matchId'
+      fullPath: '/match/$matchId'
+      preLoaderRoute: typeof MatchMatchIdImport
       parentRoute: typeof rootRoute
     }
     '/_auth-guarded/': {
@@ -224,6 +237,7 @@ export const routeTree = rootRoute.addChildren({
   }),
   RatingSystemRoute,
   TutorialRoute,
+  MatchMatchIdRoute,
   RegisterIndexRoute,
   SignInIndexRoute,
   UserUserIdRoute: UserUserIdRoute.addChildren({
@@ -245,6 +259,7 @@ export const routeTree = rootRoute.addChildren({
         "/_auth-guarded",
         "/rating-system",
         "/tutorial",
+        "/match/$matchId",
         "/register/",
         "/sign-in/",
         "/user/$userId"
@@ -262,6 +277,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/tutorial": {
       "filePath": "tutorial.tsx"
+    },
+    "/match/$matchId": {
+      "filePath": "match/$matchId.tsx"
     },
     "/_auth-guarded/": {
       "filePath": "_auth-guarded/index.tsx",

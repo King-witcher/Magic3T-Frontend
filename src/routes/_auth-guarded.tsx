@@ -15,8 +15,8 @@ export const Route = createFileRoute('/_auth-guarded')({
       const path = window.location.pathname
       if (authState === AuthState.NotSignedIn)
         navigate({
-          to: path === '/' ? '/sign-in' : `/sign-in?referrer=${path}`,
-          params:
+          to: '/sign-in',
+          search:
             path === '/'
               ? undefined
               : {

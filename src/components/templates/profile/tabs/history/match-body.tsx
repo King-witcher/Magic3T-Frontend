@@ -1,9 +1,9 @@
-import { CopyButton } from '@/components/copy-button/copy-button'
+import { CopyButton } from '@/components/atoms/copy-button/copy-button'
 import { MovesView } from '@/components/templates/match/components'
 import type { MatchModel } from '@/models'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { Flex, Stack, Text, Tooltip } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 
 interface Props {
   match: MatchModel
