@@ -1,28 +1,27 @@
+import { useGuardedAuth } from '@/contexts/guarded-auth.context'
 import {
   matchesQueryOptions,
   standingsQueryOptions,
-  userQueryOptions,
 } from '@/utils/query-options'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/user/$userId/_user-layout')({
+export const Route = createFileRoute('/_auth-guarded/me/_me-layout')({
   component: Layout,
 })
 
 function Layout() {
-  const { userId } = Route.useParams()
-  const userQuery = useQuery(userQueryOptions(userId))
+  const { user } = useGuardedAuth()
 
   useQuery({
-    ...matchesQueryOptions(userId),
+    ...matchesQueryOptions(user._id),
     enabled: false,
   })
+
   useQuery({
     ...standingsQueryOptions(),
     enabled: false,
   })
 
-  if (userQuery.isSuccess && !userQuery.data) return 'User not found'
   return <Outlet />
 }

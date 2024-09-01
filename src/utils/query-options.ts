@@ -1,7 +1,7 @@
 import { models } from '@/models'
 import { queryOptions } from '@tanstack/react-query'
 
-export function matchOptions(id: string) {
+export function matchQueryOptions(id: string) {
   return queryOptions({
     queryKey: ['match', id],
     staleTime: Number.POSITIVE_INFINITY,
@@ -11,7 +11,7 @@ export function matchOptions(id: string) {
   })
 }
 
-export function userOptions(uid: string) {
+export function userQueryOptions(uid: string) {
   return queryOptions({
     queryKey: ['user', uid],
     staleTime: Number.POSITIVE_INFINITY,
@@ -21,7 +21,7 @@ export function userOptions(uid: string) {
   })
 }
 
-export function matchesOptions(uid: string) {
+export function matchesQueryOptions(uid: string) {
   return queryOptions({
     queryKey: ['matches', uid],
     staleTime: Number.POSITIVE_INFINITY,
@@ -31,7 +31,7 @@ export function matchesOptions(uid: string) {
   })
 }
 
-export function standingsOptions() {
+export function standingsQueryOptions() {
   return queryOptions({
     queryKey: ['standings'],
     staleTime: Number.POSITIVE_INFINITY,

@@ -26,7 +26,7 @@ export function ProfileTemplate({ user, index, baseUrl }: Props) {
   return (
     <Tabs index={indexMap[index] || 0} isLazy>
       <TabList>
-        <Link to={`${baseUrl}/profile`}>
+        <Link to={`${baseUrl}/profile`} preload="viewport">
           <Tab>Perfil</Tab>
         </Link>
         <Link to={`${baseUrl}/history`}>

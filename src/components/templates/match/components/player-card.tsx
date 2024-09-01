@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
-import { userOptions } from '@/utils/query-options'
+import { userQueryOptions } from '@/utils/query-options'
 import {
   Avatar,
   Badge,
@@ -22,7 +22,7 @@ interface Props {
 export function PlayerCard({ matchPlayer, highlight }: Props) {
   const { getRankThumbnail } = useRankInfo()
 
-  const userQuery = useQuery(userOptions(matchPlayer.uid))
+  const userQuery = useQuery(userQueryOptions(matchPlayer.uid))
 
   const { user: authUser } = useAuth()
 

@@ -1,5 +1,6 @@
+export * from './error'
 export * from './game'
 export * from './lobby'
+export * from './match'
 export * from './profile'
-export * from './error'
 export * from './root-layout'

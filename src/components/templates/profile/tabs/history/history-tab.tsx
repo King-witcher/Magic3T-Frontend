@@ -3,7 +3,7 @@ import { Center, Stack, chakra, keyframes } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { HistoryRow } from './history-row'
 import { useQuery } from '@tanstack/react-query'
-import { matchesOptions } from '@/utils/query-options'
+import { matchesQueryOptions } from '@/utils/query-options'
 import { useParams } from '@tanstack/react-router'
 
 interface Props {
@@ -22,17 +22,13 @@ const appear = keyframes`
 export function HistoryTab({ referenceUid }: Props) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
 
-  const { userId } = useParams({
-    strict: false,
-  })
-
   const {
     data: matches,
     refetch,
     isFetching,
     isPending,
   } = useQuery({
-    ...matchesOptions(userId!),
+    ...matchesQueryOptions(referenceUid),
     enabled: false,
   })
 

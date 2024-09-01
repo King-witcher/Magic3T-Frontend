@@ -16,8 +16,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
 import { Route as UserUserIdUserLayoutImport } from './routes/user/$userId/_user-layout'
-import { Route as AuthGuardedMeUserLayoutImport } from './routes/_auth-guarded/me/_user-layout'
-import { Route as UserUserIdUserLayoutTabIndexImport } from './routes/user/$userId/_user-layout/$tab/index'
+import { Route as AuthGuardedMeMeLayoutImport } from './routes/_auth-guarded/me/_me-layout'
+import { Route as UserUserIdUserLayoutIndexImport } from './routes/user/$userId/_user-layout/index'
+import { Route as AuthGuardedMeMeLayoutIndexImport } from './routes/_auth-guarded/me/_me-layout/index'
+import { Route as UserUserIdUserLayoutTabImport } from './routes/user/$userId/_user-layout/$tab'
+import { Route as AuthGuardedMeMeLayoutTabImport } from './routes/_auth-guarded/me/_me-layout/$tab'
 
 // Create Virtual Routes
 
@@ -51,16 +54,32 @@ const UserUserIdUserLayoutRoute = UserUserIdUserLayoutImport.update({
   getParentRoute: () => UserUserIdRoute,
 } as any)
 
-const AuthGuardedMeUserLayoutRoute = AuthGuardedMeUserLayoutImport.update({
-  id: '/_user-layout',
+const AuthGuardedMeMeLayoutRoute = AuthGuardedMeMeLayoutImport.update({
+  id: '/_me-layout',
   getParentRoute: () => AuthGuardedMeRoute,
 } as any)
 
-const UserUserIdUserLayoutTabIndexRoute =
-  UserUserIdUserLayoutTabIndexImport.update({
-    path: '/$tab/',
-    getParentRoute: () => UserUserIdUserLayoutRoute,
-  } as any)
+const UserUserIdUserLayoutIndexRoute = UserUserIdUserLayoutIndexImport.update({
+  path: '/',
+  getParentRoute: () => UserUserIdUserLayoutRoute,
+} as any)
+
+const AuthGuardedMeMeLayoutIndexRoute = AuthGuardedMeMeLayoutIndexImport.update(
+  {
+    path: '/',
+    getParentRoute: () => AuthGuardedMeMeLayoutRoute,
+  } as any,
+)
+
+const UserUserIdUserLayoutTabRoute = UserUserIdUserLayoutTabImport.update({
+  path: '/$tab',
+  getParentRoute: () => UserUserIdUserLayoutRoute,
+} as any)
+
+const AuthGuardedMeMeLayoutTabRoute = AuthGuardedMeMeLayoutTabImport.update({
+  path: '/$tab',
+  getParentRoute: () => AuthGuardedMeMeLayoutRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -87,11 +106,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGuardedMeImport
       parentRoute: typeof AuthGuardedImport
     }
-    '/_auth-guarded/me/_user-layout': {
-      id: '/_auth-guarded/me/_user-layout'
+    '/_auth-guarded/me/_me-layout': {
+      id: '/_auth-guarded/me/_me-layout'
       path: '/me'
       fullPath: '/me'
-      preLoaderRoute: typeof AuthGuardedMeUserLayoutImport
+      preLoaderRoute: typeof AuthGuardedMeMeLayoutImport
       parentRoute: typeof AuthGuardedMeRoute
     }
     '/user/$userId': {
@@ -108,11 +127,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserUserIdUserLayoutImport
       parentRoute: typeof UserUserIdRoute
     }
-    '/user/$userId/_user-layout/$tab/': {
-      id: '/user/$userId/_user-layout/$tab/'
+    '/_auth-guarded/me/_me-layout/$tab': {
+      id: '/_auth-guarded/me/_me-layout/$tab'
+      path: '/$tab'
+      fullPath: '/me/$tab'
+      preLoaderRoute: typeof AuthGuardedMeMeLayoutTabImport
+      parentRoute: typeof AuthGuardedMeMeLayoutImport
+    }
+    '/user/$userId/_user-layout/$tab': {
+      id: '/user/$userId/_user-layout/$tab'
       path: '/$tab'
       fullPath: '/user/$userId/$tab'
-      preLoaderRoute: typeof UserUserIdUserLayoutTabIndexImport
+      preLoaderRoute: typeof UserUserIdUserLayoutTabImport
+      parentRoute: typeof UserUserIdUserLayoutImport
+    }
+    '/_auth-guarded/me/_me-layout/': {
+      id: '/_auth-guarded/me/_me-layout/'
+      path: '/'
+      fullPath: '/me/'
+      preLoaderRoute: typeof AuthGuardedMeMeLayoutIndexImport
+      parentRoute: typeof AuthGuardedMeMeLayoutImport
+    }
+    '/user/$userId/_user-layout/': {
+      id: '/user/$userId/_user-layout/'
+      path: '/'
+      fullPath: '/user/$userId/'
+      preLoaderRoute: typeof UserUserIdUserLayoutIndexImport
       parentRoute: typeof UserUserIdUserLayoutImport
     }
   }
@@ -123,11 +163,17 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   AuthGuardedRoute: AuthGuardedRoute.addChildren({
     AuthGuardedIndexRoute,
-    AuthGuardedMeRoute: AuthGuardedMeRoute.addChildren({}),
+    AuthGuardedMeRoute: AuthGuardedMeRoute.addChildren({
+      AuthGuardedMeMeLayoutRoute: AuthGuardedMeMeLayoutRoute.addChildren({
+        AuthGuardedMeMeLayoutTabRoute,
+        AuthGuardedMeMeLayoutIndexRoute,
+      }),
+    }),
   }),
   UserUserIdRoute: UserUserIdRoute.addChildren({
     UserUserIdUserLayoutRoute: UserUserIdUserLayoutRoute.addChildren({
-      UserUserIdUserLayoutTabIndexRoute,
+      UserUserIdUserLayoutTabRoute,
+      UserUserIdUserLayoutIndexRoute,
     }),
   }),
 })
@@ -159,12 +205,16 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_auth-guarded/me",
       "parent": "/_auth-guarded",
       "children": [
-        "/_auth-guarded/me/_user-layout"
+        "/_auth-guarded/me/_me-layout"
       ]
     },
-    "/_auth-guarded/me/_user-layout": {
-      "filePath": "_auth-guarded/me/_user-layout.tsx",
-      "parent": "/_auth-guarded/me"
+    "/_auth-guarded/me/_me-layout": {
+      "filePath": "_auth-guarded/me/_me-layout.tsx",
+      "parent": "/_auth-guarded/me",
+      "children": [
+        "/_auth-guarded/me/_me-layout/$tab",
+        "/_auth-guarded/me/_me-layout/"
+      ]
     },
     "/user/$userId": {
       "filePath": "user/$userId",
@@ -176,11 +226,24 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "user/$userId/_user-layout.tsx",
       "parent": "/user/$userId",
       "children": [
-        "/user/$userId/_user-layout/$tab/"
+        "/user/$userId/_user-layout/$tab",
+        "/user/$userId/_user-layout/"
       ]
     },
-    "/user/$userId/_user-layout/$tab/": {
-      "filePath": "user/$userId/_user-layout/$tab/index.tsx",
+    "/_auth-guarded/me/_me-layout/$tab": {
+      "filePath": "_auth-guarded/me/_me-layout/$tab.tsx",
+      "parent": "/_auth-guarded/me/_me-layout"
+    },
+    "/user/$userId/_user-layout/$tab": {
+      "filePath": "user/$userId/_user-layout/$tab.tsx",
+      "parent": "/user/$userId/_user-layout"
+    },
+    "/_auth-guarded/me/_me-layout/": {
+      "filePath": "_auth-guarded/me/_me-layout/index.tsx",
+      "parent": "/_auth-guarded/me/_me-layout"
+    },
+    "/user/$userId/_user-layout/": {
+      "filePath": "user/$userId/_user-layout/index.tsx",
       "parent": "/user/$userId/_user-layout"
     }
   }
