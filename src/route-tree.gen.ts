@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RatingSystemImport } from './routes/rating-system'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
 import { Route as UserUserIdUserLayoutImport } from './routes/user/$userId/_user-layout'
@@ -28,6 +29,11 @@ const UserUserIdImport = createFileRoute('/user/$userId')()
 const AuthGuardedMeImport = createFileRoute('/_auth-guarded/me')()
 
 // Create/Update Routes
+
+const RatingSystemRoute = RatingSystemImport.update({
+  path: '/rating-system',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthGuardedRoute = AuthGuardedImport.update({
   id: '/_auth-guarded',
@@ -90,6 +96,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthGuardedImport
+      parentRoute: typeof rootRoute
+    }
+    '/rating-system': {
+      id: '/rating-system'
+      path: '/rating-system'
+      fullPath: '/rating-system'
+      preLoaderRoute: typeof RatingSystemImport
       parentRoute: typeof rootRoute
     }
     '/_auth-guarded/': {
@@ -170,6 +183,7 @@ export const routeTree = rootRoute.addChildren({
       }),
     }),
   }),
+  RatingSystemRoute,
   UserUserIdRoute: UserUserIdRoute.addChildren({
     UserUserIdUserLayoutRoute: UserUserIdUserLayoutRoute.addChildren({
       UserUserIdUserLayoutTabRoute,
@@ -187,6 +201,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/_auth-guarded",
+        "/rating-system",
         "/user/$userId"
       ]
     },
@@ -196,6 +211,9 @@ export const routeTree = rootRoute.addChildren({
         "/_auth-guarded/",
         "/_auth-guarded/me"
       ]
+    },
+    "/rating-system": {
+      "filePath": "rating-system.tsx"
     },
     "/_auth-guarded/": {
       "filePath": "_auth-guarded/index.tsx",
