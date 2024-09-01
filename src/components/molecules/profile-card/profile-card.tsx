@@ -25,7 +25,7 @@ const divisionMap = {
   5: 'V',
 }
 
-export function ProfileComponent({ user }: Props) {
+export function ProfileCard({ user }: Props) {
   const { getRankInfo } = useRankInfo()
 
   const matches = user.stats.wins + user.stats.draws + user.stats.defeats

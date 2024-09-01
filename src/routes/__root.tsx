@@ -1,9 +1,8 @@
-import { RootLayout } from '@/components'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Providers } from './-providers'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ErrorTemplate } from '@/components/templates'
+import { ErrorTemplate, RootLayout } from '@/components/templates'
 
 export const Route = createRootRoute({
   component: () => (

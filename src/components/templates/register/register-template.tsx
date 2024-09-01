@@ -9,8 +9,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { useCallback, useEffect, useState } from 'react'
+import { Link, Navigate } from '@tanstack/react-router'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
 
@@ -28,7 +28,6 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
   const { authState, signInGoogle, registerEmail } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [waiting, setWaiting] = useState(false)
-  const navigate = useNavigate()
 
   const {
     register,
@@ -56,13 +55,10 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
     []
   )
 
-  useEffect(() => {
-    if (authState === AuthState.SignedIn) navigate(referrer)
-  }, [authState])
-
   if (authState === AuthState.Loading || authState === AuthState.SignedIn)
     return (
       <Center h="100%">
+        {authState === AuthState.SignedIn && <Navigate to={referrer} />}
         <Spinner size="lg" thickness="4px" color="blue.500" speed="0.8s" />
       </Center>
     )

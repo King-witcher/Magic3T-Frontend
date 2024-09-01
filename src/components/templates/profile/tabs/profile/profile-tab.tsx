@@ -1,4 +1,4 @@
-import { ProfileComponent } from '@/components'
+import { ProfileCard } from '@/components/molecules'
 import type { UserData } from '@/models/users/User'
 import { Center } from '@chakra-ui/react'
 
@@ -9,7 +9,7 @@ interface Props {
 export function ProfileTab({ user }: Props) {
   return (
     <Center h="100%">
-      <ProfileComponent user={user} />
+      <ProfileCard user={user} />
     </Center>
   )
 }

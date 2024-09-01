@@ -1,4 +1,3 @@
-import SmoothNumber from '@/components/SmoothNumber'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
@@ -21,6 +20,7 @@ import {
 import type { RefObject } from 'react'
 import { ChatDrawer, ForfeitModal } from '.'
 import { Link } from '@tanstack/react-router'
+import { SmoothNumber } from '@/components/atoms'
 
 interface Props {
   player: 'current' | 'opponent'

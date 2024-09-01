@@ -1,5 +1,5 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
-import ChoiceComponent from '@/components/ChoiceComponent'
+import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/Commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'

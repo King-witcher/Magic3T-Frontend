@@ -1,5 +1,5 @@
-import LogoutModal from '@/components/modals/LogoutModal'
-import SecretCodeModal from '@/components/modals/SecretCodeModal'
+import LogoutModal from '@/components/organisms/modals/LogoutModal'
+import SecretCodeModal from '@/components/organisms/modals/SecretCodeModal'
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import {

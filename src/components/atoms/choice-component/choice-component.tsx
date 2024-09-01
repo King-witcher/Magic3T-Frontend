@@ -71,7 +71,7 @@ const appear = keyframes`
   }
 `
 
-export default function ChoiceComponent({
+export function ChoiceComponent({
   choice,
   highlight,
   choiceStyle = 'normal',

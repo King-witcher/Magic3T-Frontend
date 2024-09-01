@@ -4,7 +4,7 @@ interface Props {
   value: number
 }
 
-export default function SmoothNumber({ value }: Props) {
+export function SmoothNumber({ value }: Props) {
   const [smoothValue, setSmoothValue] = useState(value)
 
   useEffect(() => {

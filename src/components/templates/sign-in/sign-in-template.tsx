@@ -12,9 +12,9 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, Navigate } from '@tanstack/react-router'
 import { sendPasswordResetEmail } from 'firebase/auth'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
 
@@ -28,9 +28,6 @@ export function SignInTemplate({ referrer = '/' }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [hideResetPassword, setHideResetPassword] = useState(false)
   const [waiting, setWaiting] = useState(false)
-  const navigate = useNavigate({
-    from: '/sign-in',
-  })
 
   const {
     register,
@@ -71,13 +68,10 @@ export function SignInTemplate({ referrer = '/' }: Props) {
     await sendPasswordResetEmail(auth, email)
   }, [email, setFormError])
 
-  useEffect(() => {
-    if (authState === AuthState.SignedIn) navigate(referrer)
-  }, [authState, navigate, referrer])
-
   if (authState === AuthState.Loading || authState === AuthState.SignedIn)
     return (
       <Center h="100%">
+        {authState === AuthState.SignedIn && <Navigate to={referrer} />}
         <Spinner size="lg" thickness="4px" color="blue.500" speed="0.8s" />
       </Center>
     )
