@@ -34,19 +34,16 @@ const LiveActivityContext = createContext<LiveActivityData>(
 export function LiveActivityProvider({ children }: Props) {
   const [activities, setActivities] = useState<Record<number, LiveActivity>>({})
 
-  const push = useCallback(
-    (activity: LiveActivity) => {
-      const key = lastKey++
-      setActivities((current) => ({ ...current, [key]: activity }))
-      return () => {
-        setActivities((current) => {
-          delete current[key]
-          return { ...current }
-        })
-      }
-    },
-    [setActivities]
-  )
+  const push = useCallback((activity: LiveActivity) => {
+    const key = lastKey++
+    setActivities((current) => ({ ...current, [key]: activity }))
+    return () => {
+      setActivities((current) => {
+        delete current[key]
+        return { ...current }
+      })
+    }
+  }, [])
 
   return (
     <LiveActivityContext.Provider value={{ activities, push }}>

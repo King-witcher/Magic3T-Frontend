@@ -1,7 +1,6 @@
 import { Timer } from '@/lib/Timer'
 import { models } from '@/models'
 import type { UserData } from '@/models/users/User'
-import { Api } from '@/services/api'
 import {
   GameEmittedEvents,
   GameListenedEvent,
@@ -26,6 +25,7 @@ import { type Socket, io } from 'socket.io-client'
 import { AuthState } from './auth.context.tsx'
 import { useGuardedAuth } from './guarded-auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { Api } from '@/services/api.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -37,12 +37,12 @@ type GameData =
       gameStatus: GameStatus.Waiting
       messages: Message[]
       playerChoices: Choice[]
-      oponentChoices: Choice[]
+      opponentChoices: Choice[]
       playerTimer: Timer
-      oponentTimer: Timer
+      opponentTimer: Timer
       availableChoices: Choice[]
       winningTriple: null
-      oponentProfile: null
+      opponentProfile: null
       ratingsVariation: null
 
       connectGame(matchId: string): Promise<void>
@@ -54,17 +54,17 @@ type GameData =
   | {
       matchId: string
       isActive: true
-      turn: 'player' | 'oponent' | null
+      turn: 'player' | 'opponent' | null
       gameStatus: GameStatus
       messages: Message[]
       playerChoices: Choice[]
-      oponentChoices: Choice[]
+      opponentChoices: Choice[]
       playerTimer: Timer
-      oponentTimer: Timer
+      opponentTimer: Timer
       availableChoices: Choice[]
       winningTriple: [Choice, Choice, Choice] | null
-      oponentProfile: UserData | null
-      ratingsVariation: { player: number; oponent: number } | null
+      opponentProfile: UserData | null
+      ratingsVariation: { player: number; opponent: number } | null
 
       connectGame(matchId: string): Promise<void>
       makeChoice(choice: Choice): void
@@ -79,14 +79,15 @@ interface Props {
 
 const GameContext = createContext<GameData>({} as GameData)
 
+// Refactor this and use white and black isntead of player and opponent
 export function GameProvider({ children }: Props) {
   const [matchId, setMatchId] = useState<string | null>(null)
   const isActive = !!matchId
-  const [turn, setTurn] = useState<'player' | 'oponent' | null>(null)
+  const [turn, setTurn] = useState<'player' | 'opponent' | null>(null)
   const [gameStatus, setGameStatus] = useState(GameStatus.Waiting)
   const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
   const [opponentChoices, setOpponentChoices] = useState<Choice[]>([])
-  const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null)
+  const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null) // Why not useMemo?
   const [messages, setMessages] = useState<Message[]>([])
   const [opponentProfile, setOpponentProfile] = useState<UserData | null>(null)
   const [ratingsVariation, setRatingsVariation] = useState<{
@@ -103,6 +104,7 @@ export function GameProvider({ children }: Props) {
   const breakpoint = useBreakpoint()
 
   /** Limpa o estado do jogo, colocando os timers em 0. */
+  // Refactor with keys
   const resetStates = useCallback(() => {
     setMatchId(null)
     setTurn(null)
@@ -132,7 +134,7 @@ export function GameProvider({ children }: Props) {
       setTimeout(remove, 3000)
       return remove
     }
-  }, [messages.length, breakpoint])
+  }, [messages, push, breakpoint])
 
   const handleReceiveOpponentUid = useCallback(async (uid: string) => {
     const opponentProfile = await models.users.getById(uid)
@@ -143,7 +145,7 @@ export function GameProvider({ children }: Props) {
     (data: { player: number; opponent: number }) => {
       setRatingsVariation(data)
     },
-    [setRatingsVariation]
+    []
   )
 
   const handleReceiveMessage = useCallback((message: string) => {
@@ -160,7 +162,7 @@ export function GameProvider({ children }: Props) {
   const makeChoice = useCallback((choice: Choice) => {
     socketRef.current?.emit(GameEmittedEvents.Choice, choice)
 
-    setTurn('oponent')
+    setTurn('opponent')
     setPlayerChoices((current) => [...current, choice])
 
     playerTimer.current.pause()
@@ -180,7 +182,7 @@ export function GameProvider({ children }: Props) {
     setTurn(incomingGameState.turn)
     setGameStatus(incomingGameState.status)
     setPlayerChoices(incomingGameState.playerChoices)
-    setOpponentChoices(incomingGameState.oponentChoices)
+    setOpponentChoices(incomingGameState.opponentChoices)
 
     // Muda qual timer está contando
     if (incomingGameState.turn) {
@@ -196,12 +198,12 @@ export function GameProvider({ children }: Props) {
 
     // Sincroniza os timers com os dados recebidos do servidor
     playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
-    opponentTimer.current.setRemaining(incomingGameState.oponentTimeLeft)
+    opponentTimer.current.setRemaining(incomingGameState.opponentTimeLeft)
 
     if (incomingGameState.status === GameStatus.Victory)
       setTriple(getTriple(incomingGameState.playerChoices))
     else if (incomingGameState.status === GameStatus.Defeat)
-      setTriple(getTriple(incomingGameState.oponentChoices))
+      setTriple(getTriple(incomingGameState.opponentChoices))
   }
 
   const getGameSocket = useCallback(
@@ -285,9 +287,9 @@ export function GameProvider({ children }: Props) {
     }
 
     return availableChoices
-  }, [playerChoices])
+  }, [playerChoices, matchId])
 
-  // Auto connects the user to the current game that is being played.
+  // If the player was currently in a game, auto connects him to the game when he logs in.
   useEffect(() => {
     async function checkStatus() {
       try {
@@ -309,7 +311,7 @@ export function GameProvider({ children }: Props) {
     }
 
     checkStatus()
-  }, [getToken, authState])
+  }, [getToken, connectGame, authState])
 
   useEffect(() => {
     return () => {
@@ -318,15 +320,14 @@ export function GameProvider({ children }: Props) {
   }, [])
 
   useEffect(() => {
-    let unsubscribe: Unsubscribe | null = null
+    let unsubscribe: Unsubscribe
     if (opponentProfile)
       unsubscribe = models.users.subscribe(opponentProfile?._id, (data) => {
         setOpponentProfile(data)
       })
-    return () => {
-      if (unsubscribe) unsubscribe()
-    }
-  }, [opponentProfile?._id])
+
+    return () => unsubscribe?.()
+  }, [opponentProfile])
 
   useEffect(() => {
     if (matchId) {
@@ -348,12 +349,12 @@ export function GameProvider({ children }: Props) {
           gameStatus,
           messages,
           playerChoices,
-          oponentChoices: opponentChoices,
+          opponentChoices: opponentChoices,
           playerTimer: playerTimer.current,
-          oponentTimer: opponentTimer.current,
+          opponentTimer: opponentTimer.current,
           availableChoices,
           winningTriple: triple,
-          oponentProfile: opponentProfile,
+          opponentProfile: opponentProfile,
           ratingsVariation,
 
           /** Se conecta a um jogo a partir de um token. */

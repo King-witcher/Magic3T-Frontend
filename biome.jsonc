@@ -6,7 +6,7 @@
 
   "files": {
     "include": ["src/**"],
-    "ignore": ["src/routeTree.gen.ts"]
+    "ignore": ["src/route-tree.gen.ts"]
   },
 
   "extends": [
