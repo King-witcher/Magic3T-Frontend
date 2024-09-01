@@ -1,7 +1,7 @@
 import { Box, Center, Divider, Heading, Text } from '@chakra-ui/react'
-import Choice from './Choice'
+import Choice from './choice'
 
-export default function TutorialPage() {
+export function TutorialTemplate() {
   return (
     <Center>
       <Box w="full" h="100%" p="20px" maxW="800px">

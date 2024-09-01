@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TutorialImport } from './routes/tutorial'
 import { Route as RatingSystemImport } from './routes/rating-system'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
@@ -29,6 +30,11 @@ const UserUserIdImport = createFileRoute('/user/$userId')()
 const AuthGuardedMeImport = createFileRoute('/_auth-guarded/me')()
 
 // Create/Update Routes
+
+const TutorialRoute = TutorialImport.update({
+  path: '/tutorial',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RatingSystemRoute = RatingSystemImport.update({
   path: '/rating-system',
@@ -103,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/rating-system'
       fullPath: '/rating-system'
       preLoaderRoute: typeof RatingSystemImport
+      parentRoute: typeof rootRoute
+    }
+    '/tutorial': {
+      id: '/tutorial'
+      path: '/tutorial'
+      fullPath: '/tutorial'
+      preLoaderRoute: typeof TutorialImport
       parentRoute: typeof rootRoute
     }
     '/_auth-guarded/': {
@@ -184,6 +197,7 @@ export const routeTree = rootRoute.addChildren({
     }),
   }),
   RatingSystemRoute,
+  TutorialRoute,
   UserUserIdRoute: UserUserIdRoute.addChildren({
     UserUserIdUserLayoutRoute: UserUserIdUserLayoutRoute.addChildren({
       UserUserIdUserLayoutTabRoute,
@@ -202,6 +216,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_auth-guarded",
         "/rating-system",
+        "/tutorial",
         "/user/$userId"
       ]
     },
@@ -214,6 +229,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/rating-system": {
       "filePath": "rating-system.tsx"
+    },
+    "/tutorial": {
+      "filePath": "tutorial.tsx"
     },
     "/_auth-guarded/": {
       "filePath": "_auth-guarded/index.tsx",
