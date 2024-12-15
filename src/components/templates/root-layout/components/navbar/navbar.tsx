@@ -7,16 +7,17 @@ import { ProfileButton } from './profile-button'
 
 const Container = chakra(Flex, {
   baseStyle: {
-    h: '55px',
     w: '100%',
-    flex: '0 0 55px',
+    flex: '0 0 65px',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: '10px',
     px: '10px',
-    bg: 'blue.600',
+    borderBottom: '1px solid #ffffff40',
+    bg: '#ffffff30',
     color: 'white',
-    shadow: '0 0 5px 0 #00000080',
+    zIndex: 1,
+    shadow: '0 0 12px 0 #00000040',
   },
 })
 
@@ -37,7 +38,7 @@ export function Navbar() {
           gap="3px"
           _hover={{ bg: 'whiteAlpha.200' }}
         >
-          <Text fontWeight={400}>Jogar</Text>
+          <Text fontWeight={400}>Play</Text>
           <Text fontWeight={700}>Magic3T</Text>
         </Flex>
         {Object.entries(activities).map(([key, activity]) => (

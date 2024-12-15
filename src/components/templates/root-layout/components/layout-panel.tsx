@@ -13,8 +13,9 @@ export function LayoutPanel({ children, overlay, ...props }: Props) {
       overflow="hidden"
       h="full"
       rounded="10px"
-      bg="gray.200"
+      bg="#ffffff30"
       shadow="0 0 10px 0 #00000040"
+      border="solid 1px #ffffff80"
       {...props}
     >
       <Box pos="absolute" inset={0} overflow="hidden scroll">

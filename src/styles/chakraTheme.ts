@@ -9,6 +9,7 @@ import { tooltipTheme } from './tooltip'
 import '@fontsource-variable/nunito'
 import { headingTheme } from './heading'
 import { tabsTheme } from './tabs'
+import { colors } from './colors'
 
 const scrollbarAnimation = keyframes`
   from {
@@ -50,6 +51,7 @@ export const chakraTheme = extendTheme({
   config: {
     initialColorMode: 'light',
   },
+  colors,
   components: {
     Button: buttonTheme,
     Modal: modalTheme,
