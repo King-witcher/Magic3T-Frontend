@@ -1,6 +1,7 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import { Credits, LayoutPanel, Navbar } from './components'
+import { PageWidthLimiter } from '@/components/atoms'
 
 interface Props {
   children: ReactNode
@@ -30,16 +31,9 @@ export function RootLayout({ children }: Props) {
         transform="translate(-50%, -50%)"
       />
       <Navbar />
-      <Flex
-        flex="1"
-        w="full"
-        justify="center"
-        p="10px"
-        h="fit-content"
-        gap="10px"
-      >
+      <Flex flex="1" w="full" justify="center" h="fit-content">
         {/* <LayoutPanel w="full" maxW="1280px" overlay={<Credits />}> */}
-        {children}
+        <PageWidthLimiter>{children}</PageWidthLimiter>
         {/* </LayoutPanel> */}
         {/* <LayoutPanel w="420px">
           <Flex flex="0 0 40px" align="center" justify="center" bg="gray.100">

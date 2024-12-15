@@ -4,22 +4,37 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { GameMode } from '@/types/queue'
-import { Center, type CenterProps, Flex, Spinner } from '@chakra-ui/react'
-import type { ReactNode } from 'react'
+import {
+  Box,
+  Center,
+  type CenterProps,
+  Flex,
+  keyframes,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 
 interface Props extends CenterProps {
-  children: ReactNode
   gameMode: GameMode
+  name: string
+  playersInQueue?: number
+  isLoading: boolean
 }
 
-export function QueueModeButton({ children, gameMode, ...props }: Props) {
-  const { queueModes, enqueue, dequeue } = useQueue()
+export function QueueModeButton({
+  children,
+  gameMode,
+  name,
+  playersInQueue,
+  isLoading,
+  ...props
+}: Props) {
+  const { enqueue, dequeue } = useQueue()
   const { serverStatus } = useServiceStatus()
   const isDisabled = serverStatus !== ServerStatus.On
-  const isLoading = !!queueModes[gameMode]
 
   const handleClick = () => {
-    console.log('clicked')
     if (!isLoading) {
       enqueue(gameMode)
     } else {
@@ -29,28 +44,59 @@ export function QueueModeButton({ children, gameMode, ...props }: Props) {
 
   return (
     <Center
-      flex="1"
-      w="200px"
-      bg={isDisabled ? 'gray.200' : 'gray.50'}
-      color={isDisabled ? 'gray.400' : 'black'}
+      flex={{ base: '1 0 75px', sm: '1' }}
+      h="75px"
+      background="#ffffff30"
+      color="light"
       cursor={isDisabled ? 'unset' : 'pointer'}
-      transition="all 200ms"
+      transition="all 200ms, box-shadow 500ms"
       pos="relative"
       userSelect="none"
+      boxShadow={isLoading ? 'inset 0 0 10px 0 #00ff40' : undefined}
       onClick={isDisabled ? undefined : handleClick}
       _hover={
         isDisabled
           ? undefined
           : {
-              bg: 'gray.200',
+              bg: '#ffffff60',
+            }
+      }
+      _active={
+        isDisabled
+          ? undefined
+          : {
+              bg: '#ffffff20',
             }
       }
       {...props}
     >
-      <Flex align="center" gap="5px">
-        {isLoading && <Spinner size="sm" color="blue.300" />}
-        {children}
-      </Flex>
+      <Center
+        h="full"
+        aspectRatio={1}
+        pos="absolute"
+        left="0px"
+        opacity={isLoading ? 1 : 0}
+        transition="opacity 200ms"
+      >
+        <Spinner size="sm" speed="1s" />
+      </Center>
+      <Stack spacing={0}>
+        <Text as="span" textAlign="center" fontSize="18px">
+          {name}
+        </Text>
+        {playersInQueue !== undefined && (
+          <Text
+            as="span"
+            fontSize="12px"
+            fontWeight={500}
+            color={playersInQueue ? 'green.400' : '#ffffff60'}
+            textAlign="center"
+          >
+            {playersInQueue} player
+            {playersInQueue !== 1 && 's'} in queue
+          </Text>
+        )}
+      </Stack>
     </Center>
   )
 }
