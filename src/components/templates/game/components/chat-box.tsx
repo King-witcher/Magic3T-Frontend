@@ -25,12 +25,13 @@ export function ChatBox({ inputRef, ...props }: Props) {
   } = useChatHandler()
 
   return (
-    <Center flexShrink={0} h="full" position="relative" w="500px" {...props}>
+    <Center flexShrink={0} position="relative" w="400px" {...props}>
       <VStack
-        border="solid 1px #ddd"
+        border="solid 1px #ffffff40"
+        bg="#ffffff30"
+        boxShadow="0 0 10px 0 #00000040"
         borderRadius="10px"
-        w="500px"
-        h="full"
+        inset={0}
         gap="0"
         pos="absolute"
         overflow="hidden"
@@ -48,9 +49,10 @@ export function ChatBox({ inputRef, ...props }: Props) {
                 maxW="300px"
                 p="8px 13px"
                 gap="3px"
-                rounded="8px"
-                color={message.sender === 'you' ? 'blue.700' : 'red.700'}
-                bg={message.sender === 'you' ? 'blue.100' : 'red.100'}
+                rounded="6px"
+                color="light"
+                bg="#ffffff30"
+                border="solid 1px #ffffff40"
                 key={message.timestamp}
                 alignSelf={message.sender === 'you' ? 'flex-end' : 'flex-start'}
               >
@@ -75,11 +77,15 @@ export function ChatBox({ inputRef, ...props }: Props) {
             ref={inputRef}
             variant="unstyled"
             boxShadow="none"
-            borderTop="solid 1px #ddd"
+            borderTop="solid 1px #ffffff40"
+            color="light"
             rounded="0"
             value={currentMessage}
             onChange={handleChangeMessageField}
-            placeholder="Escreva uma mensagem"
+            placeholder="Write a message"
+            _placeholder={{
+              color: '#ffffff80',
+            }}
             maxLength={1024}
           />
         </Box>

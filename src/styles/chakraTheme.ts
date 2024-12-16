@@ -28,12 +28,12 @@ export const chakraTheme = extendTheme({
         },
         '::-webkit-scrollbar-thumb': {
           w: '5px',
-          bg: 'blue.700',
+          bg: '#ffffff80',
           borderRadius: '999px',
         },
       },
       body: {
-        bg: 'gray.400',
+        bg: '#281e55',
         color: 'blackAlpha.800',
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {

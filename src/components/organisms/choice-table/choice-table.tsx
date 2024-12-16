@@ -119,16 +119,20 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
     )
   }
 
+  console.log(state)
+
   return (
     <Grid
       gridTemplateColumns="repeat(3, 1fr)"
-      rounded="16px"
+      border="1px solid #ffffff40"
+      p="20px"
+      rounded="10px"
       overflow="hidden"
       w="fit-content"
       h="fit-content"
-      bg="gray.100"
-      // border="solid 1px var(--chakra-colors-gray-200)"
-      // bg="gray.200"
+      bg="#ffffff30"
+      boxShadow="0 0 10px 0 #00000040"
+      gap="10px"
     >
       {allChoices.map((number) => {
         const blueChoice = blueMoves.includes(number)

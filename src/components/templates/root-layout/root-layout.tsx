@@ -15,8 +15,6 @@ export function RootLayout({ children }: Props) {
       h="100dvh"
       gap="0"
       pos="relative"
-      bg="#332455"
-      // bg="#450b5c"
     >
       <Box
         w="full"
@@ -31,15 +29,8 @@ export function RootLayout({ children }: Props) {
         transform="translate(-50%, -50%)"
       />
       <Navbar />
-      <Flex flex="1" w="full" justify="center" h="fit-content">
-        {/* <LayoutPanel w="full" maxW="1280px" overlay={<Credits />}> */}
+      <Flex flex="1" w="full" justify="center" h="fit-content" zIndex={1}>
         <PageWidthLimiter>{children}</PageWidthLimiter>
-        {/* </LayoutPanel> */}
-        {/* <LayoutPanel w="420px">
-          <Flex flex="0 0 40px" align="center" justify="center" bg="gray.100">
-            Global Ranking
-          </Flex>
-        </LayoutPanel> */}
       </Flex>
     </Stack>
   )

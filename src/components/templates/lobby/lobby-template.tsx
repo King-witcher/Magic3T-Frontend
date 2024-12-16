@@ -6,7 +6,7 @@ import {
 import { Center, Heading, Stack, Text } from '@chakra-ui/react'
 import { QueueModeButton } from './queue-mode-button'
 import { GameMode } from '@/types/queue'
-import { ButtonsContainer } from './buttons-container'
+import { ButtonsContainer } from '@/components/atoms'
 
 export function LobbyTemplate() {
   const { queueUserCount, queueModes } = useQueue()
