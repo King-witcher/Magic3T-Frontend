@@ -81,7 +81,6 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
 
   const ticTacToeCheat = useCallback(() => {
     initialTicTacToeCheat()
-    console.log('tictic')
     setAllChoices([...cheatAllChoices])
   }, [])
 
@@ -118,8 +117,6 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
       </VStack>
     )
   }
-
-  console.log(state)
 
   return (
     <Grid

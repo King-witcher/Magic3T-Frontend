@@ -129,9 +129,9 @@ export function GameTemplate() {
               <InnerButton h="60px" w="200px" onClick={disconnect}>
                 Leave room
               </InnerButton>
-              <Link to={`me/history/${matchId}`}>
+              <Link to={`/match/${matchId}`}>
                 <InnerButton h="60px" w="200px">
-                  View on history
+                  View match
                 </InnerButton>
               </Link>
             </>
