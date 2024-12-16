@@ -81,13 +81,14 @@ export function ChoiceComponent({
   return (
     <Flex
       key={choice}
-      w="70px"
-      h="70px"
+      w="1fr"
+      aspectRatio={1}
+      // h="70px"
       alignItems="center"
       justifyContent="center"
       backgroundSize="200%"
       boxSizing="border-box"
-      fontSize="25px"
+      fontSize={{ base: '30px', sm: '25px' }}
       fontWeight="300"
       rounded="10px"
       overflow="hidden"

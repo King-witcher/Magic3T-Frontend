@@ -56,16 +56,29 @@ export function GameTemplate() {
   if (!isActive) return null // Improve
   return (
     <Center w="full">
-      <VStack spacing="40px">
+      <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
         <Heading w="fit-content">{statusText[gameStatus]}</Heading>
-        <Flex h="min-content" gap="20px" align="stretch" justify="center">
-          <Stack spacing="20px" align="center" justify="space-between">
-            <PlayerCard player="opponent" chatInputRef={{ current: null }} />
+        <Flex
+          h="min-content"
+          gap="20px"
+          align="stretch"
+          justify="center"
+          flexDir={{ base: 'column', sm: 'row' }}
+          w="full"
+        >
+          <Stack
+            spacing="20px"
+            align="center"
+            justify="space-between"
+            hideBelow="sm"
+          >
+            <PlayerCard player="opponent" />
             <Text color="light">vs</Text>
-            <PlayerCard player="current" chatInputRef={chatInputRef} />
+            <PlayerCard player="current" />
           </Stack>
           <VStack gap="20px" justify="center">
-            <VStack gap="20px">
+            <VStack gap="20px" w="full">
+              <PlayerCard player="opponent" w="full" hideFrom={'sm'} />
               <Center
                 rounded="10px"
                 h="50px"
@@ -81,6 +94,7 @@ export function GameTemplate() {
                 />
               </Center>
               <ChoiceTable
+                w={{ base: 'full', sm: '300px' }}
                 redMoves={opponentChoices}
                 blueMoves={playerChoices}
                 state={
@@ -106,19 +120,18 @@ export function GameTemplate() {
                   timer={playerTimer}
                 />
               </Center>
+              <PlayerCard player="current" w="full" hideFrom={'sm'} />
             </VStack>
           </VStack>
-          <ChatBox
-            inputRef={chatInputRef}
-            display={{
-              base: 'none',
-              lg: 'flex',
-            }}
-          />
+          <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
         </Flex>
-        <ButtonsContainer w="fit-content">
+        <ButtonsContainer w={{ base: 'full', sm: 'fit-content' }}>
           {gameStatus === GameStatus.Playing && (
-            <InnerButton h="60px" w="200px" onClick={openForfeitModal}>
+            <InnerButton
+              h="60px"
+              w={{ base: 'full', sm: '200px' }}
+              onClick={openForfeitModal}
+            >
               Surrender
             </InnerButton>
           )}
@@ -126,11 +139,15 @@ export function GameTemplate() {
             gameStatus === GameStatus.Defeat ||
             gameStatus === GameStatus.Draw) && (
             <>
-              <InnerButton h="60px" w="200px" onClick={disconnect}>
+              <InnerButton
+                h="60px"
+                w={{ base: 'full', sm: '200px' }}
+                onClick={disconnect}
+              >
                 Leave room
               </InnerButton>
               <Link to={`/match/${matchId}`}>
-                <InnerButton h="60px" w="200px">
+                <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
                   View match
                 </InnerButton>
               </Link>

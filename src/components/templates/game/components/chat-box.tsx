@@ -25,7 +25,7 @@ export function ChatBox({ inputRef, ...props }: Props) {
   } = useChatHandler()
 
   return (
-    <Center flexShrink={0} position="relative" w="400px" {...props}>
+    <Center flexShrink={0} position="relative" w={{ sm: '400px' }} {...props}>
       <VStack
         border="solid 1px #ffffff40"
         bg="#ffffff30"

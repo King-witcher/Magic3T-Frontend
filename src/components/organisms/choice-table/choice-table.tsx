@@ -3,10 +3,10 @@ import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/Commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
-import { Grid, Image, Text, VStack } from '@chakra-ui/react'
+import { type ChakraProps, Grid, Image, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-interface Props {
+interface Props extends ChakraProps {
   redMoves: Choice[]
   blueMoves: Choice[]
   state: 'selectable' | 'static' | 'disabled'
@@ -64,7 +64,13 @@ function initialSetPugDanceCheat() {
 setCommand('3tmode', initialSetPugDanceCheat)
 setCommand('ttt', initialTicTacToeCheat)
 
-export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
+export function ChoiceTable({
+  redMoves,
+  blueMoves,
+  state,
+  onSelect,
+  ...rest
+}: Props) {
   const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
   const [pugDance, setPugDance] = useState(initialPugDance)
 
@@ -125,11 +131,12 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
       p="20px"
       rounded="10px"
       overflow="hidden"
-      w="fit-content"
+      w="full"
       h="fit-content"
       bg="#ffffff30"
       boxShadow="0 0 10px 0 #00000040"
       gap="10px"
+      {...rest}
     >
       {allChoices.map((number) => {
         const blueChoice = blueMoves.includes(number)

@@ -1,7 +1,6 @@
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
-import { GameStatus } from '@/types/game.ts'
 import {
   Badge,
   Center,
@@ -10,21 +9,16 @@ import {
   Stack,
   Text,
   keyframes,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   useDisclosure,
   Avatar,
+  type CenterProps,
 } from '@chakra-ui/react'
 import type { RefObject } from 'react'
-import { ChatDrawer, ForfeitModal } from '.'
 import { Link } from '@tanstack/react-router'
 import { SmoothNumber } from '@/components/atoms'
 
-interface Props {
+interface Props extends CenterProps {
   player: 'current' | 'opponent'
-  chatInputRef: RefObject<HTMLInputElement>
 }
 
 const appear = keyframes`
@@ -35,26 +29,13 @@ const appear = keyframes`
   }
 `
 
-export function PlayerCard({ player, chatInputRef }: Props) {
+export function PlayerCard({ player, ...rest }: Props) {
   const { user } = useGuardedAuth()
   const { getRankInfo } = useRankInfo()
 
-  const {
-    isOpen: forfeitModaOpen,
-    onClose: closeForfeitModal,
-    onOpen: openForfeitModal,
-  } = useDisclosure()
-
-  const { matchId, isActive, gameStatus, opponentProfile, ratingsVariation } =
-    useGame()
+  const { isActive, opponentProfile, ratingsVariation } = useGame()
 
   const currentPlayer = player === 'current'
-
-  const {
-    isOpen: chatIsOpen,
-    onClose: chatOnClose,
-    onOpen: chatOnOpen,
-  } = useDisclosure()
 
   const profile = currentPlayer ? user : opponentProfile
   const rinfo = profile && getRankInfo(profile.glicko)
@@ -80,6 +61,7 @@ export function PlayerCard({ player, chatInputRef }: Props) {
       bg="#ffffff30"
       boxShadow="0 0 10px 0 #00000040"
       w="400px"
+      {...rest}
     >
       <Avatar src={profile?.photoURL} size="lg" border="1px solid #ffffff40" />
       <Stack gap="0">
