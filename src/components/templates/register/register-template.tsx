@@ -13,6 +13,7 @@ import { Link, Navigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
+import { RiGoogleFill } from 'react-icons/ri'
 
 interface FormData {
   email: string
@@ -67,13 +68,19 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
     <Center h="full">
       <VStack
         as="form"
+        p="20px"
         justifyContent="center"
         alignItems="center"
         onSubmit={handleSubmit(handleRegister)}
         w="full"
+        bg="#ffffff30"
+        rounded="10px"
+        spacing="10px"
+        border="solid 1px #ffffff40"
+        boxShadow="0 0 40px 0 #00000040"
         maxW={{ base: 'auto', sm: '400px' }}
       >
-        <Heading>Criar conta</Heading>
+        <Heading lineHeight="3.125rem">Register</Heading>
         <Input
           variant="form"
           placeholder="Email"
@@ -81,27 +88,36 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
           type="email"
           {...register('email', { required: true })}
           {...(errors.email
-            ? { borderColor: 'red.400', borderWidth: '1px 1px 1px 5px' }
+            ? {
+                borderColor: '#ff4040',
+                boxShadow: 'inset 0 0 5px 0 #ff4040',
+              }
             : {})}
         />
         <Input
           variant="form"
-          placeholder="Senha"
+          placeholder="Password"
           isDisabled={waiting}
           type="password"
           {...register('password', { required: true })}
           {...(errors.password
-            ? { borderColor: 'red.400', borderWidth: '1px 1px 1px 5px' }
+            ? {
+                borderColor: '#ff4040',
+                boxShadow: 'inset 0 0 5px 0 #ff4040',
+              }
             : {})}
         />
         <Input
           variant="form"
-          placeholder="Confirmar senha"
+          placeholder="Check password"
           isDisabled={waiting}
           {...register('checkPassword', { required: true })}
           type="password"
           {...(errors.checkPassword
-            ? { borderColor: 'red.400', borderWidth: '1px 1px 1px 5px' }
+            ? {
+                borderColor: '#ff4040',
+                boxShadow: 'inset 0 0 5px 0 #ff4040',
+              }
             : {})}
         />
         <VStack w="full" gap="0">
@@ -115,21 +131,21 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
             {waiting ? (
               <Spinner size="sm" speed="1s" thickness="3px" />
             ) : (
-              'Registrar'
+              'Submit'
             )}
           </Button>
-          {error && <Text color="red.400">{error}</Text>}
+          {error && <Text color="#ff4000">{error}</Text>}
         </VStack>
         <Link to={referrer ? `/sign-in?referrer=${referrer}` : '/sign-in'}>
-          <Text color="blue.500">Tenho uma conta</Text>
+          <Text color="#9cabff">Already have an account</Text>
         </Link>
 
-        <Text>ou</Text>
+        <Text>or</Text>
 
-        <Button size="lg" w="full" onClick={signInGoogle}>
+        <Button size="lg" w="full" variant="submitForm" onClick={signInGoogle}>
           <Flex gap="10px" alignItems="center">
-            <FcGoogle size="24px" />
-            Continuar com Google
+            <RiGoogleFill size="24px" />
+            Sign-in with Gogle
           </Flex>
         </Button>
       </VStack>

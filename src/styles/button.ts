@@ -12,17 +12,17 @@ const baseStyle = defineStyle<ChakraProps>({
 
 const submitForm = defineStyle<ChakraProps>({
   transition: 'background 80ms linear',
-  bg: 'blue.400',
-  boxShadow: 'none',
+  bg: '#ffffff80',
+  border: 'solid 1px #ffffff40',
   rounded: '10px',
+  boxShadow: '0 0 10px 0 #ffffff40',
   color: 'white',
   fontSize: '20px',
   fontWeight: 400,
   fontFamily: 'nunito variable',
   p: '10px 20px',
-  borderColor: 'blue.400',
   _hover: {
-    bg: 'blue.300',
+    bg: '#ffffffc0',
   },
   _active: {
     bg: 'blue.500',

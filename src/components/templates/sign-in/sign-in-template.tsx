@@ -17,6 +17,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
+import { RiGoogleFill } from 'react-icons/ri'
 
 interface Props {
   referrer?: string
@@ -33,6 +34,7 @@ export function SignInTemplate({ referrer = '/' }: Props) {
     register,
     handleSubmit,
     setError: setFormError,
+    clearErrors,
     watch,
     formState: { errors },
   } = useForm({
@@ -63,6 +65,8 @@ export function SignInTemplate({ referrer = '/' }: Props) {
       return
     }
 
+    setError(null)
+    clearErrors()
     setHideResetPassword(true)
     setTimeout(() => setHideResetPassword(false), 5000)
     await sendPasswordResetEmail(auth, email)
@@ -77,108 +81,87 @@ export function SignInTemplate({ referrer = '/' }: Props) {
     )
 
   return (
-    <VStack
-      h="100%"
-      justifyContent="center"
-      gap="10px"
-      flexDir={{ base: 'column', lg: 'row' }}
-    >
-      <Center
-        flex="1"
-        fontSize={['60px', '80px', '120px']}
-        fontWeight="700"
-        color="blue.500"
+    <Center flex="1" boxSizing="border-box" w="full" h="full">
+      <VStack
+        as="form"
+        p="20px"
+        justifyContent="center"
+        alignItems="center"
+        onSubmit={handleSubmit(handleSignIn)}
+        w="full"
+        bg="#ffffff30"
+        rounded="10px"
+        spacing="10px"
+        border="solid 1px #ffffff40"
+        boxShadow="0 0 40px 0 #00000040"
+        maxW={{ base: 'auto', sm: '400px' }}
       >
-        Magic3T
-      </Center>
-      <Divider hideBelow="lg" orientation="vertical" />
-      <Center flex="1" boxSizing="border-box" w="full">
-        <VStack
-          as="form"
-          justifyContent="center"
-          alignItems="center"
-          onSubmit={handleSubmit(handleSignIn)}
-          w="full"
-          maxW={{ base: 'auto', sm: '400px' }}
-        >
-          <Heading>Entrar</Heading>
-          <Input
-            variant="form"
-            placeholder="Email"
-            {...register('email', { required: true })}
-            type="email"
+        <Heading lineHeight="3.125rem">Sign-in</Heading>
+        <Input
+          variant="form"
+          placeholder="Email"
+          {...register('email', { required: true })}
+          type="email"
+          isDisabled={waiting}
+          {...(errors.email
+            ? {
+                borderColor: '#ff4040',
+                boxShadow: 'inset 0 0 5px 0 #ff4040',
+              }
+            : {})}
+        />
+        <Input
+          variant="form"
+          placeholder="Password"
+          {...register('password', { required: true })}
+          type="password"
+          isDisabled={waiting}
+          {...(errors.password
+            ? {
+                borderColor: '#ff4040',
+                boxShadow: 'inset 0 0 5px 0 #ff4040',
+              }
+            : {})}
+        />
+        <VStack w="full" gap="0">
+          <Button
+            variant="submitForm"
+            type="submit"
+            w="full"
             isDisabled={waiting}
-            {...(errors.email
-              ? { borderColor: 'red.400', borderWidth: '1px 1px 1px 5px' }
-              : {})}
-          />
-          <Input
-            variant="form"
-            placeholder="Senha"
-            {...register('password', { required: true })}
-            type="password"
-            isDisabled={waiting}
-            {...(errors.password
-              ? { borderColor: 'red.400', borderWidth: '1px 1px 1px 5px' }
-              : {})}
-          />
-          <VStack w="full" gap="0">
-            <Button
-              variant="submitForm"
-              type="submit"
-              w="full"
-              isDisabled={waiting}
-            >
-              {waiting ? (
-                <Spinner size="sm" speed="1s" thickness="3px" />
-              ) : (
-                'Entrar'
-              )}
-            </Button>
-
-            {error && <Text color="red.400">{error}</Text>}
-          </VStack>
-          <Flex gap="10px">
-            <Link
-              to={referrer ? `/register?referrer=${referrer}` : '/register'}
-            >
-              <Text color="blue.500">Criar conta</Text>
-            </Link>{' '}
-            -
-            {hideResetPassword ? (
-              <Text color="blue.500">Email de recuperação enviado</Text>
+          >
+            {waiting ? (
+              <Spinner size="sm" speed="1s" thickness="3px" />
             ) : (
-              <Text color="blue.500" onClick={handleRecover} cursor="pointer">
-                Recuperar senha
-              </Text>
+              'Submit'
             )}
-          </Flex>
-
-          <Text>ou</Text>
-
-          <Button size="lg" w="full" onClick={signInGoogle}>
-            <Flex gap="10px" alignItems="center">
-              <FcGoogle size="24px" />
-              Continuar com Google
-            </Flex>
           </Button>
-          {/* <Flex
-          fontSize={['20px', '32px']}
-          alignItems="center"
-          bgColor="gray.100"
-          p={['5px 10px', '10px 20px']}
-          borderRadius={['10px', '20px']}
-          _hover={{ bg: 'gray.50' }}
-          gap="10px"
-          userSelect="none"
-          cursor="pointer"
-          onClick={signInGoogle}
-        >
-          <FcGoogle />
-          <Text fontSize={['16px', '24px']}>Entrar com Google</Text>
-        </Flex> */}
+
+          {error && <Text color="#ff4000">{error}</Text>}
         </VStack>
-      </Center>
-    </VStack>
+        <Flex gap="10px">
+          <Link to={referrer ? `/register?referrer=${referrer}` : '/register'}>
+            <Text color="#9cabff">Create account</Text>
+          </Link>{' '}
+          -
+          {hideResetPassword ? (
+            <Text color="#9cabff">Recovery email sent</Text>
+          ) : (
+            <Text color="#9cabff" onClick={handleRecover} cursor="pointer">
+              Recovery password
+            </Text>
+          )}
+        </Flex>
+
+        <Text>or</Text>
+
+        <Button size="lg" w="full" variant="submitForm" onClick={signInGoogle}>
+          <Flex gap="10px" alignItems="center">
+            <RiGoogleFill size="24px" />
+            Sign-in with Gogle
+          </Flex>
+        </Button>
+      </VStack>
+    </Center>
   )
 }
