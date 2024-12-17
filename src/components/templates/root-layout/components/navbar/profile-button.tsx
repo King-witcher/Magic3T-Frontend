@@ -37,40 +37,39 @@ export function ProfileButton() {
 
   return (
     <Menu>
-      <Tooltip label={user?.nickname} openDelay={400}>
-        <MenuButton
-          borderRadius="8px"
-          transition="all linear 80ms"
-          borderColor={rinfo?.colorScheme.darker}
-          sx={{
+      <MenuButton
+        borderRadius="8px"
+        transition="all linear 80ms"
+        borderColor={rinfo?.colorScheme.darker}
+        sx={{
+          img: {
+            transition: 'all linear 80ms',
+          },
+          _hover: {
+            backdropFilter: 'brightness(1.15)',
             img: {
-              transition: 'all linear 80ms',
+              filter: 'brightness(1.1)',
             },
-            _hover: {
-              backdropFilter: 'brightness(1.15)',
-              img: {
-                filter: 'brightness(1.1)',
-              },
+          },
+        }}
+      >
+        <Avatar
+          // src={user?.photoURL || undefined}
+          src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+          w="40px"
+          h="40px"
+          bg="whiteAlpha.300"
+          rounded="8px"
+          sx={{
+            '& img': {
+              rounded: '8px',
             },
           }}
-        >
-          <Avatar
-            src={user?.photoURL || undefined}
-            w="40px"
-            h="40px"
-            bg="whiteAlpha.300"
-            rounded="8px"
-            sx={{
-              '& img': {
-                rounded: '8px',
-              },
-            }}
-          />
-        </MenuButton>
-      </Tooltip>
-      <MenuList>
+        />
+      </MenuButton>
+      <MenuList zIndex={1}>
         {user && (
-          <MenuItem as={Link} to="/me">
+          <MenuItem as={Link} to="/me" zIndex={1}>
             Perfil
           </MenuItem>
         )}

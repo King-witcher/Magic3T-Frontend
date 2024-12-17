@@ -63,7 +63,11 @@ export function PlayerCard({ player, ...rest }: Props) {
       w="400px"
       {...rest}
     >
-      <Avatar src={profile?.photoURL} size="lg" border="1px solid #ffffff40" />
+      <Avatar
+        src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+        size="lg"
+        border="1px solid #ffffff40"
+      />
       <Stack gap="0">
         {profile && (
           <>
