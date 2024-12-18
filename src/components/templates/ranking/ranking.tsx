@@ -1,5 +1,5 @@
 import { useConfig } from '@/contexts/config.context'
-import { type RatingInfo, useRatingInfo } from '@/hooks/use-rating-info'
+import { type RatingInfo, Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import { rankingQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -73,11 +73,32 @@ export function RankingTemplate() {
                 <Center fontWeight={700} flex="0 0 25px">
                   {rinfo.reliable ? `#${index + 1}` : '-'}
                 </Center>{' '}
-                <Box>{user.identification?.nickname}</Box>
+                <Flex align={'center'} gap="5px">
+                  {(user.role === 'bot' || user.role === 'creator') && (
+                    <Center
+                      fontSize="10px"
+                      lineHeight="normal"
+                      p="3px"
+                      backgroundColor="#ffffff40"
+                      rounded="5px"
+                      textTransform="uppercase"
+                    >
+                      {user.role}
+                    </Center>
+                  )}
+                  {user.identification?.nickname}
+                </Flex>
                 <Flex ml="auto" align="center" gap="5px">
                   {rinfo.reliable && rinfo.rating}
                   {rinfo.precise && '!'}
-                  <Image src={tierInfo.emblem} w="30px" />
+                  <Image
+                    src={
+                      user.role === 'creator'
+                        ? tiersMap[Tier.Challenger].emblem
+                        : tierInfo.emblem
+                    }
+                    w="30px"
+                  />
                 </Flex>
               </Flex>
             )

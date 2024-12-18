@@ -65,9 +65,9 @@ export function ProfileTemplate({ user }: Props) {
           m="180px 40px 30px 40px"
         />
         <Flex alignItems="center" gap="8px">
-          {user.role === 'bot' && (
-            <Badge rounded="5px" fontSize="14px" bg="gray.400">
-              Bot
+          {(user.role === 'bot' || user.role === 'creator') && (
+            <Badge rounded="5px" fontSize="14px" bg="#ffffff40" color="light">
+              {user.role}
             </Badge>
           )}
           <Text
