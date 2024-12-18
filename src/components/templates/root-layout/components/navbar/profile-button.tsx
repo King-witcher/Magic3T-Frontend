@@ -76,7 +76,7 @@ export function ProfileButton() {
             Play
           </MenuItem>
         )}
-        {user && <MenuItem onClick={openSecretCode}>Códigos secretos</MenuItem>}
+        {user && <MenuItem onClick={openSecretCode}>Cheats</MenuItem>}
         <MenuItem as={Link} to="/tutorial">
           How to play
         </MenuItem>
