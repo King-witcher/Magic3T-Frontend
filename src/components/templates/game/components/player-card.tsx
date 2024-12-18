@@ -75,6 +75,7 @@ export function PlayerCard({ player, ...rest }: Props) {
       <UserAvatar
         icon={profile?.summoner_icon || 0}
         wing={rinfo?.wing || ''}
+        division={rinfo?.division || 1}
         m="10px 30px"
         size={70}
       />

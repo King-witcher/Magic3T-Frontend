@@ -27,7 +27,7 @@ export function MatchBody({ match }: Props) {
         </Tooltip>
       </Flex>
       <Flex gap="20px" justify="center">
-        <Stack align="center" spacing="10px">
+        <Stack align="center" spacing="10px" hideBelow="sm">
           <PlayerCard matchPlayer={match.white} />
           <Text>vs</Text>
           <PlayerCard matchPlayer={match.black} />

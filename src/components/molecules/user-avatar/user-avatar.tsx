@@ -17,7 +17,7 @@ export function UserAvatar({ icon, wing, size, division, ...rest }: Props) {
         <Image
           src={getIconUrl(icon)}
           pos="absolute"
-          inset="0"
+          boxSize="100%"
           top="0"
           rounded="999"
         />
@@ -30,7 +30,7 @@ export function UserAvatar({ icon, wing, size, division, ...rest }: Props) {
           lineHeight={`${size * 0.16}px`}
           top="-10%"
         >
-          {division}III
+          {division}
         </Text>
       </Center>
     </Center>

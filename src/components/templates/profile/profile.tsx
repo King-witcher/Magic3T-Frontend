@@ -26,32 +26,33 @@ const indexMap: Record<string, number> = {
 
 export function ProfileTemplate({ user, index, baseUrl }: Props) {
   return (
-    <Box {...getAcrylicProps()} minH="full" p="10px">
-      <Tabs index={indexMap[index] || 0} isLazy>
-        <TabList>
-          <Link to={`${baseUrl}/profile`} preload="viewport">
-            <Tab>Perfil</Tab>
-          </Link>
-          <Link to={`${baseUrl}/history`}>
-            <Tab>Histórico</Tab>
-          </Link>
-          <Link to={`${baseUrl}/standings`}>
-            <Tab>Ranking</Tab>
-          </Link>
-        </TabList>
-        <TabIndicator />
-        <TabPanels>
-          <TabPanel>
-            <ProfileTab user={user} />
-          </TabPanel>
-          <TabPanel>
-            <HistoryTab referenceUid={user._id} />
-          </TabPanel>
-          <TabPanel>
-            <RankingTab />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Box>
+    // <Box {...getAcrylicProps()} minH="full" p="10px">
+    //   <Tabs index={indexMap[index] || 0} isLazy>
+    //     <TabList>
+    //       <Link to={`${baseUrl}/profile`} preload="viewport">
+    //         <Tab>Perfil</Tab>
+    //       </Link>
+    //       <Link to={`${baseUrl}/history`}>
+    //         <Tab>Histórico</Tab>
+    //       </Link>
+    //       <Link to={`${baseUrl}/standings`}>
+    //         <Tab>Ranking</Tab>
+    //       </Link>
+    //     </TabList>
+    //     <TabIndicator />
+    //     <TabPanels>
+    //       <TabPanel>
+    //         <ProfileTab user={user} />
+    //       </TabPanel>
+    //       <TabPanel>
+    //         <HistoryTab referenceUid={user._id} />
+    //       </TabPanel>
+    //       <TabPanel>
+    //         <RankingTab />
+    //       </TabPanel>
+    //     </TabPanels>
+    //   </Tabs>
+    // </Box>
+    <ProfileTab user={user} />
   )
 }

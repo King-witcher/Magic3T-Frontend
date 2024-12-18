@@ -1,3 +1,4 @@
+import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
@@ -43,7 +44,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
       display="flex"
       p="10px 14px"
       alignItems="center"
-      w="250px"
+      w="300px"
       h="fit-content"
       overflow="hidden"
       gap="8px"
@@ -53,7 +54,13 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
       }}
       {...getAcrylicProps()}
     >
-      <Avatar size="lg" src={getIconUrl(userQuery.data?.summoner_icon)} />
+      <UserAvatar
+        size={70}
+        wing={rankInfo.wing}
+        division={rankInfo.division}
+        icon={userQuery.data?.summoner_icon || 0}
+        m="20px 30px"
+      />
       <LinkOverlay
         as={Link}
         to={
@@ -70,7 +77,13 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
           <Text>{matchPlayer.name}</Text>
         </Flex>
         <Flex gap="5px" alignItems="center">
-          <Image ml="3px" src={rankInfo.emblem} alt="rank" draggable={false} />
+          <Image
+            ml="3px"
+            w="35px"
+            src={rankInfo.emblem}
+            alt="rank"
+            draggable={false}
+          />
           {Math.round(matchPlayer.score)}{' '}
           <Text
             fontSize="14px"

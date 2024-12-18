@@ -67,6 +67,7 @@ export function ProfileCard({ user }: Props) {
     >
       <UserAvatar
         icon={user.summoner_icon}
+        division={rinfo.division}
         size={150}
         wing={rinfo.wing}
         m="40px 0"
