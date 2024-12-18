@@ -32,13 +32,13 @@ const divisionMap = {
 export function ProfileTemplate({ user }: Props) {
   const { getRankInfo } = useRatingInfo()
   const changeIconModalDisclosure = useDisclosure()
+  const { user: authenticatedUser } = useAuth()
 
   const { getToken } = useAuth()
 
   const { ratingConfig } = useConfig()
 
   const rinfo = getRankInfo(user.glicko)
-  console.log(user.glicko)
   const tierInfo = tiersMap[rinfo.tier]
 
   const progress = useMemo(() => {
@@ -92,8 +92,12 @@ export function ProfileTemplate({ user }: Props) {
           division={rinfo.division}
           size={140}
           m="180px 40px 30px 40px"
-          onClick={changeIconModalDisclosure.onOpen}
-          cursor="pointer"
+          onClick={
+            user._id === authenticatedUser?._id
+              ? changeIconModalDisclosure.onOpen
+              : undefined
+          }
+          cursor={user._id === authenticatedUser?._id ? 'pointer' : 'auto'}
         />
         <Flex alignItems="center" gap="8px">
           {(user.role === 'bot' || user.role === 'creator') && (
