@@ -1,7 +1,7 @@
 import LogoutModal from '@/components/organisms/modals/LogoutModal'
 import SecretCodeModal from '@/components/organisms/modals/SecretCodeModal'
 import { useAuth } from '@/contexts/auth.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
@@ -19,7 +19,7 @@ export function ProfileButton() {
   const navigate = useNavigate()
   const { user, signInGoogle: signIn } = useAuth()
 
-  const { getRankInfo } = useRankInfo()
+  const { getRankInfo } = useRatingInfo()
   const rinfo = useMemo(() => {
     return user && getRankInfo(user.glicko)
   }, [user, getRankInfo])

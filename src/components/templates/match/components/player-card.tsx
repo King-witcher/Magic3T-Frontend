@@ -1,6 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export function PlayerCard({ matchPlayer, highlight }: Props) {
-  const { getRankInfo } = useRankInfo()
+  const { getRankInfo } = useRatingInfo()
 
   const rankInfo = useMemo(() => {
     return getRankInfo({
@@ -60,7 +60,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
     >
       <UserAvatar
         size={70}
-        wing={tierInfo.wing}
+        tier={rankInfo.tier}
         division={rankInfo.division}
         icon={userQuery.data?.summoner_icon || 0}
         m="20px 30px"

@@ -22,7 +22,7 @@ const tierIndexes = [
 
 export type RatingInfo = {
   tier: Tier
-  division: Division
+  division?: Division
   rating: number
   isApex: boolean
   deviation: number
@@ -34,7 +34,7 @@ function getC(inflationTime: number) {
   return Math.sqrt((350 ** 2 - 40 ** 2) / (inflationTime * 24 * 60 * 60 * 1000))
 }
 
-export function useRankInfo() {
+export function useRatingInfo() {
   const {
     ratingConfig: {
       initialRating,
@@ -54,15 +54,19 @@ export function useRankInfo() {
     return Math.min(candidate, initialRD)
   }
 
-  function getTier(rating: number): [Tier, number] {
+  function getTier(rating: number): [Tier, Division | undefined] {
     const decimalTier = (rating - initialRating) / tierSize + initialTier
     const boundedTier = Math.max(Math.min(decimalTier, 4), 0)
     const tierIndex = Math.floor(boundedTier)
 
-    const division =
-      tierIndex === 4 ? 1 : 4 - Math.floor(4 * (boundedTier - tierIndex))
+    let division: number | undefined = undefined
 
-    return [tierIndexes[tierIndex], division]
+    if (tierIndex < 4) {
+      division =
+        tierIndex === 4 ? 1 : 4 - Math.floor(4 * (boundedTier - tierIndex))
+    }
+
+    return [tierIndexes[tierIndex], division as Division | undefined]
   }
 
   function getRankInfo({ rating, deviation, timestamp }: Glicko): RatingInfo {
@@ -78,7 +82,7 @@ export function useRankInfo() {
       rating: Math.round(rating),
       deviation: Math.round(getRD({ rating, deviation, timestamp })),
       tier,
-      division: (reliable ? division : 1) as Division,
+      division: reliable ? division : undefined,
       reliable,
       isApex: false,
       precise: currentRD < 50,

@@ -1,6 +1,6 @@
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
+import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import {
   Badge,
   Center,
@@ -33,7 +33,7 @@ const appear = keyframes`
 
 export function PlayerCard({ player, ...rest }: Props) {
   const { user } = useGuardedAuth()
-  const { getRankInfo } = useRankInfo()
+  const { getRankInfo } = useRatingInfo()
 
   const { isActive, opponentProfile, ratingsVariation } = useGame()
 
@@ -69,19 +69,13 @@ export function PlayerCard({ player, ...rest }: Props) {
       {...getAcrylicProps()}
       {...rest}
     >
-      {/* <Avatar
-        src={getIconUrl(profile?.summoner_icon)}
-        size="lg"
-        border="1px solid #ffffff40"
-      /> */}
       <UserAvatar
         icon={profile?.summoner_icon || 0}
-        wing={tierInfo?.wing || ''}
-        division={rinfo?.division || 1}
+        tier={rinfo?.tier || Tier.Provisional}
+        division={rinfo?.division}
         m="10px 30px"
         size={70}
       />
-      {/* <Image src={rinfo?.wing} /> */}
       <Stack gap="0">
         {profile && (
           <>

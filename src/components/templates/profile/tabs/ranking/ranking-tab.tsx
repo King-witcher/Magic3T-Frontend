@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useConfig } from '@/contexts/config.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import { standingsQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import {
@@ -35,7 +35,7 @@ export function RankingTab() {
   })
   const { ratingConfig } = useConfig()
   const { user: authUser } = useAuth()
-  const { getRD, getRankInfo } = useRankInfo()
+  const { getRD, getRankInfo } = useRatingInfo()
 
   useEffect(() => {
     if (!standings) refetch()

@@ -4,13 +4,15 @@ import SilverEmblem from '@/assets/tiers/emblems/Silver.png'
 import GoldEmblem from '@/assets/tiers/emblems/Gold.png'
 import DiamondEmblem from '@/assets/tiers/emblems/Diamond.png'
 import MasterEmblem from '@/assets/tiers/emblems/Master.png'
+import ChallengerEmblem from '@/assets/tiers/emblems/Challenger.png'
 
 import BronzeWing from '@/assets/tiers/wings/Bronze.png'
 import SilverWing from '@/assets/tiers/wings/Silver.png'
 import GoldWing from '@/assets/tiers/wings/Gold.png'
 import DiamondWing from '@/assets/tiers/wings/Diamond.png'
 import MasterWing from '@/assets/tiers/wings/Master.png'
-import { Tier } from '@/hooks/useRanks'
+import ChallengerWing from '@/assets/tiers/wings/Challenger.png'
+import { Tier } from '@/hooks/use-rating-info'
 
 export type Division = 1 | 2 | 3 | 4
 
@@ -52,8 +54,8 @@ export const tiersMap: Record<Tier, TierInfo> = {
     name: 'Master',
   },
   [Tier.Challenger]: {
-    emblem: '',
-    wing: '',
+    emblem: ChallengerEmblem,
+    wing: ChallengerWing,
     name: 'Challenger',
   },
 }

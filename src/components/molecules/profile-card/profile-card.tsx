@@ -1,33 +1,13 @@
 import { useConfig } from '@/contexts/config.context.tsx'
-import { Tier, useRankInfo } from '@/hooks/useRanks'
+import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import type { UserData } from '@/models/users/user'
-import { getIconUrl } from '@/utils/utils'
-import {
-  Avatar,
-  Badge,
-  Box,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Box, Flex, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { UserAvatar } from '../user-avatar'
-import { getAcrylicProps } from '@/utils/style-helpers'
 import { tiersMap } from '@/utils/ranks'
 
 interface Props {
   user: UserData
-}
-
-const tierMap = {
-  Unranked: 'Indefinido',
-  Bronze: 'Bronze',
-  Silver: 'Prata',
-  Gold: 'Ouro',
-  Diamond: 'Diamante',
-  Elite: 'Elite',
 }
 
 const divisionMap = {
@@ -35,17 +15,15 @@ const divisionMap = {
   2: 'II',
   3: 'III',
   4: 'IV',
-  5: 'V',
 }
 
 export function ProfileCard({ user }: Props) {
-  const { getRankInfo } = useRankInfo()
-
-  const matches = user.stats.wins + user.stats.draws + user.stats.defeats
+  const { getRankInfo } = useRatingInfo()
 
   const { ratingConfig } = useConfig()
 
-  const rinfo = useMemo(() => getRankInfo(user.glicko), [user])
+  const rinfo = getRankInfo(user.glicko)
+  console.log(user.glicko)
   const tierInfo = tiersMap[rinfo.tier]
 
   const progress = useMemo(() => {
@@ -75,15 +53,16 @@ export function ProfileCard({ user }: Props) {
       w="full"
       justifyContent="center"
       gap="40px"
+      pb="40px"
       flexDir="column"
     >
-      <Stack spacing={0} alignSelf="center">
+      <Stack spacing={0} alignSelf="center" align="center">
         <UserAvatar
           icon={user.summoner_icon}
+          tier={rinfo.tier}
           division={rinfo.division}
           size={140}
-          wing={tierInfo.wing}
-          m="40px 0"
+          m="180px 40px 30px 40px"
         />
         <Flex alignItems="center" gap="8px">
           {user.role === 'bot' && (
@@ -109,7 +88,7 @@ export function ProfileCard({ user }: Props) {
       </Stack>
 
       {/* Desktop ranks */}
-      <Flex gap="20px" w="full" align="center" justify="center" hideBelow="sm">
+      <Flex w="full" align="center" justify="space-evenly" hideBelow="sm">
         <Stack alignItems="center" userSelect="none" spacing={0}>
           <Image
             ml="3px"
@@ -121,12 +100,8 @@ export function ProfileCard({ user }: Props) {
           <VStack spacing={0}>
             <Text fontSize="20px">Ranking</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
-              {`${tierInfo.name} ${
-                rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
-                  ? ''
-                  : divisionMap[rinfo.division]
-              }`}{' '}
-              - {rinfo.rating} ELO
+              {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
+              {rinfo.reliable && ` - ${rinfo.rating} ELO`}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               {user.stats.wins} wins - {user.stats.draws} draws -{' '}
@@ -205,7 +180,8 @@ export function ProfileCard({ user }: Props) {
               Ranking
             </Text>
             <Text fontWeight={700}>
-              {tierInfo.name} {divisionMap[rinfo.division]} - {rinfo.rating} ELO
+              {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
+              {rinfo.reliable && ` - ${rinfo.rating} ELO`}
             </Text>
             <Image
               w="70px"
@@ -241,6 +217,8 @@ export function ProfileCard({ user }: Props) {
           </Flex>
         </Stack>
       </Stack>
+
+      {/* <Text fontSize="20px">Last 20 games</Text> */}
     </Flex>
   )
 }
