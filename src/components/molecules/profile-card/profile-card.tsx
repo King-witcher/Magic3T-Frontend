@@ -4,6 +4,7 @@ import type { UserData } from '@/models/users/user'
 import { getIconUrl } from '@/utils/utils'
 import { Avatar, Badge, Box, Flex, Image, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import { UserAvatar } from '../user-avatar'
 
 interface Props {
   user: UserData
@@ -64,22 +65,11 @@ export function ProfileCard({ user }: Props) {
       }}
       justifyContent="center"
     >
-      <Avatar
-        src={getIconUrl(user.summoner_icon)}
-        size="xxl"
-        rounded="9999"
-        borderWidth="6px"
-        overflow="hidden"
-        _before={{
-          content: '""',
-          inset: 0,
-          pos: 'absolute',
-        }}
-        sx={{
-          '& img': {
-            rounded: '14px',
-          },
-        }}
+      <UserAvatar
+        icon={user.summoner_icon}
+        size={150}
+        wing={rinfo.wing}
+        m="40px 0"
       />
       <Flex alignItems="center" gap="8px">
         {user.role === 'bot' && (
@@ -88,10 +78,10 @@ export function ProfileCard({ user }: Props) {
           </Badge>
         )}
         <Text
-          fontSize="30px"
+          fontSize="36px"
           lineHeight="39px"
           textAlign="center"
-          fontWeight={300}
+          fontWeight={500}
           rounded="10px"
           p="5px"
           _focusVisible={{
@@ -103,11 +93,6 @@ export function ProfileCard({ user }: Props) {
         </Text>
       </Flex>
       <Flex alignItems="center" userSelect="none" gap="5px">
-        <Text fontSize="18px" fontWeight="700">{`${rinfo.tierName} ${
-          rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
-            ? ''
-            : divisionMap[rinfo.division]
-        }`}</Text>
         <Image
           ml="3px"
           src={rinfo?.emblem}
@@ -115,20 +100,21 @@ export function ProfileCard({ user }: Props) {
           draggable={false}
           w="32px"
         />
-        <Text fontSize="16px" fontWeight="700" color="gray.600">
-          <>
-            {rinfo?.rating}
-            {rinfo?.precise && '!'}
-            {!rinfo?.reliable && '?'}
-          </>
+        <Text fontSize="18px" fontWeight="700">
+          {`${rinfo.tierName} ${
+            rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
+              ? ''
+              : divisionMap[rinfo.division]
+          }`}{' '}
+          - {rinfo.rating} ELO
         </Text>
-        <Text fontSize="12px" fontWeight="500" color="gray.600">
+        <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
           ±{rinfo?.deviation}
         </Text>
       </Flex>
       <Flex
-        mt="5px"
-        w="300px"
+        mt="10px"
+        w="400px"
         h="6px"
         rounded="999px"
         overflow="hidden"
@@ -136,9 +122,9 @@ export function ProfileCard({ user }: Props) {
         color="white"
         fontSize="16px"
       >
-        {progress > 0 && <Box h="full" flex={progress} />}
+        {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
         {progress < 1 && (
-          <Box bg="gray.300" h="full" flex={1 - progress} overflow="hidden" />
+          <Box bg="#ffffff30" h="full" flex={1 - progress} overflow="hidden" />
         )}
       </Flex>
       {matches && (
