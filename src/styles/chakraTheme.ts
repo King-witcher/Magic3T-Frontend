@@ -7,9 +7,9 @@ import { popoverTheme } from './popover'
 import { textareaTheme } from './textarea'
 import { tooltipTheme } from './tooltip'
 import '@fontsource-variable/nunito'
+import { colors } from './colors'
 import { headingTheme } from './heading'
 import { tabsTheme } from './tabs'
-import { colors } from './colors'
 
 const scrollbarAnimation = keyframes`
   from {

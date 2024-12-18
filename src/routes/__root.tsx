@@ -1,8 +1,8 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { Providers } from './-providers'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ErrorTemplate, RootLayout } from '@/components/templates'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 import React from 'react'
+import { Providers } from './-providers'
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'

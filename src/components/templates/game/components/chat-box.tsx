@@ -1,3 +1,4 @@
+import { getAcrylicProps } from '@/utils/style-helpers'
 import { formatMinutes } from '@/utils/timeFormat'
 import {
   Box,
@@ -10,7 +11,6 @@ import {
 } from '@chakra-ui/react'
 import type { RefObject } from 'react'
 import { useChatHandler } from '../hooks/useChatHandler'
-import { getAcrylicProps } from '@/utils/style-helpers'
 
 interface Props extends StackProps {
   inputRef: RefObject<HTMLInputElement>

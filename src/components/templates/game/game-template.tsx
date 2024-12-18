@@ -1,22 +1,21 @@
+import { ButtonsContainer } from '@/components/atoms'
+import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
+import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
 import { GameStatus } from '@/types/game.ts'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
-  Box,
   Center,
   Flex,
   Heading,
   Stack,
   Text,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { Link } from '@tanstack/react-router'
 import { useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
-import { ChoiceTable } from '@/components/organisms'
-import { ButtonsContainer } from '@/components/atoms'
-import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
-import { Link } from '@tanstack/react-router'
-import { getAcrylicProps } from '@/utils/style-helpers'
 
 const statusText: Record<GameStatus, string> = {
   defeat: 'You lost',

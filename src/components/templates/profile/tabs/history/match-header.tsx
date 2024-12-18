@@ -1,4 +1,4 @@
-import { HistoryMatchEventsEnum, MatchSide, type MatchModel } from '@/models'
+import { HistoryMatchEventsEnum, type MatchModel, MatchSide } from '@/models'
 import { MatchResult } from '@/types'
 import { formatDate } from '@/utils/timeFormat'
 import { Center, Flex, Text } from '@chakra-ui/react'

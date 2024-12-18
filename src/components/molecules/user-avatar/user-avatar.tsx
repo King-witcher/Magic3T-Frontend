@@ -1,7 +1,7 @@
 import type { Tier } from '@/hooks/use-rating-info'
 import { type Division, tiersMap } from '@/utils/ranks'
 import { getIconUrl } from '@/utils/utils'
-import { Box, Center, Image, Text, type BoxProps } from '@chakra-ui/react'
+import { Box, type BoxProps, Center, Image, Text } from '@chakra-ui/react'
 
 interface Props extends BoxProps {
   size: number

@@ -5,9 +5,7 @@ import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
-import { getIconUrl } from '@/utils/utils'
 import {
-  Avatar,
   Badge,
   Flex,
   Image,
@@ -18,7 +16,6 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
-import { RankingTab } from '../../profile/tabs'
 
 interface Props {
   matchPlayer: HistoryMatchPlayer

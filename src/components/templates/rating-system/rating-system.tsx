@@ -1,14 +1,5 @@
 import { useConfig } from '@/contexts/config.context'
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  Image,
-} from '@chakra-ui/react'
+import { Box, Center, Divider, Heading, Text } from '@chakra-ui/react'
 
 export function RatingSystemTemplate() {
   const { ratingConfig } = useConfig()

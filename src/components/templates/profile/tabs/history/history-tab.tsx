@@ -1,10 +1,10 @@
 import { MatchSide } from '@/models/matches/Match'
-import { Center, Stack, chakra, keyframes } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { HistoryRow } from './history-row'
-import { useQuery } from '@tanstack/react-query'
 import { matchesQueryOptions } from '@/utils/query-options'
 import { getAcrylicProps } from '@/utils/style-helpers'
+import { Center, Stack, chakra, keyframes } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { HistoryRow } from './history-row'
 
 interface Props {
   referenceUid: string

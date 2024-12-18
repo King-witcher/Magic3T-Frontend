@@ -12,7 +12,6 @@ import {
 import { Link, Navigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { FcGoogle } from 'react-icons/fc'
 import { RiGoogleFill } from 'react-icons/ri'
 
 interface FormData {

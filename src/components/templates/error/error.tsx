@@ -1,6 +1,6 @@
 import { Flex, Link, Text } from '@chakra-ui/react'
-import { BiErrorAlt } from 'react-icons/bi'
 import { Link as TanStackLink } from '@tanstack/react-router'
+import { BiErrorAlt } from 'react-icons/bi'
 
 export function ErrorTemplate() {
   return (

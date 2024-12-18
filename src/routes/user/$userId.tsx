@@ -3,7 +3,7 @@ import { userQueryOptions } from '@/utils/query-options'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/user/$userId/_user-layout/')({
+export const Route = createFileRoute('/user/$userId')({
   component: Page,
   shouldReload: false,
 })
@@ -16,11 +16,5 @@ function Page() {
     return <>loading</>
   }
 
-  return (
-    <ProfileTemplate
-      baseUrl={`/user/${userId}`}
-      index="profile"
-      user={userQuery.data}
-    />
-  )
+  return <ProfileTemplate user={userQuery.data} />
 }

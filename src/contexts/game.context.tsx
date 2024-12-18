@@ -1,6 +1,7 @@
 import { Timer } from '@/lib/Timer'
 import { models } from '@/models'
 import type { UserData } from '@/models/users/user'
+import { Api } from '@/services/api.ts'
 import {
   GameEmittedEvents,
   GameListenedEvent,
@@ -24,7 +25,6 @@ import { type Socket, io } from 'socket.io-client'
 import { AuthState } from './auth.context.tsx'
 import { useGuardedAuth } from './guarded-auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { Api } from '@/services/api.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 

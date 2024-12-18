@@ -1,9 +1,8 @@
 import { CopyButton } from '@/components/atoms/copy-button/copy-button'
 import { MovesView, PlayerCard } from '@/components/templates/match/components'
 import type { MatchModel } from '@/models'
-import { getAcrylicProps } from '@/utils/style-helpers'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { Avatar, Flex, Stack, Text, Tooltip } from '@chakra-ui/react'
+import { Flex, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 
 interface Props {

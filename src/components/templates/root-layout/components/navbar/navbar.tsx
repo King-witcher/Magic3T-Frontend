@@ -1,8 +1,8 @@
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { useLiveActivity } from '@/contexts/live-activity.context.tsx'
 import { Flex, Skeleton, Text, chakra } from '@chakra-ui/react'
-import { ActivityBadge } from './activity-badge'
 import { Link } from '@tanstack/react-router'
+import { ActivityBadge } from './activity-badge'
 import { ProfileButton } from './profile-button'
 
 const Container = chakra(Flex, {

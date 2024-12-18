@@ -1,23 +1,21 @@
+import { SmoothNumber } from '@/components/atoms'
+import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
+import { tiersMap } from '@/utils/ranks'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Badge,
   Center,
+  type CenterProps,
   Flex,
   Image,
   Stack,
   Text,
   keyframes,
-  Avatar,
-  type CenterProps,
 } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
-import { SmoothNumber } from '@/components/atoms'
-import { getAcrylicProps } from '@/utils/style-helpers'
-import { getIconUrl } from '@/utils/utils'
-import { UserAvatar } from '@/components/molecules'
-import { tiersMap } from '@/utils/ranks'
 
 interface Props extends CenterProps {
   player: 'current' | 'opponent'

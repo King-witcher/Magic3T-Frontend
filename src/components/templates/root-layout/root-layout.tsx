@@ -1,7 +1,7 @@
+import { PageWidthLimiter } from '@/components/atoms'
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
-import { Credits, LayoutPanel, Navbar } from './components'
-import { PageWidthLimiter } from '@/components/atoms'
+import { Navbar } from './components'
 
 interface Props {
   children: ReactNode

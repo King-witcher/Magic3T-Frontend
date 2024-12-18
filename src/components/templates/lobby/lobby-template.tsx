@@ -1,12 +1,12 @@
+import { ButtonsContainer } from '@/components/atoms'
 import { useQueue } from '@/contexts/queue.context'
 import {
   ServerStatus,
   useServiceStatus,
 } from '@/contexts/service-status.context'
+import { GameMode } from '@/types/queue'
 import { Center, Heading, Stack, Text } from '@chakra-ui/react'
 import { QueueModeButton } from './queue-mode-button'
-import { GameMode } from '@/types/queue'
-import { ButtonsContainer } from '@/components/atoms'
 
 export function LobbyTemplate() {
   const { queueUserCount, queueModes } = useQueue()

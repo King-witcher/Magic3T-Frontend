@@ -6,11 +6,8 @@ import {
 import type { GameMode } from '@/types/queue'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
-  Box,
   Center,
   type CenterProps,
-  Flex,
-  keyframes,
   Spinner,
   Stack,
   Text,
