@@ -9,15 +9,14 @@ import {
   Stack,
   Text,
   keyframes,
-  useDisclosure,
   Avatar,
   type CenterProps,
 } from '@chakra-ui/react'
-import type { RefObject } from 'react'
 import { Link } from '@tanstack/react-router'
 import { SmoothNumber } from '@/components/atoms'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
+import { UserAvatar } from '@/components/molecules'
 
 interface Props extends CenterProps {
   player: 'current' | 'opponent'
@@ -59,7 +58,7 @@ export function PlayerCard({ player, ...rest }: Props) {
       justifyContent="left"
       gap="20px"
       p="20px"
-      overflow="hidden"
+      // overflow="hidden"
       w="400px"
       transition="background-color 200ms"
       _hover={{
@@ -68,11 +67,18 @@ export function PlayerCard({ player, ...rest }: Props) {
       {...getAcrylicProps()}
       {...rest}
     >
-      <Avatar
+      {/* <Avatar
         src={getIconUrl(profile?.summoner_icon)}
         size="lg"
         border="1px solid #ffffff40"
+      /> */}
+      <UserAvatar
+        icon={profile?.summoner_icon || 0}
+        wing={rinfo?.wing || ''}
+        m="10px 30px"
+        size={70}
       />
+      {/* <Image src={rinfo?.wing} /> */}
       <Stack gap="0">
         {profile && (
           <>

@@ -2,12 +2,18 @@ import { useConfig } from '@/contexts/config.context.tsx'
 import type { Glicko } from '@/types/glicko.ts'
 import { type Division, tiers } from '@/utils/ranks'
 import { useCallback } from 'react'
-import Provisional from '@/assets/tiers/emblems/provisional.png'
-import Bronze from '@/assets/tiers/emblems/Bronze.png'
-import Silver from '@/assets/tiers/emblems/Silver.png'
-import Gold from '@/assets/tiers/emblems/Gold.png'
-import Diamond from '@/assets/tiers/emblems/Diamond.png'
-import Master from '@/assets/tiers/emblems/Master.png'
+import ProvisionalEmblem from '@/assets/tiers/emblems/provisional.png'
+import BronzeEmblem from '@/assets/tiers/emblems/Bronze.png'
+import SilverEmblem from '@/assets/tiers/emblems/Silver.png'
+import GoldEmblem from '@/assets/tiers/emblems/Gold.png'
+import DiamondEmblem from '@/assets/tiers/emblems/Diamond.png'
+import MasterEmblem from '@/assets/tiers/emblems/Master.png'
+
+import BronzeWing from '@/assets/tiers/wings/Bronze.png'
+import SilverWing from '@/assets/tiers/wings/Silver.png'
+import GoldWing from '@/assets/tiers/wings/Gold.png'
+import DiamondWing from '@/assets/tiers/wings/Diamond.png'
+import MasterWing from '@/assets/tiers/wings/Master.png'
 
 export enum Tier {
   Provisional = 'provisional',
@@ -28,12 +34,22 @@ const tierIndexes = [
 ]
 
 const emblemsMap: Record<Tier, string> = {
-  [Tier.Provisional]: Provisional,
-  [Tier.Bronze]: Bronze,
-  [Tier.Silver]: Silver,
-  [Tier.Gold]: Gold,
-  [Tier.Diamond]: Diamond,
-  [Tier.Master]: Master,
+  [Tier.Provisional]: ProvisionalEmblem,
+  [Tier.Bronze]: BronzeEmblem,
+  [Tier.Silver]: SilverEmblem,
+  [Tier.Gold]: GoldEmblem,
+  [Tier.Diamond]: DiamondEmblem,
+  [Tier.Master]: MasterEmblem,
+  [Tier.Challenger]: '',
+}
+
+const wingsMap: Record<Tier, string> = {
+  [Tier.Provisional]: BronzeWing,
+  [Tier.Bronze]: BronzeWing,
+  [Tier.Silver]: SilverWing,
+  [Tier.Gold]: GoldWing,
+  [Tier.Diamond]: DiamondWing,
+  [Tier.Master]: MasterWing,
   [Tier.Challenger]: '',
 }
 
@@ -42,6 +58,7 @@ export type RatingInfo = {
   division: Division
   tierName: string
   emblem: string
+  wing: string
   rating: number
   isApex: boolean
   deviation: number
@@ -100,6 +117,7 @@ export function useRankInfo() {
       tierName: tier,
       division: (reliable ? division : 1) as Division,
       emblem: emblemsMap[tier],
+      wing: wingsMap[tier],
       reliable,
       isApex: false,
       precise: currentRD < 50,
