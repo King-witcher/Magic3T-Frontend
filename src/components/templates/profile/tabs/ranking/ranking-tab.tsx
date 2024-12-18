@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { useRatingInfo } from '@/hooks/use-rating-info'
-import { standingsQueryOptions } from '@/utils/query-options'
+import { rankingQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import {
   Badge,
@@ -30,7 +30,7 @@ const appear = keyframes`
 export function RankingTab() {
   const [filter, setFilter] = useState<'valid' | 'modified' | 'all'>('valid')
   const { data: standings, refetch } = useQuery({
-    ...standingsQueryOptions(),
+    ...rankingQueryOptions(),
     enabled: false,
   })
   const { ratingConfig } = useConfig()

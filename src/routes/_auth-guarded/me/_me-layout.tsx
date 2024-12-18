@@ -1,8 +1,5 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context'
-import {
-  matchesQueryOptions,
-  standingsQueryOptions,
-} from '@/utils/query-options'
+import { matchesQueryOptions, rankingQueryOptions } from '@/utils/query-options'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
@@ -19,7 +16,7 @@ function Layout() {
   })
 
   useQuery({
-    ...standingsQueryOptions(),
+    ...rankingQueryOptions(),
     enabled: false,
   })
 

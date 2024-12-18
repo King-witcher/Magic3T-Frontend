@@ -1,7 +1,6 @@
 import LogoutModal from '@/components/organisms/modals/LogoutModal'
 import SecretCodeModal from '@/components/organisms/modals/SecretCodeModal'
 import { useAuth } from '@/contexts/auth.context.tsx'
-import { useRatingInfo } from '@/hooks/use-rating-info'
 import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
@@ -13,16 +12,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useMemo } from 'react'
 
 export function ProfileButton() {
   const navigate = useNavigate()
   const { user, signInGoogle: signIn } = useAuth()
-
-  const { getRankInfo } = useRatingInfo()
-  const rinfo = useMemo(() => {
-    return user && getRankInfo(user.glicko)
-  }, [user, getRankInfo])
 
   const {
     isOpen: logoutModalOpen,
@@ -58,7 +51,7 @@ export function ProfileButton() {
           w="40px"
           h="40px"
           bg="whiteAlpha.300"
-          rounded="8px"
+          rounded="9999"
           sx={{
             '& img': {
               rounded: '8px',
@@ -69,7 +62,7 @@ export function ProfileButton() {
       <MenuList zIndex={1}>
         {user && (
           <MenuItem as={Link} to="/me" zIndex={1}>
-            Perfil
+            Profile
           </MenuItem>
         )}
         {user && (
@@ -80,19 +73,22 @@ export function ProfileButton() {
               })
             }
           >
-            Jogar
+            Play
           </MenuItem>
         )}
         {user && <MenuItem onClick={openSecretCode}>Códigos secretos</MenuItem>}
         <MenuItem as={Link} to="/tutorial">
-          Como jogar
+          How to play
         </MenuItem>
         <MenuItem as={Link} to="/rating-system">
-          Sistema de Ranking
+          Rating system
+        </MenuItem>
+        <MenuItem as={Link} to="/ranking">
+          Top players
         </MenuItem>
         <MenuDivider color="blue.100" />
-        {user && <MenuItem onClick={openLogout}>Sair</MenuItem>}
-        {!user && <MenuItem onClick={signIn}>Entrar</MenuItem>}
+        {user && <MenuItem onClick={openLogout}>Sign out</MenuItem>}
+        {!user && <MenuItem onClick={signIn}>Sign in</MenuItem>}
         <LogoutModal isOpen={logoutModalOpen} onClose={closeLogout} />
         <SecretCodeModal
           isOpen={secretCodeModalOpen}

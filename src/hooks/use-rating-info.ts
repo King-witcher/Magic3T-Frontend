@@ -74,7 +74,6 @@ export function useRatingInfo() {
 
     const currentRD = getRD({ rating, deviation, timestamp })
     const newDeviation = Math.round(currentRD)
-
     const reliable = newDeviation < maxReliableDeviation
     const tier = reliable ? expectedTier : Tier.Provisional
 

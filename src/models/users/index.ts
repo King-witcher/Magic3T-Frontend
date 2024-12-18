@@ -25,7 +25,7 @@ async function getById(id: string): Promise<UserData> {
   return data
 }
 
-async function getStandings(): Promise<UserData[]> {
+async function getRanking(): Promise<UserData[]> {
   const q = query(usersCollection, orderBy('glicko.rating', 'desc'), limit(30))
   const snap = await getDocs(q)
 
@@ -50,4 +50,4 @@ function subscribe(uid: string, callback: (data: UserData) => void) {
   )
 }
 
-export const users = { getById, getStandings, subscribe }
+export const users = { getById, getRanking, subscribe }

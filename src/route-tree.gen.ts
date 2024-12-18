@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as TutorialImport } from './routes/tutorial'
 import { Route as RatingSystemImport } from './routes/rating-system'
+import { Route as RankingImport } from './routes/ranking'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
@@ -41,6 +42,11 @@ const TutorialRoute = TutorialImport.update({
 
 const RatingSystemRoute = RatingSystemImport.update({
   path: '/rating-system',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RankingRoute = RankingImport.update({
+  path: '/ranking',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -120,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthGuardedImport
+      parentRoute: typeof rootRoute
+    }
+    '/ranking': {
+      id: '/ranking'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingImport
       parentRoute: typeof rootRoute
     }
     '/rating-system': {
@@ -235,6 +248,7 @@ export const routeTree = rootRoute.addChildren({
       }),
     }),
   }),
+  RankingRoute,
   RatingSystemRoute,
   TutorialRoute,
   MatchMatchIdRoute,
@@ -257,6 +271,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/_auth-guarded",
+        "/ranking",
         "/rating-system",
         "/tutorial",
         "/match/$matchId",
@@ -271,6 +286,9 @@ export const routeTree = rootRoute.addChildren({
         "/_auth-guarded/",
         "/_auth-guarded/me"
       ]
+    },
+    "/ranking": {
+      "filePath": "ranking.tsx"
     },
     "/rating-system": {
       "filePath": "rating-system.tsx"

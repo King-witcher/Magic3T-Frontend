@@ -1,6 +1,6 @@
 import {
   matchesQueryOptions,
-  standingsQueryOptions,
+  rankingQueryOptions,
   userQueryOptions,
 } from '@/utils/query-options'
 import { useQuery } from '@tanstack/react-query'
@@ -19,7 +19,7 @@ function Layout() {
     enabled: false,
   })
   useQuery({
-    ...standingsQueryOptions(),
+    ...rankingQueryOptions(),
     enabled: false,
   })
 
