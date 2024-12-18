@@ -127,7 +127,7 @@ export function AuthProvider({ children }: Props) {
       }
       setAuthData(authUser)
     })
-  }, [])
+  }, [user?._id])
 
   return (
     <AuthContext.Provider

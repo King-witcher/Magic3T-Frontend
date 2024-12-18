@@ -1,9 +1,21 @@
 import { UserAvatar } from '@/components/molecules'
+import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
+import { useAuth } from '@/contexts/auth.context'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import type { UserData } from '@/models/users/user'
+import { Api } from '@/services/api'
 import { tiersMap } from '@/utils/ranks'
-import { Badge, Box, Flex, Image, Stack, Text, VStack } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Flex,
+  Image,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 interface Props {
@@ -19,6 +31,9 @@ const divisionMap = {
 
 export function ProfileTemplate({ user }: Props) {
   const { getRankInfo } = useRatingInfo()
+  const changeIconModalDisclosure = useDisclosure()
+
+  const { getToken } = useAuth()
 
   const { ratingConfig } = useConfig()
 
@@ -46,6 +61,20 @@ export function ProfileTemplate({ user }: Props) {
     return currentDivision
   }, [rinfo])
 
+  async function saveIconChange(iconId: number) {
+    await Api.patch(
+      'user/me/icon',
+      {
+        iconId,
+      },
+      {
+        headers: {
+          Authorization: `${await getToken()}`,
+        },
+      }
+    )
+  }
+
   return (
     <Flex
       align="cneter"
@@ -63,6 +92,8 @@ export function ProfileTemplate({ user }: Props) {
           division={rinfo.division}
           size={140}
           m="180px 40px 30px 40px"
+          onClick={changeIconModalDisclosure.onOpen}
+          cursor="pointer"
         />
         <Flex alignItems="center" gap="8px">
           {(user.role === 'bot' || user.role === 'creator') && (
@@ -217,6 +248,13 @@ export function ProfileTemplate({ user }: Props) {
           </Flex>
         </Stack>
       </Stack>
+
+      <ChangeIconModal
+        user={user}
+        onSave={saveIconChange}
+        isOpen={changeIconModalDisclosure.isOpen}
+        onClose={changeIconModalDisclosure.onClose}
+      />
 
       {/* <Text fontSize="20px">Last 20 games</Text> */}
     </Flex>
