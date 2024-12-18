@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
+import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
 import {
@@ -17,6 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
+import { RankingTab } from '../../profile/tabs'
 
 interface Props {
   matchPlayer: HistoryMatchPlayer
@@ -34,6 +36,8 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
       timestamp: new Date(),
     })
   }, [matchPlayer.score])
+
+  const tierInfo = tiersMap[rankInfo.tier]
 
   const userQuery = useQuery(userQueryOptions(matchPlayer.uid))
 
@@ -56,7 +60,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
     >
       <UserAvatar
         size={70}
-        wing={rankInfo.wing}
+        wing={tierInfo.wing}
         division={rankInfo.division}
         icon={userQuery.data?.summoner_icon || 0}
         m="20px 30px"
@@ -80,7 +84,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
           <Image
             ml="3px"
             w="35px"
-            src={rankInfo.emblem}
+            src={tierInfo.emblem}
             alt="rank"
             draggable={false}
           />

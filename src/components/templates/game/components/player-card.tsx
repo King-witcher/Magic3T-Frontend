@@ -17,6 +17,7 @@ import { SmoothNumber } from '@/components/atoms'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
 import { UserAvatar } from '@/components/molecules'
+import { tiersMap } from '@/utils/ranks'
 
 interface Props extends CenterProps {
   player: 'current' | 'opponent'
@@ -40,6 +41,7 @@ export function PlayerCard({ player, ...rest }: Props) {
 
   const profile = currentPlayer ? user : opponentProfile
   const rinfo = profile && getRankInfo(profile.glicko)
+  const tierInfo = rinfo?.tier ? tiersMap[rinfo.tier] : null
 
   const ratingVariation =
     ratingsVariation?.[currentPlayer ? 'player' : 'opponent']
@@ -74,7 +76,7 @@ export function PlayerCard({ player, ...rest }: Props) {
       /> */}
       <UserAvatar
         icon={profile?.summoner_icon || 0}
-        wing={rinfo?.wing || ''}
+        wing={tierInfo?.wing || ''}
         division={rinfo?.division || 1}
         m="10px 30px"
         size={70}
@@ -104,7 +106,7 @@ export function PlayerCard({ player, ...rest }: Props) {
               </Text>
             </Flex>
             <Flex alignItems="center" gap="5px">
-              <Image src={rinfo?.emblem} w="32px" />
+              <Image src={tierInfo?.emblem} w="32px" />
 
               <Text fontWeight={300} fontSize="16px" color="light">
                 <SmoothNumber value={rinfo!.rating} />

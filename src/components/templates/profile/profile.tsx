@@ -11,6 +11,8 @@ import {
 import { HistoryTab, ProfileTab, RankingTab } from './tabs'
 import { Link } from '@tanstack/react-router'
 import { getAcrylicProps } from '@/utils/style-helpers'
+import { PageWidthLimiter } from '@/components/atoms'
+import { ProfileCard } from '@/components/molecules'
 
 interface Props {
   user: UserData
@@ -53,6 +55,6 @@ export function ProfileTemplate({ user, index, baseUrl }: Props) {
     //     </TabPanels>
     //   </Tabs>
     // </Box>
-    <ProfileTab user={user} />
+    <ProfileCard user={user} />
   )
 }

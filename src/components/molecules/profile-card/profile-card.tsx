@@ -2,9 +2,20 @@ import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRankInfo } from '@/hooks/useRanks'
 import type { UserData } from '@/models/users/user'
 import { getIconUrl } from '@/utils/utils'
-import { Avatar, Badge, Box, Flex, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  Badge,
+  Box,
+  Flex,
+  Image,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { UserAvatar } from '../user-avatar'
+import { getAcrylicProps } from '@/utils/style-helpers'
+import { tiersMap } from '@/utils/ranks'
 
 interface Props {
   user: UserData
@@ -35,6 +46,7 @@ export function ProfileCard({ user }: Props) {
   const { ratingConfig } = useConfig()
 
   const rinfo = useMemo(() => getRankInfo(user.glicko), [user])
+  const tierInfo = tiersMap[rinfo.tier]
 
   const progress = useMemo(() => {
     if (!rinfo.reliable) {
@@ -57,124 +69,178 @@ export function ProfileCard({ user }: Props) {
   }, [rinfo])
 
   return (
-    <VStack
-      gap="0px"
-      w={{
-        base: '100%',
-        md: '400px',
-      }}
+    <Flex
+      align="cneter"
+      justify="center"
+      w="full"
       justifyContent="center"
+      gap="40px"
+      flexDir="column"
     >
-      <UserAvatar
-        icon={user.summoner_icon}
-        division={rinfo.division}
-        size={150}
-        wing={rinfo.wing}
-        m="40px 0"
-      />
-      <Flex alignItems="center" gap="8px">
-        {user.role === 'bot' && (
-          <Badge rounded="5px" fontSize="14px" bg="gray.400">
-            Bot
-          </Badge>
-        )}
-        <Text
-          fontSize="36px"
-          lineHeight="39px"
-          textAlign="center"
-          fontWeight={500}
-          rounded="10px"
-          p="5px"
-          _focusVisible={{
-            outline: 'solid 1px var(--chakra-colors-gray-200)',
-            fontWeight: 500,
-          }}
-        >
-          {user.identification?.nickname}
-        </Text>
-      </Flex>
-      <Flex alignItems="center" userSelect="none" gap="5px">
-        <Image
-          ml="3px"
-          src={rinfo?.emblem}
-          alt="rank"
-          draggable={false}
-          w="32px"
+      <Stack spacing={0} alignSelf="center">
+        <UserAvatar
+          icon={user.summoner_icon}
+          division={rinfo.division}
+          size={140}
+          wing={tierInfo.wing}
+          m="40px 0"
         />
-        <Text fontSize="18px" fontWeight="700">
-          {`${rinfo.tierName} ${
-            rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
-              ? ''
-              : divisionMap[rinfo.division]
-          }`}{' '}
-          - {rinfo.rating} ELO
-        </Text>
-        <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
-          ±{rinfo?.deviation}
-        </Text>
-      </Flex>
-      <Flex
-        mt="10px"
-        w="400px"
-        h="6px"
-        rounded="999px"
-        overflow="hidden"
-        gap="1px"
-        color="white"
-        fontSize="16px"
-      >
-        {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
-        {progress < 1 && (
-          <Box bg="#ffffff30" h="full" flex={1 - progress} overflow="hidden" />
-        )}
-      </Flex>
-      {matches && (
-        <>
+        <Flex alignItems="center" gap="8px">
+          {user.role === 'bot' && (
+            <Badge rounded="5px" fontSize="14px" bg="gray.400">
+              Bot
+            </Badge>
+          )}
+          <Text
+            fontSize="36px"
+            lineHeight="39px"
+            textAlign="center"
+            fontWeight={500}
+            rounded="10px"
+            p="5px"
+            _focusVisible={{
+              outline: 'solid 1px var(--chakra-colors-gray-200)',
+              fontWeight: 500,
+            }}
+          >
+            {user.identification?.nickname}
+          </Text>
+        </Flex>
+      </Stack>
+
+      {/* Desktop ranks */}
+      <Flex gap="20px" w="full" align="center" justify="center" hideBelow="sm">
+        <Stack alignItems="center" userSelect="none" spacing={0}>
+          <Image
+            ml="3px"
+            src={tierInfo.emblem}
+            alt="rank"
+            draggable={false}
+            w="250px"
+          />
+          <VStack spacing={0}>
+            <Text fontSize="20px">Ranking</Text>
+            <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
+              {`${tierInfo.name} ${
+                rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
+                  ? ''
+                  : divisionMap[rinfo.division]
+              }`}{' '}
+              - {rinfo.rating} ELO
+            </Text>
+            <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
+              {user.stats.wins} wins - {user.stats.draws} draws -{' '}
+              {user.stats.defeats} defeats
+            </Text>
+          </VStack>
+
           <Flex
             mt="10px"
-            w="300px"
-            h="6px"
+            w={{ base: 'full', sm: '250px' }}
+            h="8px"
             rounded="999px"
             overflow="hidden"
             gap="1px"
             color="white"
             fontSize="16px"
           >
-            {!!user.stats.defeats && (
-              <Box bg="red.400" h="full" flex={user.stats.defeats / matches} />
-            )}
-            {!!user.stats.draws && (
+            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
+            {progress < 1 && (
               <Box
-                bg="gray.400"
+                bg="#ffffff30"
                 h="full"
-                flex={user.stats.draws / matches}
+                flex={1 - progress}
                 overflow="hidden"
               />
             )}
-            {!!user.stats.wins && (
-              <Box
-                bg="green.400"
-                h="full"
-                overflow="hidden"
-                flex={user.stats.wins / matches}
-              />
-            )}
           </Flex>
-          <Flex gap="10px" alignItems="center">
-            <Text fontWeight="500" color="red.400">
-              {Math.round((100 * user.stats.defeats) / matches)}%
+        </Stack>
+        <Stack alignItems="center" userSelect="none" spacing={0}>
+          <Image
+            ml="3px"
+            src={tiersMap[Tier.Provisional].emblem}
+            alt="rank"
+            draggable={false}
+            w="250px"
+          />
+          <VStack spacing={0}>
+            <Text fontSize="20px">Experience</Text>
+            <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
+              {tiersMap[Tier.Provisional].name}
             </Text>
-            <Text fontWeight="500" color="gray.500">
-              {Math.round((100 * user.stats.draws) / matches)}%
+            <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
+              0 xp
             </Text>
-            <Text fontWeight="500" color="green.400">
-              {Math.round((100 * user.stats.wins) / matches)}%
-            </Text>
-          </Flex>
+          </VStack>
 
-          <Text fontSize="16px">{matches} partidas</Text>
-        </>
-      )}
-    </VStack>
+          <Flex
+            mt="10px"
+            w={{ base: 'full', sm: '250px' }}
+            h="8px"
+            rounded="999px"
+            overflow="hidden"
+            gap="1px"
+            color="white"
+            fontSize="16px"
+          >
+            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={0} />}
+            {progress < 1 && (
+              <Box bg="#ffffff30" h="full" flex={1} overflow="hidden" />
+            )}
+          </Flex>
+        </Stack>
+      </Flex>
+
+      {/* Mobile ranks */}
+      <Stack hideFrom="sm" spacing="10px">
+        <Stack spacing={0}>
+          <Flex
+            w="full"
+            align="center"
+            justify="space-between"
+            pos="relative"
+            h="70px"
+          >
+            <Text fontSize="12px" pos="absolute" top="0" left="0">
+              Ranking
+            </Text>
+            <Text fontWeight={700}>
+              {tierInfo.name} {divisionMap[rinfo.division]} - {rinfo.rating} ELO
+            </Text>
+            <Image
+              w="70px"
+              pos="absolute"
+              right="0"
+              top="50%"
+              transform="translateY(-70%)"
+              src={tierInfo.emblem}
+            />
+          </Flex>
+        </Stack>
+
+        <Stack spacing={0}>
+          <Flex
+            w="full"
+            align="center"
+            justify="space-between"
+            pos="relative"
+            h="70px"
+          >
+            <Text fontSize="12px" pos="absolute" top="0" left="0">
+              Experience
+            </Text>
+            <Text fontWeight={700}>{tiersMap[Tier.Provisional].name}</Text>
+            <Image
+              w="70px"
+              pos="absolute"
+              right="0"
+              top="50%"
+              transform="translateY(-70%)"
+              src={tiersMap[Tier.Provisional].emblem}
+            />
+          </Flex>
+        </Stack>
+      </Stack>
+    </Flex>
   )
 }

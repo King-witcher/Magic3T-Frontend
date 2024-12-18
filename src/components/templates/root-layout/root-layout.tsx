@@ -36,7 +36,8 @@ export function RootLayout({ children }: Props) {
           w="full"
           justify="center"
           h="fit-content"
-          overflow="auto"
+          overflowX="hidden"
+          overflowY="scroll"
         >
           <PageWidthLimiter>{children}</PageWidthLimiter>
         </Flex>

@@ -8,6 +8,8 @@ interface Props extends BoxProps {
   wing: string
 }
 
+const numbers = ['', 'I', 'II', 'III', 'IV', 'V']
+
 export function UserAvatar({ icon, wing, size, division, ...rest }: Props) {
   return (
     <Center
@@ -21,7 +23,7 @@ export function UserAvatar({ icon, wing, size, division, ...rest }: Props) {
           top="0"
           rounded="999"
         />
-        <Box pos="absolute" w="290%" bottom="-100%">
+        <Box pos="absolute" w="290%" bottom="-100%" pointerEvents="none">
           <Image src={wing} />
         </Box>
         <Text
@@ -30,7 +32,7 @@ export function UserAvatar({ icon, wing, size, division, ...rest }: Props) {
           lineHeight={`${size * 0.16}px`}
           top="-10%"
         >
-          {division}
+          {numbers[division]}
         </Text>
       </Center>
     </Center>

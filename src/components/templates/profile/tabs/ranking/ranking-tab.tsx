@@ -2,6 +2,7 @@ import { useAuth } from '@/contexts/auth.context.tsx'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import { standingsQueryOptions } from '@/utils/query-options'
+import { tiersMap } from '@/utils/ranks'
 import {
   Badge,
   Box,
@@ -76,6 +77,7 @@ export function RankingTab() {
       <Stack userSelect="none">
         {filtered?.map((player, index) => {
           const rinfo = getRankInfo(player.glicko)
+          const tierInfo = tiersMap[rinfo.tier]
 
           const delay = (0.5 * index) / filtered.length
 
@@ -126,7 +128,7 @@ export function RankingTab() {
                 <Box w={{ base: 'fit-content', sm: '100px' }}>
                   <Flex alignItems="center" gap="5px">
                     <Image
-                      src={rinfo.emblem}
+                      src={tierInfo.emblem}
                       h={{ base: '24px', sm: '30px' }}
                     />
                     <Text fontWeight={[600, 800]}>
