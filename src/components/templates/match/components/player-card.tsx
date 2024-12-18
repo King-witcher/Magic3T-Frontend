@@ -3,6 +3,7 @@ import { useRankInfo } from '@/hooks/useRanks'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
 import { getAcrylicProps } from '@/utils/style-helpers'
+import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
   Badge,
@@ -14,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
 
 interface Props {
   matchPlayer: HistoryMatchPlayer
@@ -21,7 +23,16 @@ interface Props {
 }
 
 export function PlayerCard({ matchPlayer, highlight }: Props) {
-  const { getRankThumbnail } = useRankInfo()
+  const { getRankInfo } = useRankInfo()
+
+  const rankInfo = useMemo(() => {
+    return getRankInfo({
+      // TODO: Fix it
+      deviation: 0,
+      rating: matchPlayer.score,
+      timestamp: new Date(),
+    })
+  }, [matchPlayer.score])
 
   const userQuery = useQuery(userQueryOptions(matchPlayer.uid))
 
@@ -42,7 +53,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
       }}
       {...getAcrylicProps()}
     >
-      <Avatar size="lg" src={userQuery.data?.photoURL} />
+      <Avatar size="lg" src={getIconUrl(userQuery.data?.summoner_icon)} />
       <LinkOverlay
         as={Link}
         to={
@@ -59,12 +70,7 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
           <Text>{matchPlayer.name}</Text>
         </Flex>
         <Flex gap="5px" alignItems="center">
-          <Image
-            ml="3px"
-            src={getRankThumbnail(matchPlayer.score)}
-            alt="rank"
-            draggable={false}
-          />
+          <Image ml="3px" src={rankInfo.emblem} alt="rank" draggable={false} />
           {Math.round(matchPlayer.score)}{' '}
           <Text
             fontSize="14px"

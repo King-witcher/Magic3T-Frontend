@@ -1,4 +1,4 @@
-import type { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/user'
 import {
   Box,
   Tab,

@@ -8,7 +8,7 @@ import {
 } from 'firebase/firestore'
 import { NotFoundError } from '../errors/NotFoundError'
 import { getConverter } from '../getConverter'
-import type { UserData } from './User'
+import type { UserData } from './user'
 import { firestore, getDoc, getDocs } from '@/services/firestore'
 
 const converter = getConverter<UserData>()

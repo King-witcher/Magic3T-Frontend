@@ -1,4 +1,4 @@
-import type { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/user'
 import { type ReactNode, createContext, useContext } from 'react'
 import { AuthState } from './auth.context.tsx'
 

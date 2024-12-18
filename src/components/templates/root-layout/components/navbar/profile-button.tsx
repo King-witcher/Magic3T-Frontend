@@ -2,6 +2,7 @@ import LogoutModal from '@/components/organisms/modals/LogoutModal'
 import SecretCodeModal from '@/components/organisms/modals/SecretCodeModal'
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
+import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
   Menu,
@@ -9,7 +10,6 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -40,7 +40,6 @@ export function ProfileButton() {
       <MenuButton
         borderRadius="8px"
         transition="all linear 80ms"
-        borderColor={rinfo?.colorScheme.darker}
         sx={{
           img: {
             transition: 'all linear 80ms',
@@ -55,7 +54,7 @@ export function ProfileButton() {
       >
         <Avatar
           // src={user?.photoURL || undefined}
-          src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+          src={getIconUrl(user?.summoner_icon)}
           w="40px"
           h="40px"
           bg="whiteAlpha.300"

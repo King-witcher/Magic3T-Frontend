@@ -88,15 +88,10 @@ export function RankingTab() {
               w="full"
               alignItems="center"
               p="10px 10px"
-              bg={rinfo.colorScheme.normal}
               borderLeft="solid 5px"
-              borderColor={rinfo.colorScheme.darker}
               transition="background linear 80ms"
               rounded="8px"
               gap={{ base: '10px', sm: '0' }}
-              _hover={{
-                bg: rinfo.colorScheme.lighter,
-              }}
             >
               <Center textAlign="center" w="50px" p="10px">
                 <Text
@@ -124,14 +119,14 @@ export function RankingTab() {
                       fontSize={{ base: '20px', sm: '16px' }}
                       userSelect="text"
                     >
-                      {player.nickname}
+                      {player.identification?.nickname}
                     </Text>
                   </Flex>
                 </Box>
                 <Box w={{ base: 'fit-content', sm: '100px' }}>
                   <Flex alignItems="center" gap="5px">
                     <Image
-                      src={rinfo.thumbnail}
+                      src={rinfo.emblem}
                       h={{ base: '24px', sm: '30px' }}
                     />
                     <Text fontWeight={[600, 800]}>

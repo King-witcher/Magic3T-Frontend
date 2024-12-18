@@ -1,5 +1,5 @@
 import { models } from '@/models'
-import type { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/user'
 import { auth, provider } from '@/services/firebase'
 import {
   type User,

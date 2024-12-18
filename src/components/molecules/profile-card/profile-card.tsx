@@ -1,6 +1,7 @@
 import { useConfig } from '@/contexts/config.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
-import type { UserData } from '@/models/users/User'
+import { Tier, useRankInfo } from '@/hooks/useRanks'
+import type { UserData } from '@/models/users/user'
+import { getIconUrl } from '@/utils/utils'
 import { Avatar, Badge, Box, Flex, Image, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
@@ -64,11 +65,10 @@ export function ProfileCard({ user }: Props) {
       justifyContent="center"
     >
       <Avatar
-        src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+        src={getIconUrl(user.summoner_icon)}
         size="xxl"
         rounded="9999"
         borderWidth="6px"
-        borderColor={rinfo.colorScheme.darker}
         overflow="hidden"
         _before={{
           content: '""',
@@ -76,10 +76,8 @@ export function ProfileCard({ user }: Props) {
           pos: 'absolute',
         }}
         sx={{
-          '--bg': rinfo ? `colors.${rinfo.colorScheme.lighter}` : 'white',
           '& img': {
             rounded: '14px',
-            bg: 'linear-gradient(white, var(--bg))',
           },
         }}
       />
@@ -101,22 +99,18 @@ export function ProfileCard({ user }: Props) {
             fontWeight: 500,
           }}
         >
-          {user.nickname}
+          {user.identification?.nickname}
         </Text>
       </Flex>
       <Flex alignItems="center" userSelect="none" gap="5px">
-        <Text
-          color={rinfo.colorScheme.darker}
-          fontSize="18px"
-          fontWeight="700"
-        >{`${tierMap[rinfo.tier]} ${
-          rinfo.tier === 'Elite' || rinfo.tier === 'Unranked'
+        <Text fontSize="18px" fontWeight="700">{`${rinfo.tierName} ${
+          rinfo.tier === Tier.Master || rinfo.tier === Tier.Provisional
             ? ''
             : divisionMap[rinfo.division]
         }`}</Text>
         <Image
           ml="3px"
-          src={rinfo?.thumbnail}
+          src={rinfo?.emblem}
           alt="rank"
           draggable={false}
           w="32px"
@@ -142,9 +136,7 @@ export function ProfileCard({ user }: Props) {
         color="white"
         fontSize="16px"
       >
-        {progress > 0 && (
-          <Box bg={rinfo.colorScheme.darker} h="full" flex={progress} />
-        )}
+        {progress > 0 && <Box h="full" flex={progress} />}
         {progress < 1 && (
           <Box bg="gray.300" h="full" flex={1 - progress} overflow="hidden" />
         )}

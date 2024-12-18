@@ -4,7 +4,7 @@ export type Tier =
   | 'Silver'
   | 'Gold'
   | 'Diamond'
-  | 'Elite'
+  | 'Challenger'
 
 export const tiers: Tier[] = [
   'Unranked',
@@ -12,7 +12,7 @@ export const tiers: Tier[] = [
   'Silver',
   'Gold',
   'Diamond',
-  'Elite',
+  'Challenger',
 ]
 
 export type Division = 1 | 2 | 3 | 4 | 5

@@ -17,6 +17,7 @@ import type { RefObject } from 'react'
 import { Link } from '@tanstack/react-router'
 import { SmoothNumber } from '@/components/atoms'
 import { getAcrylicProps } from '@/utils/style-helpers'
+import { getIconUrl } from '@/utils/utils'
 
 interface Props extends CenterProps {
   player: 'current' | 'opponent'
@@ -68,7 +69,7 @@ export function PlayerCard({ player, ...rest }: Props) {
       {...rest}
     >
       <Avatar
-        src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+        src={getIconUrl(profile?.summoner_icon)}
         size="lg"
         border="1px solid #ffffff40"
       />
@@ -92,11 +93,11 @@ export function PlayerCard({ player, ...rest }: Props) {
                 noOfLines={1}
                 color="light"
               >
-                {profile.nickname}
+                {profile.identification?.nickname}
               </Text>
             </Flex>
             <Flex alignItems="center" gap="5px">
-              <Image src={rinfo?.thumbnail} w="32px" />
+              <Image src={rinfo?.emblem} w="32px" />
 
               <Text fontWeight={300} fontSize="16px" color="light">
                 <SmoothNumber value={rinfo!.rating} />

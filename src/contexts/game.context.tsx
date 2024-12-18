@@ -1,6 +1,6 @@
 import { Timer } from '@/lib/Timer'
 import { models } from '@/models'
-import type { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/user'
 import {
   GameEmittedEvents,
   GameListenedEvent,

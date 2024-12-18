@@ -1,65 +1,56 @@
 import { useConfig } from '@/contexts/config.context.tsx'
 import type { Glicko } from '@/types/glicko.ts'
-import { type Division, type Tier, tiers } from '@/utils/ranks'
-import type { ThemeTypings } from '@chakra-ui/react'
+import { type Division, tiers } from '@/utils/ranks'
 import { useCallback } from 'react'
+import Provisional from '@/assets/tiers/emblems/provisional.png'
+import Bronze from '@/assets/tiers/emblems/Bronze.png'
+import Silver from '@/assets/tiers/emblems/Silver.png'
+import Gold from '@/assets/tiers/emblems/Gold.png'
+import Diamond from '@/assets/tiers/emblems/Diamond.png'
+import Master from '@/assets/tiers/emblems/Master.png'
 
-export type RatingColorScheme = {
-  normal: ThemeTypings['colors']
-  darker: ThemeTypings['colors']
-  lighter: ThemeTypings['colors']
+export enum Tier {
+  Provisional = 'provisional',
+  Bronze = 'bronze',
+  Silver = 'silver',
+  Gold = 'gold',
+  Diamond = 'diamond',
+  Master = 'master',
+  Challenger = 'challenger',
 }
 
-export const RatingColorSchemes: Record<Tier, RatingColorScheme> = {
-  Unranked: {
-    darker: 'gray.400',
-    lighter: 'gray.100',
-    normal: 'gray.200',
-  },
-  Bronze: {
-    normal: 'orange.500',
-    darker: 'orange.700',
-    lighter: 'orange.400',
-  },
-  Silver: {
-    normal: 'gray.400',
-    darker: 'gray.500',
-    lighter: 'gray.300',
-  },
-  Gold: {
-    normal: 'yellow.300',
-    darker: 'yellow.500',
-    lighter: 'yellow.200',
-  },
-  Diamond: {
-    normal: 'cyan.300',
-    darker: 'cyan.500',
-    lighter: 'cyan.100',
-  },
-  Elite: {
-    normal: 'purple.300',
-    darker: 'purple.600',
-    lighter: 'purple.200',
-  },
+const tierIndexes = [
+  Tier.Bronze,
+  Tier.Silver,
+  Tier.Gold,
+  Tier.Diamond,
+  Tier.Master,
+]
+
+const emblemsMap: Record<Tier, string> = {
+  [Tier.Provisional]: Provisional,
+  [Tier.Bronze]: Bronze,
+  [Tier.Silver]: Silver,
+  [Tier.Gold]: Gold,
+  [Tier.Diamond]: Diamond,
+  [Tier.Master]: Master,
+  [Tier.Challenger]: '',
 }
 
-type RatingInfo = {
+export type RatingInfo = {
   tier: Tier
   division: Division
-  thumbnail: string
+  tierName: string
+  emblem: string
   rating: number
+  isApex: boolean
   deviation: number
   reliable: boolean
   precise: boolean
-  colorScheme: RatingColorScheme
 }
 
 function getC(inflationTime: number) {
   return Math.sqrt((350 ** 2 - 40 ** 2) / (inflationTime * 24 * 60 * 60 * 1000))
-}
-
-function getThumbnailByTierAndDivision(tier: number, division: number) {
-  return `https://quake-stats.bethesda.net/ranks/${tiers[tier]}_0${division}.png`
 }
 
 export function useRankInfo() {
@@ -73,67 +64,49 @@ export function useRankInfo() {
     },
   } = useConfig()
 
-  const getRD = useCallback(
-    (rating: Glicko) => {
-      if (rating.deviation === 0) return 0
+  function getRD(rating: Glicko) {
+    if (rating.deviation === 0) return 0
 
-      const c = getC(deviationInflationTime)
-      const t = Date.now() - rating.timestamp.getTime()
-      const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
-      return Math.min(candidate, initialRD)
-    },
-    [deviationInflationTime]
-  )
+    const c = getC(deviationInflationTime)
+    const t = Date.now() - rating.timestamp.getTime()
+    const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
+    return Math.min(candidate, initialRD)
+  }
 
-  const getRankThumbnail = useCallback(
-    (rating: number) => {
-      const infiniteTier = (rating - initialRating) / tierSize + initialTier + 1
-      const boundedTier = Math.max(Math.min(infiniteTier, 5), 1)
-      const tierINdex = Math.floor(boundedTier)
-      const division = Math.floor(5 * (boundedTier - tierINdex)) + 1
+  function getTier(rating: number): [Tier, number] {
+    const decimalTier = (rating - initialRating) / tierSize + initialTier
+    const boundedTier = Math.max(Math.min(decimalTier, 4), 0)
+    const tierIndex = Math.floor(boundedTier)
 
-      return getThumbnailByTierAndDivision(tierINdex, division)
-    },
-    [initialRating, tierSize, initialTier]
-  )
+    const division =
+      tierIndex === 4 ? 1 : 4 - Math.floor(4 * (boundedTier - tierIndex))
 
-  const getRankInfo = useCallback(
-    ({ rating, deviation, timestamp }: Glicko): RatingInfo => {
-      const infiniteTier = (rating - initialRating) / tierSize + initialTier + 1
-      const boundedTier = Math.max(Math.min(infiniteTier, 5), 1)
-      const tierIndex = Math.floor(boundedTier)
-      const division =
-        tierIndex === 5 ? 1 : Math.floor(5 * (boundedTier - tierIndex)) + 1
+    return [tierIndexes[tierIndex], division]
+  }
 
-      const currentRD = getRD({ rating, deviation, timestamp })
-      const newDeviation = Math.round(currentRD)
+  function getRankInfo({ rating, deviation, timestamp }: Glicko): RatingInfo {
+    const [expectedTier, division] = getTier(rating)
 
-      const reliable = newDeviation < maxReliableDeviation
+    const currentRD = getRD({ rating, deviation, timestamp })
+    const newDeviation = Math.round(currentRD)
 
-      return {
-        rating: Math.round(rating),
-        deviation: Math.round(getRD({ rating, deviation, timestamp })),
-        tier: reliable ? tiers[tierIndex] : 'Unranked',
-        division: (reliable ? division : 1) as Division,
-        thumbnail: reliable
-          ? getThumbnailByTierAndDivision(tierIndex, division)
-          : 'https://quake-stats.bethesda.net/ranks/Zero_01.png',
-        reliable,
-        precise: currentRD < 50,
-        colorScheme: reliable
-          ? RatingColorSchemes[tiers[tierIndex]]
-          : {
-              darker: 'gray.400',
-              lighter: 'gray.100',
-              normal: 'gray.200',
-            },
-      }
-    },
-    [initialTier, tierSize, initialRating, getRD]
-  )
+    const reliable = newDeviation < maxReliableDeviation
+    const tier = reliable ? expectedTier : Tier.Provisional
+
+    return {
+      rating: Math.round(rating),
+      deviation: Math.round(getRD({ rating, deviation, timestamp })),
+      tier,
+      tierName: tier,
+      division: (reliable ? division : 1) as Division,
+      emblem: emblemsMap[tier],
+      reliable,
+      isApex: false,
+      precise: currentRD < 50,
+    }
+  }
 
   return {
-    getRankThumbnail,
     getRankInfo,
     getRD,
   }
