@@ -60,7 +60,6 @@ export function PlayerCard({ player, ...rest }: Props) {
       justifyContent="left"
       gap="20px"
       p="20px"
-      // overflow="hidden"
       w="400px"
       transition="background-color 200ms"
       _hover={{

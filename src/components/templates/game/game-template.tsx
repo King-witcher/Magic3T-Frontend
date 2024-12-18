@@ -49,7 +49,9 @@ export function GameTemplate() {
   return (
     <Center w="full">
       <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
-        <Heading w="fit-content">{statusText[gameStatus]}</Heading>
+        <Heading w="fit-content" hideBelow="sm">
+          {statusText[gameStatus]}
+        </Heading>
         <Flex
           h="min-content"
           gap="20px"
@@ -70,7 +72,7 @@ export function GameTemplate() {
           </Stack>
           <VStack gap="20px" justify="center">
             <VStack gap="20px" w="full">
-              <PlayerCard player="opponent" w="full" hideFrom={'sm'} />
+              <PlayerCard player="opponent" w="full" hideFrom="sm" />
               <Center {...getAcrylicProps()} h="50px" w="full">
                 <TimeCounter
                   color="light"
@@ -98,7 +100,6 @@ export function GameTemplate() {
                   timer={playerTimer}
                 />
               </Center>
-              <PlayerCard player="current" w="full" hideFrom={'sm'} />
             </VStack>
           </VStack>
           <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
