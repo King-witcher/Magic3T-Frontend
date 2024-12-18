@@ -1,8 +1,4 @@
-import {
-  HistoryMatchEventsEnum,
-  type MatchModel,
-  type MatchSide,
-} from '@/models'
+import { HistoryMatchEventsEnum, MatchSide, type MatchModel } from '@/models'
 import { MatchResult } from '@/types'
 import { formatDate } from '@/utils/timeFormat'
 import { Center, Flex, Text } from '@chakra-ui/react'
@@ -35,19 +31,19 @@ export function MatchHeader({ match, referenceSide }: Props) {
           <Text
             fontWeight={700}
             color={
-              result === 'victory'
-                ? 'green.700'
+              result === 'defeat'
+                ? '#ff3040'
                 : result === 'draw'
-                  ? 'gray.600'
-                  : 'red.700'
+                  ? 'light'
+                  : '#40cf40'
             }
           >
             {/* ({match.mode === 'ranked' ? 'Ranqueada' : 'Casual'}){' '} */}
             {result === 'victory'
-              ? 'Vitória'
+              ? 'Victory'
               : result === 'draw'
-                ? 'Empate'
-                : 'Derrota'}
+                ? 'Draw'
+                : 'Defeat'}
 
             {player.gain !== 0 && (
               <>
@@ -69,18 +65,24 @@ export function MatchHeader({ match, referenceSide }: Props) {
             borderRadius="3px"
             minW="20px"
             h="20px"
-            bg={
-              event.event === HistoryMatchEventsEnum.Forfeit
-                ? 'red.500'
-                : event.event === HistoryMatchEventsEnum.Timeout
-                  ? 'yellow.500'
-                  : event.side === referenceSide
-                    ? 'blue.300'
-                    : 'red.300'
-            }
+            {...(event.event === HistoryMatchEventsEnum.Forfeit
+              ? {}
+              : event.event === HistoryMatchEventsEnum.Timeout
+                ? {}
+                : event.side === MatchSide.White
+                  ? {
+                      bg: '#3787ffc0',
+                      border: '1px solid #3787ff',
+                      boxShadow: '0 0 10px 0 #3787ff80',
+                    }
+                  : {
+                      bg: '#ff3737c0',
+                      border: '1px solid #ff3737',
+                      boxShadow: '0 0 10px 0 #ff373780',
+                    })}
           >
             {event.event === HistoryMatchEventsEnum.Choice && event.choice}
-            {event.event === HistoryMatchEventsEnum.Forfeit && 'Rendição'}
+            {event.event === HistoryMatchEventsEnum.Forfeit && 'Surrender'}
             {event.event === HistoryMatchEventsEnum.Timeout && 'Timeout'}
           </Center>
         ))}

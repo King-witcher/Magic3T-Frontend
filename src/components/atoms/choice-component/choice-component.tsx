@@ -1,4 +1,5 @@
 import type { Choice } from '@/types/game.ts'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   type ChakraProps,
   Flex,
@@ -27,11 +28,7 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
     case 'selectable':
       return {
         cursor: 'pointer',
-        _hover: {
-          bg: '#ffffff30',
-          border: '1px solid #ffffff40',
-          boxShadow: '0 0 10px 0 #ffffff20',
-        },
+        _hover: { ...getAcrylicProps(), boxShadow: 'unset' },
       }
     case 'opponentSelected':
       return {

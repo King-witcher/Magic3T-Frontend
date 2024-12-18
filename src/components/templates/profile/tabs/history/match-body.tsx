@@ -1,8 +1,9 @@
 import { CopyButton } from '@/components/atoms/copy-button/copy-button'
-import { MovesView } from '@/components/templates/match/components'
+import { MovesView, PlayerCard } from '@/components/templates/match/components'
 import type { MatchModel } from '@/models'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { Flex, Stack, Text, Tooltip } from '@chakra-ui/react'
+import { Avatar, Flex, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 
 interface Props {
@@ -25,7 +26,14 @@ export function MatchBody({ match }: Props) {
           </Link>
         </Tooltip>
       </Flex>
-      <MovesView moves={match.events} />
+      <Flex gap="20px" justify="center">
+        <Stack align="center" spacing="10px">
+          <PlayerCard matchPlayer={match.white} />
+          <Text>vs</Text>
+          <PlayerCard matchPlayer={match.black} />
+        </Stack>
+        <MovesView moves={match.events} />
+      </Flex>
     </Stack>
   )
 }

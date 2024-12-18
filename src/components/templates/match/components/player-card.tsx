@@ -2,6 +2,7 @@ import { useAuth } from '@/contexts/auth.context.tsx'
 import { useRankInfo } from '@/hooks/useRanks'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Avatar,
   Badge,
@@ -30,22 +31,16 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
     <LinkBox
       display="flex"
       p="10px 14px"
-      rounded="10px"
       alignItems="center"
       w="250px"
+      h="fit-content"
       overflow="hidden"
       gap="8px"
-      bg="whiteAlpha.600"
       transition="background 80ms linear"
       _hover={{
-        bg: 'white',
+        bg: '#ffffff40',
       }}
-      border={
-        highlight
-          ? `solid 5px var(--chakra-colors-${highlight}-300)`
-          : 'solid 5px var(--chakra-colors-gray-300)'
-      }
-      borderWidth="1px 1px 1px 6px"
+      {...getAcrylicProps()}
     >
       <Avatar size="lg" src={userQuery.data?.photoURL} />
       <LinkOverlay

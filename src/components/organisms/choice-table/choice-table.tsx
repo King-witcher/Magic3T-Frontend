@@ -3,6 +3,7 @@ import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/Commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import { type ChakraProps, Grid, Image, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -127,14 +128,18 @@ export function ChoiceTable({
   return (
     <Grid
       gridTemplateColumns="repeat(3, 1fr)"
-      border="1px solid #ffffff40"
+      {...getAcrylicProps()}
       p="20px"
       rounded="10px"
       overflow="hidden"
       w="full"
       h="fit-content"
-      bg="#ffffff30"
-      boxShadow="0 0 10px 0 #00000040"
+      transition="box-shadow 1s"
+      boxShadow={
+        state === 'selectable'
+          ? '0 0 10px 0 #00ff0080, inset 0 0 40px #40ff40ff'
+          : '0 0 10px 0 #00000040'
+      }
       gap="10px"
       {...rest}
     >

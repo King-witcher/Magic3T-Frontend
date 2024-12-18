@@ -1,8 +1,9 @@
 import type { MatchModel, MatchSide } from '@/models/matches/Match'
 import { MatchResult } from '@/types'
-import { Collapse, Stack, type StackProps } from '@chakra-ui/react'
+import { Collapse, Flex, Stack, type StackProps } from '@chakra-ui/react'
 import { MatchBody } from './match-body'
 import { MatchHeader } from './match-header'
+import { getAcrylicProps } from '@/utils/style-helpers'
 
 interface Props extends StackProps {
   match: MatchModel
@@ -26,35 +27,33 @@ export function HistoryRow({
   return (
     <Stack
       gap="0"
-      bg="gray.100"
+      bgColor="#ffffff30"
       p={['10px 15px', '10px 20px']}
       transition="background 80ms linear"
-      color="#000000c0"
+      color="light"
       userSelect="none"
-      _hover={{
-        bgColor: 'gray.200',
-        borderColor:
-          result === 'defeat'
-            ? 'red.300'
-            : result === 'draw'
-              ? 'gray.300'
-              : 'green.300',
-      }}
-      borderLeft="solid 10px"
+      _hover={
+        isExpanded
+          ? undefined
+          : {
+              bgColor: '#ffffff60',
+            }
+      }
+      borderLeft="solid 5px"
       borderLeftColor={
         result === 'defeat'
-          ? 'red.400'
+          ? '#ff3040'
           : result === 'draw'
-            ? 'gray.400'
-            : 'green.400'
+            ? '#c0c0c0'
+            : '#40cf40'
       }
       fontSize={{
-        base: '11px',
-        sm: '16px',
+        base: '0.6875rem',
+        sm: '1rem',
       }}
       lineHeight={{
-        base: '11px',
-        sm: '16px',
+        base: '0.6875rem',
+        sm: '1rem',
       }}
       {...rest}
     >

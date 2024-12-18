@@ -16,6 +16,7 @@ import { ChoiceTable } from '@/components/organisms'
 import { ButtonsContainer } from '@/components/atoms'
 import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
 import { Link } from '@tanstack/react-router'
+import { getAcrylicProps } from '@/utils/style-helpers'
 
 const statusText: Record<GameStatus, string> = {
   defeat: 'You lost',
@@ -44,15 +45,6 @@ export function GameTemplate() {
     onOpen: openForfeitModal,
   } = useDisclosure()
   const chatInputRef = useRef<HTMLInputElement>(null)
-  // useEffect(() => {
-  //   return () => {
-  //     if (
-  //       gameStatus !== GameStatus.Playing &&
-  //       gameStatus !== GameStatus.Waiting
-  //     )
-  //       disconnect()
-  //   }
-  // }, [gameStatus, disconnect])
   if (!isActive) return null // Improve
   return (
     <Center w="full">
@@ -79,14 +71,7 @@ export function GameTemplate() {
           <VStack gap="20px" justify="center">
             <VStack gap="20px" w="full">
               <PlayerCard player="opponent" w="full" hideFrom={'sm'} />
-              <Center
-                rounded="10px"
-                h="50px"
-                bg="#ffffff30"
-                border="1px solid #ffffff40"
-                boxShadow="0 0 10px 0 #00000040"
-                w="full"
-              >
+              <Center {...getAcrylicProps()} h="50px" w="full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
@@ -106,14 +91,7 @@ export function GameTemplate() {
                 }
                 onSelect={makeChoice}
               />
-              <Center
-                rounded="10px"
-                h="50px"
-                bg="#ffffff30"
-                border="1px solid #ffffff40"
-                boxShadow="0 0 10px 0 #00000040"
-                w="full"
-              >
+              <Center {...getAcrylicProps()} h="50px" w="full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
@@ -137,22 +115,21 @@ export function GameTemplate() {
           )}
           {(gameStatus === GameStatus.Victory ||
             gameStatus === GameStatus.Defeat ||
-            gameStatus === GameStatus.Draw) && (
-            <>
-              <InnerButton
-                h="60px"
-                w={{ base: 'full', sm: '200px' }}
-                onClick={disconnect}
-              >
-                Leave room
+            gameStatus === GameStatus.Draw) && [
+            <InnerButton
+              key="leave"
+              h="60px"
+              w={{ base: 'full', sm: '200px' }}
+              onClick={disconnect}
+            >
+              Leave room
+            </InnerButton>,
+            <Link to={`/match/${matchId}`} key="view">
+              <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
+                View match
               </InnerButton>
-              <Link to={`/match/${matchId}`}>
-                <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
-                  View match
-                </InnerButton>
-              </Link>
-            </>
-          )}
+            </Link>,
+          ]}
         </ButtonsContainer>
       </VStack>
       <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />

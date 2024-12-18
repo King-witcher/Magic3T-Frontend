@@ -64,9 +64,9 @@ export function ProfileCard({ user }: Props) {
       justifyContent="center"
     >
       <Avatar
-        src={user.photoURL || undefined}
-        size="xl"
-        rounded="20px"
+        src="https://ddragon.leagueoflegends.com/cdn/11.14.1/img/profileicon/0.png"
+        size="xxl"
+        rounded="9999"
         borderWidth="6px"
         borderColor={rinfo.colorScheme.darker}
         overflow="hidden"

@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import type { RefObject } from 'react'
 import { useChatHandler } from '../hooks/useChatHandler'
+import { getAcrylicProps } from '@/utils/style-helpers'
 
 interface Props extends StackProps {
   inputRef: RefObject<HTMLInputElement>
@@ -27,10 +28,7 @@ export function ChatBox({ inputRef, ...props }: Props) {
   return (
     <Center flexShrink={0} position="relative" w={{ sm: '400px' }} {...props}>
       <VStack
-        border="solid 1px #ffffff40"
-        bg="#ffffff30"
-        boxShadow="0 0 10px 0 #00000040"
-        borderRadius="10px"
+        {...getAcrylicProps()}
         inset={0}
         gap="0"
         pos="absolute"
@@ -49,12 +47,12 @@ export function ChatBox({ inputRef, ...props }: Props) {
                 maxW="300px"
                 p="8px 13px"
                 gap="3px"
-                rounded="6px"
                 color="light"
-                bg="#ffffff30"
-                border="solid 1px #ffffff40"
                 key={message.timestamp}
                 alignSelf={message.sender === 'you' ? 'flex-end' : 'flex-start'}
+                {...getAcrylicProps()}
+                boxShadow="none"
+                rounded="6px"
               >
                 <Text fontSize="16px" lineHeight="18px">
                   {message.content}
@@ -77,7 +75,7 @@ export function ChatBox({ inputRef, ...props }: Props) {
             ref={inputRef}
             variant="unstyled"
             boxShadow="none"
-            borderTop="solid 1px #ffffff40"
+            borderTop="solid 1px #ffffff60"
             color="light"
             rounded="0"
             value={currentMessage}

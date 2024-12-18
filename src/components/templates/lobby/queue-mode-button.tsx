@@ -4,6 +4,7 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { GameMode } from '@/types/queue'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Box,
   Center,
@@ -46,6 +47,12 @@ export function QueueModeButton({
     <Center
       flex={{ base: '1 0 75px', sm: '1' }}
       h="75px"
+      {...{
+        ...getAcrylicProps(),
+        rounded: 0,
+        border: 'none',
+        boxShadow: 'none',
+      }}
       background="#ffffff30"
       color="light"
       cursor={isDisabled ? 'unset' : 'pointer'}
@@ -58,14 +65,14 @@ export function QueueModeButton({
         isDisabled
           ? undefined
           : {
-              bg: '#ffffff60',
+              bgColor: '#ffffff60',
             }
       }
       _active={
         isDisabled
           ? undefined
           : {
-              bg: '#ffffff20',
+              bgColor: '#ffffff20',
             }
       }
       {...props}

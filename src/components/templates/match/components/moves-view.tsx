@@ -54,6 +54,7 @@ export function MovesView({ moves }: Props) {
         blueMoves={whiteMoves}
         redMoves={blackMoves}
         state="static"
+        w={{ base: 'full', sm: '240px' }}
       />
       <Flex
         gap="5px"

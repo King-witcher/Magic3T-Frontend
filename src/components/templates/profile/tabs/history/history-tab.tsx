@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { HistoryRow } from './history-row'
 import { useQuery } from '@tanstack/react-query'
 import { matchesQueryOptions } from '@/utils/query-options'
+import { getAcrylicProps } from '@/utils/style-helpers'
 
 interface Props {
   referenceUid: string
@@ -41,18 +42,18 @@ export function HistoryTab({ referenceUid }: Props) {
     <Stack
       h="100%"
       rounded="10px"
+      {...getAcrylicProps()}
+      bg="none"
       gap="0"
-      boxShadow="0 0 10px 8px #00000010"
       divider={
         <chakra.hr
           m="0 !important"
           borderTopWidth="1px"
           borderBottom="0px"
           p="0"
-          borderColor="gray.300"
+          borderColor="#ffffff80"
         />
       }
-      borderColor="gray.400"
       overflow="hidden"
     >
       {matches.map((match, matchIndex) => {

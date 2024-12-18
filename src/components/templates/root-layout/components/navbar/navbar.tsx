@@ -8,13 +8,16 @@ import { ProfileButton } from './profile-button'
 const Container = chakra(Flex, {
   baseStyle: {
     w: '100%',
+    h: '65px',
     flex: '0 0 65px',
     alignItems: 'center',
+    backdropFilter: 'blur(10px)',
     justifyContent: 'space-between',
     gap: '10px',
     px: '10px',
-    borderBottom: '1px solid #ffffff40',
-    bg: '#ffffff30',
+    borderBottom: '1px solid #ffffff80',
+    bg: 'linear-gradient(90deg, #ffffff30, #ffffff40, #ffffff30)',
+    backgroundClip: 'padding-box',
     color: 'white',
     zIndex: 1,
     shadow: '0 0 12px 0 #00000040',

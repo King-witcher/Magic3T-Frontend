@@ -16,6 +16,7 @@ import {
 import type { RefObject } from 'react'
 import { Link } from '@tanstack/react-router'
 import { SmoothNumber } from '@/components/atoms'
+import { getAcrylicProps } from '@/utils/style-helpers'
 
 interface Props extends CenterProps {
   player: 'current' | 'opponent'
@@ -50,17 +51,20 @@ export function PlayerCard({ player, ...rest }: Props) {
 
   return (
     <Center
+      as={Link}
+      to={`/user/${profile?._id}`}
       className="playerCard"
       alignItems="center"
       justifyContent="left"
       gap="20px"
-      border="solid 1px #ffffff40"
       p="20px"
-      rounded="10px"
       overflow="hidden"
-      bg="#ffffff30"
-      boxShadow="0 0 10px 0 #00000040"
       w="400px"
+      transition="background-color 200ms"
+      _hover={{
+        backgroundColor: '#ffffff40',
+      }}
+      {...getAcrylicProps()}
       {...rest}
     >
       <Avatar
