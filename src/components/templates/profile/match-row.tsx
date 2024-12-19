@@ -5,6 +5,7 @@ import { Box, Center, Flex, Stack, Text } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { RiFlagFill } from 'react-icons/ri'
 import { FaClock } from 'react-icons/fa'
+import { Link } from '@tanstack/react-router'
 
 interface Props {
   match: MatchModel
@@ -29,7 +30,7 @@ export function MatchRow({ match, viewAs }: Props) {
         : MatchResult.Defeat
 
   const player = match.white.uid === viewAs ? match.white : match.black
-  const oponent = match.white.uid === viewAs ? match.black : match.white
+  const opponent = match.white.uid === viewAs ? match.black : match.white
 
   const durationString = useMemo(() => {
     const duration = Math.floor(
@@ -43,15 +44,31 @@ export function MatchRow({ match, viewAs }: Props) {
   }, [match])
 
   return (
-    <Stack gap="10px" p="20px" transition="all 100ms" {...getAcrylicProps()}>
+    <Stack
+      as={Link}
+      to={`/user/${opponent.uid}`}
+      gap="10px"
+      p="20px"
+      transition="all 100ms"
+      cursor="pointer"
+      {...getAcrylicProps()}
+      _hover={{
+        bgColor: '#ffffff40',
+      }}
+    >
       <Flex>
         <Stack spacing={0}>
           <Flex align="center" gap="10px">
-            <Text fontWeight={700}>{oponent.name}</Text>
+            <Text fontWeight={700}>{opponent.name}</Text>
             {!!player.gain && (
-              <Text fontSize="14px" fontWeight={600}>
+              <Text
+                fontSize="0.875rem"
+                fontWeight={700}
+                lineHeight="normal"
+                color={player.gain > 0 ? '#00c020' : '#ff4000'}
+              >
                 {player.gain > 0 ? '+' : '-'}
-                {Math.abs(player.gain)}
+                {Math.round(Math.abs(player.gain))}
               </Text>
             )}
           </Flex>

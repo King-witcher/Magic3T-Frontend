@@ -16,5 +16,5 @@ function Page() {
     return <>loading</>
   }
 
-  return <ProfileTemplate user={userQuery.data} />
+  return <ProfileTemplate key={userId} user={userQuery.data} />
 }
