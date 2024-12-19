@@ -35,7 +35,9 @@ async function getRanking(): Promise<UserData[]> {
       'color: #FFCA28'
     )
 
-  return snap.docs.map((doc) => doc.data())
+  return snap.docs
+    .map((doc) => doc.data())
+    .filter((user) => !!user.identification)
 }
 
 function subscribe(uid: string, callback: (data: UserData) => void) {
