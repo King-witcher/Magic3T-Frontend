@@ -124,11 +124,11 @@ export function GameTemplate() {
             >
               Leave room
             </InnerButton>,
-            <Link to={`/match/${matchId}`} key="view">
-              <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
-                View match
-              </InnerButton>
-            </Link>,
+            // <Link to={`/match/${matchId}`} key="view">
+            //   <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
+            //     View match
+            //   </InnerButton>
+            // </Link>,
           ]}
         </ButtonsContainer>
       </VStack>

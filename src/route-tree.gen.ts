@@ -19,7 +19,6 @@ import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
 import { Route as UserUserIdImport } from './routes/user/$userId'
-import { Route as MatchMatchIdImport } from './routes/match/$matchId'
 import { Route as AuthGuardedMeRouteImport } from './routes/_auth-guarded/me/route'
 
 // Create/Update Routes
@@ -61,11 +60,6 @@ const AuthGuardedIndexRoute = AuthGuardedIndexImport.update({
 
 const UserUserIdRoute = UserUserIdImport.update({
   path: '/user/$userId',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MatchMatchIdRoute = MatchMatchIdImport.update({
-  path: '/match/$matchId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -113,13 +107,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGuardedMeRouteImport
       parentRoute: typeof AuthGuardedImport
     }
-    '/match/$matchId': {
-      id: '/match/$matchId'
-      path: '/match/$matchId'
-      fullPath: '/match/$matchId'
-      preLoaderRoute: typeof MatchMatchIdImport
-      parentRoute: typeof rootRoute
-    }
     '/user/$userId': {
       id: '/user/$userId'
       path: '/user/$userId'
@@ -161,7 +148,6 @@ export const routeTree = rootRoute.addChildren({
   RankingRoute,
   RatingSystemRoute,
   TutorialRoute,
-  MatchMatchIdRoute,
   UserUserIdRoute,
   RegisterIndexRoute,
   SignInIndexRoute,
@@ -179,7 +165,6 @@ export const routeTree = rootRoute.addChildren({
         "/ranking",
         "/rating-system",
         "/tutorial",
-        "/match/$matchId",
         "/user/$userId",
         "/register/",
         "/sign-in/"
@@ -204,9 +189,6 @@ export const routeTree = rootRoute.addChildren({
     "/_auth-guarded/me": {
       "filePath": "_auth-guarded/me/route.tsx",
       "parent": "/_auth-guarded"
-    },
-    "/match/$matchId": {
-      "filePath": "match/$matchId.tsx"
     },
     "/user/$userId": {
       "filePath": "user/$userId.tsx"

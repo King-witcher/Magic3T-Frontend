@@ -4,7 +4,6 @@ import { GuardedAuthProvider } from '@/contexts/guarded-auth.context'
 import { Center, Spinner, Text, VStack } from '@chakra-ui/react'
 import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import { GuardedProviders } from './-guarded-providers'
 
 export const Route = createFileRoute('/_auth-guarded')({
   component: () => {
@@ -44,9 +43,7 @@ export const Route = createFileRoute('/_auth-guarded')({
 
     return (
       <GuardedAuthProvider user={user} getToken={getToken} signOut={signOut}>
-        <GuardedProviders>
-          {user.identification ? <Outlet /> : <ChooseNicknameTemplate />}
-        </GuardedProviders>
+        {user.identification ? <Outlet /> : <ChooseNicknameTemplate />}
       </GuardedAuthProvider>
     )
   },
