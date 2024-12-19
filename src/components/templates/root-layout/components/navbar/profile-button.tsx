@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/auth.context.tsx'
 import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
+  Flex,
   Menu,
   MenuButton,
   MenuDivider,
@@ -31,16 +32,15 @@ export function ProfileButton() {
   return (
     <Menu>
       <MenuButton
-        borderRadius="8px"
-        transition="all linear 80ms"
+        borderRadius="9999"
+        transition="all linear 200ms"
         sx={{
           img: {
             transition: 'all linear 80ms',
           },
           _hover: {
-            backdropFilter: 'brightness(1.15)',
             img: {
-              filter: 'brightness(1.1)',
+              filter: 'brightness(1.1) saturate(1.1)',
             },
           },
         }}
@@ -48,13 +48,14 @@ export function ProfileButton() {
         <Avatar
           // src={user?.photoURL || undefined}
           src={getIconUrl(user?.summoner_icon)}
+          border="2px solid #ffffff40"
           w="40px"
           h="40px"
           bg="whiteAlpha.300"
           rounded="9999"
           sx={{
             '& img': {
-              rounded: '8px',
+              rounded: '9999',
             },
           }}
         />
