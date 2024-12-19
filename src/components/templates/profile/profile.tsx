@@ -13,8 +13,8 @@ import {
   Image,
   Stack,
   Text,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
