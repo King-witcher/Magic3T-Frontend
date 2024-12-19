@@ -9,11 +9,12 @@
         "noDefaultExport": "info",
         "noUselessElse": "error",
         "noNonNullAssertion": "off",
-        "useImportType": "off"
+        "useImportType": "off",
+        "useTemplate": "info"
       },
       "correctness": {
         "useExhaustiveDependencies": "info",
-        "noUnusedImports": "off"
+        "noUnusedImports": "warn"
       }
     }
   },

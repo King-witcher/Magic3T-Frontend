@@ -1,3 +1,4 @@
+import { ChooseNicknameTemplate } from '@/components/templates'
 import { AuthState, useAuth } from '@/contexts/auth.context'
 import { GuardedAuthProvider } from '@/contexts/guarded-auth.context'
 import { Center, Spinner, Text, VStack } from '@chakra-ui/react'
@@ -32,9 +33,9 @@ export const Route = createFileRoute('/_auth-guarded')({
       return (
         <Center h="100%">
           <VStack gap="10px" p="20px 30px" rounded="10px">
-            <Spinner size="xl" thickness="5px" color="blue.500" speed="1.5s" />
-            <Text fontSize="18px" color="blue.700" fontWeight={600}>
-              Carregando sessão
+            <Spinner size="xl" thickness="5px" color="light" speed="1.5s" />
+            <Text fontSize="18px" color="light" fontWeight={600}>
+              Loading session
             </Text>
           </VStack>
         </Center>
@@ -44,7 +45,7 @@ export const Route = createFileRoute('/_auth-guarded')({
     return (
       <GuardedAuthProvider user={user} getToken={getToken} signOut={signOut}>
         <GuardedProviders>
-          <Outlet />
+          {user.identification ? <Outlet /> : <ChooseNicknameTemplate />}
         </GuardedProviders>
       </GuardedAuthProvider>
     )

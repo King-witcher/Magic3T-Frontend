@@ -16,8 +16,8 @@ const baseStyle = definePartsStyle({
 
 const form = definePartsStyle({
   field: {
-    bg: '#ffffff20',
-    border: 'solid 1px #ffffff40',
+    bg: '#ffffff20 padding-box',
+    border: 'solid 1px #ffffff80',
     boxShadow: 'none',
     rounded: '10px',
     color: 'light',

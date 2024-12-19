@@ -1,8 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
-import { useGuardedAuth } from '@/contexts/guarded-auth.context'
-import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import { UserData } from '@/models/users/user'
-import { Api } from '@/services/api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
 import {

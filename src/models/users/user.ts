@@ -3,7 +3,7 @@ import type { WithId } from '@/types/withId.ts'
 
 export type UserData = WithId & {
   identification?: {
-    unique_id: string // nickname.toLower() without spaces
+    unique_id: string
     nickname: string
     last_changed: Date
   } | null
