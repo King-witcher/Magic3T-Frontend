@@ -1,6 +1,5 @@
-import { UserAvatar } from '@/components/molecules'
 import { useConfig } from '@/contexts/config.context'
-import { type RatingInfo, Tier, useRatingInfo } from '@/hooks/use-rating-info'
+import { type RatingInfo, useRatingInfo } from '@/hooks/use-rating-info'
 import { rankingQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
