@@ -15,6 +15,7 @@ const baseStyle = definePartsStyle({
     border: '1px solid #ffffff40',
     boxShadow: '0 0 10px 0 #00000040',
     backdropFilter: 'blur(10px)',
+    p: '20px',
     color: 'light',
     margin: '10px',
   },
