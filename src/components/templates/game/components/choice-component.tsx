@@ -34,13 +34,11 @@ function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
       }
     case 'opponentSelected':
       return {
-        //opacity: 0.5,
         bg: 'red.400',
         color: 'white',
       }
     case 'playerSelected':
       return {
-        //opacity: 0.5,
         bg: 'blue.400',
         color: 'white',
       }

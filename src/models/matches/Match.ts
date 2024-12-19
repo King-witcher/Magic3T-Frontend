@@ -37,18 +37,18 @@ export type HistoryMatchEvent = BaseMatchEvent &
   (
     | {
         event: HistoryMatchEventsEnum.Choice
-        message: never
+        message?: never
         choice: Choice
       }
     | {
         event: HistoryMatchEventsEnum.Message
         message: string
-        choice: never
+        choice?: never
       }
     | {
         event: HistoryMatchEventsEnum.Timeout | HistoryMatchEventsEnum.Forfeit
-        message: never
-        choice: never
+        message?: never
+        choice?: never
       }
   )
 

@@ -5,7 +5,9 @@ import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api'
+import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Badge,
   Box,
@@ -16,7 +18,9 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { MatchRow } from './match-row'
 
 interface Props {
   user: UserData
@@ -33,13 +37,11 @@ export function ProfileTemplate({ user }: Props) {
   const { getRankInfo } = useRatingInfo()
   const changeIconModalDisclosure = useDisclosure()
   const { user: authenticatedUser } = useAuth()
-
   const { getToken } = useAuth()
-
   const { ratingConfig } = useConfig()
-
   const rinfo = getRankInfo(user.glicko)
   const tierInfo = tiersMap[rinfo.tier]
+  const matchesQuery = useQuery(matchesQueryOptions(user._id))
 
   const progress = useMemo(() => {
     if (!rinfo.reliable) {
@@ -260,7 +262,14 @@ export function ProfileTemplate({ user }: Props) {
         onClose={changeIconModalDisclosure.onClose}
       />
 
-      {/* <Text fontSize="20px">Last 20 games</Text> */}
+      <Text fontSize="20px">Last 20 games</Text>
+      {matchesQuery.isSuccess && (
+        <Stack spacing="10px">
+          {matchesQuery.data.map((match) => (
+            <MatchRow key={match._id} match={match} viewAs={user._id} />
+          ))}
+        </Stack>
+      )}
     </Flex>
   )
 }
