@@ -8,10 +8,12 @@
       "style": {
         "noDefaultExport": "info",
         "noUselessElse": "error",
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useImportType": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "info"
+        "useExhaustiveDependencies": "info",
+        "noUnusedImports": "off"
       }
     }
   },

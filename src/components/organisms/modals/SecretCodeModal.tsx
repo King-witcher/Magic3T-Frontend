@@ -32,13 +32,10 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
     <Modal isCentered {...props}>
       <ModalOverlay />
       <ModalContent as="form" onSubmit={handleSubmit}>
-        <ModalHeader>Códigos secretos</ModalHeader>
+        <ModalHeader>Cheats</ModalHeader>
         <ModalBody>
           <Stack>
-            <Text>
-              Insira um código para ativar alguma funcionalidade secreta ou
-              cheat do jogo.
-            </Text>
+            <Text>Enter a cheat code to enable a secret funcionality.</Text>
             <Input
               value={input}
               onChange={(e) => {
@@ -48,7 +45,7 @@ export default function SecretCodeModal(props: Omit<ModalProps, 'children'>) {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={handleSubmit}>Usar</Button>
+          <Button onClick={handleSubmit}>Use</Button>
         </ModalFooter>
         <ModalCloseButton />
       </ModalContent>

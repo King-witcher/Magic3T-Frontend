@@ -3,10 +3,11 @@ import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/Commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
-import { Grid, Image, Text, VStack } from '@chakra-ui/react'
+import { getAcrylicProps } from '@/utils/style-helpers'
+import { type ChakraProps, Grid, Image, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-interface Props {
+interface Props extends ChakraProps {
   redMoves: Choice[]
   blueMoves: Choice[]
   state: 'selectable' | 'static' | 'disabled'
@@ -64,7 +65,13 @@ function initialSetPugDanceCheat() {
 setCommand('3tmode', initialSetPugDanceCheat)
 setCommand('ttt', initialTicTacToeCheat)
 
-export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
+export function ChoiceTable({
+  redMoves,
+  blueMoves,
+  state,
+  onSelect,
+  ...rest
+}: Props) {
   const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
   const [pugDance, setPugDance] = useState(initialPugDance)
 
@@ -81,7 +88,6 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
 
   const ticTacToeCheat = useCallback(() => {
     initialTicTacToeCheat()
-    console.log('tictic')
     setAllChoices([...cheatAllChoices])
   }, [])
 
@@ -122,13 +128,20 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
   return (
     <Grid
       gridTemplateColumns="repeat(3, 1fr)"
-      rounded="16px"
+      {...getAcrylicProps()}
+      p="20px"
+      rounded="10px"
       overflow="hidden"
-      w="fit-content"
+      w="full"
       h="fit-content"
-      bg="gray.100"
-      // border="solid 1px var(--chakra-colors-gray-200)"
-      // bg="gray.200"
+      transition="box-shadow 1s"
+      boxShadow={
+        state === 'selectable'
+          ? '0 0 10px 0 #00ff0080, inset 0 0 40px #40ff40ff'
+          : '0 0 10px 0 #00000040'
+      }
+      gap="10px"
+      {...rest}
     >
       {allChoices.map((number) => {
         const blueChoice = blueMoves.includes(number)

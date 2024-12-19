@@ -6,8 +6,8 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react'
-import { BadgeContainer } from './badge-container'
 import { Link } from '@tanstack/react-router'
+import { BadgeContainer } from './badge-container'
 
 interface Props {
   liveActivity: LiveActivity

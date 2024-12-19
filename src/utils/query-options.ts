@@ -31,12 +31,12 @@ export function matchesQueryOptions(uid: string) {
   })
 }
 
-export function standingsQueryOptions() {
+export function rankingQueryOptions() {
   return queryOptions({
-    queryKey: ['standings'],
+    queryKey: ['ranking'],
     staleTime: Number.POSITIVE_INFINITY,
     queryFn: async () => {
-      return await models.users.getStandings()
+      return await models.users.getRanking()
     },
   })
 }

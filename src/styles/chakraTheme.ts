@@ -7,6 +7,7 @@ import { popoverTheme } from './popover'
 import { textareaTheme } from './textarea'
 import { tooltipTheme } from './tooltip'
 import '@fontsource-variable/nunito'
+import { colors } from './colors'
 import { headingTheme } from './heading'
 import { tabsTheme } from './tabs'
 
@@ -27,13 +28,13 @@ export const chakraTheme = extendTheme({
         },
         '::-webkit-scrollbar-thumb': {
           w: '5px',
-          bg: 'blue.700',
+          bg: '#ffffff80',
           borderRadius: '999px',
         },
       },
       body: {
-        bg: 'gray.400',
-        color: 'blackAlpha.800',
+        bg: '#281e55',
+        color: 'light',
         fontFamily: 'Nunito Variable',
         '::-webkit-scrollbar': {
           w: '5px',
@@ -50,6 +51,7 @@ export const chakraTheme = extendTheme({
   config: {
     initialColorMode: 'light',
   },
+  colors,
   components: {
     Button: buttonTheme,
     Modal: modalTheme,

@@ -18,18 +18,34 @@ export function ForfeitModal(props: Omit<ModalProps, 'children'>) {
     <Modal isCentered {...props}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Deseja render-se?</ModalHeader>
-        <ModalBody>Você perderá a partida. Confirme sua ação.</ModalBody>
+        <ModalHeader>Surrender</ModalHeader>
+        <ModalBody>Are you sure you want to surrender?</ModalBody>
         <ModalFooter>
-          <Button onClick={props.onClose}>Cancelar</Button>
+          <Button
+            onClick={props.onClose}
+            color="light"
+            bg="#ffffff40"
+            border="1px solid #ffffff40"
+            _hover={{
+              bg: '#ffffff80',
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             colorScheme="red"
             onClick={async () => {
               forfeit()
               props.onClose()
             }}
+            color="#ff4040"
+            bg="#ff404040"
+            border="1px solid #ff404040"
+            _hover={{
+              bg: '#ff404080',
+            }}
           >
-            Render-se
+            Surrender
           </Button>
         </ModalFooter>
         <ModalCloseButton />

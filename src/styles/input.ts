@@ -16,16 +16,18 @@ const baseStyle = definePartsStyle({
 
 const form = definePartsStyle({
   field: {
-    bg: 'gray.100',
+    bg: '#ffffff20',
+    border: 'solid 1px #ffffff40',
     boxShadow: 'none',
-    borderStyle: 'solid',
-    borderWidth: '0 0 0 5px',
     rounded: '10px',
+    color: 'light',
     p: { base: '10px 15px', lg: '15px 18px' },
-    borderColor: 'blue.400',
     _focus: {
-      bg: 'gray.50',
-      borderWidth: '1px 1px 1px 5px',
+      bg: '#ffffff40',
+      border: 'solid 1px #ffffff80',
+    },
+    _placeholder: {
+      color: '#ffffff80',
     },
   },
 })

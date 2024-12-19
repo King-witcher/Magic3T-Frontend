@@ -1,7 +1,7 @@
 import { AuthState, useAuth } from '@/contexts/auth.context'
 import { GuardedAuthProvider } from '@/contexts/guarded-auth.context'
-import { Center, VStack, Text, Spinner } from '@chakra-ui/react'
-import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
+import { Center, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { GuardedProviders } from './-guarded-providers'
 

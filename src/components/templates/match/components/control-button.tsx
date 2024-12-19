@@ -1,3 +1,4 @@
+import { getAcrylicProps } from '@/utils/style-helpers'
 import { Center, type CenterProps } from '@chakra-ui/react'
 
 interface Props extends CenterProps {
@@ -7,8 +8,9 @@ interface Props extends CenterProps {
 export function ControlButton({ children, disabled, ...rest }: Props) {
   return (
     <Center
-      bg="gray.300"
+      {...getAcrylicProps()}
       rounded="8px"
+      boxShadow="none"
       p="12px"
       transition="80ms linear all"
       cursor={disabled ? 'normal' : 'pointer'}
@@ -17,7 +19,7 @@ export function ControlButton({ children, disabled, ...rest }: Props) {
         disabled
           ? {}
           : {
-              bg: 'gray.200',
+              bg: '#ffffff60',
             }
       }
       {...rest}

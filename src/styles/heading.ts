@@ -1,9 +1,9 @@
 import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
 
 const baseStyle = defineStyle({
-  color: 'blue.600',
+  color: 'light',
   fontFamily: 'Nunito Variable',
-  fontWeight: '700',
+  fontWeight: '300',
 })
 
 export const headingTheme = defineStyleConfig({

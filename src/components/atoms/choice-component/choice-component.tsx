@@ -1,4 +1,5 @@
 import type { Choice } from '@/types/game.ts'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   type ChakraProps,
   Flex,
@@ -23,32 +24,27 @@ interface Props extends FlexProps {
 function getStyle(choiceStyle: ChoiceStyle): ChakraProps {
   switch (choiceStyle) {
     case 'normal':
-      return {
-        opacity: 1,
-        bg: 'white',
-      }
+      return {}
     case 'selectable':
       return {
         cursor: 'pointer',
-        _hover: {
-          bg: 'blue.100',
-        },
+        _hover: { ...getAcrylicProps(), boxShadow: 'unset' },
       }
     case 'opponentSelected':
       return {
-        //opacity: 0.5,
-        bg: 'red.400',
-        color: 'white',
+        bg: '#ff3737c0',
+        border: '1px solid #ff3737',
+        boxShadow: '0 0 10px 0 #ff373780',
       }
     case 'blueSelected':
       return {
-        //opacity: 0.5,
-        bg: 'blue.400',
-        color: 'white',
+        bg: '#3787ffc0',
+        border: '1px solid #3787ff',
+        boxShadow: '0 0 10px 0 #3787ff80',
       }
     case 'disabled':
       return {
-        opacity: 0.3,
+        opacity: 0.5,
       }
   }
 }
@@ -82,19 +78,23 @@ export function ChoiceComponent({
   return (
     <Flex
       key={choice}
-      w="70px"
-      h="70px"
+      w="1fr"
+      aspectRatio={1}
+      // h="70px"
       alignItems="center"
       justifyContent="center"
       backgroundSize="200%"
       boxSizing="border-box"
-      fontSize="25px"
+      fontSize={{ base: '30px', sm: '25px' }}
       fontWeight="300"
+      rounded="10px"
+      overflow="hidden"
       m="0"
       animation={`${highlightAnimation} infinite 3s linear`}
       userSelect="none"
       transition="opacity 300ms linear, background-color 80ms linear"
       pos="relative"
+      color="white"
       _after={
         highlight
           ? {

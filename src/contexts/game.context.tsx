@@ -1,6 +1,7 @@
 import { Timer } from '@/lib/Timer'
 import { models } from '@/models'
-import type { UserData } from '@/models/users/User'
+import type { UserData } from '@/models/users/user'
+import { Api } from '@/services/api.ts'
 import {
   GameEmittedEvents,
   GameListenedEvent,
@@ -9,7 +10,6 @@ import {
 import { type Choice, type GameStateReport, GameStatus } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
 import { useBreakpoint } from '@chakra-ui/react'
-import type { Unsubscribe } from 'firebase/auth'
 import {
   type ReactNode,
   createContext,
@@ -25,7 +25,6 @@ import { type Socket, io } from 'socket.io-client'
 import { AuthState } from './auth.context.tsx'
 import { useGuardedAuth } from './guarded-auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { Api } from '@/services/api.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -320,16 +319,6 @@ export function GameProvider({ children }: Props) {
   }, [])
 
   useEffect(() => {
-    let unsubscribe: Unsubscribe
-    if (opponentProfile)
-      unsubscribe = models.users.subscribe(opponentProfile?._id, (data) => {
-        setOpponentProfile(data)
-      })
-
-    return () => unsubscribe?.()
-  }, [opponentProfile])
-
-  useEffect(() => {
     if (matchId) {
       return push({
         content: <IoGameController size="16px" />,
@@ -354,7 +343,7 @@ export function GameProvider({ children }: Props) {
           opponentTimer: opponentTimer.current,
           availableChoices,
           winningTriple: triple,
-          opponentProfile: opponentProfile,
+          opponentProfile,
           ratingsVariation,
 
           /** Se conecta a um jogo a partir de um token. */

@@ -1,6 +1,7 @@
-import { Flex, Stack } from '@chakra-ui/react'
+import { PageWidthLimiter } from '@/components/atoms'
+import { Box, Flex, Stack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
-import { Credits, LayoutPanel, Navbar } from './components'
+import { Navbar } from './components'
 
 interface Props {
   children: ReactNode
@@ -8,25 +9,39 @@ interface Props {
 
 export function RootLayout({ children }: Props) {
   return (
-    <Stack className="root-layout" alignItems="center" h="100dvh" gap="0">
-      <Navbar />
-      <Flex
-        flex="1"
-        w="full"
-        justify="center"
-        p="10px"
-        h="fit-content"
-        gap="10px"
+    <>
+      <Box
+        w="100vw"
+        h="100vh"
+        rounded={999999}
+        bg="radial-gradient(white, transparent 70.7%)"
+        mixBlendMode="overlay"
+        aspectRatio={1}
+        pos="fixed"
+        pointerEvents="none"
+        left="50%"
+        top="50%"
+        transform="translate(-50%, -50%)"
+      />
+      <Stack
+        className="root-layout"
+        alignItems="center"
+        h="100dvh"
+        gap="0"
+        pos="relative"
       >
-        <LayoutPanel w="full" maxW="1280px" overlay={<Credits />}>
-          {children}
-        </LayoutPanel>
-        {/* <LayoutPanel w="420px">
-          <Flex flex="0 0 40px" align="center" justify="center" bg="gray.100">
-            Global Ranking
-          </Flex>
-        </LayoutPanel> */}
-      </Flex>
-    </Stack>
+        <Navbar />
+        <Flex
+          flex="1"
+          w="full"
+          justify="center"
+          h="fit-content"
+          overflowX="hidden"
+          overflowY="scroll"
+        >
+          <PageWidthLimiter>{children}</PageWidthLimiter>
+        </Flex>
+      </Stack>
+    </>
   )
 }

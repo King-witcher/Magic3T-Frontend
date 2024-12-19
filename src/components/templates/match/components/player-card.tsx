@@ -1,9 +1,11 @@
+import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context.tsx'
-import { useRankInfo } from '@/hooks/useRanks'
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import type { HistoryMatchPlayer } from '@/models/matches/Match'
 import { userQueryOptions } from '@/utils/query-options'
+import { tiersMap } from '@/utils/ranks'
+import { getAcrylicProps } from '@/utils/style-helpers'
 import {
-  Avatar,
   Badge,
   Flex,
   Image,
@@ -13,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
 
 interface Props {
   matchPlayer: HistoryMatchPlayer
@@ -20,7 +23,18 @@ interface Props {
 }
 
 export function PlayerCard({ matchPlayer, highlight }: Props) {
-  const { getRankThumbnail } = useRankInfo()
+  const { getRankInfo } = useRatingInfo()
+
+  const rankInfo = useMemo(() => {
+    return getRankInfo({
+      // TODO: Fix it
+      deviation: 0,
+      rating: matchPlayer.score,
+      timestamp: new Date(),
+    })
+  }, [matchPlayer.score])
+
+  const tierInfo = tiersMap[rankInfo.tier]
 
   const userQuery = useQuery(userQueryOptions(matchPlayer.uid))
 
@@ -30,24 +44,24 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
     <LinkBox
       display="flex"
       p="10px 14px"
-      rounded="10px"
       alignItems="center"
-      w="250px"
+      w="300px"
+      h="fit-content"
       overflow="hidden"
       gap="8px"
-      bg="whiteAlpha.600"
       transition="background 80ms linear"
       _hover={{
-        bg: 'white',
+        bg: '#ffffff40',
       }}
-      border={
-        highlight
-          ? `solid 5px var(--chakra-colors-${highlight}-300)`
-          : 'solid 5px var(--chakra-colors-gray-300)'
-      }
-      borderWidth="1px 1px 1px 6px"
+      {...getAcrylicProps()}
     >
-      <Avatar size="lg" src={userQuery.data?.photoURL} />
+      <UserAvatar
+        size={70}
+        tier={rankInfo.tier}
+        division={rankInfo.division}
+        icon={userQuery.data?.summoner_icon || 0}
+        m="20px 30px"
+      />
       <LinkOverlay
         as={Link}
         to={
@@ -66,7 +80,8 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
         <Flex gap="5px" alignItems="center">
           <Image
             ml="3px"
-            src={getRankThumbnail(matchPlayer.score)}
+            w="35px"
+            src={tierInfo.emblem}
             alt="rank"
             draggable={false}
           />

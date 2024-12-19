@@ -1,16 +1,5 @@
 import { useConfig } from '@/contexts/config.context'
-import { RatingColorSchemes } from '@/hooks/useRanks'
-import { tiers } from '@/utils/ranks'
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  Image,
-} from '@chakra-ui/react'
+import { Box, Center, Divider, Heading, Text } from '@chakra-ui/react'
 
 export function RatingSystemTemplate() {
   const { ratingConfig } = useConfig()
@@ -50,7 +39,7 @@ export function RatingSystemTemplate() {
           e seus respectivos intervalos:
         </Text>
 
-        <Stack flexDir="column-reverse" m="15px 0">
+        {/* <Stack flexDir="column-reverse" m="15px 0">
           <Stack
             bg="gray.200"
             border="solid 1px"
@@ -76,7 +65,7 @@ export function RatingSystemTemplate() {
           </Stack>
           {tiers.map(
             (tier, tierIndex) =>
-              tier !== 'Elite' &&
+              tier !== 'Challenger' &&
               tier !== 'Unranked' && (
                 <Stack
                   key={tier}
@@ -140,7 +129,7 @@ export function RatingSystemTemplate() {
               </Text>
             </Flex>
           </Stack>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize={['16px', '20px']} textIndent="20px" mt="15px">
           Note que o Bot de dificuldade média tem sua pontuação fixada em 1500 e
