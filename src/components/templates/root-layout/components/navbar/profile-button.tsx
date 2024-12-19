@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/auth.context.tsx'
 import { getIconUrl } from '@/utils/utils'
 import {
   Avatar,
-  Flex,
   Menu,
   MenuButton,
   MenuDivider,
