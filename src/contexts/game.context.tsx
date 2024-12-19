@@ -9,7 +9,6 @@ import {
 } from '@/types/GameSocket.ts'
 import { type Choice, type GameStateReport, GameStatus } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
-import { useBreakpoint } from '@chakra-ui/react'
 import {
   type ReactNode,
   createContext,
@@ -20,10 +19,9 @@ import {
   useRef,
   useState,
 } from 'react'
-import { IoChatbox, IoGameController } from 'react-icons/io5'
+import { IoGameController } from 'react-icons/io5'
 import { type Socket, io } from 'socket.io-client'
-import { AuthState } from './auth.context.tsx'
-import { useGuardedAuth } from './guarded-auth.context.tsx'
+import { AuthState, useAuth } from './auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
@@ -98,9 +96,9 @@ export function GameProvider({ children }: Props) {
   const opponentTimer = useRef(new Timer(0))
   const socketRef = useRef<GameSocket | null>(null)
 
-  const { getToken, authState } = useGuardedAuth()
+  const { getToken, authState } = useAuth()
   const { push } = useLiveActivity()
-  const breakpoint = useBreakpoint()
+  // const breakpoint = useBreakpoint()
 
   /** Limpa o estado do jogo, colocando os timers em 0. */
   // Refactor with keys
@@ -120,20 +118,21 @@ export function GameProvider({ children }: Props) {
     setOpponentProfile(null)
   }, [])
 
-  useEffect(() => {
-    if (
-      breakpoint === 'base' &&
-      messages.length &&
-      messages[messages.length - 1].sender !== 'you'
-    ) {
-      const remove = push({
-        content: <IoChatbox size="16px" />,
-        tooltip: 'Você tem uma nova mensagem',
-      })
-      setTimeout(remove, 3000)
-      return remove
-    }
-  }, [messages, push, breakpoint])
+  // Pushes a message notification for a short period.
+  // useEffect(() => {
+  //   if (
+  //     breakpoint === 'base' &&
+  //     messages.length &&
+  //     messages[messages.length - 1].sender !== 'you'
+  //   ) {
+  //     const remove = push({
+  //       content: <IoChatbox size="16px" />,
+  //       tooltip: 'You have a new message',
+  //     })
+  //     setTimeout(remove, 3000)
+  //     return remove
+  //   }
+  // }, [messages, push, breakpoint])
 
   const handleReceiveOpponentUid = useCallback(async (uid: string) => {
     const opponentProfile = await models.users.getById(uid)
@@ -157,25 +156,6 @@ export function GameProvider({ children }: Props) {
       },
     ])
   }, [])
-
-  const makeChoice = useCallback((choice: Choice) => {
-    socketRef.current?.emit(GameEmittedEvents.Choice, choice)
-
-    setTurn('opponent')
-    setPlayerChoices((current) => [...current, choice])
-
-    playerTimer.current.pause()
-    opponentTimer.current.start()
-  }, [])
-
-  function handleServerDisconnect(reason: Socket.DisconnectReason) {
-    console.warn('Socket disconnected because of', `${reason}.`)
-    if (reason === 'transport error' && matchId) {
-      connectGame(matchId)
-      console.log('Attempting to reconnect')
-    }
-    socketRef.current?.connect()
-  }
 
   function handleServerGameState(incomingGameState: GameStateReport) {
     setTurn(incomingGameState.turn)
@@ -205,28 +185,44 @@ export function GameProvider({ children }: Props) {
       setTriple(getTriple(incomingGameState.opponentChoices))
   }
 
-  const getGameSocket = useCallback(
-    async (matchId: string): Promise<GameSocket> => {
-      const token = await getToken()
-      if (!token) throw new Error('No Id Token')
+  function handleServerDisconnect(reason: Socket.DisconnectReason) {
+    console.warn('Socket disconnected because of', `${reason}.`)
+    if (reason === 'transport error' && matchId) {
+      connectGame(matchId)
+      console.log('Attempting to reconnect')
+    }
+    socketRef.current?.connect()
+  }
 
-      const socket: GameSocket = io(`${import.meta.env.VITE_API_URL}/match`, {
-        auth: { matchId, token },
+  const getGameSocket = useCallback(async (): Promise<GameSocket> => {
+    const token = await getToken()
+    if (!token) throw new Error('No Id Token')
+
+    const socket: GameSocket = io(`${import.meta.env.VITE_API_URL}/match`, {
+      auth: { token },
+    })
+
+    return socket
+      .on(GameListenedEvent.GameState, handleServerGameState)
+      .on('disconnect', handleServerDisconnect)
+      .on(GameListenedEvent.Message, handleReceiveMessage)
+      .on(GameListenedEvent.OpponentUid, handleReceiveOpponentUid)
+      .on(GameListenedEvent.RatingsVariation, handleReceiveRatingsVariation)
+      .on('connect', () => {
+        socket.emit(GameEmittedEvents.GetOpponent)
+        socket.emit(GameEmittedEvents.GetState)
       })
+  }, [getToken])
 
-      return socket
-        .on(GameListenedEvent.GameState, handleServerGameState)
-        .on('disconnect', handleServerDisconnect)
-        .on(GameListenedEvent.Message, handleReceiveMessage)
-        .on(GameListenedEvent.OpponentUid, handleReceiveOpponentUid)
-        .on(GameListenedEvent.RatingsVariation, handleReceiveRatingsVariation)
-        .on('connect', () => {
-          socket.emit(GameEmittedEvents.GetOpponent)
-          socket.emit(GameEmittedEvents.GetState)
-        })
-    },
-    [getToken]
-  )
+  const makeChoice = useCallback((choice: Choice) => {
+    socketRef.current?.emit(GameEmittedEvents.Choice, choice)
+
+    setTurn('opponent')
+    setPlayerChoices((current) => [...current, choice])
+
+    playerTimer.current.pause()
+    opponentTimer.current.start()
+  }, [])
 
   const sendMessage = useCallback((message: string) => {
     if (socketRef.current) {
@@ -253,7 +249,7 @@ export function GameProvider({ children }: Props) {
 
       resetStates()
 
-      const newSocket = await getGameSocket(matchId)
+      const newSocket = await getGameSocket()
       socketRef.current = newSocket
       setMatchId(matchId)
       setTurn(null)
@@ -295,9 +291,9 @@ export function GameProvider({ children }: Props) {
         if (authState !== AuthState.SignedIn) return
         const token = await getToken()
         if (!token) return
-        const response = await Api.get('/matchId', {
+        const response = await Api.get('/match/current', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
           },
         })
 

@@ -11,8 +11,8 @@ import {
 import { IoSearch } from 'react-icons/io5'
 import { io } from 'socket.io-client'
 import { useGame } from './game.context.tsx'
-import { useGuardedAuth } from './guarded-auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { AuthState, useAuth } from './auth.context.tsx'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void
@@ -42,12 +42,14 @@ export function QueueProvider({ children }: QueueContextProps) {
       queue: 0,
     },
   })
-  const { user, getToken } = useGuardedAuth()
+  const { user, authState, getToken } = useAuth()
   const { connectGame } = useGame()
 
   useEffect(() => {
     let newSocket: QueueSocket
     async function init() {
+      if (authState !== AuthState.SignedIn) return
+
       const token = await getToken()
       newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
         auth: {
@@ -91,7 +93,7 @@ export function QueueProvider({ children }: QueueContextProps) {
         setQueueModes({})
       })
     }
-  }, [user])
+  }, [user, authState])
 
   const enqueue = useCallback(
     async (mode: GameMode) => {
