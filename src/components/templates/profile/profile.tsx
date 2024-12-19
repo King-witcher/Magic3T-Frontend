@@ -7,7 +7,6 @@ import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api'
 import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
-import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Badge,
   Box,

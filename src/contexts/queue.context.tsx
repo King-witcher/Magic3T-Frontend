@@ -10,9 +10,9 @@ import {
 } from 'react'
 import { IoSearch } from 'react-icons/io5'
 import { io } from 'socket.io-client'
+import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { AuthState, useAuth } from './auth.context.tsx'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void

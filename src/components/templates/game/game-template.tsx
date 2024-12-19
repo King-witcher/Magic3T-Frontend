@@ -13,7 +13,6 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Link } from '@tanstack/react-router'
 import { useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 

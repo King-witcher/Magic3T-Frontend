@@ -1,11 +1,11 @@
 import { HistoryMatchEventsEnum, MatchModel, MatchSide } from '@/models'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
-import { Box, Center, Flex, Stack, Text } from '@chakra-ui/react'
-import { useMemo } from 'react'
-import { RiFlagFill } from 'react-icons/ri'
-import { FaClock } from 'react-icons/fa'
+import { Center, Flex, Stack, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
+import { FaClock } from 'react-icons/fa'
+import { RiFlagFill } from 'react-icons/ri'
 
 interface Props {
   match: MatchModel
