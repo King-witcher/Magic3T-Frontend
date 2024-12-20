@@ -10,12 +10,14 @@ import {
   Spinner,
   Text,
   VStack,
+  chakra,
 } from '@chakra-ui/react'
 import { Link, Navigate } from '@tanstack/react-router'
-import { sendPasswordResetEmail } from 'firebase/auth'
+import { AuthErrorCodes, sendPasswordResetEmail } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { RiGoogleFill } from 'react-icons/ri'
+import { LoadingSessionTemplate } from '../loading-session'
 
 interface Props {
   referrer?: string
@@ -48,8 +50,8 @@ export function SignInTemplate({ referrer = '/' }: Props) {
     async (data: { email: string; password: string }) => {
       setWaiting(true)
       const error = await signInEmail(data.email, data.password)
-      if (error === 'auth/invalid-login-credentials') {
-        setError('Credenciais inválidas')
+      if (error === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS) {
+        setError('Invalid credentials')
       }
       setWaiting(false)
     },
@@ -59,7 +61,7 @@ export function SignInTemplate({ referrer = '/' }: Props) {
   const handleRecover = useCallback(async () => {
     if (!isValidEmail(email)) {
       setFormError('email', {})
-      setError('Email inválido')
+      setError('Invalid email')
       return
     }
 
@@ -70,19 +72,20 @@ export function SignInTemplate({ referrer = '/' }: Props) {
     await sendPasswordResetEmail(auth, email)
   }, [email, setFormError])
 
-  if (authState === AuthState.Loading || authState === AuthState.SignedIn)
+  if (authState === AuthState.Loading || authState === AuthState.SignedIn) {
     return (
-      <Center h="100%">
+      <>
         {authState === AuthState.SignedIn && <Navigate to={referrer} />}
-        <Spinner size="lg" thickness="4px" color="blue.500" speed="0.8s" />
-      </Center>
+        <LoadingSessionTemplate />
+      </>
     )
+  }
 
   return (
     <Center flex="1" boxSizing="border-box" w="full" h="full">
       <VStack
         as="form"
-        p="20px"
+        p="40px"
         justifyContent="center"
         alignItems="center"
         onSubmit={handleSubmit(handleSignIn)}
@@ -95,6 +98,12 @@ export function SignInTemplate({ referrer = '/' }: Props) {
         maxW={{ base: 'auto', sm: '400px' }}
       >
         <Heading lineHeight="3.125rem">Sign-in</Heading>
+        <Text textAlign="center">
+          Don&apos;t have an account yet?{' '}
+          <Link to={referrer ? `/register?referrer=${referrer}` : '/register'}>
+            <chakra.span color="#9cabff">Create one</chakra.span>
+          </Link>
+        </Text>{' '}
         <Input
           variant="form"
           placeholder="Email"
@@ -137,22 +146,14 @@ export function SignInTemplate({ referrer = '/' }: Props) {
 
           {error && <Text color="#ff4000">{error}</Text>}
         </VStack>
-        <Flex gap="10px">
-          <Link to={referrer ? `/register?referrer=${referrer}` : '/register'}>
-            <Text color="#9cabff">Create account</Text>
-          </Link>{' '}
-          -
-          {hideResetPassword ? (
-            <Text color="#9cabff">Recovery email sent</Text>
-          ) : (
-            <Text color="#9cabff" onClick={handleRecover} cursor="pointer">
-              Recovery password
-            </Text>
-          )}
-        </Flex>
-
+        {hideResetPassword ? (
+          <Text color="#9cabff">Recovery email sent</Text>
+        ) : (
+          <Text color="#9cabff" onClick={handleRecover} cursor="pointer">
+            Forgot password?
+          </Text>
+        )}
         <Text>or</Text>
-
         <Button size="lg" w="full" variant="submitForm" onClick={signInGoogle}>
           <Flex gap="10px" alignItems="center">
             <RiGoogleFill size="24px" />

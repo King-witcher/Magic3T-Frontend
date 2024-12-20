@@ -13,6 +13,7 @@ import { Link, Navigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { RiGoogleFill } from 'react-icons/ri'
+import { LoadingSessionTemplate } from '../loading-session'
 
 interface FormData {
   email: string
@@ -44,30 +45,37 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
   const handleRegister = useCallback(
     async ({ email, password, checkPassword }: FormData) => {
       if (password !== checkPassword) {
+        setError('Password does not match')
         return
       }
+
       setWaiting(true)
+      setError(null)
       const error = await registerEmail(email, password)
-      console.error(error)
-      if (error) setError(errorMap[error] || 'Erro desconhecido')
+      if (error) {
+        setError(errorMap[error] || 'Unknown error')
+      }
       setWaiting(false)
     },
     []
   )
 
-  if (authState === AuthState.Loading || authState === AuthState.SignedIn)
+  console.log(authState)
+
+  if (authState === AuthState.Loading || authState === AuthState.SignedIn) {
     return (
-      <Center h="100%">
+      <>
         {authState === AuthState.SignedIn && <Navigate to={referrer} />}
-        <Spinner size="lg" thickness="4px" color="blue.500" speed="0.8s" />
-      </Center>
+        <LoadingSessionTemplate />
+      </>
     )
+  }
 
   return (
     <Center h="full">
       <VStack
         as="form"
-        p="20px"
+        p="40px"
         justifyContent="center"
         alignItems="center"
         onSubmit={handleSubmit(handleRegister)}
@@ -80,6 +88,9 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
         maxW={{ base: 'auto', sm: '400px' }}
       >
         <Heading lineHeight="3.125rem">Register</Heading>
+        <Link to={referrer ? `/sign-in?referrer=${referrer}` : '/sign-in'}>
+          <Text color="#9cabff">Already have an account?</Text>
+        </Link>
         <Input
           variant="form"
           placeholder="Email"
@@ -135,9 +146,6 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
           </Button>
           {error && <Text color="#ff4000">{error}</Text>}
         </VStack>
-        <Link to={referrer ? `/sign-in?referrer=${referrer}` : '/sign-in'}>
-          <Text color="#9cabff">Already have an account</Text>
-        </Link>
 
         <Text>or</Text>
 
