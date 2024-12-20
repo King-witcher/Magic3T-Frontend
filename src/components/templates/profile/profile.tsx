@@ -18,8 +18,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
 import { MatchRow } from './match-row'
+import { block } from '@/utils/utils'
 
 interface Props {
   user: UserData
@@ -42,25 +42,11 @@ export function ProfileTemplate({ user }: Props) {
   const tierInfo = tiersMap[rinfo.tier]
   const matchesQuery = useQuery(matchesQueryOptions(user._id))
 
-  const progress = useMemo(() => {
-    if (!rinfo.reliable) {
-      return (350 - rinfo.deviation) / (350 - ratingConfig.maxReliableDeviation)
-    }
-
-    const bronze4 =
-      ratingConfig.initialRating -
-      ratingConfig.ranks.tierSize * ratingConfig.ranks.initialTier
-
-    const currentTier =
-      (user.glicko.rating - bronze4) / ratingConfig.ranks.tierSize
-
-    const currentDivision = (currentTier * 4) % 1
-
-    if (currentTier >= 4) return 1
-    if (currentTier < 0) return 0
-
-    return currentDivision
-  }, [rinfo])
+  const progress = block(() => {
+    if (rinfo.reliable) return rinfo.leaguePoints
+    const full = ratingConfig.maxRD - ratingConfig.maxReliableDeviation
+    return Math.floor((100 * (ratingConfig.maxRD - rinfo.deviation)) / full)
+  })
 
   async function saveIconChange(iconId: number) {
     await Api.patch(
@@ -134,10 +120,11 @@ export function ProfileTemplate({ user }: Props) {
             w="250px"
           />
           <VStack spacing={0}>
-            <Text fontSize="20px">Ranking</Text>
+            <Text fontSize="20px">Rating</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
               {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
               {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
+              {!rinfo.reliable && ` - ${progress}%`}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               {user.stats.wins} wins - {user.stats.draws} draws -{' '}
@@ -155,14 +142,12 @@ export function ProfileTemplate({ user }: Props) {
             color="white"
             fontSize="16px"
           >
-            {rinfo.leaguePoints > 0 && (
-              <Box h="full" bg="#ffffffc0" flex={rinfo.leaguePoints} />
-            )}
-            {rinfo.leaguePoints < 100 && (
+            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
+            {progress < 100 && (
               <Box
                 bg="#ffffff30"
                 h="full"
-                flex={100 - rinfo.leaguePoints}
+                flex={100 - progress}
                 overflow="hidden"
               />
             )}
@@ -196,10 +181,8 @@ export function ProfileTemplate({ user }: Props) {
             color="white"
             fontSize="16px"
           >
-            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={0} />}
-            {progress < 1 && (
-              <Box bg="#ffffff30" h="full" flex={1} overflow="hidden" />
-            )}
+            <Box h="full" bg="#ffffffc0" flex={0} />
+            <Box bg="#ffffff30" h="full" flex={1} overflow="hidden" />
           </Flex>
         </Stack>
       </Flex>
@@ -233,11 +216,12 @@ export function ProfileTemplate({ user }: Props) {
             h="70px"
           >
             <Text fontSize="12px" pos="absolute" top="0" left="0">
-              Ranking
+              Rating
             </Text>
             <Text fontWeight={700}>
               {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
               {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
+              {!rinfo.reliable && ` - ${progress}%`}
             </Text>
             <Image
               w="70px"
