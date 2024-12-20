@@ -47,14 +47,14 @@ export function ProfileTemplate({ user }: Props) {
       return (350 - rinfo.deviation) / (350 - ratingConfig.maxReliableDeviation)
     }
 
-    const bronze1 =
+    const bronze4 =
       ratingConfig.initialRating -
       ratingConfig.ranks.tierSize * ratingConfig.ranks.initialTier
 
     const currentTier =
-      (user.glicko.rating - bronze1) / ratingConfig.ranks.tierSize
+      (user.glicko.rating - bronze4) / ratingConfig.ranks.tierSize
 
-    const currentDivision = (currentTier * 5) % 1
+    const currentDivision = (currentTier * 4) % 1
 
     if (currentTier >= 4) return 1
     if (currentTier < 0) return 0
@@ -137,7 +137,7 @@ export function ProfileTemplate({ user }: Props) {
             <Text fontSize="20px">Ranking</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
               {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
-              {rinfo.reliable && ` - ${rinfo.rating} ELO`}
+              {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               {user.stats.wins} wins - {user.stats.draws} draws -{' '}
@@ -155,12 +155,14 @@ export function ProfileTemplate({ user }: Props) {
             color="white"
             fontSize="16px"
           >
-            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
-            {progress < 1 && (
+            {rinfo.leaguePoints > 0 && (
+              <Box h="full" bg="#ffffffc0" flex={rinfo.leaguePoints} />
+            )}
+            {rinfo.leaguePoints < 100 && (
               <Box
                 bg="#ffffff30"
                 h="full"
-                flex={1 - progress}
+                flex={100 - rinfo.leaguePoints}
                 overflow="hidden"
               />
             )}
@@ -235,7 +237,7 @@ export function ProfileTemplate({ user }: Props) {
             </Text>
             <Text fontWeight={700}>
               {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
-              {rinfo.reliable && ` - ${rinfo.rating} ELO`}
+              {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
             </Text>
             <Image
               w="70px"

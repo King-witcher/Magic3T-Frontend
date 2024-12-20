@@ -2,7 +2,7 @@ import { SmoothNumber } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
-import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
+import { divisionMap, Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
@@ -97,13 +97,18 @@ export function PlayerCard({ player, ...rest }: Props) {
               </Text>
             </Flex>
             <Flex alignItems="center" gap="5px">
-              <Image src={tierInfo?.emblem} w="32px" />
-
-              <Text fontWeight={300} fontSize="16px" color="light">
-                <SmoothNumber value={rinfo!.rating} />
-                {!rinfo!.reliable && '?'}
-                {rinfo!.precise && '!'}
+              <Image src={tierInfo?.emblem} w="34px" />
+              <Text textTransform="capitalize" fontSize="0.875rem">
+                {rinfo?.tier} {divisionMap[rinfo?.division || 0]}
               </Text>
+              {rinfo?.reliable && (
+                <Text fontWeight={300} fontSize="0.875rem">
+                  - <SmoothNumber value={rinfo?.leaguePoints || 0} /> LP
+                  {!rinfo!.reliable && '?'}
+                  {rinfo!.precise && '!'}
+                </Text>
+              )}
+
               {!!ratingVariation && (
                 <Text
                   animation={`${appear} linear 300ms`}

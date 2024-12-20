@@ -1,6 +1,7 @@
 import { useConfig } from '@/contexts/config.context.tsx'
 import type { Glicko } from '@/types/glicko.ts'
 import type { Division } from '@/utils/ranks'
+import { block } from '@/utils/utils'
 
 export enum Tier {
   Provisional = 'provisional',
@@ -23,11 +24,20 @@ const tierIndexes = [
 export type RatingInfo = {
   tier: Tier
   division?: Division
+  leaguePoints: number
   rating: number
   isApex: boolean
   deviation: number
   reliable: boolean
   precise: boolean
+}
+
+export const divisionMap = {
+  0: '',
+  1: 'I',
+  2: 'II',
+  3: 'III',
+  4: 'IV',
 }
 
 function getC(inflationTime: number) {
@@ -54,9 +64,15 @@ export function useRatingInfo() {
     return Math.min(candidate, initialRD)
   }
 
-  function getTier(rating: number): [Tier, Division | undefined] {
-    const decimalTier = (rating - initialRating) / tierSize + initialTier
-    const boundedTier = Math.max(Math.min(decimalTier, 4), 0)
+  function convertToLp(elo: number) {
+    const divisionSize = tierSize / 4
+    return Math.round((elo * 100) / divisionSize)
+  }
+
+  function getTier(rating: number): [Tier, Division | undefined, number] {
+    const tiersAwayFromInitial =
+      (rating - initialRating) / tierSize + initialTier
+    const boundedTier = Math.max(Math.min(tiersAwayFromInitial, 4), 0)
     const tierIndex = Math.floor(boundedTier)
 
     let division: number | undefined = undefined
@@ -66,11 +82,36 @@ export function useRatingInfo() {
         tierIndex === 4 ? 1 : 4 - Math.floor(4 * (boundedTier - tierIndex))
     }
 
-    return [tierIndexes[tierIndex], division as Division | undefined]
+    const leaguePoints = block(() => {
+      const divisionSize = tierSize / 4
+      const lowestTier = initialRating - tierSize * initialTier
+      const apexTier = lowestTier + tierSize * 4 // master
+
+      if (rating <= lowestTier) {
+        return Math.ceil((100 * (rating - lowestTier)) / divisionSize)
+      }
+
+      const totalLp = Math.floor((100 * (rating - lowestTier)) / divisionSize)
+
+      if (rating < apexTier) {
+        return totalLp % 100
+      }
+
+      if (rating >= apexTier) {
+        return totalLp - 1600
+      }
+      return 0
+    })
+
+    return [
+      tierIndexes[tierIndex],
+      division as Division | undefined,
+      leaguePoints,
+    ]
   }
 
   function getRankInfo({ rating, deviation, timestamp }: Glicko): RatingInfo {
-    const [expectedTier, division] = getTier(rating)
+    const [expectedTier, division, leaguePoints] = getTier(rating)
 
     const currentRD = getRD({ rating, deviation, timestamp })
     const newDeviation = Math.round(currentRD)
@@ -82,6 +123,7 @@ export function useRatingInfo() {
       deviation: Math.round(getRD({ rating, deviation, timestamp })),
       tier,
       division: reliable ? division : undefined,
+      leaguePoints,
       reliable,
       isApex: false,
       precise: currentRD < 50,
@@ -90,6 +132,7 @@ export function useRatingInfo() {
 
   return {
     getRankInfo,
+    convertToLp,
     getRD,
   }
 }

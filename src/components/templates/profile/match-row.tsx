@@ -1,3 +1,4 @@
+import { useRatingInfo } from '@/hooks/use-rating-info'
 import { HistoryMatchEventsEnum, MatchModel, MatchSide } from '@/models'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -21,6 +22,8 @@ const resultColorMap: Record<MatchResult, string> = {
 const dateTimeFormat = Intl.DateTimeFormat()
 
 export function MatchRow({ match, viewAs }: Props) {
+  const { convertToLp } = useRatingInfo()
+
   const side = match.black.uid === viewAs ? MatchSide.Black : MatchSide.White
   const result =
     match.winner === null
@@ -68,7 +71,7 @@ export function MatchRow({ match, viewAs }: Props) {
                 color={player.gain > 0 ? '#00c020' : '#ff4000'}
               >
                 {player.gain > 0 ? '+' : '-'}
-                {Math.round(Math.abs(player.gain))}
+                {Math.abs(convertToLp(player.gain))}
               </Text>
             )}
           </Flex>

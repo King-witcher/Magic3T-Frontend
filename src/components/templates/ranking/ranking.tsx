@@ -1,5 +1,10 @@
 import { useConfig } from '@/contexts/config.context'
-import { type RatingInfo, useRatingInfo } from '@/hooks/use-rating-info'
+import {
+  divisionMap,
+  type RatingInfo,
+  Tier,
+  useRatingInfo,
+} from '@/hooks/use-rating-info'
 import { rankingQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -102,12 +107,19 @@ export function RankingTemplate() {
                 <Flex
                   ml="auto"
                   align="center"
-                  fontSize={{ base: '0.875rem', sm: '1rem' }}
+                  fontSize={{ base: '0.75rem', sm: '0.875rem' }}
                   gap="5px"
                 >
-                  {rinfo.reliable && rinfo.rating}
-                  {rinfo.precise && '!'}
                   <Image src={tierInfo.emblem} w="30px" />
+
+                  {rinfo.reliable &&
+                    rinfo.tier !== Tier.Master &&
+                    divisionMap[rinfo.division || 1]}
+
+                  {rinfo.reliable &&
+                    rinfo.tier === Tier.Master &&
+                    `${rinfo.leaguePoints} LP`}
+                  {rinfo.precise && '!'}
                 </Flex>
               </Flex>
             )
