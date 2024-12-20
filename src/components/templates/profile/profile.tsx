@@ -213,6 +213,24 @@ export function ProfileTemplate({ user }: Props) {
             h="70px"
           >
             <Text fontSize="12px" pos="absolute" top="0" left="0">
+              Stats
+            </Text>
+            <Text fontWeight={700}>
+              {user.stats.wins} wins - {user.stats.draws} draws -{' '}
+              {user.stats.defeats} defeats
+            </Text>
+          </Flex>
+        </Stack>
+
+        <Stack spacing={0}>
+          <Flex
+            w="full"
+            align="center"
+            justify="space-between"
+            pos="relative"
+            h="70px"
+          >
+            <Text fontSize="12px" pos="absolute" top="0" left="0">
               Ranking
             </Text>
             <Text fontWeight={700}>
@@ -261,14 +279,16 @@ export function ProfileTemplate({ user }: Props) {
         onClose={changeIconModalDisclosure.onClose}
       />
 
-      <Text fontSize="20px">Last 20 games</Text>
-      {matchesQuery.isSuccess && (
-        <Stack spacing="10px">
-          {matchesQuery.data.map((match) => (
-            <MatchRow key={match._id} match={match} viewAs={user._id} />
-          ))}
-        </Stack>
-      )}
+      <Stack spacing="10px">
+        <Text fontSize="20px">Last 20 games</Text>
+        {matchesQuery.isSuccess && (
+          <Stack spacing="10px">
+            {matchesQuery.data.map((match) => (
+              <MatchRow key={match._id} match={match} viewAs={user._id} />
+            ))}
+          </Stack>
+        )}
+      </Stack>
     </Flex>
   )
 }
