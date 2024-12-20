@@ -7,6 +7,7 @@ import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api'
 import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
+import { block } from '@/utils/utils'
 import {
   Badge,
   Box,
@@ -19,7 +20,6 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
-import { block } from '@/utils/utils'
 
 interface Props {
   user: UserData

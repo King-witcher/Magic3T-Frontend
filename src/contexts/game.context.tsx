@@ -1,3 +1,4 @@
+import { Subscribe, useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
 import { models } from '@/models'
 import type { UserData } from '@/models/users/user'
@@ -43,6 +44,7 @@ type GameData =
       ratingsVariation: null
 
       connectGame(matchId: string): Promise<void>
+      subscribeFinishMatch: Subscribe<null>
       makeChoice(choice: Choice): void
       sendMessage(message: string): void
       forfeit(): Promise<void>
@@ -64,6 +66,7 @@ type GameData =
       ratingsVariation: { player: number; opponent: number } | null
 
       connectGame(matchId: string): Promise<void>
+      subscribeFinishMatch: Subscribe<null>
       makeChoice(choice: Choice): void
       sendMessage(message: string): void
       forfeit(): Promise<void>
@@ -91,6 +94,7 @@ export function GameProvider({ children }: Props) {
     player: number
     opponent: number
   } | null>(null)
+  const [subscribeFinishMatch, emitFinishMatch] = useObservable<null>()
 
   const playerTimer = useRef(new Timer(0))
   const opponentTimer = useRef(new Timer(0))
@@ -179,10 +183,18 @@ export function GameProvider({ children }: Props) {
     playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
     opponentTimer.current.setRemaining(incomingGameState.opponentTimeLeft)
 
-    if (incomingGameState.status === GameStatus.Victory)
+    if (
+      incomingGameState.status === GameStatus.Defeat ||
+      incomingGameState.status === GameStatus.Draw ||
+      incomingGameState.status === GameStatus.Victory
+    )
+      emitFinishMatch(null)
+
+    if (incomingGameState.status === GameStatus.Victory) {
       setTriple(getTriple(incomingGameState.playerChoices))
-    else if (incomingGameState.status === GameStatus.Defeat)
+    } else if (incomingGameState.status === GameStatus.Defeat) {
       setTriple(getTriple(incomingGameState.opponentChoices))
+    }
   }
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
@@ -344,6 +356,7 @@ export function GameProvider({ children }: Props) {
 
           /** Se conecta a um jogo a partir de um token. */
           connectGame,
+          subscribeFinishMatch,
           makeChoice,
           disconnect,
           sendMessage,

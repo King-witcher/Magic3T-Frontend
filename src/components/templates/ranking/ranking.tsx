@@ -1,8 +1,8 @@
 import { useConfig } from '@/contexts/config.context'
 import {
-  divisionMap,
   type RatingInfo,
   Tier,
+  divisionMap,
   useRatingInfo,
 } from '@/hooks/use-rating-info'
 import { rankingQueryOptions } from '@/utils/query-options'

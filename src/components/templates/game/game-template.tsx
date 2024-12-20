@@ -13,8 +13,9 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
+import { ResultModal } from './components/result-modal'
 
 const statusText: Record<GameStatus, string> = {
   defeat: 'You lost',
@@ -29,13 +30,13 @@ export function GameTemplate() {
     isActive,
     turn,
     disconnect,
+    subscribeFinishMatch,
     makeChoice,
     gameStatus,
     playerChoices,
     opponentChoices,
     opponentTimer,
     playerTimer,
-    matchId,
   } = useGame()
   const {
     isOpen: forfeitModaOpen,
@@ -43,6 +44,15 @@ export function GameTemplate() {
     onOpen: openForfeitModal,
   } = useDisclosure()
   const chatInputRef = useRef<HTMLInputElement>(null)
+
+  const resultModalDisclosure = useDisclosure()
+
+  useEffect(() => {
+    return subscribeFinishMatch(() => {
+      resultModalDisclosure.onOpen()
+    })
+  }, [])
+
   if (!isActive) return null // Improve
   return (
     <Center w="full">
@@ -132,6 +142,10 @@ export function GameTemplate() {
         </ButtonsContainer>
       </VStack>
       <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />
+      <ResultModal
+        onClose={resultModalDisclosure.onClose}
+        isOpen={resultModalDisclosure.isOpen}
+      />
     </Center>
   )
 }

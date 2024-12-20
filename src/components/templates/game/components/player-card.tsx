@@ -2,7 +2,7 @@ import { SmoothNumber } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
-import { divisionMap, Tier, useRatingInfo } from '@/hooks/use-rating-info'
+import { Tier, divisionMap, useRatingInfo } from '@/hooks/use-rating-info'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
