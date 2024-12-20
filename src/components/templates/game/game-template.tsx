@@ -49,7 +49,9 @@ export function GameTemplate() {
 
   useEffect(() => {
     return subscribeFinishMatch(() => {
-      resultModalDisclosure.onOpen()
+      setTimeout(() => {
+        resultModalDisclosure.onOpen()
+      }, 500)
     })
   }, [])
 
