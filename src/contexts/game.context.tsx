@@ -6,6 +6,7 @@ import { Api } from '@/services/api.ts'
 import {
   GameEmittedEvents,
   GameListenedEvent,
+  MatchReportData,
   type GameSocket,
 } from '@/types/GameSocket.ts'
 import { type Choice, type GameStateReport, GameStatus } from '@/types/game.ts'
@@ -24,6 +25,7 @@ import { IoGameController } from 'react-icons/io5'
 import { type Socket, io } from 'socket.io-client'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { block } from '@/utils/utils.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -44,7 +46,7 @@ type GameData =
       ratingsVariation: null
 
       connectGame(matchId: string): Promise<void>
-      subscribeFinishMatch: Subscribe<null>
+      subscribeFinishMatch: Subscribe<MatchReportData>
       makeChoice(choice: Choice): void
       sendMessage(message: string): void
       forfeit(): Promise<void>
@@ -66,7 +68,7 @@ type GameData =
       ratingsVariation: { player: number; opponent: number } | null
 
       connectGame(matchId: string): Promise<void>
-      subscribeFinishMatch: Subscribe<null>
+      subscribeFinishMatch: Subscribe<MatchReportData>
       makeChoice(choice: Choice): void
       sendMessage(message: string): void
       forfeit(): Promise<void>
@@ -94,7 +96,8 @@ export function GameProvider({ children }: Props) {
     player: number
     opponent: number
   } | null>(null)
-  const [subscribeFinishMatch, emitFinishMatch] = useObservable<null>()
+  const [subscribeFinishMatch, emitFinishMatch] =
+    useObservable<MatchReportData>()
 
   const playerTimer = useRef(new Timer(0))
   const opponentTimer = useRef(new Timer(0))
@@ -183,18 +186,22 @@ export function GameProvider({ children }: Props) {
     playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
     opponentTimer.current.setRemaining(incomingGameState.opponentTimeLeft)
 
-    if (
-      incomingGameState.status === GameStatus.Defeat ||
-      incomingGameState.status === GameStatus.Draw ||
-      incomingGameState.status === GameStatus.Victory
-    )
-      emitFinishMatch(null)
+    // if (
+    //   incomingGameState.status === GameStatus.Defeat ||
+    //   incomingGameState.status === GameStatus.Draw ||
+    //   incomingGameState.status === GameStatus.Victory
+    // )
+    //   emitFinishMatch(null)
 
     if (incomingGameState.status === GameStatus.Victory) {
       setTriple(getTriple(incomingGameState.playerChoices))
     } else if (incomingGameState.status === GameStatus.Defeat) {
       setTriple(getTriple(incomingGameState.opponentChoices))
     }
+  }
+
+  function handleReceiveMatchReport(report: MatchReportData) {
+    emitFinishMatch(report)
   }
 
   function handleServerDisconnect(reason: Socket.DisconnectReason) {
@@ -220,6 +227,7 @@ export function GameProvider({ children }: Props) {
       .on(GameListenedEvent.Message, handleReceiveMessage)
       .on(GameListenedEvent.OpponentUid, handleReceiveOpponentUid)
       .on(GameListenedEvent.RatingsVariation, handleReceiveRatingsVariation)
+      .on(GameListenedEvent.MatchReport, handleReceiveMatchReport)
       .on('connect', () => {
         socket.emit(GameEmittedEvents.GetOpponent)
         socket.emit(GameEmittedEvents.GetState)

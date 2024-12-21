@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 
-export type Observer<T> = (event?: T) => void
+export type Observer<T> = (event: T) => void
 export type Subscribe<T> = (observer: Observer<T>) => () => void
 
 export function useObservable<T>(): [

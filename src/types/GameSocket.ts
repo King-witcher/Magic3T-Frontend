@@ -1,10 +1,13 @@
+import { MatchSide } from '@/models'
 import type { Choice, GameStateReport } from '@/types/game.ts'
 import type { Socket } from 'socket.io-client'
+import { Glicko } from './glicko'
 
 export enum GameListenedEvent {
   OpponentUid = 'opponent-uid',
   Message = 'message',
   GameState = 'game-state',
+  MatchReport = 'match-report',
   RatingsVariation = 'ratings-variation',
 }
 
@@ -16,10 +19,26 @@ export enum GameEmittedEvents {
   Message = 'message',
 }
 
+export type MatchReportData = {
+  matchId: string
+  winner: MatchSide | null
+  white: {
+    score: number
+    gain: number
+    newRating: Glicko
+  }
+  black: {
+    score: number
+    gain: number
+    newRating: Glicko
+  }
+}
+
 interface ListenEventsMap {
   [GameListenedEvent.OpponentUid](uid: string): void
   [GameListenedEvent.GameState](stateReport: GameStateReport): void
   [GameListenedEvent.Message](message: string): void
+  [GameListenedEvent.MatchReport](matchReport: MatchReportData): void
   [GameListenedEvent.RatingsVariation](data: {
     player: number
     opponent: number
