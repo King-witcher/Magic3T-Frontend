@@ -1,5 +1,5 @@
 import { useConfig } from '@/contexts/config.context.tsx'
-import type { Glicko } from '@/types/glicko.ts'
+import { RatingDto } from '@/types/dtos/user'
 import type { Division } from '@/utils/ranks'
 import { block } from '@/utils/utils'
 
@@ -55,12 +55,12 @@ export function useRatingInfo() {
     },
   } = useConfig()
 
-  function getRD(rating: Glicko) {
-    if (rating.deviation === 0) return 0
+  function getRD(rating: RatingDto) {
+    if (rating.rd === 0) return 0
 
     const c = getC(deviationInflationTime)
-    const t = Date.now() - rating.timestamp.getTime()
-    const candidate = Math.sqrt(rating.deviation ** 2 + c ** 2 * t)
+    const t = Date.now() - rating.date
+    const candidate = Math.sqrt(rating.rd ** 2 + c ** 2 * t)
     return Math.min(candidate, initialRD)
   }
 
@@ -110,17 +110,17 @@ export function useRatingInfo() {
     ]
   }
 
-  function getRankInfo({ rating, deviation, timestamp }: Glicko): RatingInfo {
-    const [expectedTier, division, leaguePoints] = getTier(rating)
+  function getRankInfo({ score, rd, date }: RatingDto): RatingInfo {
+    const [expectedTier, division, leaguePoints] = getTier(score)
 
-    const currentRD = getRD({ rating, deviation, timestamp })
+    const currentRD = getRD({ score, rd, date })
     const newDeviation = Math.round(currentRD)
     const reliable = newDeviation < maxReliableDeviation
     const tier = reliable ? expectedTier : Tier.Provisional
 
     return {
-      rating: Math.round(rating),
-      deviation: Math.round(getRD({ rating, deviation, timestamp })),
+      rating: Math.round(score),
+      deviation: Math.round(getRD({ score, rd, date })),
       tier,
       division: reliable ? division : undefined,
       leaguePoints,

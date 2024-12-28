@@ -59,9 +59,6 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
     },
     []
   )
-
-  console.log(authState)
-
   if (authState === AuthState.Loading || authState === AuthState.SignedIn) {
     return (
       <>

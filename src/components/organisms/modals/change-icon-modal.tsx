@@ -1,6 +1,7 @@
 import { UserAvatar } from '@/components/molecules'
 import { useRatingInfo } from '@/hooks/use-rating-info'
 import { UserData } from '@/models/users/user'
+import { UserDto } from '@/types/dtos/user'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
 import {
@@ -31,7 +32,7 @@ interface Props extends Omit<ModalProps, 'children'> {
 
 export function ChangeIconModal({ user, onSave, ...props }: Props) {
   const { getRankInfo } = useRatingInfo()
-  const rinfo = getRankInfo(user.glicko)
+  const rinfo = getRankInfo(UserDto.fromModel(user).rating)
 
   const [selectedIcon, setSelectedIcon] = useState(user.summoner_icon)
 

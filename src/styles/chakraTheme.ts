@@ -1,4 +1,4 @@
-import { extendTheme, keyframes } from '@chakra-ui/react'
+import { extendTheme } from '@chakra-ui/react'
 import { buttonTheme } from './button'
 import { inputTheme } from './input'
 import { menuTheme } from './menu'
@@ -10,6 +10,7 @@ import '@fontsource-variable/nunito'
 import { colors } from './colors'
 import { headingTheme } from './heading'
 import { tabsTheme } from './tabs'
+import { keyframes } from '@emotion/react'
 
 const scrollbarAnimation = keyframes`
   from {

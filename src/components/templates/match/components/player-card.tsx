@@ -28,9 +28,9 @@ export function PlayerCard({ matchPlayer, highlight }: Props) {
   const rankInfo = useMemo(() => {
     return getRankInfo({
       // TODO: Fix it
-      deviation: 0,
-      rating: matchPlayer.score,
-      timestamp: new Date(),
+      rd: 0,
+      score: matchPlayer.score,
+      date: Date.now(),
     })
   }, [matchPlayer.score])
 

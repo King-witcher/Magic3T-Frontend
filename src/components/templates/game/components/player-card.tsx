@@ -1,10 +1,11 @@
 import { SmoothNumber } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
-import { useGuardedAuth } from '@/contexts/guarded-auth.context.tsx'
 import { Tier, divisionMap, useRatingInfo } from '@/hooks/use-rating-info'
+import { Team } from '@/types/game-socket'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
+import { block } from '@/utils/utils'
 import {
   Badge,
   Center,
@@ -13,12 +14,12 @@ import {
   Image,
   Stack,
   Text,
-  keyframes,
 } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import { Link } from '@tanstack/react-router'
 
 interface Props extends CenterProps {
-  player: 'current' | 'opponent'
+  team: Team
 }
 
 const appear = keyframes`
@@ -29,30 +30,28 @@ const appear = keyframes`
   }
 `
 
-export function PlayerCard({ player, ...rest }: Props) {
-  const { user } = useGuardedAuth()
-  const { getRankInfo } = useRatingInfo()
+export function PlayerCard({ team, ...rest }: Props) {
+  const { getRankInfo, convertToLp } = useRatingInfo()
 
-  const { isActive, opponentProfile, ratingsVariation } = useGame()
+  const game = useGame()
+  const teamInfo = game.teams[team]
+  const profile = teamInfo.profile
 
-  const currentPlayer = player === 'current'
-
-  const profile = currentPlayer ? user : opponentProfile
-  const rinfo = profile && getRankInfo(profile.glicko)
+  const rinfo = profile && getRankInfo(profile.rating)
   const tierInfo = rinfo?.tier ? tiersMap[rinfo.tier] : null
 
-  const ratingVariation =
-    ratingsVariation?.[currentPlayer ? 'player' : 'opponent']
+  const gain = block(() => {
+    if (teamInfo.gain === null) return null
+    const gain = convertToLp(teamInfo.gain)
+    return Math.round(gain)
+  })
 
-  const integerVariation =
-    ratingVariation && Math.round(Math.abs(ratingVariation))
-
-  if (!isActive) return null
+  if (!game.isActive) return null
 
   return (
     <Center
       as={Link}
-      to={`/user/${profile?._id}`}
+      to={`/user/${profile?.id}`}
       className="playerCard"
       alignItems="center"
       justifyContent="left"
@@ -67,7 +66,7 @@ export function PlayerCard({ player, ...rest }: Props) {
       {...rest}
     >
       <UserAvatar
-        icon={profile?.summoner_icon || 0}
+        icon={profile?.summonerIcon || 0}
         tier={rinfo?.tier || Tier.Provisional}
         division={rinfo?.division}
         m="10px 30px"
@@ -93,7 +92,7 @@ export function PlayerCard({ player, ...rest }: Props) {
                 noOfLines={1}
                 color="light"
               >
-                {profile.identification?.nickname}
+                {profile.nickname}
               </Text>
             </Flex>
             <Flex alignItems="center" gap="5px">
@@ -109,21 +108,17 @@ export function PlayerCard({ player, ...rest }: Props) {
                 </Text>
               )}
 
-              {!!ratingVariation && (
+              {gain !== null && (
                 <Text
                   animation={`${appear} linear 300ms`}
                   fontWeight={800}
                   fontSize="14px"
                   color={
-                    ratingVariation < 0
-                      ? 'red.500'
-                      : ratingVariation > 0
-                        ? 'green.500'
-                        : 'gray.500'
+                    gain < 0 ? 'red.500' : gain > 0 ? 'green.500' : 'gray.500'
                   }
                 >
-                  {ratingVariation < 0 ? '-' : '+'}
-                  {integerVariation}
+                  {gain >= 0 && '+'}
+                  {gain}
                 </Text>
               )}
             </Flex>

@@ -48,14 +48,14 @@ export function ChatBox({ inputRef, ...props }: Props) {
                 p="8px 13px"
                 gap="3px"
                 color="light"
-                key={message.timestamp}
+                key={message.time}
                 alignSelf={message.sender === 'you' ? 'flex-end' : 'flex-start'}
                 {...getAcrylicProps()}
                 boxShadow="none"
                 rounded="6px"
               >
                 <Text fontSize="16px" lineHeight="18px">
-                  {message.content}
+                  {message.message}
                 </Text>
                 <Text
                   fontSize="10px"
@@ -64,7 +64,7 @@ export function ChatBox({ inputRef, ...props }: Props) {
                   opacity={0.8}
                   alignSelf="flex-end"
                 >
-                  {formatMinutes(message.timestamp)}
+                  {formatMinutes(message.time)}
                 </Text>
               </Stack>
             ))}

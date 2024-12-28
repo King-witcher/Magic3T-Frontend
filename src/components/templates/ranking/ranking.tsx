@@ -5,6 +5,7 @@ import {
   divisionMap,
   useRatingInfo,
 } from '@/hooks/use-rating-info'
+import { UserDto } from '@/types/dtos/user'
 import { rankingQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -26,7 +27,7 @@ export function RankingTemplate() {
     const map: Record<string, RatingInfo> = {}
     if (rankingQuery.data) {
       for (const user of rankingQuery.data) {
-        map[user._id] = getRankInfo(user.glicko)
+        map[user._id] = getRankInfo(UserDto.fromModel(user).rating) // TODO: Remove model from frontend.
       }
     }
     return map

@@ -1,4 +1,7 @@
-import type { QueueSocket } from '@/types/QueueSocket.ts'
+import type {
+  QueueClientEventsMap,
+  QueueServerEventsMap,
+} from '@/types/QueueSocket.ts'
 import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
 import {
   type ReactNode,
@@ -9,10 +12,11 @@ import {
   useState,
 } from 'react'
 import { IoSearch } from 'react-icons/io5'
-import { io } from 'socket.io-client'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { useGateway } from '@/hooks/use-gateway.ts'
+import { useListener } from '@/hooks/use-listener.ts'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void
@@ -29,7 +33,7 @@ const QueueContext = createContext<QueueContextData>({} as QueueContextData)
 
 export function QueueProvider({ children }: QueueContextProps) {
   const { push } = useLiveActivity()
-  const [socket, setSocket] = useState<ReturnType<typeof io>>()
+  // const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
   const [queueUserCount, setQueueUserCount] = useState<QueueUserCount>({
     casual: {
@@ -42,58 +46,45 @@ export function QueueProvider({ children }: QueueContextProps) {
       queue: 0,
     },
   })
-  const { user, authState, getToken } = useAuth()
-  const { connectGame } = useGame()
+  const { user, authState } = useAuth()
+  const gameCtx = useGame()
+
+  const gateway = useGateway<QueueServerEventsMap, QueueClientEventsMap>(
+    'queue',
+    authState === AuthState.SignedIn
+  )
+
+  useListener(gateway, 'matchFound', (data) => {
+    setQueueModes({})
+    gameCtx.connect(data.matchId)
+  })
+
+  useListener(gateway, 'updateUserCount', (data) => {
+    setQueueUserCount(data)
+  })
+
+  useListener(gateway, 'queueModes', (data) => {
+    setQueueModes(data)
+  })
+
+  useListener(gateway, 'disconnect', () => {
+    setQueueModes({})
+    setQueueUserCount({
+      casual: {
+        queue: 0,
+        inGame: 0,
+      },
+      ranked: {
+        queue: 0,
+        inGame: 0,
+      },
+      connected: 0,
+    })
+  })
 
   useEffect(() => {
-    let newSocket: QueueSocket
-    async function init() {
-      if (authState !== AuthState.SignedIn) return
-
-      const token = await getToken()
-      newSocket = io(`${import.meta.env.VITE_API_URL}/queue`, {
-        auth: {
-          token,
-        },
-      })
-      newSocket.on('matchFound', (data) => {
-        setQueueModes({})
-        connectGame(data.matchId)
-      })
-      newSocket.on('updateUserCount', (data) => {
-        setQueueUserCount(data)
-      })
-      newSocket.on('disconnect', () => {
-        setQueueModes({})
-        setQueueUserCount({
-          casual: {
-            queue: 0,
-            inGame: 0,
-          },
-          ranked: {
-            queue: 0,
-            inGame: 0,
-          },
-          connected: 0,
-        })
-      })
-      newSocket.on('queueModes', (data) => {
-        setQueueModes(data)
-      })
-
-      newSocket.emit('interact')
-      if (socket) socket.disconnect()
-      setSocket(newSocket)
-    }
-    const initPromise = init()
-
-    return () => {
-      initPromise.then(() => {
-        if (newSocket) newSocket.disconnect()
-        setQueueModes({})
-      })
-    }
-  }, [user, authState])
+    gateway.emit('interact')
+  }, [gateway])
 
   const enqueue = useCallback(
     async (mode: GameMode) => {
@@ -102,20 +93,20 @@ export function QueueProvider({ children }: QueueContextProps) {
         [mode]: true,
       }))
 
-      socket?.emit(mode)
+      gateway.emit(mode)
     },
-    [socket, user, setQueueModes]
+    [gateway, user, setQueueModes]
   )
 
   const dequeue = useCallback(
     (mode: GameMode) => {
-      socket?.emit('dequeue', mode)
+      gateway.emit('dequeue', mode)
       setQueueModes((current) => ({
         ...current,
         [mode]: false,
       }))
     },
-    [socket]
+    [gateway]
   )
 
   useEffect(() => {

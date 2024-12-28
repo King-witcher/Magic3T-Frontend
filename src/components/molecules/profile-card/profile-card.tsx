@@ -5,6 +5,7 @@ import { tiersMap } from '@/utils/ranks'
 import { Badge, Box, Flex, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { UserAvatar } from '../user-avatar'
+import { UserDto } from '@/types/dtos/user'
 
 interface Props {
   user: UserData
@@ -19,11 +20,8 @@ const divisionMap = {
 
 export function ProfileCard({ user }: Props) {
   const { getRankInfo } = useRatingInfo()
-
   const { ratingConfig } = useConfig()
-
-  const rinfo = getRankInfo(user.glicko)
-  console.log(user.glicko)
+  const rinfo = getRankInfo(UserDto.fromModel(user).rating)
   const tierInfo = tiersMap[rinfo.tier]
 
   const progress = useMemo(() => {

@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
+import { UserDto } from '@/types/dtos/user'
 
 interface Props {
   user: UserData
@@ -38,7 +39,7 @@ export function ProfileTemplate({ user }: Props) {
   const { user: authenticatedUser } = useAuth()
   const { getToken } = useAuth()
   const { ratingConfig } = useConfig()
-  const rinfo = getRankInfo(user.glicko)
+  const rinfo = getRankInfo(UserDto.fromModel(user).rating)
   const tierInfo = tiersMap[rinfo.tier]
   const matchesQuery = useQuery(matchesQueryOptions(user._id))
 
@@ -266,7 +267,12 @@ export function ProfileTemplate({ user }: Props) {
       />
 
       <Stack spacing="10px">
-        <Text fontSize="20px">Last 20 games</Text>
+        {matchesQuery.data && matchesQuery.data.length >= 20 && (
+          <Text fontSize="20px">Last 20 matches</Text>
+        )}
+        {matchesQuery.data && matchesQuery.data.length < 20 && (
+          <Text fontSize="20px">{matchesQuery.data.length} recent matches</Text>
+        )}
         {matchesQuery.isSuccess && (
           <Stack spacing="10px">
             {matchesQuery.data.map((match) => (
