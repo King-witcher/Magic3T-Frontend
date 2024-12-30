@@ -4,13 +4,14 @@ import type { WithId } from '@/types/withId'
 export interface HistoryMatchPlayer {
   uid: string
   name: string
+  rating: number
   score: number
   gain: number
 }
 
-export enum MatchSide {
-  White = 0,
-  Black = 1,
+export enum Team {
+  Order = 0,
+  Chaos = 1,
 }
 
 export enum GameMode {
@@ -29,35 +30,31 @@ export enum HistoryMatchEventsEnum {
 
 type BaseMatchEvent = {
   event: HistoryMatchEventsEnum
-  side: MatchSide
+  side: Team
   time: number
 }
 
-export type HistoryMatchEvent = BaseMatchEvent &
+export type MatchEventModal = BaseMatchEvent &
   (
     | {
         event: HistoryMatchEventsEnum.Choice
-        message?: never
         choice: Choice
       }
     | {
         event: HistoryMatchEventsEnum.Message
         message: string
-        choice?: never
       }
     | {
         event: HistoryMatchEventsEnum.Timeout | HistoryMatchEventsEnum.Forfeit
-        message?: never
-        choice?: never
       }
   )
 
 /** Represents a match registry in the History. */
 export interface MatchModel extends WithId {
-  white: HistoryMatchPlayer
-  black: HistoryMatchPlayer
-  events: HistoryMatchEvent[]
-  winner: MatchSide | null
+  [Team.Order]: HistoryMatchPlayer
+  [Team.Chaos]: HistoryMatchPlayer
+  events: MatchEventModal[]
+  winner: Team | null
   gameMode: GameMode
   timestamp: Date
 }

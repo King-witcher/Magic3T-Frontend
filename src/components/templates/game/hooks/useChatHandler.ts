@@ -1,4 +1,5 @@
 import { useGame } from '@/contexts/game.context.tsx'
+import { MessageData } from '@/types/game-socket'
 import {
   type ChangeEvent,
   type FormEvent,
@@ -9,13 +10,13 @@ import {
 } from 'react'
 
 export function useChatHandler() {
-  const { messages, sendMessage } = useGame()
+  const gameCtx = useGame()
   const [currentMessage, setCurrentMessage] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
 
   function handleSubmitMessage(e: FormEvent) {
     e.preventDefault()
-    sendMessage(currentMessage)
+    gameCtx.sendMessage(currentMessage)
     setCurrentMessage('')
   }
 
@@ -43,10 +44,10 @@ export function useChatHandler() {
     movedn()
   }, [])
 
-  useEffect(smoothScroll, [messages])
+  useEffect(smoothScroll, [])
 
   return {
-    messages,
+    messages: [] as MessageData[],
     currentMessage,
     handleSubmitMessage,
     handleChangeMessageField,

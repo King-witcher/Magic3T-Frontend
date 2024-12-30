@@ -2,6 +2,7 @@ import { ButtonsContainer } from '@/components/atoms'
 import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
+import { Team } from '@/types/game-socket'
 import { GameStatus } from '@/types/game.ts'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
@@ -26,41 +27,35 @@ const statusText: Record<GameStatus, string> = {
 }
 
 export function GameTemplate() {
-  const {
-    isActive,
-    turn,
-    disconnect,
-    subscribeFinishMatch,
-    makeChoice,
-    gameStatus,
-    playerChoices,
-    opponentChoices,
-    opponentTimer,
-    playerTimer,
-  } = useGame()
+  const gameCtx = useGame()
   const {
     isOpen: forfeitModaOpen,
     onClose: closeForfeitModal,
     onOpen: openForfeitModal,
   } = useDisclosure()
+  const downTeam = gameCtx.currentTeam || Team.Order
+  const upTeam = (1 - downTeam) as Team
+  const downPlayer = gameCtx.teams[downTeam]
+  const upPlayer = gameCtx.teams[upTeam]
   const chatInputRef = useRef<HTMLInputElement>(null)
+  // parei aqui
 
   const resultModalDisclosure = useDisclosure()
 
   useEffect(() => {
-    return subscribeFinishMatch(() => {
+    return gameCtx.onMatchReport((report) => {
       setTimeout(() => {
         resultModalDisclosure.onOpen()
       }, 500)
     })
   }, [])
 
-  if (!isActive) return null // Improve
+  if (!gameCtx.isActive) return null // Improve
   return (
     <Center w="full">
       <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
         <Heading w="fit-content" hideBelow="sm">
-          {statusText[gameStatus]}
+          {/* {statusText[gameStatus]} */}
         </Heading>
         <Flex
           h="min-content"
@@ -76,38 +71,39 @@ export function GameTemplate() {
             justify="space-between"
             hideBelow="sm"
           >
-            <PlayerCard player="opponent" />
+            <PlayerCard team={upTeam} />
             <Text color="light">vs</Text>
-            <PlayerCard player="current" />
+            <PlayerCard team={downTeam} />
           </Stack>
           <VStack gap="20px" justify="center">
             <VStack gap="20px" w="full">
-              <PlayerCard player="opponent" w="full" hideFrom="sm" />
+              <PlayerCard team={upTeam} w="full" hideFrom="sm" />
               <Center {...getAcrylicProps()} h="50px" w="full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
-                  timer={opponentTimer}
+                  timer={upPlayer.timer}
                 />
               </Center>
               <ChoiceTable
                 w={{ base: 'full', sm: '300px' }}
-                redMoves={opponentChoices}
-                blueMoves={playerChoices}
+                redMoves={upPlayer.choices}
+                blueMoves={downPlayer.choices}
                 state={
-                  gameStatus === GameStatus.Playing
-                    ? turn
+                  !gameCtx.finished
+                    ? gameCtx.turn !== null &&
+                      gameCtx.turn === gameCtx.currentTeam
                       ? 'selectable'
                       : 'static'
                     : 'disabled'
                 }
-                onSelect={makeChoice}
+                onSelect={gameCtx.pick}
               />
               <Center {...getAcrylicProps()} h="50px" w="full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
-                  timer={playerTimer}
+                  timer={downPlayer.timer}
                 />
               </Center>
             </VStack>
@@ -115,7 +111,7 @@ export function GameTemplate() {
           <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
         </Flex>
         <ButtonsContainer w={{ base: 'full', sm: 'fit-content' }}>
-          {gameStatus === GameStatus.Playing && (
+          {!gameCtx.finished && (
             <InnerButton
               h="60px"
               w={{ base: 'full', sm: '200px' }}
@@ -124,14 +120,12 @@ export function GameTemplate() {
               Surrender
             </InnerButton>
           )}
-          {(gameStatus === GameStatus.Victory ||
-            gameStatus === GameStatus.Defeat ||
-            gameStatus === GameStatus.Draw) && [
+          {gameCtx.finished && [
             <InnerButton
               key="leave"
               h="60px"
               w={{ base: 'full', sm: '200px' }}
-              onClick={disconnect}
+              onClick={gameCtx.disconnect}
             >
               Leave room
             </InnerButton>,

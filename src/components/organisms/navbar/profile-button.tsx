@@ -77,12 +77,12 @@ export function ProfileButton() {
           </MenuItem>
         )}
         {user && <MenuItem onClick={openSecretCode}>Cheats</MenuItem>}
-        <MenuItem as={Link} to="/tutorial">
+        {/* <MenuItem as={Link} to="/tutorial">
           How to play
-        </MenuItem>
-        <MenuItem as={Link} to="/rating-system">
+        </MenuItem> */}
+        {/* <MenuItem as={Link} to="/rating-system">
           Rating system
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem as={Link} to="/ranking">
           Top players
         </MenuItem>

@@ -11,7 +11,7 @@ import {
 } from 'firebase/firestore'
 import { NotFoundError } from '../errors/NotFoundError'
 import { getConverter } from '../getConverter'
-import type { MatchModel } from './Match'
+import { type MatchModel, Team } from './Match'
 
 const converter = getConverter<MatchModel>()
 
@@ -20,7 +20,10 @@ const col = collection(firestore, 'matches').withConverter(converter)
 async function listByPlayerId(uid: string): Promise<MatchModel[]> {
   const q = query(
     col,
-    or(where('black.uid', '==', uid), where('white.uid', '==', uid)),
+    or(
+      where(`${Team.Order}.uid`, '==', uid),
+      where(`${Team.Chaos}.uid`, '==', uid)
+    ),
     orderBy(documentId()),
     limit(15)
   )

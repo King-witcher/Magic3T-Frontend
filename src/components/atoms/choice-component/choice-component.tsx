@@ -1,11 +1,7 @@
 import type { Choice } from '@/types/game.ts'
 import { getAcrylicProps } from '@/utils/style-helpers'
-import {
-  type ChakraProps,
-  Flex,
-  type FlexProps,
-  keyframes,
-} from '@chakra-ui/react'
+import { type ChakraProps, Flex, type FlexProps } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import { useMemo } from 'react'
 
 export type ChoiceStyle =

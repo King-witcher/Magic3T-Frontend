@@ -1,10 +1,6 @@
 import type { Choice } from '@/types/game.ts'
-import {
-  type ChakraProps,
-  Flex,
-  type FlexProps,
-  keyframes,
-} from '@chakra-ui/react'
+import { type ChakraProps, Flex, type FlexProps } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 
 export type ChoiceStyle =
   | 'normal'

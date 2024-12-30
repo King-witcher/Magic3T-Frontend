@@ -1,15 +1,18 @@
-import { Subscribe, useObservable } from '@/hooks/use-observable.ts'
+import { useGateway } from '@/hooks/use-gateway.ts'
+import { useListener } from '@/hooks/use-listener.ts'
+import { useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
-import { models } from '@/models'
-import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api.ts'
+import { UserDto } from '@/types/dtos/user.ts'
 import {
-  GameEmittedEvents,
-  GameListenedEvent,
-  type GameSocket,
-} from '@/types/GameSocket.ts'
-import { type Choice, type GameStateReport, GameStatus } from '@/types/game.ts'
-import { getTriple } from '@/utils/getTriple'
+  ClientMatchEvents,
+  GameClientEventsMap,
+  GameServerEventsMap,
+  MatchReportData,
+  ServerMatchEvents,
+  Team,
+} from '@/types/game-socket.ts'
+import { type Choice } from '@/types/game.ts'
 import {
   type ReactNode,
   createContext,
@@ -21,280 +24,255 @@ import {
   useState,
 } from 'react'
 import { IoGameController } from 'react-icons/io5'
-import { type Socket, io } from 'socket.io-client'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
-type GameData =
-  | {
-      matchId: null
-      isActive: false
-      turn: null
-      gameStatus: GameStatus.Waiting
-      messages: Message[]
-      playerChoices: Choice[]
-      opponentChoices: Choice[]
-      playerTimer: Timer
-      opponentTimer: Timer
-      availableChoices: Choice[]
-      winningTriple: null
-      opponentProfile: null
-      ratingsVariation: null
-
-      connectGame(matchId: string): Promise<void>
-      subscribeFinishMatch: Subscribe<null>
-      makeChoice(choice: Choice): void
-      sendMessage(message: string): void
-      forfeit(): Promise<void>
-      disconnect(): void
+type GameData2 = {
+  matchId: string | null
+  isActive: boolean
+  turn: Team | null
+  currentTeam: Team | null
+  availableChoices: Choice[]
+  finished: boolean
+  finalReport: MatchReportData | null
+  teams: Record<
+    Team,
+    {
+      timer: Timer
+      profile: UserDto | null
+      choices: Choice[]
+      gain: number | null
+      score: number | null
     }
-  | {
-      matchId: string
-      isActive: true
-      turn: 'player' | 'opponent' | null
-      gameStatus: GameStatus
-      messages: Message[]
-      playerChoices: Choice[]
-      opponentChoices: Choice[]
-      playerTimer: Timer
-      opponentTimer: Timer
-      availableChoices: Choice[]
-      winningTriple: [Choice, Choice, Choice] | null
-      opponentProfile: UserData | null
-      ratingsVariation: { player: number; opponent: number } | null
+  >
 
-      connectGame(matchId: string): Promise<void>
-      subscribeFinishMatch: Subscribe<null>
-      makeChoice(choice: Choice): void
-      sendMessage(message: string): void
-      forfeit(): Promise<void>
-      disconnect(): void
-    }
+  connect(id: string): void
+  disconnect(): void
+
+  pick(choice: Choice): void
+  sendMessage(message: string): void
+  forfeit(): void
+
+  onMatchReport(callback: (report: MatchReportData) => void): void
+}
 
 interface Props {
   children?: ReactNode
 }
 
-const GameContext = createContext<GameData>({} as GameData)
+const GameContext = createContext<GameData2>({} as GameData2)
 
 // Refactor this and use white and black isntead of player and opponent
 export function GameProvider({ children }: Props) {
+  const auth = useAuth()
   const [matchId, setMatchId] = useState<string | null>(null)
   const isActive = !!matchId
-  const [turn, setTurn] = useState<'player' | 'opponent' | null>(null)
-  const [gameStatus, setGameStatus] = useState(GameStatus.Waiting)
-  const [playerChoices, setPlayerChoices] = useState<Choice[]>([])
-  const [opponentChoices, setOpponentChoices] = useState<Choice[]>([])
-  const [triple, setTriple] = useState<[Choice, Choice, Choice] | null>(null) // Why not useMemo?
+  const [orderProfile, setOrderProfile] = useState<UserDto | null>(null)
+  const [chaosProfile, setChaosProfile] = useState<UserDto | null>(null)
+  const [orderChoices, setOrderChoices] = useState<Choice[]>([])
+  const [chaosChoices, setChaosChoices] = useState<Choice[]>([])
+  const [turn, setTurn] = useState<Team | null>(null)
+  const [currentTeam, setCurrentTeam] = useState<Team | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [opponentProfile, setOpponentProfile] = useState<UserData | null>(null)
-  const [ratingsVariation, setRatingsVariation] = useState<{
-    player: number
-    opponent: number
-  } | null>(null)
-  const [subscribeFinishMatch, emitFinishMatch] = useObservable<null>()
+  const [finalReport, setFinalReport] = useState<MatchReportData | null>(null)
+  const [subscribeFinishMatch, emitFinishMatch] =
+    useObservable<MatchReportData>()
 
-  const playerTimer = useRef(new Timer(0))
-  const opponentTimer = useRef(new Timer(0))
-  const socketRef = useRef<GameSocket | null>(null)
+  const orderTimer = useRef(new Timer(0))
+  const chaosTimer = useRef(new Timer(0))
 
   const { getToken, authState } = useAuth()
-  const { push } = useLiveActivity()
-  // const breakpoint = useBreakpoint()
-
-  /** Limpa o estado do jogo, colocando os timers em 0. */
-  // Refactor with keys
-  const resetStates = useCallback(() => {
-    setMatchId(null)
-    setTurn(null)
-    setGameStatus(GameStatus.Waiting)
-    setPlayerChoices([])
-    setOpponentChoices([])
-    setMessages([])
-    setTriple(null)
-    setRatingsVariation(null)
-    playerTimer.current.pause()
-    opponentTimer.current.pause()
-    playerTimer.current.setRemaining(0)
-    opponentTimer.current.setRemaining(0)
-    setOpponentProfile(null)
-  }, [])
-
-  // Pushes a message notification for a short period.
-  // useEffect(() => {
-  //   if (
-  //     breakpoint === 'base' &&
-  //     messages.length &&
-  //     messages[messages.length - 1].sender !== 'you'
-  //   ) {
-  //     const remove = push({
-  //       content: <IoChatbox size="16px" />,
-  //       tooltip: 'You have a new message',
-  //     })
-  //     setTimeout(remove, 3000)
-  //     return remove
-  //   }
-  // }, [messages, push, breakpoint])
-
-  const handleReceiveOpponentUid = useCallback(async (uid: string) => {
-    const opponentProfile = await models.users.getById(uid)
-    setOpponentProfile(opponentProfile)
-  }, [])
-
-  const handleReceiveRatingsVariation = useCallback(
-    (data: { player: number; opponent: number }) => {
-      setRatingsVariation(data)
-    },
-    []
+  const gateway = useGateway<GameServerEventsMap, GameClientEventsMap>(
+    'match',
+    authState === AuthState.SignedIn
   )
+  const { push } = useLiveActivity()
 
-  const handleReceiveMessage = useCallback((message: string) => {
+  // Handles text messages from the server. To be done.
+  useListener(gateway, ServerMatchEvents.Message, (message) => {
     setMessages((current) => [
       ...current,
       {
         timestamp: Date.now(),
-        content: message,
+        content: message.message,
         sender: 'him',
       },
     ])
-  }, [])
+  })
 
-  function handleServerGameState(incomingGameState: GameStateReport) {
-    setTurn(incomingGameState.turn)
-    setGameStatus(incomingGameState.status)
-    setPlayerChoices(incomingGameState.playerChoices)
-    setOpponentChoices(incomingGameState.opponentChoices)
+  // Handles team assignments messages from the server.
+  useListener(
+    gateway,
+    ServerMatchEvents.Assignments,
+    (assignments) => {
+      setOrderProfile(assignments[Team.Order].profile)
+      setChaosProfile(assignments[Team.Chaos].profile)
 
-    // Muda qual timer está contando
-    if (incomingGameState.turn) {
-      playerTimer.current.start()
-      opponentTimer.current.pause()
-    } else if (incomingGameState.status === GameStatus.Playing) {
-      playerTimer.current.pause()
-      opponentTimer.current.start()
-    } else {
-      playerTimer.current.pause()
-      opponentTimer.current.pause()
+      if (assignments[Team.Order].profile.id === auth.user?._id) {
+        setCurrentTeam(Team.Order)
+      } else if (assignments[Team.Chaos].profile.id === auth.user?._id) {
+        setCurrentTeam(Team.Chaos)
+      } else {
+        setCurrentTeam(null)
+      }
+    },
+    [auth.user?._id]
+  )
+
+  // Handles state updates from the server.
+  useListener(gateway, ServerMatchEvents.StateReport, (report) => {
+    setTurn(report.turn)
+    setOrderChoices(report[Team.Order].choices)
+    setChaosChoices(report[Team.Chaos].choices)
+    orderTimer.current.pause()
+    chaosTimer.current.pause()
+    orderTimer.current.setRemaining(report[Team.Order].timeLeft)
+    chaosTimer.current.setRemaining(report[Team.Chaos].timeLeft)
+
+    if (report.turn === Team.Order) {
+      orderTimer.current.start()
+    } else if (report.turn === Team.Chaos) {
+      chaosTimer.current.start()
     }
+  })
 
-    // Sincroniza os timers com os dados recebidos do servidor
-    playerTimer.current.setRemaining(incomingGameState.playerTimeLeft)
-    opponentTimer.current.setRemaining(incomingGameState.opponentTimeLeft)
-
-    if (
-      incomingGameState.status === GameStatus.Defeat ||
-      incomingGameState.status === GameStatus.Draw ||
-      incomingGameState.status === GameStatus.Victory
-    )
-      emitFinishMatch(null)
-
-    if (incomingGameState.status === GameStatus.Victory) {
-      setTriple(getTriple(incomingGameState.playerChoices))
-    } else if (incomingGameState.status === GameStatus.Defeat) {
-      setTriple(getTriple(incomingGameState.opponentChoices))
-    }
-  }
-
-  function handleServerDisconnect(reason: Socket.DisconnectReason) {
-    console.warn('Socket disconnected because of', `${reason}.`)
-    if (reason === 'transport error' && matchId) {
-      connectGame(matchId)
-      console.log('Attempting to reconnect')
-    }
-    socketRef.current?.connect()
-  }
-
-  const getGameSocket = useCallback(async (): Promise<GameSocket> => {
-    const token = await getToken()
-    if (!token) throw new Error('No Id Token')
-
-    const socket: GameSocket = io(`${import.meta.env.VITE_API_URL}/match`, {
-      auth: { token },
-    })
-
-    return socket
-      .on(GameListenedEvent.GameState, handleServerGameState)
-      .on('disconnect', handleServerDisconnect)
-      .on(GameListenedEvent.Message, handleReceiveMessage)
-      .on(GameListenedEvent.OpponentUid, handleReceiveOpponentUid)
-      .on(GameListenedEvent.RatingsVariation, handleReceiveRatingsVariation)
-      .on('connect', () => {
-        socket.emit(GameEmittedEvents.GetOpponent)
-        socket.emit(GameEmittedEvents.GetState)
+  // Handles final match reports from the server.
+  useListener(
+    gateway,
+    ServerMatchEvents.MatchReport,
+    (report) => {
+      setOrderProfile((old) => {
+        return (
+          old && {
+            ...old,
+            rating: report[Team.Order].newRating,
+          }
+        )
       })
-  }, [getToken])
+      setChaosProfile((old) => {
+        return (
+          old && {
+            ...old,
+            rating: report[Team.Chaos].newRating,
+          }
+        )
+      })
+      setFinalReport(report)
+      emitFinishMatch(report)
+    },
+    [gateway.socket]
+  )
 
-  const makeChoice = useCallback((choice: Choice) => {
-    socketRef.current?.emit(GameEmittedEvents.Choice, choice)
-
-    setTurn('opponent')
-    setPlayerChoices((current) => [...current, choice])
-
-    playerTimer.current.pause()
-    opponentTimer.current.start()
+  // Refactor with keys
+  const resetState = useCallback(() => {
+    setMatchId(null)
+    setTurn(null)
+    setMessages([])
+    orderTimer.current.pause()
+    chaosTimer.current.pause()
+    orderTimer.current.setRemaining(0)
+    chaosTimer.current.setRemaining(0)
+    setOrderProfile(null)
+    setChaosProfile(null)
+    setOrderChoices([])
+    setChaosChoices([])
+    setFinalReport(null)
+    setCurrentTeam(null)
   }, [])
 
-  const sendMessage = useCallback((message: string) => {
-    if (socketRef.current) {
-      setMessages((current) => [
-        ...current,
-        {
-          content: message,
-          sender: 'you',
-          timestamp: Date.now(),
-        },
-      ])
+  // Requests game state and game assignments whenever a new game starts.
+  useEffect(() => {
+    if (!matchId) return
+    if (!gateway.socket) return
 
-      socketRef.current?.emit(GameEmittedEvents.Message, message)
-    }
-  }, [])
+    gateway.emit(ClientMatchEvents.GetState)
+    gateway.emit(ClientMatchEvents.GetAssignments)
+  }, [matchId, gateway])
+
+  useListener(gateway, 'disconnect', (reason) => {
+    console.error('Socket disconnected because of', `${reason}.`)
+  })
+
+  const pick = useCallback(
+    (choice: Choice) => {
+      if (currentTeam === null) return
+      if (currentTeam !== turn) return
+      gateway.emit(ClientMatchEvents.Pick, choice)
+      switch (currentTeam) {
+        case Team.Order: {
+          setOrderChoices((old) => [...old, choice])
+          setTurn(Team.Chaos)
+          orderTimer.current.pause()
+          chaosTimer.current.start()
+          break
+        }
+        case Team.Chaos: {
+          setChaosChoices((old) => [...old, choice])
+          setTurn(Team.Order)
+          chaosTimer.current.pause()
+          orderTimer.current.start()
+          break
+        }
+      }
+    },
+    [currentTeam, turn, gateway.emit]
+  )
+
+  const sendMessage = useCallback(
+    (message: string) => {
+      if (gateway.socket) {
+        setMessages((current) => [
+          ...current,
+          {
+            content: message,
+            sender: 'you',
+            timestamp: Date.now(),
+          },
+        ])
+
+        gateway.emit(ClientMatchEvents.Message, message)
+      }
+    },
+    [gateway]
+  )
 
   const forfeit = useCallback(async () => {
-    await socketRef.current?.emitWithAck(GameEmittedEvents.Forfeit)
-  }, [])
+    if (currentTeam === null) return
+    if (finalReport) return
+    gateway.emit(ClientMatchEvents.Surrender)
+    setTurn(null)
+    orderTimer.current.pause()
+    chaosTimer.current.pause()
+  }, [currentTeam, finalReport, gateway])
 
+  // Sets the state as connected to a game by just setting a matchId different from null.
   const connectGame = useCallback(
-    async (matchId: string) => {
-      socketRef.current?.disconnect()
-
-      resetStates()
-
-      const newSocket = await getGameSocket()
-      socketRef.current = newSocket
+    (matchId: string) => {
+      resetState()
       setMatchId(matchId)
-      setTurn(null)
-      setGameStatus(GameStatus.Waiting)
-      setOpponentChoices([])
-      setPlayerChoices([])
     },
-    [getGameSocket, resetStates]
+    [resetState]
   )
 
   function disconnect() {
-    socketRef.current?.disconnect()
-    socketRef.current = null
-    resetStates()
+    setMatchId(null)
+    resetState()
   }
 
   const availableChoices = useMemo(() => {
-    if (!matchId) {
-      return []
-    }
-
+    if (!isActive) return []
     const availableChoices: Choice[] = []
-
     for (let i = 1; i < 10; i++) {
       if (
-        !playerChoices.includes(i as Choice) &&
-        !opponentChoices.includes(i as Choice)
+        !orderChoices.includes(i as Choice) &&
+        !chaosChoices.includes(i as Choice)
       )
         availableChoices.push(i as Choice)
     }
-
     return availableChoices
-  }, [playerChoices, matchId])
+  }, [orderChoices, chaosChoices, isActive])
 
   // If the player was currently in a game, auto connects him to the game when he logs in.
   useEffect(() => {
@@ -321,12 +299,6 @@ export function GameProvider({ children }: Props) {
   }, [getToken, connectGame, authState])
 
   useEffect(() => {
-    return () => {
-      socketRef.current?.disconnect()
-    }
-  }, [])
-
-  useEffect(() => {
     if (matchId) {
       return push({
         content: <IoGameController size="16px" />,
@@ -338,31 +310,37 @@ export function GameProvider({ children }: Props) {
 
   return (
     <GameContext.Provider
-      value={
-        {
-          matchId,
-          isActive,
-          turn,
-          gameStatus,
-          messages,
-          playerChoices,
-          opponentChoices: opponentChoices,
-          playerTimer: playerTimer.current,
-          opponentTimer: opponentTimer.current,
-          availableChoices,
-          winningTriple: triple,
-          opponentProfile,
-          ratingsVariation,
-
-          /** Se conecta a um jogo a partir de um token. */
-          connectGame,
-          subscribeFinishMatch,
-          makeChoice,
-          disconnect,
-          sendMessage,
-          forfeit,
-        } as GameData
-      }
+      value={{
+        teams: {
+          [Team.Order]: {
+            choices: orderChoices,
+            profile: orderProfile,
+            timer: orderTimer.current,
+            gain: finalReport?.[Team.Order].gain || null,
+            score: finalReport?.[Team.Order].score || null,
+          },
+          [Team.Chaos]: {
+            choices: chaosChoices,
+            profile: chaosProfile,
+            timer: chaosTimer.current,
+            gain: finalReport?.[Team.Chaos].gain || null,
+            score: finalReport?.[Team.Chaos].score || null,
+          },
+        },
+        availableChoices,
+        isActive,
+        matchId,
+        finalReport,
+        currentTeam,
+        finished: !!finalReport,
+        turn,
+        connect: connectGame,
+        disconnect,
+        forfeit,
+        pick,
+        sendMessage,
+        onMatchReport: subscribeFinishMatch,
+      }}
     >
       {children}
     </GameContext.Provider>

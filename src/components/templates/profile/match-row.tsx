@@ -1,5 +1,5 @@
 import { useRatingInfo } from '@/hooks/use-rating-info'
-import { HistoryMatchEventsEnum, MatchModel, MatchSide } from '@/models'
+import { HistoryMatchEventsEnum, MatchModel, Team } from '@/models'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { Center, Flex, Stack, Text } from '@chakra-ui/react'
@@ -24,16 +24,18 @@ const dateTimeFormat = Intl.DateTimeFormat()
 export function MatchRow({ match, viewAs }: Props) {
   const { convertToLp } = useRatingInfo()
 
-  const side = match.black.uid === viewAs ? MatchSide.Black : MatchSide.White
+  const team = match[Team.Order].uid === viewAs ? Team.Order : Team.Chaos
   const result =
     match.winner === null
       ? MatchResult.Draw
-      : match.winner === side
+      : match.winner === team
         ? MatchResult.Victory
         : MatchResult.Defeat
 
-  const player = match.white.uid === viewAs ? match.white : match.black
-  const opponent = match.white.uid === viewAs ? match.black : match.white
+  const player =
+    match[Team.Order].uid === viewAs ? match[Team.Order] : match[Team.Chaos]
+  const opponent =
+    match[Team.Order].uid === viewAs ? match[Team.Chaos] : match[Team.Order]
 
   const durationString = useMemo(() => {
     const duration = Math.floor(
@@ -95,8 +97,7 @@ export function MatchRow({ match, viewAs }: Props) {
       </Flex>
       <Flex gap={{ base: '8px', sm: '10px' }}>
         {match.events.map((event) => {
-          const bgColor =
-            event.side === MatchSide.White ? 'blue.400' : 'red.400'
+          const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
 
           if (event.event === HistoryMatchEventsEnum.Message) return null
 
@@ -112,7 +113,7 @@ export function MatchRow({ match, viewAs }: Props) {
               fontSize="0.875rem"
               key={event.time}
             >
-              {event.choice}
+              {event.event === HistoryMatchEventsEnum.Choice && event.choice}
               {event.event === HistoryMatchEventsEnum.Forfeit && <RiFlagFill />}
               {event.event === HistoryMatchEventsEnum.Timeout && <FaClock />}
             </Center>
