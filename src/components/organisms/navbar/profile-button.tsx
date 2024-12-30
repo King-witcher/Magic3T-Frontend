@@ -45,7 +45,6 @@ export function ProfileButton() {
         }}
       >
         <Avatar
-          // src={user?.photoURL || undefined}
           src={getIconUrl(user?.summoner_icon)}
           border="2px solid #ffffff40"
           w="40px"
@@ -88,7 +87,11 @@ export function ProfileButton() {
         </MenuItem>
         <MenuDivider color="blue.100" />
         {user && <MenuItem onClick={openLogout}>Sign out</MenuItem>}
-        {!user && <MenuItem onClick={signIn}>Sign in</MenuItem>}
+        {!user && (
+          <MenuItem as={Link} to="/sign-in">
+            Sign in
+          </MenuItem>
+        )}
         <LogoutModal isOpen={logoutModalOpen} onClose={closeLogout} />
         <SecretCodeModal
           isOpen={secretCodeModalOpen}
