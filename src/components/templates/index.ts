@@ -1,7 +1,6 @@
 export * from './error'
 export * from './game'
 export * from './lobby'
-export * from './match'
 export * from './profile'
 export * from './root-layout'
 export * from './rating-system'

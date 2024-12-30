@@ -90,6 +90,7 @@ export function GameProvider({ children }: Props) {
   )
   const { push } = useLiveActivity()
 
+  // Handles text messages from the server. To be done.
   useListener(gateway, ServerMatchEvents.Message, (message) => {
     setMessages((current) => [
       ...current,
@@ -101,6 +102,7 @@ export function GameProvider({ children }: Props) {
     ])
   })
 
+  // Handles team assignments messages from the server.
   useListener(
     gateway,
     ServerMatchEvents.Assignments,
@@ -119,6 +121,7 @@ export function GameProvider({ children }: Props) {
     [auth.user?._id]
   )
 
+  // Handles state updates from the server.
   useListener(gateway, ServerMatchEvents.StateReport, (report) => {
     setTurn(report.turn)
     setOrderChoices(report[Team.Order].choices)
@@ -135,6 +138,7 @@ export function GameProvider({ children }: Props) {
     }
   })
 
+  // Handles final match reports from the server.
   useListener(
     gateway,
     ServerMatchEvents.MatchReport,
@@ -178,15 +182,14 @@ export function GameProvider({ children }: Props) {
     setCurrentTeam(null)
   }, [])
 
-  useListener(
-    gateway,
-    'connect',
-    () => {
-      gateway.socket?.emit(ClientMatchEvents.GetState)
-      gateway.socket?.emit(ClientMatchEvents.GetAssignments)
-    },
-    [gateway]
-  )
+  // Requests game state and game assignments whenever a new game starts.
+  useEffect(() => {
+    if (!matchId) return
+    if (!gateway.socket) return
+
+    gateway.emit(ClientMatchEvents.GetState)
+    gateway.emit(ClientMatchEvents.GetAssignments)
+  }, [matchId, gateway])
 
   useListener(gateway, 'disconnect', (reason) => {
     console.warn('Socket disconnected because of', `${reason}.`)
@@ -200,7 +203,7 @@ export function GameProvider({ children }: Props) {
     (choice: Choice) => {
       if (currentTeam === null) return
       if (currentTeam !== turn) return
-      gateway.socket?.emit(ClientMatchEvents.Pick, choice)
+      gateway.emit(ClientMatchEvents.Pick, choice)
       switch (currentTeam) {
         case Team.Order: {
           setOrderChoices((old) => [...old, choice])
@@ -218,7 +221,7 @@ export function GameProvider({ children }: Props) {
         }
       }
     },
-    [currentTeam, turn]
+    [currentTeam, turn, gateway.emit]
   )
 
   const sendMessage = useCallback((message: string) => {
@@ -232,27 +235,26 @@ export function GameProvider({ children }: Props) {
         },
       ])
 
-      gateway.socket.emit(ClientMatchEvents.Message, message)
+      gateway.emit(ClientMatchEvents.Message, message)
     }
-  }, [])
+  }, [gateway])
 
   const forfeit = useCallback(async () => {
     if (currentTeam === null) return
     if (finalReport) return
-    gateway.socket?.emit(ClientMatchEvents.Surrender)
+    gateway.emit(ClientMatchEvents.Surrender)
     setTurn(null)
     orderTimer.current.pause()
     chaosTimer.current.pause()
-  }, [currentTeam, finalReport])
+  }, [currentTeam, finalReport, gateway])
 
+  // Sets the state as connected to a game by just setting a matchId different from null.
   const connectGame = useCallback(
     (matchId: string) => {
       resetState()
       setMatchId(matchId)
-      gateway.emit(ClientMatchEvents.GetState)
-      gateway.emit(ClientMatchEvents.GetAssignments)
     },
-    [resetState, setMatchId, gateway]
+    [resetState]
   )
 
   function disconnect() {
@@ -262,9 +264,7 @@ export function GameProvider({ children }: Props) {
 
   const availableChoices = useMemo(() => {
     if (!isActive) return []
-
     const availableChoices: Choice[] = []
-
     for (let i = 1; i < 10; i++) {
       if (
         !orderChoices.includes(i as Choice) &&
@@ -272,7 +272,6 @@ export function GameProvider({ children }: Props) {
       )
         availableChoices.push(i as Choice)
     }
-
     return availableChoices
   }, [orderChoices, chaosChoices, isActive])
 

@@ -35,15 +35,16 @@ export function useGateway<
     }
 
     let cancel = false
-    console.log('getting token')
+    let socket: Socket | null = null
+    console.log(`Connecting to gateway ${gateway}...`)
     auth.getToken().then((token) => {
-      console.log('got token')
       if (cancel) return
-      const socket = io(`${import.meta.env.VITE_API_URL}/${gateway}`, {
+      socket = io(`${import.meta.env.VITE_API_URL}/${gateway}`, {
         auth: {
           token,
         },
       })
+      console.log(`Connected to gateway ${gateway}.`)
 
       setSocket(socket)
     })
