@@ -32,8 +32,10 @@ export function MatchRow({ match, viewAs }: Props) {
         ? MatchResult.Victory
         : MatchResult.Defeat
 
-  const player = match[Team.Order].uid === viewAs ? match[Team.Order] : match[Team.Chaos]
-  const opponent = match[Team.Order].uid === viewAs ? match[Team.Chaos] : match[Team.Order]
+  const player =
+    match[Team.Order].uid === viewAs ? match[Team.Order] : match[Team.Chaos]
+  const opponent =
+    match[Team.Order].uid === viewAs ? match[Team.Chaos] : match[Team.Order]
 
   const durationString = useMemo(() => {
     const duration = Math.floor(
@@ -95,8 +97,7 @@ export function MatchRow({ match, viewAs }: Props) {
       </Flex>
       <Flex gap={{ base: '8px', sm: '10px' }}>
         {match.events.map((event) => {
-          const bgColor =
-            event.side === Team.Order ? 'blue.400' : 'red.400'
+          const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
 
           if (event.event === HistoryMatchEventsEnum.Message) return null
 

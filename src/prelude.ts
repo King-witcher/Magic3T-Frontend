@@ -1,7 +1,7 @@
 import {
   Result as ResultClass,
-  Ok as ResultOk,
   Err as ResultErr,
+  Ok as ResultOk,
 } from '@/utils/rust/result'
 
 window.Ok = ResultOk

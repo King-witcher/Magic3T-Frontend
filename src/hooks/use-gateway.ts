@@ -5,7 +5,7 @@ import {
   EventsMap,
 } from '@socket.io/component-emitter'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { Socket, io } from 'socket.io-client'
 
 export type Gateway<
   ServerEvents extends EventsMap,

@@ -7,9 +7,9 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
+  type ModalProps,
   Text,
   VStack,
-  type ModalProps,
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 

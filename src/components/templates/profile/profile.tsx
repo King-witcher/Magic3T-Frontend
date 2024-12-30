@@ -5,6 +5,7 @@ import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api'
+import { UserDto } from '@/types/dtos/user'
 import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { block } from '@/utils/utils'
@@ -20,7 +21,6 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
-import { UserDto } from '@/types/dtos/user'
 
 interface Props {
   user: UserData

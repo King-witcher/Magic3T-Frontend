@@ -1,3 +1,5 @@
+import { useGateway } from '@/hooks/use-gateway.ts'
+import { useListener } from '@/hooks/use-listener.ts'
 import type {
   QueueClientEventsMap,
   QueueServerEventsMap,
@@ -15,8 +17,6 @@ import { IoSearch } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { useGateway } from '@/hooks/use-gateway.ts'
-import { useListener } from '@/hooks/use-listener.ts'
 
 interface QueueContextData {
   enqueue(mode: GameMode): void

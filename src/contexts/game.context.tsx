@@ -1,13 +1,16 @@
+import { useGateway } from '@/hooks/use-gateway.ts'
+import { useListener } from '@/hooks/use-listener.ts'
 import { useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
 import { Api } from '@/services/api.ts'
+import { UserDto } from '@/types/dtos/user.ts'
 import {
   ClientMatchEvents,
-  ServerMatchEvents,
-  MatchReportData,
-  Team,
-  GameServerEventsMap,
   GameClientEventsMap,
+  GameServerEventsMap,
+  MatchReportData,
+  ServerMatchEvents,
+  Team,
 } from '@/types/game-socket.ts'
 import { type Choice } from '@/types/game.ts'
 import {
@@ -23,9 +26,6 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { useGateway } from '@/hooks/use-gateway.ts'
-import { useListener } from '@/hooks/use-listener.ts'
-import { UserDto } from '@/types/dtos/user.ts'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
@@ -224,20 +224,23 @@ export function GameProvider({ children }: Props) {
     [currentTeam, turn, gateway.emit]
   )
 
-  const sendMessage = useCallback((message: string) => {
-    if (gateway.socket) {
-      setMessages((current) => [
-        ...current,
-        {
-          content: message,
-          sender: 'you',
-          timestamp: Date.now(),
-        },
-      ])
+  const sendMessage = useCallback(
+    (message: string) => {
+      if (gateway.socket) {
+        setMessages((current) => [
+          ...current,
+          {
+            content: message,
+            sender: 'you',
+            timestamp: Date.now(),
+          },
+        ])
 
-      gateway.emit(ClientMatchEvents.Message, message)
-    }
-  }, [gateway])
+        gateway.emit(ClientMatchEvents.Message, message)
+      }
+    },
+    [gateway]
+  )
 
   const forfeit = useCallback(async () => {
     if (currentTeam === null) return

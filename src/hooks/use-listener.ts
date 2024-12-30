@@ -4,9 +4,9 @@ import {
   ReservedOrUserEventNames,
   ReservedOrUserListener,
 } from '@socket.io/component-emitter'
-import { Gateway } from './use-gateway'
 import { DependencyList, useEffect } from 'react'
 import { Socket } from 'socket.io-client'
+import { Gateway } from './use-gateway'
 
 export type DisconnectDescription =
   | Error

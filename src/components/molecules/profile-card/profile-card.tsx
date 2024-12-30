@@ -1,11 +1,11 @@
 import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import type { UserData } from '@/models/users/user'
+import { UserDto } from '@/types/dtos/user'
 import { tiersMap } from '@/utils/ranks'
 import { Badge, Box, Flex, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { UserAvatar } from '../user-avatar'
-import { UserDto } from '@/types/dtos/user'
 
 interface Props {
   user: UserData
