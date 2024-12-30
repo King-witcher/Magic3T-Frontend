@@ -192,11 +192,7 @@ export function GameProvider({ children }: Props) {
   }, [matchId, gateway])
 
   useListener(gateway, 'disconnect', (reason) => {
-    console.warn('Socket disconnected because of', `${reason}.`)
-    if (reason === 'transport error' && matchId) {
-      // connectGame(matchId)
-      // console.log('Attempting to reconnect')
-    }
+    console.error('Socket disconnected because of', `${reason}.`)
   })
 
   const pick = useCallback(

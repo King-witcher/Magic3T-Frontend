@@ -1,5 +1,4 @@
 import {
-  EventNames,
   EventsMap,
   ReservedOrUserEventNames,
   ReservedOrUserListener,
@@ -23,10 +22,6 @@ interface SocketReservedEvents {
     description?: DisconnectDescription
   ) => void
 }
-
-type EventFrom<S extends Socket> = S extends Socket<infer T>
-  ? EventNames<T>
-  : unknown
 
 export function useListener<
   ServerEventsMap extends EventsMap,
