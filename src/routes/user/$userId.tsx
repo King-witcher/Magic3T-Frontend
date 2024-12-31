@@ -1,5 +1,6 @@
 import { ProfileTemplate } from '@/components/templates'
-import { userQueryOptions } from '@/utils/query-options'
+import { NestApi } from '@/services/nest-api'
+import { Center } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -10,10 +11,20 @@ export const Route = createFileRoute('/user/$userId')({
 
 function Page() {
   const { userId } = Route.useParams()
-  const userQuery = useQuery(userQueryOptions(userId))
+  const userQuery = useQuery({
+    queryKey: ['user', userId],
+    staleTime: Number.POSITIVE_INFINITY,
+    async queryFn() {
+      return await NestApi.User.getById(userId)
+    },
+  })
 
   if (userQuery.isLoading || !userQuery.data) {
-    return <>loading</>
+    return (
+      <Center w="full" h="full">
+        Loading...
+      </Center>
+    )
   }
 
   return <ProfileTemplate key={userId} user={userQuery.data} />

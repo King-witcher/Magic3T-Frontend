@@ -19,7 +19,7 @@ export function ChooseNicknameTemplate() {
       setError('')
 
       const response = await Api.patch(
-        '/user/me/nickname',
+        '/users/me/nickname',
         {
           nickname,
         },

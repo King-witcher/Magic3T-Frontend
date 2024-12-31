@@ -54,7 +54,7 @@ export function useGateway<
       socket?.disconnect()
       setSocket(null)
     }
-  }, [gateway, enabled, auth.user?._id, auth.getToken])
+  }, [gateway, enabled, auth.user?.id, auth.getToken])
 
   const emit = useCallback(
     <Ev extends EventNames<ClientEvents>>(

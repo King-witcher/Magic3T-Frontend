@@ -1,6 +1,6 @@
-import { models } from '@/models'
-import type { UserData } from '@/models/users/user'
 import { auth, provider } from '@/services/firebase'
+import { NestApi, UserDto } from '@/services/nest-api'
+import { useQuery } from '@tanstack/react-query'
 import {
   type User,
   createUserWithEmailAndPassword,
@@ -41,7 +41,7 @@ type AuthData = {
       authState: AuthState.Loading
     }
   | {
-      user: UserData
+      user: UserDto
       authState: AuthState.SignedIn
     }
 )
@@ -55,7 +55,18 @@ const AuthContext = createContext<AuthData>({} as AuthData)
 export function AuthProvider({ children }: Props) {
   const [authData, setAuthData] = useState<User | null>(null)
   const [authState, setAuthState] = useState(AuthState.Loading)
-  const [user, setUser] = useState<UserData | null>(null)
+  // const [user, setUser] = useState<UserData | null>(null)
+
+  const userQuery = useQuery({
+    queryKey: ['myself', authData?.uid],
+    staleTime: Number.POSITIVE_INFINITY,
+    async queryFn() {
+      if (!authData) return null
+      const user = await NestApi.User.getById(authData.uid)
+      setAuthState(AuthState.SignedIn) // Smell
+      return user
+    },
+  })
 
   const signInGoogle = useCallback(async () => {
     try {
@@ -104,40 +115,24 @@ export function AuthProvider({ children }: Props) {
     throw new Error('No user connected')
   }, [authData])
 
-  const handleUserSnapshot = useCallback((user: UserData | null) => {
-    import.meta.env.DEV && console.info('got user data', user)
-    if (!user) {
-      console.error('bad user')
-    } else {
-      setUser(user)
-      setAuthState(AuthState.SignedIn)
-    }
-  }, [])
-
   // Syncs authData with firebase
   useEffect(() => {
     return onAuthStateChanged(auth, async (authData) => {
       import.meta.env.DEV && console.info('detected auth state', authData)
       setAuthData(authData)
       if (!authData) {
-        setUser(null)
+        // setUser(null)
         setAuthState(AuthState.NotSignedIn)
       }
     })
   }, [])
-
-  // Syncs the user data from the database with authData
-  useEffect(() => {
-    if (!authData) return () => null
-    return models.users.subscribe(authData.uid, handleUserSnapshot)
-  }, [authData, handleUserSnapshot])
 
   return (
     <AuthContext.Provider
       value={
         {
           authState,
-          user,
+          user: userQuery.data,
           getToken,
           signInGoogle,
           signInEmail,

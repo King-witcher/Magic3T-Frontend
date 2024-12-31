@@ -1,11 +1,11 @@
-import type { UserData } from '@/models/users/user'
+import { UserDto } from '@/types/dtos/user.ts'
 import { type ReactNode, createContext, useContext } from 'react'
 import { AuthState } from './auth.context.tsx'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 
 interface GuardedAuthData {
-  user: UserData
+  user: UserDto
   authState: AuthState.SignedIn
   signOut(): Promise<void>
   getToken(): Promise<string>
@@ -13,7 +13,7 @@ interface GuardedAuthData {
 
 interface Props {
   children?: ReactNode
-  user: UserData
+  user: UserDto
   signOut(): Promise<void>
   getToken(): Promise<string>
 }

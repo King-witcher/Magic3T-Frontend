@@ -1,5 +1,5 @@
 import { useRatingInfo } from '@/hooks/use-rating-info'
-import { HistoryMatchEventsEnum, MatchModel, Team } from '@/models'
+import { MatchDto, MatchEventType, Team } from '@/services/nest-api'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { Center, Flex, Stack, Text } from '@chakra-ui/react'
@@ -9,7 +9,7 @@ import { FaClock } from 'react-icons/fa'
 import { RiFlagFill } from 'react-icons/ri'
 
 interface Props {
-  match: MatchModel
+  match: MatchDto
   viewAs: string
 }
 
@@ -24,7 +24,7 @@ const dateTimeFormat = Intl.DateTimeFormat()
 export function MatchRow({ match, viewAs }: Props) {
   const { convertToLp } = useRatingInfo()
 
-  const team = match[Team.Order].uid === viewAs ? Team.Order : Team.Chaos
+  const team = match.teams[Team.Order].id === viewAs ? Team.Order : Team.Chaos
   const result =
     match.winner === null
       ? MatchResult.Draw
@@ -33,9 +33,13 @@ export function MatchRow({ match, viewAs }: Props) {
         : MatchResult.Defeat
 
   const player =
-    match[Team.Order].uid === viewAs ? match[Team.Order] : match[Team.Chaos]
+    match.teams[Team.Order].id === viewAs
+      ? match.teams[Team.Order]
+      : match.teams[Team.Chaos]
   const opponent =
-    match[Team.Order].uid === viewAs ? match[Team.Chaos] : match[Team.Order]
+    match.teams[Team.Order].id === viewAs
+      ? match.teams[Team.Chaos]
+      : match.teams[Team.Order]
 
   const durationString = useMemo(() => {
     const duration = Math.floor(
@@ -51,7 +55,7 @@ export function MatchRow({ match, viewAs }: Props) {
   return (
     <Stack
       as={Link}
-      to={`/user/${opponent.uid}`}
+      to={`/user/${opponent.id}`}
       gap="10px"
       p="20px"
       transition="all 100ms"
@@ -64,21 +68,21 @@ export function MatchRow({ match, viewAs }: Props) {
       <Flex>
         <Stack spacing={0}>
           <Flex align="center" gap="10px">
-            <Text fontWeight={700}>{opponent.name}</Text>
-            {!!player.gain && (
+            <Text fontWeight={700}>{opponent.nickname}</Text>
+            {!!player.ratingGain && (
               <Text
                 fontSize="0.875rem"
                 fontWeight={700}
                 lineHeight="normal"
-                color={player.gain > 0 ? '#00c020' : '#ff4000'}
+                color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
               >
-                {player.gain > 0 ? '+' : '-'}
-                {Math.abs(convertToLp(player.gain))}
+                {player.ratingGain > 0 ? '+' : '-'}
+                {Math.abs(convertToLp(player.ratingGain))}
               </Text>
             )}
           </Flex>
           <Text fontSize="0.75rem" opacity={0.7}>
-            {dateTimeFormat.format(match.timestamp)} - {durationString}
+            {dateTimeFormat.format(match.time)} - {durationString}
           </Text>
         </Stack>
         <Center
@@ -99,7 +103,7 @@ export function MatchRow({ match, viewAs }: Props) {
         {match.events.map((event) => {
           const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
 
-          if (event.event === HistoryMatchEventsEnum.Message) return null
+          if (event.event === MatchEventType.Message) return null
 
           return (
             <Center
@@ -113,9 +117,9 @@ export function MatchRow({ match, viewAs }: Props) {
               fontSize="0.875rem"
               key={event.time}
             >
-              {event.event === HistoryMatchEventsEnum.Choice && event.choice}
-              {event.event === HistoryMatchEventsEnum.Forfeit && <RiFlagFill />}
-              {event.event === HistoryMatchEventsEnum.Timeout && <FaClock />}
+              {event.event === MatchEventType.Choice && event.choice}
+              {event.event === MatchEventType.Forfeit && <RiFlagFill />}
+              {event.event === MatchEventType.Timeout && <FaClock />}
             </Center>
           )
         })}

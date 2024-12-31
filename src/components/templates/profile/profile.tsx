@@ -3,10 +3,9 @@ import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal
 import { useAuth } from '@/contexts/auth.context'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
-import type { UserData } from '@/models/users/user'
 import { Api } from '@/services/api'
+import { NestApi } from '@/services/nest-api'
 import { UserDto } from '@/types/dtos/user'
-import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { block } from '@/utils/utils'
 import {
@@ -23,7 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
 
 interface Props {
-  user: UserData
+  user: UserDto
 }
 
 const divisionMap = {
@@ -39,9 +38,16 @@ export function ProfileTemplate({ user }: Props) {
   const { user: authenticatedUser } = useAuth()
   const { getToken } = useAuth()
   const { ratingConfig } = useConfig()
-  const rinfo = getRankInfo(UserDto.fromModel(user).rating)
+  const rinfo = getRankInfo(user.rating)
   const tierInfo = tiersMap[rinfo.tier]
-  const matchesQuery = useQuery(matchesQueryOptions(user._id))
+
+  const matchesQuery = useQuery({
+    queryKey: ['matches', user.id],
+    staleTime: Number.POSITIVE_INFINITY,
+    async queryFn() {
+      return await NestApi.Match.getMatchesByUser(user.id, 20)
+    },
+  })
 
   const progress = block(() => {
     if (rinfo.reliable) return rinfo.leaguePoints
@@ -51,7 +57,7 @@ export function ProfileTemplate({ user }: Props) {
 
   async function saveIconChange(iconId: number) {
     await Api.patch(
-      'user/me/icon',
+      'users/me/icon',
       {
         iconId,
       },
@@ -75,17 +81,17 @@ export function ProfileTemplate({ user }: Props) {
     >
       <Stack spacing={0} alignSelf="center" align="center">
         <UserAvatar
-          icon={user.summoner_icon}
+          icon={user.summonerIcon}
           tier={rinfo.tier}
           division={rinfo.division}
           size={140}
           m="180px 40px 30px 40px"
           onClick={
-            user._id === authenticatedUser?._id
+            user.id === authenticatedUser?.id
               ? changeIconModalDisclosure.onOpen
               : undefined
           }
-          cursor={user._id === authenticatedUser?._id ? 'pointer' : 'auto'}
+          cursor={user.id === authenticatedUser?.id ? 'pointer' : 'auto'}
         />
         <Flex alignItems="center" gap="8px">
           {(user.role === 'bot' || user.role === 'creator') && (
@@ -105,7 +111,7 @@ export function ProfileTemplate({ user }: Props) {
               fontWeight: 500,
             }}
           >
-            {user.identification?.nickname}
+            {user.nickname}
           </Text>
         </Flex>
       </Stack>
@@ -276,7 +282,7 @@ export function ProfileTemplate({ user }: Props) {
         {matchesQuery.isSuccess && (
           <Stack spacing="10px">
             {matchesQuery.data.map((match) => (
-              <MatchRow key={match._id} match={match} viewAs={user._id} />
+              <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}
           </Stack>
         )}

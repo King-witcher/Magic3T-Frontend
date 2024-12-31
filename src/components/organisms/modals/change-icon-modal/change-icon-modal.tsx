@@ -1,15 +1,12 @@
 import { UserAvatar } from '@/components/molecules'
 import { useRatingInfo } from '@/hooks/use-rating-info'
-import { UserData } from '@/models/users/user'
 import { UserDto } from '@/types/dtos/user'
 import { getAcrylicProps } from '@/utils/style-helpers'
-import { getIconUrl } from '@/utils/utils'
 import {
   Box,
   Button,
   Flex,
   Grid,
-  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -21,29 +18,43 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import _ from 'lodash'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { SummonerIcon } from './summoner-icon'
 
 const iconIds = [..._.range(0, 30), ..._.range(3455, 3464)]
 
 interface Props extends Omit<ModalProps, 'children'> {
-  user: UserData
+  user: UserDto
   onSave: (iconId: number) => void
 }
 
 export function ChangeIconModal({ user, onSave, ...props }: Props) {
   const { getRankInfo } = useRatingInfo()
-  const rinfo = getRankInfo(UserDto.fromModel(user).rating)
+  const rinfo = getRankInfo(user.rating)
 
-  const [selectedIcon, setSelectedIcon] = useState(user.summoner_icon)
+  const [selectedIcon, setSelectedIcon] = useState(user.summonerIcon)
 
-  function handleSelectIcon(iconId: number) {
+  const handleSelectIcon = useCallback((iconId: number) => {
     setSelectedIcon(iconId)
-  }
+  }, [])
 
-  function handleSave() {
+  const handleSave = useCallback(() => {
     onSave(selectedIcon)
     props.onClose()
-  }
+  }, [props.onClose, selectedIcon, onSave])
+
+  const icons = useMemo(() => {
+    return iconIds.map((iconId) => {
+      return (
+        <SummonerIcon
+          key={iconId}
+          id={iconId}
+          onSelect={handleSelectIcon}
+          selected={iconId === selectedIcon}
+        />
+      )
+    })
+  }, [handleSelectIcon, selectedIcon])
 
   return (
     <Modal isCentered {...props} size="xl">
@@ -77,7 +88,7 @@ export function ChangeIconModal({ user, onSave, ...props }: Props) {
                 division={rinfo.division}
                 m={{ base: '0', md: '70px 80px 0 70px' }}
               />
-              <Text fontSize="24px">{user.identification?.nickname}</Text>
+              <Text fontSize="24px">{user.nickname}</Text>
             </VStack>
             <Box
               h={{ base: '200px', md: '470px' }}
@@ -94,32 +105,7 @@ export function ChangeIconModal({ user, onSave, ...props }: Props) {
                 gap="20px"
                 flex="1"
               >
-                {iconIds.map((iconId) => {
-                  return (
-                    <Image
-                      key={iconId}
-                      w="full"
-                      src={getIconUrl(iconId)}
-                      cursor="pointer"
-                      transition="all 200ms"
-                      onClick={() => handleSelectIcon(iconId)}
-                      border={
-                        iconId === selectedIcon
-                          ? '2px solid #ffffff'
-                          : '1px solid #ffffff40'
-                      }
-                      boxShadow={
-                        iconId === selectedIcon
-                          ? '0 0 5px 0 #ffffff80'
-                          : '0 0 10px 0 #00000040'
-                      }
-                      _hover={{
-                        filter: 'saturate(1.5) brightness(1.1)',
-                        borderColor: '#ffffff',
-                      }}
-                    />
-                  )
-                })}
+                {icons}
               </Grid>
             </Box>
           </Flex>
