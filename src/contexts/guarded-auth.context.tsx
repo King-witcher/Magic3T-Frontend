@@ -1,6 +1,6 @@
+import { UserDto } from '@/types/dtos/user.ts'
 import { type ReactNode, createContext, useContext } from 'react'
 import { AuthState } from './auth.context.tsx'
-import { UserDto } from '@/types/dtos/user.ts'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 

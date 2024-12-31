@@ -8,4 +8,11 @@ export namespace NestApi.User {
     const data: UserDto = await response.json()
     return data
   }
+
+  export async function getRanking(): Promise<UserDto[]> {
+    const response = await fetch(`${API_URL}/users/ranking`)
+    if (response.status !== 200) return []
+    const data: UserDto[] = await response.json()
+    return data
+  }
 }

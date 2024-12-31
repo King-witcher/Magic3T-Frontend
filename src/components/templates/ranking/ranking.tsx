@@ -5,8 +5,7 @@ import {
   divisionMap,
   useRatingInfo,
 } from '@/hooks/use-rating-info'
-import { UserDto } from '@/types/dtos/user'
-import { rankingQueryOptions } from '@/utils/query-options'
+import { NestApi } from '@/services/nest-api'
 import { tiersMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
@@ -16,57 +15,42 @@ import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 
 export function RankingTemplate() {
-  const rankingQuery = useQuery({
-    ...rankingQueryOptions(),
-  })
-
   const { ratingConfig } = useConfig()
   const { getRankInfo } = useRatingInfo()
+
+  const rankingQuery = useQuery({
+    queryKey: ['ranking'],
+    staleTime: Number.POSITIVE_INFINITY,
+    async queryFn() {
+      return await NestApi.User.getRanking()
+    },
+  })
 
   const ratingInfoMap = useMemo(() => {
     const map: Record<string, RatingInfo> = {}
     if (rankingQuery.data) {
       for (const user of rankingQuery.data) {
-        map[user._id] = getRankInfo(UserDto.fromModel(user).rating) // TODO: Remove model from frontend.
+        map[user.id] = getRankInfo(user.rating) // TODO: Remove model from frontend.
       }
     }
     return map
   }, [rankingQuery.data, ratingConfig])
-
-  const reorderedUsers = useMemo(() => {
-    if (!rankingQuery.data) return []
-
-    const reliable = rankingQuery.data.filter(
-      (user) => ratingInfoMap[user._id].reliable
-    )
-
-    const provisional = rankingQuery.data
-      .filter((user) => !ratingInfoMap[user._id].reliable)
-      .sort(
-        (a, b) =>
-          a.identification?.nickname.localeCompare(
-            b.identification?.nickname || ''
-          ) || 0
-      )
-
-    return [...reliable, ...provisional]
-  }, [rankingQuery.data, ratingInfoMap, ratingConfig])
 
   return (
     <>
       <Heading>Top Magic3T players</Heading>
       <Stack spacing="20px" mt="40px">
         {rankingQuery.isSuccess &&
-          reorderedUsers.map((user, index) => {
-            const rinfo = ratingInfoMap[user._id]
+          rankingQuery.data.map((user, index) => {
+            const rinfo = ratingInfoMap[user.id]
             const tierInfo = tiersMap[rinfo.tier]
 
             return (
               <Flex
                 as={Link}
                 from="/ranking"
-                to={`/user/${user._id}`}
-                key={user._id}
+                to={`/user/${user.id}`}
+                key={user.id}
                 align="center"
                 p={{ base: '20px 15px', sm: '20px' }}
                 gap={{ base: '5px', sm: '10px' }}
@@ -86,7 +70,7 @@ export function RankingTemplate() {
                   fontSize={{ base: '0.875rem', sm: '1rem' }}
                 >
                   <Image
-                    src={getIconUrl(user.summoner_icon)}
+                    src={getIconUrl(user.summonerIcon)}
                     w="30px"
                     rounded="999"
                     border="2px solid #ffffff80"
@@ -103,7 +87,7 @@ export function RankingTemplate() {
                       {user.role}
                     </Center>
                   )}
-                  {user.identification?.nickname}
+                  {user?.nickname ?? '?'}
                 </Flex>
                 <Flex
                   ml="auto"
