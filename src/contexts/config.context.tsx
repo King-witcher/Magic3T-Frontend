@@ -14,16 +14,13 @@ interface Props {
 }
 
 const defaultRatingConfig: RatingConfig = {
-  deviationInflationTime: 0,
-  distrust: 0,
-  initialRating: 1500,
-  initialRD: 350,
-  maxRD: 350,
-  maxReliableDeviation: 1,
-  ranks: {
-    initialTier: 0,
-    tierSize: 1000,
-  },
+  rd_inflation_time: Number.POSITIVE_INFINITY,
+  base_score: 1500,
+  max_rd: 350,
+  min_rd: 0,
+  rd_threshold: 0,
+  league_length: 200,
+  base_league: 2,
 }
 
 const ConfigContext = createContext<ConfigData>({} as ConfigData)

@@ -47,31 +47,33 @@ function getC(inflationTime: number) {
 export function useRatingInfo() {
   const {
     ratingConfig: {
-      initialRating,
-      deviationInflationTime,
-      maxReliableDeviation,
-      initialRD,
-      ranks: { initialTier, tierSize },
+      base_score,
+      rd_inflation_time,
+      max_rd,
+      min_rd,
+      base_league,
+      league_length,
+      rd_threshold,
     },
   } = useConfig()
 
   function getRD(rating: RatingDto) {
     if (rating.rd === 0) return 0
 
-    const c = getC(deviationInflationTime)
+    const c = getC(rd_inflation_time)
     const t = Date.now() - rating.date
     const candidate = Math.sqrt(rating.rd ** 2 + c ** 2 * t)
-    return Math.min(candidate, initialRD)
+    return Math.min(candidate, max_rd)
   }
 
   function convertToLp(elo: number) {
-    const divisionSize = tierSize / 4
+    const divisionSize = league_length / 4
     return Math.round((elo * 100) / divisionSize)
   }
 
   function getTier(rating: number): [Tier, Division | undefined, number] {
     const tiersAwayFromInitial =
-      (rating - initialRating) / tierSize + initialTier
+      (rating - base_score) / league_length + base_league
     const boundedTier = Math.max(Math.min(tiersAwayFromInitial, 4), 0)
     const tierIndex = Math.floor(boundedTier)
 
@@ -83,9 +85,9 @@ export function useRatingInfo() {
     }
 
     const leaguePoints = block(() => {
-      const divisionSize = tierSize / 4
-      const lowestTier = initialRating - tierSize * initialTier
-      const apexTier = lowestTier + tierSize * 4 // master
+      const divisionSize = league_length / 4
+      const lowestTier = base_score - league_length * base_league
+      const apexTier = lowestTier + league_length * 4 // master
 
       if (rating <= lowestTier) {
         return Math.ceil((100 * (rating - lowestTier)) / divisionSize)
@@ -115,7 +117,7 @@ export function useRatingInfo() {
 
     const currentRD = getRD({ score, rd, date })
     const newDeviation = Math.round(currentRD)
-    const reliable = newDeviation < maxReliableDeviation
+    const reliable = newDeviation < rd_threshold
     const tier = reliable ? expectedTier : Tier.Provisional
 
     return {

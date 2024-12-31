@@ -1,22 +1,22 @@
 export interface RatingConfig {
-  deviationInflationTime: number
-  distrust: number
+  /** How much time a player with RD=40 would take to go back to 350, in days. */
+  rd_inflation_time: number
 
-  /** Max RD a player can have */
-  initialRD: number
-  initialRating: number
+  /** The base rating in the game, which is assigned to every player at the beginning. */
+  base_score: number
 
-  /** Should not be used */
-  maxRD: number
+  /** The max RD a player can reach, which is also the initial RD for every player. */
+  max_rd: number
 
-  /** Max RD a player can have to be placed */
-  maxReliableDeviation: number
+  /** The min RD a player can reach. */
+  min_rd: number
 
-  ranks: {
-    /** The size of each tier */
-    tierSize: number
+  /** The max rd a player can have to have their ranking revealed. */
+  rd_threshold: number
 
-    /** The tier corresponding to the initial rating. Can be non integer. 0 is equivalent to Bronze 1 and 4, Elite. */
-    initialTier: number
-  }
+  /** The legth of each league in score points. */
+  league_length: number
+
+  /** The league where a player would be with the base score. This number can be fractionary. */
+  base_league: number
 }

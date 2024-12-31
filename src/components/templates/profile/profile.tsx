@@ -51,8 +51,8 @@ export function ProfileTemplate({ user }: Props) {
 
   const progress = block(() => {
     if (rinfo.reliable) return rinfo.leaguePoints
-    const full = ratingConfig.maxRD - ratingConfig.maxReliableDeviation
-    return Math.floor((100 * (ratingConfig.maxRD - rinfo.deviation)) / full)
+    const full = ratingConfig.max_rd - ratingConfig.rd_threshold
+    return Math.floor((100 * (ratingConfig.max_rd - rinfo.deviation)) / full)
   })
 
   async function saveIconChange(iconId: number) {
