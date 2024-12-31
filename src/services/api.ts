@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-export const ApiUrl = import.meta.env.VITE_API_URL
+export const API_URL = import.meta.env.VITE_API_URL
 
 export const Api = axios.create({
-  baseURL: ApiUrl,
+  baseURL: API_URL,
   validateStatus: () => true,
 })
 

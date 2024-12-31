@@ -4,8 +4,8 @@ import { useAuth } from '@/contexts/auth.context'
 import { useConfig } from '@/contexts/config.context.tsx'
 import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import { Api } from '@/services/api'
+import { NestApi } from '@/services/nest-api'
 import { UserDto } from '@/types/dtos/user'
-import { matchesQueryOptions } from '@/utils/query-options'
 import { tiersMap } from '@/utils/ranks'
 import { block } from '@/utils/utils'
 import {
@@ -40,7 +40,14 @@ export function ProfileTemplate({ user }: Props) {
   const { ratingConfig } = useConfig()
   const rinfo = getRankInfo(user.rating)
   const tierInfo = tiersMap[rinfo.tier]
-  const matchesQuery = useQuery(matchesQueryOptions(user.id))
+
+  const matchesQuery = useQuery({
+    queryKey: ['matches', user.id],
+    staleTime: Number.POSITIVE_INFINITY,
+    async queryFn() {
+      return await NestApi.Match.getMatchesByUser(user.id, 20)
+    },
+  })
 
   const progress = block(() => {
     if (rinfo.reliable) return rinfo.leaguePoints
@@ -275,7 +282,7 @@ export function ProfileTemplate({ user }: Props) {
         {matchesQuery.isSuccess && (
           <Stack spacing="10px">
             {matchesQuery.data.map((match) => (
-              <MatchRow key={match._id} match={match} viewAs={user.id} />
+              <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}
           </Stack>
         )}
