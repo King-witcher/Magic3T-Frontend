@@ -1,6 +1,6 @@
 import { firestore, getDoc } from '@/services/firestore'
 import { doc } from 'firebase/firestore'
-import type { RatingConfig } from './RatingConfig'
+import type { RatingConfig } from './rating-config'
 
 async function getRatingConfig(): Promise<RatingConfig> {
   const snap = await getDoc(doc(firestore, 'config/rating'))
