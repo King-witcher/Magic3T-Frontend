@@ -36,7 +36,7 @@ export const Route = createFileRoute('/_auth-guarded')({
 
     return (
       <GuardedAuthProvider user={user} getToken={getToken} signOut={signOut}>
-        {user.identification ? <Outlet /> : <ChooseNicknameTemplate />}
+        {user.nickname ? <Outlet /> : <ChooseNicknameTemplate />}
       </GuardedAuthProvider>
     )
   },

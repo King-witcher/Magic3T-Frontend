@@ -6,4 +6,16 @@ declare global {
     Ok<T, E>(data: T): ResultClass<T, E>
     Err<T, E>(error: E): ResultClass<T, E>
   }
+
+  namespace NodeJS {
+    interface ProcessEnv {
+      API: string
+    }
+  }
+
+  interface ImportMeta {
+    env: {
+      VITE_API_URL: string
+    }
+  }
 }

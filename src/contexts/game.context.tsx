@@ -110,15 +110,15 @@ export function GameProvider({ children }: Props) {
       setOrderProfile(assignments[Team.Order].profile)
       setChaosProfile(assignments[Team.Chaos].profile)
 
-      if (assignments[Team.Order].profile.id === auth.user?._id) {
+      if (assignments[Team.Order].profile.id === auth.user?.id) {
         setCurrentTeam(Team.Order)
-      } else if (assignments[Team.Chaos].profile.id === auth.user?._id) {
+      } else if (assignments[Team.Chaos].profile.id === auth.user?.id) {
         setCurrentTeam(Team.Chaos)
       } else {
         setCurrentTeam(null)
       }
     },
-    [auth.user?._id]
+    [auth.user?.id]
   )
 
   // Handles state updates from the server.

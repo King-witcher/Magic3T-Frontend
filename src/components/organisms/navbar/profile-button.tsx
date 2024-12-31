@@ -45,7 +45,7 @@ export function ProfileButton() {
         }}
       >
         <Avatar
-          src={getIconUrl(user?.summoner_icon)}
+          src={getIconUrl(user?.summonerIcon)}
           border="2px solid #ffffff40"
           w="40px"
           h="40px"
