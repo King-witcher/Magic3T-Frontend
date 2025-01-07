@@ -14,12 +14,23 @@ export function LobbyTemplate() {
 
   return (
     <Center className="lobby" h="full">
-      <Stack gap="20px" w="full" maxW="800px">
+      <Stack spacing={0} w="full" maxW="800px">
         <Heading textAlign="center" color="light">
           Play Magic3T
         </Heading>
+        <Text
+          textAlign="center"
+          fontSize={{ base: '0.8rem', sm: '0.9rem' }}
+          color="#ffffffc0"
+          mt="10px"
+        >
+          Be the first to select three numbers that add up to exactly 15.
+        </Text>
 
-        <ButtonsContainer opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}>
+        <ButtonsContainer
+          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
+          mt="20px"
+        >
           <QueueModeButton
             name="Easy"
             isLoading={!!queueModes['bot-0']}
@@ -41,7 +52,10 @@ export function LobbyTemplate() {
             gameMode={GameMode.Bot3}
           />
         </ButtonsContainer>
-        <ButtonsContainer opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}>
+        <ButtonsContainer
+          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
+          my="20px"
+        >
           <QueueModeButton
             name="Human"
             isLoading={!!queueModes.ranked}

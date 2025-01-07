@@ -54,9 +54,9 @@ export function GameTemplate() {
   return (
     <Center w="full">
       <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
-        <Heading w="fit-content" hideBelow="sm">
-          {/* {statusText[gameStatus]} */}
-        </Heading>
+        <Text textAlign="center" fontSize="1rem" color="#ffffff" hideBelow="sm">
+          Be the first to select three numbers that add up to exactly 15.
+        </Text>
         <Flex
           h="min-content"
           gap="20px"

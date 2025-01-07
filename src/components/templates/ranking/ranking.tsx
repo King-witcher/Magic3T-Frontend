@@ -39,7 +39,7 @@ export function RankingTemplate() {
   return (
     <>
       <Heading>Top Magic3T players</Heading>
-      <Stack spacing="20px" mt="40px">
+      <Stack spacing="20px" mt="40px" pb="40px">
         {rankingQuery.isSuccess &&
           rankingQuery.data.map((user, index) => {
             const rinfo = ratingInfoMap[user.id]
