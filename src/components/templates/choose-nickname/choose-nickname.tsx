@@ -2,21 +2,20 @@ import { useGuardedAuth } from '@/contexts/guarded-auth.context'
 import { Api } from '@/services/api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { Button, Center, Heading, Input, Text, VStack } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
-import { ChangeEvent, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
 export function ChooseNicknameTemplate() {
   const [nickname, setNickname] = useState('')
-  const { getToken } = useGuardedAuth()
+  const { getToken, user } = useGuardedAuth()
   const [error, setError] = useState<string | null>(null)
+  const client = useQueryClient()
 
   const changeNickMutation = useMutation({
     mutationKey: ['change-nickname', nickname],
-    mutationFn: async () => {
+    async mutationFn() {
       if (nickname.length < 3)
         throw new Error('nickname must contain at least 3 characters')
-
-      setError('')
 
       const response = await Api.patch(
         '/users/me/nickname',
@@ -39,7 +38,15 @@ export function ChooseNicknameTemplate() {
         throw new Error(`unknown error from server: ${response.data.message}`)
       }
     },
-    onError: (e) => {
+    onMutate() {
+      setError('')
+    },
+    onSuccess() {
+      client.refetchQueries({
+        queryKey: ['myself', user.id],
+      })
+    },
+    onError(e) {
       setError(e.message.replace(/^(.)/, (match) => match.toUpperCase()) + '.')
     },
   })
@@ -59,9 +66,16 @@ export function ChooseNicknameTemplate() {
     setNickname(value)
   }
 
+  function handleSubmit(e: FormEvent<HTMLDivElement>) {
+    e.preventDefault()
+    changeNickMutation.mutate()
+  }
+
   return (
     <Center h="full">
       <VStack
+        as="form"
+        onSubmit={handleSubmit}
         spacing={0}
         {...getAcrylicProps()}
         boxShadow="0 0 80px 0 #00000040"
@@ -105,12 +119,10 @@ export function ChooseNicknameTemplate() {
           color="light"
           type="submit"
           w={{ base: 'full', md: '200px' }}
-          onClick={() => changeNickMutation.mutate()}
           isDisabled={changeNickMutation.isPending}
         >
           Save
         </Button>
-        v
       </VStack>
     </Center>
   )
