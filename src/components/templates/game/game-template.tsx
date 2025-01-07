@@ -8,7 +8,6 @@ import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Center,
   Flex,
-  Heading,
   Stack,
   Text,
   VStack,

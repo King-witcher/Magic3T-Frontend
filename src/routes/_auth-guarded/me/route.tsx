@@ -6,6 +6,6 @@ export const Route = createFileRoute('/_auth-guarded/me')({
   component: () => {
     const { user } = useGuardedAuth()
 
-    return <ProfileTemplate user={user} />
+    return <ProfileTemplate user={user} editable />
   },
 })

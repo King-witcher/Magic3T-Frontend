@@ -18,11 +18,12 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
 
 interface Props {
   user: UserDto
+  editable?: boolean
 }
 
 const divisionMap = {
@@ -32,7 +33,7 @@ const divisionMap = {
   4: 'IV',
 }
 
-export function ProfileTemplate({ user }: Props) {
+export function ProfileTemplate({ user, editable }: Props) {
   const { getRankInfo } = useRatingInfo()
   const changeIconModalDisclosure = useDisclosure()
   const { user: authenticatedUser } = useAuth()
@@ -40,6 +41,7 @@ export function ProfileTemplate({ user }: Props) {
   const { ratingConfig } = useConfig()
   const rinfo = getRankInfo(user.rating)
   const tierInfo = tiersMap[rinfo.tier]
+  const client = useQueryClient()
 
   const matchesQuery = useQuery({
     queryKey: ['matches', user.id],
@@ -67,6 +69,11 @@ export function ProfileTemplate({ user }: Props) {
         },
       }
     )
+    await client.refetchQueries({
+      queryKey: ['myself', authenticatedUser?.id],
+    })
+
+    console.log('refetched')
   }
 
   return (
@@ -86,12 +93,9 @@ export function ProfileTemplate({ user }: Props) {
           division={rinfo.division}
           size={140}
           m="180px 40px 30px 40px"
-          onClick={
-            user.id === authenticatedUser?.id
-              ? changeIconModalDisclosure.onOpen
-              : undefined
-          }
-          cursor={user.id === authenticatedUser?.id ? 'pointer' : 'auto'}
+          onClick={editable ? changeIconModalDisclosure.onOpen : undefined}
+          showPencil={editable}
+          cursor={editable ? 'pointer' : 'auto'}
         />
         <Flex alignItems="center" gap="8px">
           {(user.role === 'bot' || user.role === 'creator') && (
