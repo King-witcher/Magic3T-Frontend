@@ -2,7 +2,7 @@ import { ErrorTemplate, RootLayout } from '@/components/templates'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
-import { SpeedInsights as VercelSpeedInsights } from '@vercel/speed-insights/next'
+import { SpeedInsights as VercelSpeedInsights } from '@vercel/speed-insights/react'
 import React from 'react'
 import { Providers } from './-providers'
 
