@@ -1,7 +1,8 @@
 import { ErrorTemplate, RootLayout } from '@/components/templates'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
+import { SpeedInsights as VercelSpeedInsights } from '@vercel/speed-insights/next'
 import React from 'react'
 import { Providers } from './-providers'
 
@@ -23,7 +24,8 @@ export const Route = createRootRoute({
       <RootLayout>
         <Outlet />
       </RootLayout>
-      <Analytics />
+      <VercelAnalytics />
+      <VercelSpeedInsights />
       <ReactQueryDevtools />
       <TanStackRouterDevtools position="bottom-left" />
     </Providers>

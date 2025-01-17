@@ -24,6 +24,7 @@
     "@tanstack/react-router": "^1.92.3",
     "@types/lodash": "^4.17.13",
     "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
     "axios": "1.6.8",
     "firebase": "^10.14.1",
     "framer-motion": "^10.18.0",
