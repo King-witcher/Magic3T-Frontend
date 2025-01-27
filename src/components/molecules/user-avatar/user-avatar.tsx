@@ -1,5 +1,5 @@
-import type { Tier } from '@/hooks/use-rating-info'
-import { type Division, tiersMap } from '@/utils/ranks'
+import { Division, League } from '@/services/nest-api'
+import { leaguesMap } from '@/utils/ranks'
 import { getIconUrl } from '@/utils/utils'
 import { Box, type BoxProps, Center, Image, Text } from '@chakra-ui/react'
 import { RiEdit2Fill } from 'react-icons/ri'
@@ -7,8 +7,8 @@ import { RiEdit2Fill } from 'react-icons/ri'
 interface Props extends BoxProps {
   size: number
   icon: number
-  tier: Tier
-  division?: Division
+  league: League
+  division: Division | null
   showPencil?: boolean
 }
 
@@ -17,12 +17,12 @@ const numbers = ['', 'I', 'II', 'III', 'IV', 'V']
 export function UserAvatar({
   icon,
   size,
-  tier,
+  league,
   division,
   showPencil,
   ...rest
 }: Props) {
-  const tierInfo = tiersMap[tier]
+  const tierInfo = leaguesMap[league]
 
   return (
     <Center
@@ -41,6 +41,12 @@ export function UserAvatar({
       >
         <Image
           src={getIconUrl(icon)}
+          boxShadow={
+            league === League.Provisional
+              ? '0 0 0 6px #bbb, 0 5px 15px 5px #00000080'
+              : undefined
+          }
+          boxSizing="content-box"
           pos="absolute"
           boxSize="100%"
           top="0"
@@ -49,14 +55,16 @@ export function UserAvatar({
         <Box pos="absolute" w="290%" bottom="-100%" pointerEvents="none">
           <Image src={tierInfo.wing} />
         </Box>
-        <Text
-          pos="absolute"
-          fontSize={`${size * 0.16}px`}
-          lineHeight={`${size * 0.16}px`}
-          top="-10%"
-        >
-          {division && numbers[division]}
-        </Text>
+        {division && (
+          <Text
+            pos="absolute"
+            fontSize={`${size * 0.16}px`}
+            lineHeight={`${size * 0.16}px`}
+            top="-10%"
+          >
+            {numbers[division]}
+          </Text>
+        )}
         {showPencil && (
           <Center
             className="edit-button"

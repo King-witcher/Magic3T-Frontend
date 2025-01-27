@@ -1,6 +1,5 @@
-import { UserDto } from '@/types/dtos/user'
 import { API_URL } from '../api'
-import { MatchDto } from './dtos'
+import { MatchDto, UserDto } from './dtos'
 
 export namespace NestApi {
   export namespace User {

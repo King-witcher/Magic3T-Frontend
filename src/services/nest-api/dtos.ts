@@ -1,9 +1,22 @@
 import { Choice } from '@/types/game'
 
+export enum League {
+  Provisional = 'provisional',
+  Bronze = 'bronze',
+  Silver = 'silver',
+  Gold = 'gold',
+  Diamond = 'diamond',
+  Master = 'master',
+  Challenger = 'challenger',
+}
+
+export type Division = 1 | 2 | 3 | 4
+
 export type RatingDto = {
-  score: number
-  rd: number
-  date: number
+  league: League
+  division: Division | null
+  points: number | null
+  progress: number
 }
 
 export type UserDto = {

@@ -1,22 +1,14 @@
 import { useConfig } from '@/contexts/config.context'
-import {
-  type RatingInfo,
-  Tier,
-  divisionMap,
-  useRatingInfo,
-} from '@/hooks/use-rating-info'
-import { NestApi } from '@/services/nest-api'
-import { tiersMap } from '@/utils/ranks'
+import { League, NestApi } from '@/services/nest-api'
+import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
 import { Center, Flex, Heading, Image, Stack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { useMemo } from 'react'
 
 export function RankingTemplate() {
   const { ratingConfig } = useConfig()
-  const { getRankInfo } = useRatingInfo()
 
   const rankingQuery = useQuery({
     queryKey: ['ranking'],
@@ -26,25 +18,15 @@ export function RankingTemplate() {
     },
   })
 
-  const ratingInfoMap = useMemo(() => {
-    const map: Record<string, RatingInfo> = {}
-    if (rankingQuery.data) {
-      for (const user of rankingQuery.data) {
-        map[user.id] = getRankInfo(user.rating) // TODO: Remove model from frontend.
-      }
-    }
-    return map
-  }, [rankingQuery.data, ratingConfig])
-
   return (
     <>
       <Heading>Top Magic3T players</Heading>
       <Stack spacing="20px" mt="40px" pb="40px">
         {rankingQuery.isSuccess &&
           rankingQuery.data.map((user, index) => {
-            const rinfo = ratingInfoMap[user.id]
-            const tierInfo = tiersMap[rinfo.tier]
-
+            const isProvisional = user.rating.league === League.Provisional
+            const isApex = user.rating.league === League.Master
+            const tierInfo = leaguesMap[user.rating.league]
             return (
               <Flex
                 as={Link}
@@ -54,7 +36,7 @@ export function RankingTemplate() {
                 align="center"
                 p={{ base: '20px 15px', sm: '20px' }}
                 gap={{ base: '5px', sm: '10px' }}
-                opacity={rinfo.reliable ? 1 : 0.5}
+                opacity={isProvisional ? 0.5 : 1}
                 {...getAcrylicProps()}
                 transition="background-color 200ms"
                 _hover={{
@@ -62,7 +44,7 @@ export function RankingTemplate() {
                 }}
               >
                 <Center fontWeight={700} flex="0 0 25px">
-                  {rinfo.reliable ? `#${index + 1}` : '-'}
+                  {isProvisional ? '-' : `#${index + 1}`}
                 </Center>{' '}
                 <Flex
                   align={'center'}
@@ -97,14 +79,12 @@ export function RankingTemplate() {
                 >
                   <Image src={tierInfo.emblem} w="30px" />
 
-                  {rinfo.reliable &&
-                    rinfo.tier !== Tier.Master &&
-                    divisionMap[rinfo.division || 1]}
+                  {!isProvisional &&
+                    !isApex &&
+                    divisionMap[user.rating.division || 1]}
 
-                  {rinfo.reliable &&
-                    rinfo.tier === Tier.Master &&
-                    `${rinfo.leaguePoints} LP`}
-                  {rinfo.precise && '!'}
+                  {isApex && `${user.rating.points} LP`}
+                  {/* {rinfo.precise && '!'} */}
                 </Flex>
               </Flex>
             )

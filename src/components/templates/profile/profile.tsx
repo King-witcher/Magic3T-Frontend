@@ -2,12 +2,9 @@ import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
 import { useConfig } from '@/contexts/config.context.tsx'
-import { Tier, useRatingInfo } from '@/hooks/use-rating-info'
 import { Api } from '@/services/api'
-import { NestApi } from '@/services/nest-api'
-import { UserDto } from '@/types/dtos/user'
-import { tiersMap } from '@/utils/ranks'
-import { block } from '@/utils/utils'
+import { League, NestApi, UserDto } from '@/services/nest-api'
+import { leaguesMap } from '@/utils/ranks'
 import {
   Badge,
   Box,
@@ -34,13 +31,11 @@ const divisionMap = {
 }
 
 export function ProfileTemplate({ user, editable }: Props) {
-  const { getRankInfo } = useRatingInfo()
   const changeIconModalDisclosure = useDisclosure()
   const { user: authenticatedUser } = useAuth()
   const { getToken } = useAuth()
   const { ratingConfig } = useConfig()
-  const rinfo = getRankInfo(user.rating)
-  const tierInfo = tiersMap[rinfo.tier]
+  const leagueInfo = leaguesMap[user.rating.league]
   const client = useQueryClient()
 
   const matchesQuery = useQuery({
@@ -51,11 +46,7 @@ export function ProfileTemplate({ user, editable }: Props) {
     },
   })
 
-  const progress = block(() => {
-    if (rinfo.reliable) return rinfo.leaguePoints
-    const full = ratingConfig.max_rd - ratingConfig.rd_threshold
-    return Math.floor((100 * (ratingConfig.max_rd - rinfo.deviation)) / full)
-  })
+  const progress = user.rating.points ?? (user.rating.progress || 0)
 
   async function saveIconChange(iconId: number) {
     await Api.patch(
@@ -89,8 +80,8 @@ export function ProfileTemplate({ user, editable }: Props) {
       <Stack spacing={0} alignSelf="center" align="center">
         <UserAvatar
           icon={user.summonerIcon}
-          tier={rinfo.tier}
-          division={rinfo.division}
+          league={user.rating.league}
+          division={user.rating.division}
           size={140}
           m="180px 40px 30px 40px"
           onClick={editable ? changeIconModalDisclosure.onOpen : undefined}
@@ -125,7 +116,7 @@ export function ProfileTemplate({ user, editable }: Props) {
         <Stack alignItems="center" userSelect="none" spacing={0}>
           <Image
             ml="3px"
-            src={tierInfo.emblem}
+            src={leagueInfo.emblem}
             alt="rank"
             draggable={false}
             w="250px"
@@ -133,9 +124,11 @@ export function ProfileTemplate({ user, editable }: Props) {
           <VStack spacing={0}>
             <Text fontSize="20px">Rating</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
-              {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
-              {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
-              {!rinfo.reliable && ` - ${progress}%`}
+              {leagueInfo.name}{' '}
+              {user.rating.division && divisionMap[user.rating.division || 1]}
+              {user.rating.points !== undefined &&
+                ` - ${user.rating.points} LP`}
+              {user.rating.points === undefined && ` - ${progress}%`}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               {user.stats.wins} wins - {user.stats.draws} draws -{' '}
@@ -167,7 +160,7 @@ export function ProfileTemplate({ user, editable }: Props) {
         <Stack alignItems="center" userSelect="none" spacing={0}>
           <Image
             ml="3px"
-            src={tiersMap[Tier.Provisional].emblem}
+            src={leaguesMap[League.Provisional].emblem}
             alt="rank"
             draggable={false}
             w="250px"
@@ -175,7 +168,7 @@ export function ProfileTemplate({ user, editable }: Props) {
           <VStack spacing={0}>
             <Text fontSize="20px">Experience</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
-              {tiersMap[Tier.Provisional].name}
+              {leaguesMap[League.Provisional].name}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               0 xp
@@ -230,9 +223,11 @@ export function ProfileTemplate({ user, editable }: Props) {
               Rating
             </Text>
             <Text fontWeight={700}>
-              {tierInfo.name} {rinfo.division && divisionMap[rinfo.division]}
-              {rinfo.reliable && ` - ${rinfo.leaguePoints} LP`}
-              {!rinfo.reliable && ` - ${progress}%`}
+              {leagueInfo.name}{' '}
+              {user.rating.division && divisionMap[user.rating.division || 1]}
+              {user.rating.points !== undefined
+                ? ` - ${user.rating.points} LP`
+                : ` - ${progress}%`}
             </Text>
             <Image
               w="70px"
@@ -240,7 +235,7 @@ export function ProfileTemplate({ user, editable }: Props) {
               right="0"
               top="50%"
               transform="translateY(-70%)"
-              src={tierInfo.emblem}
+              src={leagueInfo.emblem}
             />
           </Flex>
         </Stack>
@@ -256,14 +251,14 @@ export function ProfileTemplate({ user, editable }: Props) {
             <Text fontSize="12px" pos="absolute" top="0" left="0">
               Experience
             </Text>
-            <Text fontWeight={700}>{tiersMap[Tier.Provisional].name}</Text>
+            <Text fontWeight={700}>{leaguesMap[League.Provisional].name}</Text>
             <Image
               w="70px"
               pos="absolute"
               right="0"
               top="50%"
               transform="translateY(-70%)"
-              src={tiersMap[Tier.Provisional].emblem}
+              src={leaguesMap[League.Provisional].emblem}
             />
           </Flex>
         </Stack>

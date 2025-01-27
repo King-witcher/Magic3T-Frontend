@@ -1,5 +1,4 @@
 import { useGame } from '@/contexts/game.context.tsx'
-import { useRatingInfo } from '@/hooks/use-rating-info'
 import {
   Center,
   Flex,
@@ -15,7 +14,6 @@ import { useMemo } from 'react'
 
 export function ResultModal(props: Omit<ModalProps, 'children'>) {
   const game = useGame()
-  const { convertToLp } = useRatingInfo()
 
   const score = useMemo(() => {
     if (game.currentTeam === null) return 0
@@ -43,10 +41,7 @@ export function ResultModal(props: Omit<ModalProps, 'children'>) {
                 <Text fontWeight={700} ml="10px">
                   LP Gain:
                 </Text>
-                <Text>
-                  {convertToLp(game.finalReport?.[game.currentTeam].gain || 0)}{' '}
-                  LP
-                </Text>
+                <Text>{game.finalReport?.[game.currentTeam].gain || 0} LP</Text>
               </Flex>
             </VStack>
           )}

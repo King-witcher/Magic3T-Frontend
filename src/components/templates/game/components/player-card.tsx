@@ -1,9 +1,9 @@
 import { SmoothNumber } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
-import { Tier, divisionMap, useRatingInfo } from '@/hooks/use-rating-info'
+import { League } from '@/services/nest-api'
 import { Team } from '@/types/game-socket'
-import { tiersMap } from '@/utils/ranks'
+import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { block } from '@/utils/utils'
 import {
@@ -31,18 +31,15 @@ const appear = keyframes`
 `
 
 export function PlayerCard({ team, ...rest }: Props) {
-  const { getRankInfo, convertToLp } = useRatingInfo()
-
   const game = useGame()
   const teamInfo = game.teams[team]
   const profile = teamInfo.profile
 
-  const rinfo = profile && getRankInfo(profile.rating)
-  const tierInfo = rinfo?.tier ? tiersMap[rinfo.tier] : null
+  const tierInfo = profile ? leaguesMap[profile?.rating.league] : null
 
   const gain = block(() => {
     if (teamInfo.gain === null) return null
-    const gain = convertToLp(teamInfo.gain)
+    const gain = teamInfo.gain
     return Math.round(gain)
   })
 
@@ -67,8 +64,8 @@ export function PlayerCard({ team, ...rest }: Props) {
     >
       <UserAvatar
         icon={profile?.summonerIcon || 0}
-        tier={rinfo?.tier || Tier.Provisional}
-        division={rinfo?.division}
+        league={profile?.rating.league || League.Provisional}
+        division={profile?.rating.division || null}
         m="10px 30px"
         size={70}
       />
@@ -98,13 +95,13 @@ export function PlayerCard({ team, ...rest }: Props) {
             <Flex alignItems="center" gap="5px">
               <Image src={tierInfo?.emblem} w="34px" />
               <Text textTransform="capitalize" fontSize="0.875rem">
-                {rinfo?.tier} {divisionMap[rinfo?.division || 0]}
+                {profile.rating.league}{' '}
+                {divisionMap[profile.rating.division || 0]}
               </Text>
-              {rinfo?.reliable && (
+              {profile.rating.league !== League.Provisional && (
                 <Text fontWeight={300} fontSize="0.875rem">
-                  - <SmoothNumber value={rinfo?.leaguePoints || 0} /> LP
-                  {!rinfo!.reliable && '?'}
-                  {rinfo!.precise && '!'}
+                  - <SmoothNumber value={profile.rating.points || 0} /> LP
+                  {/* {rinfo!.precise && '!'} */}
                 </Text>
               )}
 

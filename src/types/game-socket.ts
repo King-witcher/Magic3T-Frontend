@@ -1,6 +1,6 @@
+import { RatingDto, UserDto } from '@/services/nest-api'
 import type { Choice } from '@/types/game.ts'
 import type { Socket } from 'socket.io-client'
-import { RatingDto, UserDto } from './dtos/user'
 
 export enum Team {
   Order = 0,

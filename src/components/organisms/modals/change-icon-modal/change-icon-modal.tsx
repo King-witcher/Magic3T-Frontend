@@ -1,6 +1,5 @@
 import { UserAvatar } from '@/components/molecules'
-import { useRatingInfo } from '@/hooks/use-rating-info'
-import { UserDto } from '@/types/dtos/user'
+import { UserDto } from '@/services/nest-api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Box,
@@ -29,9 +28,6 @@ interface Props extends Omit<ModalProps, 'children'> {
 }
 
 export function ChangeIconModal({ user, onSave, ...props }: Props) {
-  const { getRankInfo } = useRatingInfo()
-  const rinfo = getRankInfo(user.rating)
-
   const [selectedIcon, setSelectedIcon] = useState(user.summonerIcon)
 
   const handleSelectIcon = useCallback((iconId: number) => {
@@ -84,8 +80,8 @@ export function ChangeIconModal({ user, onSave, ...props }: Props) {
               <UserAvatar
                 icon={selectedIcon}
                 size={140}
-                tier={rinfo.tier}
-                division={rinfo.division}
+                league={user.rating.league}
+                division={user.rating.division}
                 m={{ base: '0', md: '70px 80px 0 70px' }}
               />
               <Text fontSize="24px">{user.nickname}</Text>

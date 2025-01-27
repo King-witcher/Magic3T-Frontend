@@ -12,9 +12,7 @@ import DiamondWing from '@/assets/tiers/wings/Diamond.png'
 import GoldWing from '@/assets/tiers/wings/Gold.png'
 import MasterWing from '@/assets/tiers/wings/Master.png'
 import SilverWing from '@/assets/tiers/wings/Silver.png'
-import { Tier } from '@/hooks/use-rating-info'
-
-export type Division = 1 | 2 | 3 | 4
+import { League } from '@/services/nest-api'
 
 export type TierInfo = {
   emblem: string
@@ -22,40 +20,48 @@ export type TierInfo = {
   name: string
 }
 
-export const tiersMap: Record<Tier, TierInfo> = {
-  [Tier.Provisional]: {
+export const leaguesMap: Record<League, TierInfo> = {
+  [League.Provisional]: {
     emblem: ProvisionalEmblem,
     wing: '',
     name: 'Unranked',
   },
-  [Tier.Bronze]: {
+  [League.Bronze]: {
     emblem: BronzeEmblem,
     wing: BronzeWing,
     name: 'Bronze',
   },
-  [Tier.Silver]: {
+  [League.Silver]: {
     emblem: SilverEmblem,
     wing: SilverWing,
     name: 'Silver',
   },
-  [Tier.Gold]: {
+  [League.Gold]: {
     emblem: GoldEmblem,
     wing: GoldWing,
     name: 'Gold',
   },
-  [Tier.Diamond]: {
+  [League.Diamond]: {
     emblem: DiamondEmblem,
     wing: DiamondWing,
     name: 'Diamond',
   },
-  [Tier.Master]: {
+  [League.Master]: {
     emblem: MasterEmblem,
     wing: MasterWing,
     name: 'Master',
   },
-  [Tier.Challenger]: {
+  [League.Challenger]: {
     emblem: ChallengerEmblem,
     wing: ChallengerWing,
     name: 'Challenger',
   },
+}
+
+export const divisionMap = {
+  0: '',
+  1: 'I',
+  2: 'II',
+  3: 'III',
+  4: 'IV',
 }

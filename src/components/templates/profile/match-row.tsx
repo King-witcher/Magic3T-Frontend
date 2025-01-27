@@ -1,4 +1,3 @@
-import { useRatingInfo } from '@/hooks/use-rating-info'
 import { MatchDto, MatchEventType, Team } from '@/services/nest-api'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -22,8 +21,6 @@ const resultColorMap: Record<MatchResult, string> = {
 const dateTimeFormat = Intl.DateTimeFormat()
 
 export function MatchRow({ match, viewAs }: Props) {
-  const { convertToLp } = useRatingInfo()
-
   const team = match.teams[Team.Order].id === viewAs ? Team.Order : Team.Chaos
   const result =
     match.winner === null
@@ -77,7 +74,7 @@ export function MatchRow({ match, viewAs }: Props) {
                 color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
               >
                 {player.ratingGain > 0 ? '+' : '-'}
-                {Math.abs(convertToLp(player.ratingGain))}
+                {Math.abs(player.ratingGain)}
               </Text>
             )}
           </Flex>

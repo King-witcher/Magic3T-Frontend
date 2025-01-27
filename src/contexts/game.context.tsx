@@ -3,7 +3,7 @@ import { useListener } from '@/hooks/use-listener.ts'
 import { useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
 import { Api } from '@/services/api.ts'
-import { UserDto } from '@/types/dtos/user.ts'
+import { UserDto } from '@/services/nest-api'
 import {
   ClientMatchEvents,
   GameClientEventsMap,

@@ -1,4 +1,4 @@
-import { UserDto } from '@/types/dtos/user.ts'
+import { UserDto } from '@/services/nest-api/dtos.ts'
 import { type ReactNode, createContext, useContext } from 'react'
 import { AuthState } from './auth.context.tsx'
 
