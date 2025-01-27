@@ -1,4 +1,3 @@
-import { useConfig } from '@/contexts/config.context'
 import { League, NestApi } from '@/services/nest-api'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
@@ -8,8 +7,6 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 export function RankingTemplate() {
-  const { ratingConfig } = useConfig()
-
   const rankingQuery = useQuery({
     queryKey: ['ranking'],
     staleTime: Number.POSITIVE_INFINITY,

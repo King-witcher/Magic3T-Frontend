@@ -1,5 +1,4 @@
 import { AuthProvider } from '@/contexts/auth.context.tsx'
-import { ConfigProvider } from '@/contexts/config.context.tsx'
 import { GameProvider } from '@/contexts/game.context'
 import { LiveActivityProvider } from '@/contexts/live-activity.context.tsx'
 import { QueueProvider } from '@/contexts/queue.context'
@@ -20,17 +19,13 @@ export function Providers({ children }: Props) {
     <QueryClientProvider client={queryClient}>
       <LiveActivityProvider>
         <ServiceStatusProvider>
-          <ConfigProvider>
-            <AuthProvider>
-              <GameProvider>
-                <QueueProvider>
-                  <ChakraProvider theme={chakraTheme}>
-                    {children}
-                  </ChakraProvider>
-                </QueueProvider>
-              </GameProvider>
-            </AuthProvider>
-          </ConfigProvider>
+          <AuthProvider>
+            <GameProvider>
+              <QueueProvider>
+                <ChakraProvider theme={chakraTheme}>{children}</ChakraProvider>
+              </QueueProvider>
+            </GameProvider>
+          </AuthProvider>
         </ServiceStatusProvider>
       </LiveActivityProvider>
     </QueryClientProvider>

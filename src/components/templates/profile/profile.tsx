@@ -1,7 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
-import { useConfig } from '@/contexts/config.context.tsx'
 import { Api } from '@/services/api'
 import { League, NestApi, UserDto } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
@@ -34,7 +33,6 @@ export function ProfileTemplate({ user, editable }: Props) {
   const changeIconModalDisclosure = useDisclosure()
   const { user: authenticatedUser } = useAuth()
   const { getToken } = useAuth()
-  const { ratingConfig } = useConfig()
   const leagueInfo = leaguesMap[user.rating.league]
   const client = useQueryClient()
 
