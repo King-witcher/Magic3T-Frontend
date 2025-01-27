@@ -1,4 +1,8 @@
-import { ErrorTemplate, RootLayout } from '@/components/templates'
+import {
+  ErrorTemplate,
+  NotFoundTemplate,
+  RootLayout,
+} from '@/components/templates'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
@@ -30,6 +34,6 @@ export const Route = createRootRoute({
       <TanStackRouterDevtools position="bottom-left" />
     </Providers>
   ),
-  notFoundComponent: () => <>Not found</>,
+  notFoundComponent: () => <NotFoundTemplate />,
   errorComponent: () => <ErrorTemplate />,
 })

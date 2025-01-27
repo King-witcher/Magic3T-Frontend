@@ -2,14 +2,14 @@ import { League, NestApi } from '@/services/nest-api'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
-import { Center, Flex, Heading, Image, Stack } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
+import { Center, Flex, Heading, Image, Spinner, Stack } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 export function RankingTemplate() {
-  const rankingQuery = useQuery({
+  const rankingQuery = useSuspenseQuery({
     queryKey: ['ranking'],
-    staleTime: Number.POSITIVE_INFINITY,
+    staleTime: 30 * 1000,
     async queryFn() {
       return await NestApi.User.getRanking()
     },
@@ -18,9 +18,9 @@ export function RankingTemplate() {
   return (
     <>
       <Heading>Top Magic3T players</Heading>
-      <Stack spacing="20px" mt="40px" pb="40px">
-        {rankingQuery.isSuccess &&
-          rankingQuery.data.map((user, index) => {
+      {rankingQuery.isSuccess && (
+        <Stack spacing="20px" mt="40px" pb="40px">
+          {rankingQuery.data.map((user, index) => {
             const isProvisional = user.rating.league === League.Provisional
             const isApex = user.rating.league === League.Master
             const tierInfo = leaguesMap[user.rating.league]
@@ -50,7 +50,7 @@ export function RankingTemplate() {
                 >
                   <Image
                     src={getIconUrl(user.summonerIcon)}
-                    w="30px"
+                    boxSize="30px"
                     rounded="999"
                     border="2px solid #ffffff80"
                   />
@@ -86,7 +86,13 @@ export function RankingTemplate() {
               </Flex>
             )
           })}
-      </Stack>
+        </Stack>
+      )}
+      {rankingQuery.isPending && (
+        <Center p="30px" h="1fr">
+          <Spinner size="md" thickness="4px" color="light" speed="666ms" />
+        </Center>
+      )}
     </>
   )
 }

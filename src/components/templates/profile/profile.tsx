@@ -2,7 +2,7 @@ import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
 import { Api } from '@/services/api'
-import { League, NestApi, UserDto } from '@/services/nest-api'
+import { League, MatchDto, UserDto } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
 import {
   Badge,
@@ -14,11 +14,12 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
 
 interface Props {
   user: UserDto
+  matchesQuery: UseQueryResult<MatchDto[], Error>
   editable?: boolean
 }
 
@@ -29,20 +30,12 @@ const divisionMap = {
   4: 'IV',
 }
 
-export function ProfileTemplate({ user, editable }: Props) {
+export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   const changeIconModalDisclosure = useDisclosure()
   const { user: authenticatedUser } = useAuth()
   const { getToken } = useAuth()
   const leagueInfo = leaguesMap[user.rating.league]
   const client = useQueryClient()
-
-  const matchesQuery = useQuery({
-    queryKey: ['matches', user.id],
-    staleTime: Number.POSITIVE_INFINITY,
-    async queryFn() {
-      return await NestApi.Match.getMatchesByUser(user.id, 20)
-    },
-  })
 
   const progress = user.rating.points ?? (user.rating.progress || 0)
 
