@@ -17,6 +17,7 @@ import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
+import { Route as UsersNicknameImport } from './routes/users/$nickname'
 import { Route as UserUserIdImport } from './routes/user/$userId'
 import { Route as AuthGuardedMeRouteImport } from './routes/_auth-guarded/me/route'
 
@@ -55,6 +56,12 @@ const AuthGuardedIndexRoute = AuthGuardedIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthGuardedRoute,
+} as any)
+
+const UsersNicknameRoute = UsersNicknameImport.update({
+  id: '/users/$nickname',
+  path: '/users/$nickname',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const UserUserIdRoute = UserUserIdImport.update({
@@ -108,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserUserIdImport
       parentRoute: typeof rootRoute
     }
+    '/users/$nickname': {
+      id: '/users/$nickname'
+      path: '/users/$nickname'
+      fullPath: '/users/$nickname'
+      preLoaderRoute: typeof UsersNicknameImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth-guarded/': {
       id: '/_auth-guarded/'
       path: '/'
@@ -154,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
   '/user/$userId': typeof UserUserIdRoute
+  '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
   '/register': typeof RegisterIndexRoute
   '/sign-in': typeof SignInIndexRoute
@@ -164,6 +179,7 @@ export interface FileRoutesByTo {
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
   '/user/$userId': typeof UserUserIdRoute
+  '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
   '/register': typeof RegisterIndexRoute
   '/sign-in': typeof SignInIndexRoute
@@ -176,6 +192,7 @@ export interface FileRoutesById {
   '/tutorial': typeof TutorialRoute
   '/_auth-guarded/me': typeof AuthGuardedMeRouteRoute
   '/user/$userId': typeof UserUserIdRoute
+  '/users/$nickname': typeof UsersNicknameRoute
   '/_auth-guarded/': typeof AuthGuardedIndexRoute
   '/register/': typeof RegisterIndexRoute
   '/sign-in/': typeof SignInIndexRoute
@@ -189,6 +206,7 @@ export interface FileRouteTypes {
     | '/tutorial'
     | '/me'
     | '/user/$userId'
+    | '/users/$nickname'
     | '/'
     | '/register'
     | '/sign-in'
@@ -198,6 +216,7 @@ export interface FileRouteTypes {
     | '/tutorial'
     | '/me'
     | '/user/$userId'
+    | '/users/$nickname'
     | '/'
     | '/register'
     | '/sign-in'
@@ -208,6 +227,7 @@ export interface FileRouteTypes {
     | '/tutorial'
     | '/_auth-guarded/me'
     | '/user/$userId'
+    | '/users/$nickname'
     | '/_auth-guarded/'
     | '/register/'
     | '/sign-in/'
@@ -219,6 +239,7 @@ export interface RootRouteChildren {
   RankingRoute: typeof RankingRoute
   TutorialRoute: typeof TutorialRoute
   UserUserIdRoute: typeof UserUserIdRoute
+  UsersNicknameRoute: typeof UsersNicknameRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
   SignInIndexRoute: typeof SignInIndexRoute
 }
@@ -228,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   RankingRoute: RankingRoute,
   TutorialRoute: TutorialRoute,
   UserUserIdRoute: UserUserIdRoute,
+  UsersNicknameRoute: UsersNicknameRoute,
   RegisterIndexRoute: RegisterIndexRoute,
   SignInIndexRoute: SignInIndexRoute,
 }
@@ -246,6 +268,7 @@ export const routeTree = rootRoute
         "/ranking",
         "/tutorial",
         "/user/$userId",
+        "/users/$nickname",
         "/register/",
         "/sign-in/"
       ]
@@ -269,6 +292,9 @@ export const routeTree = rootRoute
     },
     "/user/$userId": {
       "filePath": "user/$userId.tsx"
+    },
+    "/users/$nickname": {
+      "filePath": "users/$nickname.tsx"
     },
     "/_auth-guarded/": {
       "filePath": "_auth-guarded/index.tsx",

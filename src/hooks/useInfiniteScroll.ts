@@ -21,7 +21,7 @@ export function useInfiniteScroll(
   enabled: boolean
 ): UseInfiniteScrollReturnType {
   const [isLoading, setIsLoading] = useState(false)
-  const observerRef = useRef<IntersectionObserver>()
+  const observerRef = useRef<IntersectionObserver>(null)
 
   const lastElementRef = useCallback(
     (node: Element | null) => {
