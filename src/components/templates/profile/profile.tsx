@@ -116,10 +116,10 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
             <Text fontSize="20px">Rating</Text>
             <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
               {leagueInfo.name}{' '}
-              {user.rating.division && divisionMap[user.rating.division || 1]}
-              {user.rating.points !== undefined &&
-                ` - ${user.rating.points} LP`}
-              {user.rating.points === undefined && ` - ${progress}%`}
+              {user.rating.division && divisionMap[user.rating.division]}
+              {user.rating.league === League.Provisional
+                ? ` - ${progress}%`
+                : ` - ${user.rating.points} LP`}
             </Text>
             <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
               {user.stats.wins} wins - {user.stats.draws} draws -{' '}
@@ -215,10 +215,10 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
             </Text>
             <Text fontWeight={700}>
               {leagueInfo.name}{' '}
-              {user.rating.division && divisionMap[user.rating.division || 1]}
-              {user.rating.points !== undefined
-                ? ` - ${user.rating.points} LP`
-                : ` - ${progress}%`}
+              {user.rating.division && divisionMap[user.rating.division]}
+              {user.rating.league === League.Provisional
+                ? ` - ${progress}%`
+                : ` - ${user.rating.points} LP`}
             </Text>
             <Image
               w="70px"
