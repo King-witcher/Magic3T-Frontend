@@ -33,7 +33,7 @@ export function ServiceStatusProvider({ children }: Props) {
     ServerStatus.Loading
   )
   const { push } = useLiveActivity()
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout>(null)
 
   async function fetchStatus() {
     try {
@@ -72,7 +72,7 @@ export function ServiceStatusProvider({ children }: Props) {
   useEffect(() => {
     fetchStatus()
     return () => {
-      clearTimeout(timeoutRef.current)
+      clearTimeout(timeoutRef.current || undefined)
     }
   }, [])
 
