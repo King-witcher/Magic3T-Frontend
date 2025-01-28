@@ -12,13 +12,11 @@ function RouteComponent() {
 
   const uniqueId = nickname.toLowerCase().replaceAll(' ', '')
 
-  console.log(nickname)
-
   const userQuery = useSuspenseQuery({
     queryKey: ['user-by-nickname', uniqueId],
     staleTime: Number.POSITIVE_INFINITY,
     async queryFn() {
-      return await NestApi.User.getBySummonerName(nickname)
+      return await NestApi.User.getByNickname(nickname)
     },
   })
 

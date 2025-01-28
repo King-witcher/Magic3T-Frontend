@@ -10,10 +10,10 @@ export namespace NestApi {
       return data
     }
 
-    export async function getBySummonerName(
+    export async function getByNickname(
       nickname: string
     ): Promise<UserDto | null> {
-      const response = await fetch(`${API_URL}/users/summoner-name/${nickname}`)
+      const response = await fetch(`${API_URL}/users/nickname/${nickname}`)
       if (response.status !== 200) return null
       const data: UserDto = await response.json()
       return data
