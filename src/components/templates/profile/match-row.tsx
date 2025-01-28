@@ -50,77 +50,77 @@ export function MatchRow({ match, viewAs }: Props) {
   }, [match])
 
   return (
-    <Stack
-      as={Link}
-      to={`/user/${opponent.id}`}
-      gap="10px"
-      p="20px"
-      transition="all 100ms"
-      cursor="pointer"
-      {...getAcrylicProps()}
-      _hover={{
-        bgColor: '#ffffff40',
-      }}
-    >
-      <Flex>
-        <Stack spacing={0}>
-          <Flex align="center" gap="10px">
-            <Text fontWeight={700}>{opponent.nickname}</Text>
-            {!!player.ratingGain && (
-              <Text
-                fontSize="0.875rem"
-                fontWeight={700}
+    <Link to="/users/id/$userId" params={{ userId: opponent.id }}>
+      <Stack
+        gap="10px"
+        p="20px"
+        transition="all 100ms"
+        cursor="pointer"
+        {...getAcrylicProps()}
+        _hover={{
+          bgColor: '#ffffff40',
+        }}
+      >
+        <Flex>
+          <Stack spacing={0}>
+            <Flex align="center" gap="10px">
+              <Text fontWeight={700}>{opponent.nickname}</Text>
+              {!!player.ratingGain && (
+                <Text
+                  fontSize="0.875rem"
+                  fontWeight={700}
+                  lineHeight="normal"
+                  color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
+                >
+                  {player.ratingGain > 0 ? '+' : '-'}
+                  {Math.abs(player.ratingGain)}
+                </Text>
+              )}
+            </Flex>
+            <Text fontSize="0.75rem" opacity={0.7}>
+              {dateTimeFormat.format(match.time)} - {durationString}
+            </Text>
+          </Stack>
+          <Center
+            ml="auto"
+            rounded="9990"
+            textTransform="capitalize"
+            color={result === MatchResult.Defeat ? 'light' : '#000000'}
+            fontWeight={700}
+            fontSize="0.875rem"
+            w="80px"
+            h="25px"
+            bgColor={resultColorMap[result]}
+          >
+            {result}
+          </Center>
+        </Flex>
+        <Flex gap={{ base: '8px', sm: '10px' }}>
+          {match.events.map((event) => {
+            const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
+
+            if (event.event === MatchEventType.Message) return null
+
+            return (
+              <Center
+                h={{ base: '22px', sm: '25px' }}
+                w={{ base: '22px', sm: '25px' }}
+                {...getAcrylicProps()}
+                borderWidth="2px"
+                borderColor={bgColor}
                 lineHeight="normal"
-                color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
+                rounded="8px"
+                fontSize="0.875rem"
+                key={event.time}
               >
-                {player.ratingGain > 0 ? '+' : '-'}
-                {Math.abs(player.ratingGain)}
-              </Text>
-            )}
-          </Flex>
-          <Text fontSize="0.75rem" opacity={0.7}>
-            {dateTimeFormat.format(match.time)} - {durationString}
-          </Text>
-        </Stack>
-        <Center
-          ml="auto"
-          rounded="9990"
-          textTransform="capitalize"
-          color={result === MatchResult.Defeat ? 'light' : '#000000'}
-          fontWeight={700}
-          fontSize="0.875rem"
-          w="80px"
-          h="25px"
-          bgColor={resultColorMap[result]}
-        >
-          {result}
-        </Center>
-      </Flex>
-      <Flex gap={{ base: '8px', sm: '10px' }}>
-        {match.events.map((event) => {
-          const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
-
-          if (event.event === MatchEventType.Message) return null
-
-          return (
-            <Center
-              h={{ base: '22px', sm: '25px' }}
-              w={{ base: '22px', sm: '25px' }}
-              {...getAcrylicProps()}
-              borderWidth="2px"
-              borderColor={bgColor}
-              lineHeight="normal"
-              rounded="8px"
-              fontSize="0.875rem"
-              key={event.time}
-            >
-              {event.event === MatchEventType.Choice && event.choice}
-              {event.event === MatchEventType.Forfeit && <RiFlagFill />}
-              {event.event === MatchEventType.Timeout && <FaClock />}
-            </Center>
-          )
-        })}
-      </Flex>
-    </Stack>
+                {event.event === MatchEventType.Choice && event.choice}
+                {event.event === MatchEventType.Forfeit && <RiFlagFill />}
+                {event.event === MatchEventType.Timeout && <FaClock />}
+              </Center>
+            )
+          })}
+        </Flex>
+      </Stack>
+    </Link>
   )
 }

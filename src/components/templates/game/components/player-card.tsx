@@ -48,7 +48,7 @@ export function PlayerCard({ team, ...rest }: Props) {
   return (
     <Center
       as={Link}
-      to={`/user/${profile?.id}`}
+      to={`/users/${profile?.nickname?.replaceAll(' ', '')}`}
       className="playerCard"
       alignItems="center"
       justifyContent="left"

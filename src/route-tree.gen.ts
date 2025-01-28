@@ -18,8 +18,8 @@ import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
 import { Route as UsersNicknameImport } from './routes/users/$nickname'
-import { Route as UserUserIdImport } from './routes/user/$userId'
 import { Route as AuthGuardedMeRouteImport } from './routes/_auth-guarded/me/route'
+import { Route as UsersIdUserIdImport } from './routes/users/id/$userId'
 
 // Create/Update Routes
 
@@ -64,16 +64,16 @@ const UsersNicknameRoute = UsersNicknameImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const UserUserIdRoute = UserUserIdImport.update({
-  id: '/user/$userId',
-  path: '/user/$userId',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AuthGuardedMeRouteRoute = AuthGuardedMeRouteImport.update({
   id: '/me',
   path: '/me',
   getParentRoute: () => AuthGuardedRoute,
+} as any)
+
+const UsersIdUserIdRoute = UsersIdUserIdImport.update({
+  id: '/users/id/$userId',
+  path: '/users/id/$userId',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -108,13 +108,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGuardedMeRouteImport
       parentRoute: typeof AuthGuardedImport
     }
-    '/user/$userId': {
-      id: '/user/$userId'
-      path: '/user/$userId'
-      fullPath: '/user/$userId'
-      preLoaderRoute: typeof UserUserIdImport
-      parentRoute: typeof rootRoute
-    }
     '/users/$nickname': {
       id: '/users/$nickname'
       path: '/users/$nickname'
@@ -143,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInIndexImport
       parentRoute: typeof rootRoute
     }
+    '/users/id/$userId': {
+      id: '/users/id/$userId'
+      path: '/users/id/$userId'
+      fullPath: '/users/id/$userId'
+      preLoaderRoute: typeof UsersIdUserIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -167,22 +167,22 @@ export interface FileRoutesByFullPath {
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
-  '/user/$userId': typeof UserUserIdRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
   '/register': typeof RegisterIndexRoute
   '/sign-in': typeof SignInIndexRoute
+  '/users/id/$userId': typeof UsersIdUserIdRoute
 }
 
 export interface FileRoutesByTo {
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
-  '/user/$userId': typeof UserUserIdRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
   '/register': typeof RegisterIndexRoute
   '/sign-in': typeof SignInIndexRoute
+  '/users/id/$userId': typeof UsersIdUserIdRoute
 }
 
 export interface FileRoutesById {
@@ -191,11 +191,11 @@ export interface FileRoutesById {
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/_auth-guarded/me': typeof AuthGuardedMeRouteRoute
-  '/user/$userId': typeof UserUserIdRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/_auth-guarded/': typeof AuthGuardedIndexRoute
   '/register/': typeof RegisterIndexRoute
   '/sign-in/': typeof SignInIndexRoute
+  '/users/id/$userId': typeof UsersIdUserIdRoute
 }
 
 export interface FileRouteTypes {
@@ -205,32 +205,32 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/tutorial'
     | '/me'
-    | '/user/$userId'
     | '/users/$nickname'
     | '/'
     | '/register'
     | '/sign-in'
+    | '/users/id/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/ranking'
     | '/tutorial'
     | '/me'
-    | '/user/$userId'
     | '/users/$nickname'
     | '/'
     | '/register'
     | '/sign-in'
+    | '/users/id/$userId'
   id:
     | '__root__'
     | '/_auth-guarded'
     | '/ranking'
     | '/tutorial'
     | '/_auth-guarded/me'
-    | '/user/$userId'
     | '/users/$nickname'
     | '/_auth-guarded/'
     | '/register/'
     | '/sign-in/'
+    | '/users/id/$userId'
   fileRoutesById: FileRoutesById
 }
 
@@ -238,20 +238,20 @@ export interface RootRouteChildren {
   AuthGuardedRoute: typeof AuthGuardedRouteWithChildren
   RankingRoute: typeof RankingRoute
   TutorialRoute: typeof TutorialRoute
-  UserUserIdRoute: typeof UserUserIdRoute
   UsersNicknameRoute: typeof UsersNicknameRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
   SignInIndexRoute: typeof SignInIndexRoute
+  UsersIdUserIdRoute: typeof UsersIdUserIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthGuardedRoute: AuthGuardedRouteWithChildren,
   RankingRoute: RankingRoute,
   TutorialRoute: TutorialRoute,
-  UserUserIdRoute: UserUserIdRoute,
   UsersNicknameRoute: UsersNicknameRoute,
   RegisterIndexRoute: RegisterIndexRoute,
   SignInIndexRoute: SignInIndexRoute,
+  UsersIdUserIdRoute: UsersIdUserIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -267,10 +267,10 @@ export const routeTree = rootRoute
         "/_auth-guarded",
         "/ranking",
         "/tutorial",
-        "/user/$userId",
         "/users/$nickname",
         "/register/",
-        "/sign-in/"
+        "/sign-in/",
+        "/users/id/$userId"
       ]
     },
     "/_auth-guarded": {
@@ -290,9 +290,6 @@ export const routeTree = rootRoute
       "filePath": "_auth-guarded/me/route.tsx",
       "parent": "/_auth-guarded"
     },
-    "/user/$userId": {
-      "filePath": "user/$userId.tsx"
-    },
     "/users/$nickname": {
       "filePath": "users/$nickname.tsx"
     },
@@ -305,6 +302,9 @@ export const routeTree = rootRoute
     },
     "/sign-in/": {
       "filePath": "sign-in/index.tsx"
+    },
+    "/users/id/$userId": {
+      "filePath": "users/id/$userId.tsx"
     }
   }
 }

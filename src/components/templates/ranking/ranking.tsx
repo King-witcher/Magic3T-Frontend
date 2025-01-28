@@ -28,7 +28,7 @@ export function RankingTemplate() {
               <Flex
                 as={Link}
                 from="/ranking"
-                to={`/user/${user.id}`}
+                to={`/users/${user.nickname?.replaceAll(' ', '')}`}
                 key={user.id}
                 align="center"
                 p={{ base: '20px 15px', sm: '20px' }}
