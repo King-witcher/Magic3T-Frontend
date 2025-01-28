@@ -100,7 +100,7 @@ export function SignInTemplate({ referrer = '/' }: Props) {
         <Heading lineHeight="3.125rem">Sign-in</Heading>
         <Text textAlign="center">
           Don&apos;t have an account yet?{' '}
-          <Link to={referrer ? `/register?referrer=${referrer}` : '/register'}>
+          <Link to="/register" search={(prev) => ({ referrer: prev.referrer })}>
             <chakra.span color="#9cabff">Create one</chakra.span>
           </Link>
         </Text>{' '}

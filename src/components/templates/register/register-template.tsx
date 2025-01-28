@@ -85,7 +85,7 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
         maxW={{ base: 'auto', sm: '400px' }}
       >
         <Heading lineHeight="3.125rem">Register</Heading>
-        <Link to={referrer ? `/sign-in?referrer=${referrer}` : '/sign-in'}>
+        <Link to="/sign-in" search={(prev) => ({ referrer: prev.referrer })}>
           <Text color="#9cabff">Already have an account?</Text>
         </Link>
         <Input

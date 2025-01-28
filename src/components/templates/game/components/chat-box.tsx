@@ -13,7 +13,7 @@ import type { RefObject } from 'react'
 import { useChatHandler } from '../hooks/useChatHandler'
 
 interface Props extends StackProps {
-  inputRef: RefObject<HTMLInputElement>
+  inputRef: RefObject<HTMLInputElement | null>
 }
 
 export function ChatBox({ inputRef, ...props }: Props) {
