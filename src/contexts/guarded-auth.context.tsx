@@ -1,7 +1,7 @@
+import { setCommand } from '@/lib/Commands.ts'
 import { UserDto } from '@/services/nest-api/dtos.ts'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
 import { AuthState } from './auth.context.tsx'
-import { setCommand } from '@/lib/Commands.ts'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 

@@ -1,9 +1,11 @@
 import { UserAvatar } from '@/components/molecules'
-import { UserDto } from '@/services/nest-api'
+import { useGuardedAuth } from '@/contexts/guarded-auth.context'
+import { NestApi, UserDto } from '@/services/nest-api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
   Box,
   Button,
+  Center,
   Flex,
   Grid,
   Modal,
@@ -13,9 +15,11 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Spinner,
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
@@ -29,10 +33,17 @@ interface Props extends Omit<ModalProps, 'children'> {
 
 export function ChangeIconModal({ user, onSave, ...props }: Props) {
   const [selectedIcon, setSelectedIcon] = useState(user.summonerIcon)
+  const auth = useGuardedAuth()
 
-  const handleSelectIcon = useCallback((iconId: number) => {
-    setSelectedIcon(iconId)
-  }, [])
+  const iconsQuery = useQuery({
+    queryKey: ['available-icons', auth.user.id],
+    enabled: props.isOpen,
+    async queryFn() {
+      const token = await auth.getToken()
+      const icons = await NestApi.User.getIcons(token)
+      return icons
+    },
+  })
 
   const handleSave = useCallback(() => {
     onSave(selectedIcon)
@@ -40,17 +51,17 @@ export function ChangeIconModal({ user, onSave, ...props }: Props) {
   }, [props.onClose, selectedIcon, onSave])
 
   const icons = useMemo(() => {
-    return iconIds.map((iconId) => {
+    return iconsQuery.data?.map((iconId) => {
       return (
         <SummonerIcon
           key={iconId}
           id={iconId}
-          onSelect={handleSelectIcon}
+          onSelect={setSelectedIcon}
           selected={iconId === selectedIcon}
         />
       )
     })
-  }, [handleSelectIcon, selectedIcon])
+  }, [selectedIcon, iconsQuery.data])
 
   return (
     <Modal isCentered {...props} size="xl">
@@ -88,21 +99,34 @@ export function ChangeIconModal({ user, onSave, ...props }: Props) {
             </VStack>
             <Box
               h={{ base: '200px', md: '470px' }}
+              w="full"
               overflowY="scroll"
               overflowX="hidden"
             >
-              <Grid
-                templateColumns={{
-                  base: 'repeat(3, 1fr)',
-                  md: 'repeat(5, 1fr)',
-                  lg: 'repeat(6, 1fr)',
-                }}
-                justifyContent="space-between"
-                gap="20px"
-                flex="1"
-              >
-                {icons}
-              </Grid>
+              {iconsQuery.isLoading && (
+                <Center boxSize="full">
+                  <Spinner
+                    size="xl"
+                    thickness="5px"
+                    color="light"
+                    speed="666ms"
+                  />
+                </Center>
+              )}
+              {iconsQuery.isSuccess && (
+                <Grid
+                  templateColumns={{
+                    base: 'repeat(3, 1fr)',
+                    md: 'repeat(5, 1fr)',
+                    lg: 'repeat(6, 1fr)',
+                  }}
+                  justifyContent="space-between"
+                  gap="20px"
+                  flex="1"
+                >
+                  {icons}
+                </Grid>
+              )}
             </Box>
           </Flex>
         </ModalBody>

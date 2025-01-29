@@ -25,6 +25,18 @@ export namespace NestApi {
       const data: UserDto[] = await response.json()
       return data
     }
+
+    export async function getIcons(token: string): Promise<number[]> {
+      const response = await fetch(`${API_URL}/users/me/icons`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if (response.status !== 200) return []
+
+      const data: number[] = await response.json()
+      return data
+    }
   }
 
   export namespace Match {
