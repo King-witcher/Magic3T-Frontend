@@ -1,5 +1,4 @@
 import { UserAvatar } from '@/components/molecules'
-import { useGuardedAuth } from '@/contexts/guarded-auth.context'
 import { NestApi, UserDto } from '@/services/nest-api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
@@ -23,6 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
+import { useAuth } from '@/contexts/auth.context'
 
 const iconIds = [..._.range(0, 30), ..._.range(3455, 3464)]
 
@@ -33,11 +33,11 @@ interface Props extends Omit<ModalProps, 'children'> {
 
 export function ChangeIconModal({ user, onSave, ...props }: Props) {
   const [selectedIcon, setSelectedIcon] = useState(user.summonerIcon)
-  const auth = useGuardedAuth()
+  const auth = useAuth()
 
   const iconsQuery = useQuery({
-    queryKey: ['available-icons', auth.user.id],
-    enabled: props.isOpen,
+    queryKey: ['available-icons', user.id],
+    enabled: props.isOpen && user.id === auth.user?.id,
     async queryFn() {
       const token = await auth.getToken()
       const icons = await NestApi.User.getIcons(token)
