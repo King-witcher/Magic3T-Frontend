@@ -1,7 +1,8 @@
 import { MatchDto, MatchEventType, Team } from '@/services/nest-api'
+import { acrylicClasses } from '@/styles/tailwind'
 import { MatchResult } from '@/types'
 import { getAcrylicProps } from '@/utils/style-helpers'
-import { Center, Flex, Stack, Text } from '@chakra-ui/react'
+import { Center, Flex } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { FaClock } from 'react-icons/fa'
@@ -51,36 +52,26 @@ export function MatchRow({ match, viewAs }: Props) {
 
   return (
     <Link to="/users/id/$userId" params={{ userId: opponent.id }}>
-      <Stack
-        gap="10px"
-        p="20px"
-        transition="all 100ms"
-        cursor="pointer"
-        {...getAcrylicProps()}
-        _hover={{
-          bgColor: '#ffffff40',
-        }}
+      <div
+        className={`gap-[10px] p-[20px] transition-all duration-100 cursor-pointer ${acrylicClasses} hover:bg-[#ffffff40]`}
       >
-        <Flex>
-          <Stack spacing={0}>
-            <Flex align="center" gap="10px">
-              <Text fontWeight={700}>{opponent.nickname}</Text>
+        <div className="flex">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-[10px]">
+              <p className="font-bold">{opponent.nickname}</p>
               {!!player.ratingGain && (
-                <Text
-                  fontSize="0.875rem"
-                  fontWeight={700}
-                  lineHeight="normal"
-                  color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
+                <p
+                  className={`text-sm/normal font-bold ${player.ratingGain > 0 ? 'text-[#00c020]' : 'text-[#ff4000]'}`}
                 >
                   {player.ratingGain > 0 ? '+' : '-'}
                   {Math.abs(player.ratingGain)}
-                </Text>
+                </p>
               )}
-            </Flex>
-            <Text fontSize="0.75rem" opacity={0.7}>
+            </div>
+            <p className="text-xs opacity-70">
               {dateTimeFormat.format(match.time)} - {durationString}
-            </Text>
-          </Stack>
+            </p>
+          </div>
           <Center
             ml="auto"
             rounded="9990"
@@ -94,7 +85,7 @@ export function MatchRow({ match, viewAs }: Props) {
           >
             {result}
           </Center>
-        </Flex>
+        </div>
         <Flex gap={{ base: '8px', sm: '10px' }}>
           {match.events.map((event) => {
             const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
@@ -120,7 +111,7 @@ export function MatchRow({ match, viewAs }: Props) {
             )
           })}
         </Flex>
-      </Stack>
+      </div>
     </Link>
   )
 }
