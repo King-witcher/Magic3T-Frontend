@@ -4,18 +4,11 @@ import { useAuth } from '@/contexts/auth.context'
 import { Api } from '@/services/api'
 import { League, MatchDto, UserDto } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
-import {
-  Badge,
-  Box,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import { MatchRow } from './match-row'
+import { DesktopRankContainer } from './desktop-rank-container'
+import { MobileRankContainer } from './mobile-rank-container'
 
 interface Props {
   user: UserDto
@@ -59,16 +52,8 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   }
 
   return (
-    <Flex
-      align="cneter"
-      justify="center"
-      w="full"
-      justifyContent="center"
-      gap="40px"
-      pb="40px"
-      flexDir="column"
-    >
-      <Stack spacing={0} alignSelf="center" align="center">
+    <main className="profile-template !flex flex-col justify-center w-full gap-[40px] pb-[40px]">
+      <section className="flex flex-col items-center self-center">
         <UserAvatar
           icon={user.summonerIcon}
           league={user.rating.league}
@@ -79,181 +64,64 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           showPencil={editable}
           cursor={editable ? 'pointer' : 'auto'}
         />
-        <Flex alignItems="center" gap="8px">
+        <div className="nickname-box flex items-center gap-[8px]">
           {(user.role === 'bot' || user.role === 'creator') && (
-            <Badge rounded="5px" fontSize="14px" bg="#ffffff40" color="light">
+            <span className="badge rounded-[5px] text-sm bg-[#ffffff40] text-white uppercase font-bold px-[4px] py-[1px]">
               {user.role}
-            </Badge>
+            </span>
           )}
-          <Text
-            fontSize="36px"
-            lineHeight="39px"
-            textAlign="center"
-            fontWeight={500}
-            rounded="10px"
-            p="5px"
-            _focusVisible={{
-              outline: 'solid 1px var(--chakra-colors-gray-200)',
-              fontWeight: 500,
-            }}
-          >
+          <p className="text-4xl/[39px] text-center p-[5px] font-medium rounded-[10px]">
             {user.nickname}
-          </Text>
-        </Flex>
-      </Stack>
+          </p>
+        </div>
+      </section>
 
       {/* Desktop ranks */}
-      <Flex w="full" align="center" justify="space-evenly" hideBelow="sm">
-        <Stack alignItems="center" userSelect="none" spacing={0}>
-          <Image
-            ml="3px"
-            src={leagueInfo.emblem}
-            alt="rank"
-            draggable={false}
-            w="250px"
-          />
-          <VStack spacing={0}>
-            <Text fontSize="20px">Rating</Text>
-            <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
-              {leagueInfo.name}{' '}
-              {user.rating.division && divisionMap[user.rating.division]}
-              {user.rating.league === League.Provisional
-                ? ` - ${progress}%`
-                : ` - ${user.rating.points} LP`}
-            </Text>
-            <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
-              {user.stats.wins} wins - {user.stats.draws} draws -{' '}
-              {user.stats.defeats} defeats
-            </Text>
-          </VStack>
-
-          <Flex
-            mt="10px"
-            w={{ base: 'full', sm: '250px' }}
-            h="8px"
-            rounded="999px"
-            overflow="hidden"
-            gap="1px"
-            color="white"
-            fontSize="16px"
-          >
-            {progress > 0 && <Box h="full" bg="#ffffffc0" flex={progress} />}
-            {progress < 100 && (
-              <Box
-                bg="#ffffff30"
-                h="full"
-                flex={100 - progress}
-                overflow="hidden"
-              />
-            )}
-          </Flex>
-        </Stack>
-        <Stack alignItems="center" userSelect="none" spacing={0}>
-          <Image
-            ml="3px"
-            src={leaguesMap[League.Provisional].emblem}
-            alt="rank"
-            draggable={false}
-            w="250px"
-          />
-          <VStack spacing={0}>
-            <Text fontSize="20px">Experience</Text>
-            <Text fontSize="18px" fontWeight="700" textTransform="capitalize">
-              {leaguesMap[League.Provisional].name}
-            </Text>
-            <Text fontSize="12px" fontWeight="500" color="#ffffffc0">
-              0 xp
-            </Text>
-          </VStack>
-
-          <Flex
-            mt="10px"
-            w={{ base: 'full', sm: '250px' }}
-            h="8px"
-            rounded="999px"
-            overflow="hidden"
-            gap="1px"
-            color="white"
-            fontSize="16px"
-          >
-            <Box h="full" bg="#ffffffc0" flex={0} />
-            <Box bg="#ffffff30" h="full" flex={1} overflow="hidden" />
-          </Flex>
-        </Stack>
-      </Flex>
+      <div className="ranks hidden md:flex items-center w-full justify-evenly">
+        <DesktopRankContainer
+          title="Rating"
+          content={`${leagueInfo.name} ${user.rating.division && divisionMap[user.rating.division]} - ${
+            user.rating.league === League.Provisional
+              ? `${progress}%`
+              : `${user.rating.points} LP`
+          }`}
+          extra={`${user.stats.wins} wins - ${user.stats.draws} draws - 
+              ${user.stats.defeats} defeats`}
+          league={user.rating.league}
+          progress={progress}
+        />
+        <DesktopRankContainer
+          title="Experience"
+          content="Coming soon"
+          extra="0 xp"
+          league={League.Provisional}
+          progress={0}
+        />
+      </div>
 
       {/* Mobile ranks */}
-      <Stack hideFrom="sm" spacing="10px">
-        <Stack spacing={0}>
-          <Flex
-            w="full"
-            align="center"
-            justify="space-between"
-            pos="relative"
-            h="70px"
-          >
-            <Text fontSize="12px" pos="absolute" top="0" left="0">
-              Stats
-            </Text>
-            <Text fontWeight={700}>
-              {user.stats.wins} wins - {user.stats.draws} draws -{' '}
-              {user.stats.defeats} defeats
-            </Text>
-          </Flex>
-        </Stack>
+      <section className="mobile-ranks flex flex-col md:hidden gap-[10px]">
+        <MobileRankContainer
+          title="Stats"
+          content={`${user.stats.wins} wins - ${user.stats.draws} draws - ${user.stats.defeats} defeats`}
+        />
 
-        <Stack spacing={0}>
-          <Flex
-            w="full"
-            align="center"
-            justify="space-between"
-            pos="relative"
-            h="70px"
-          >
-            <Text fontSize="12px" pos="absolute" top="0" left="0">
-              Rating
-            </Text>
-            <Text fontWeight={700}>
-              {leagueInfo.name}{' '}
-              {user.rating.division && divisionMap[user.rating.division]}
-              {user.rating.league === League.Provisional
-                ? ` - ${progress}%`
-                : ` - ${user.rating.points} LP`}
-            </Text>
-            <Image
-              w="70px"
-              pos="absolute"
-              right="0"
-              top="50%"
-              transform="translateY(-70%)"
-              src={leagueInfo.emblem}
-            />
-          </Flex>
-        </Stack>
+        <MobileRankContainer
+          title="Rating"
+          content={`${leagueInfo.name} ${user.rating.division && divisionMap[user.rating.division]} - ${
+            user.rating.league === League.Provisional
+              ? `${progress}%`
+              : `${user.rating.points} LP`
+          }`}
+          league={user.rating.league}
+        />
 
-        <Stack spacing={0}>
-          <Flex
-            w="full"
-            align="center"
-            justify="space-between"
-            pos="relative"
-            h="70px"
-          >
-            <Text fontSize="12px" pos="absolute" top="0" left="0">
-              Experience
-            </Text>
-            <Text fontWeight={700}>{leaguesMap[League.Provisional].name}</Text>
-            <Image
-              w="70px"
-              pos="absolute"
-              right="0"
-              top="50%"
-              transform="translateY(-70%)"
-              src={leaguesMap[League.Provisional].emblem}
-            />
-          </Flex>
-        </Stack>
-      </Stack>
+        <MobileRankContainer
+          title="Experience"
+          content="Coming soon"
+          league={League.Provisional}
+        />
+      </section>
 
       <ChangeIconModal
         user={user}
@@ -262,21 +130,21 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         onClose={changeIconModalDisclosure.onClose}
       />
 
-      <Stack spacing="10px">
+      <section className="flex flex-col gap-[10px]">
         {matchesQuery.data && matchesQuery.data.length >= 20 && (
-          <Text fontSize="20px">Last 20 matches</Text>
+          <p className="text-xl">Last 20 matches</p>
         )}
         {matchesQuery.data && matchesQuery.data.length < 20 && (
-          <Text fontSize="20px">{matchesQuery.data.length} recent matches</Text>
+          <p className="text-xl">{matchesQuery.data.length} recent matches</p>
         )}
         {matchesQuery.isSuccess && (
-          <Stack spacing="10px">
+          <div className="flex flex-col gap-[10px]">
             {matchesQuery.data.map((match) => (
               <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}
-          </Stack>
+          </div>
         )}
-      </Stack>
-    </Flex>
+      </section>
+    </main>
   )
 }
