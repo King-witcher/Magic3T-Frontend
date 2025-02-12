@@ -1,7 +1,5 @@
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
-import { useLiveActivity } from '@/contexts/live-activity.context.tsx'
 import { Link } from '@tanstack/react-router'
-import { ActivityBadge } from './activity-badge'
 import { NavbarMenu } from './menu/navbar-menu'
 import { useCallback, useState } from 'react'
 import { FaRankingStar } from 'react-icons/fa6'
@@ -10,7 +8,6 @@ import { getIconUrl } from '@/utils/utils'
 import { NavbarButton } from './navbar-button'
 
 export function Navbar() {
-  const { activities } = useLiveActivity()
   const { authState, user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -32,9 +29,6 @@ export function Navbar() {
           <ActivityBadge key={key} liveActivity={activity} />
         ))} */}
       </div>
-      {/* <Skeleton isLoaded={authState !== AuthState.Loading} borderRadius="999px">
-        <ProfileButton />
-      </Skeleton> */}
       <div className="flex items-center h-full">
         {authState === AuthState.SignedIn && (
           <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">

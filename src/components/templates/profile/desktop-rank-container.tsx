@@ -21,9 +21,9 @@ export function DesktopRankContainer({
   return (
     <div className="rank-container flex flex-col items-center select-none">
       <img
-        className="ml-[3px] w-[250px]"
+        className={`ml-[3px] w-[250px]${league === League.Provisional ? ' opacity-50' : ''}`}
         src={leagueInfo.emblem}
-        alt="rank"
+        alt={league}
         draggable={false}
       />
       <div className="flex flex-col items-center">

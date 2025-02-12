@@ -16,9 +16,9 @@ export function MobileRankContainer({ title, content: rank, league }: Props) {
       <span className="font-bold">{rank}</span>
       {league && (
         <img
-          className="w-[70px] absolute right-0 top-1/2 -translate-y-7/10"
+          className="w-[50px] aspect-square absolute right-0 top-1/2 -translate-y-7/10"
           alt={leagueInfo?.name}
-          src={leagueInfo?.emblem}
+          src={leagueInfo?.icon}
         />
       )}
     </div>
