@@ -22,7 +22,6 @@ export function CheatsModal() {
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
-      console.log(input)
       e.preventDefault()
       runCommand(input)
       setInput('')
