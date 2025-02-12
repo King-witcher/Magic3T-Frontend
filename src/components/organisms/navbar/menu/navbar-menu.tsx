@@ -12,6 +12,7 @@ import { useModalStore } from '@/contexts/modal.store'
 import { CheatsModal, LogoutModal } from '../../modals'
 import { FaRankingStar } from 'react-icons/fa6'
 import { IoBag } from 'react-icons/io5'
+import { Spinner } from '@chakra-ui/react'
 
 interface NavbarMenuProps {
   isOpen: boolean
@@ -47,7 +48,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
       ref={ref}
       className={`absolute bottom-[10px] right-0 translate-y-full duration-150 ${isOpen ? 'opacity-100' : 'opacity-0 transform-[translateY(-20px)] pointer-events-none'} !p-[10px] bg-[#ffffff30] text-white ${acrylicClasses}  text-black rounded-[10px] w-[330px] backdrop-blur-sm`}
     >
-      {auth.authState === AuthState.SignedIn && (
+      {auth.authState === AuthState.SignedIn && auth.user.nickname && (
         <>
           <Link
             to="/me"
@@ -105,21 +106,21 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
             </MenuOption>
           </>
         )}
+        {auth.authState === AuthState.Loading && <br />}
         {auth.authState === AuthState.NotSignedIn && (
           <>
-            <MenuOption>
-              <FaSignInAlt /> Sign in
-            </MenuOption>
+            <Link to="/ranking" onClick={onClose}>
+              <MenuOption className="xs:hidden">
+                <FaRankingStar /> Top players
+              </MenuOption>
+            </Link>
+            <Link to="/sign-in" onClick={onClose}>
+              <MenuOption>
+                <FaSignInAlt /> Sign in
+              </MenuOption>
+            </Link>
           </>
         )}
-        {/* <LogoutModal
-          isOpen={logoutModalOpen}
-          onClose={() => setLogoutModalOpen(false)}
-        />
-        <SecretCodeModal
-          isOpen={cheatsModalOpen}
-          onClose={() => setCheatsModalOpen(false)}
-        /> */}
       </div>
     </div>
   )

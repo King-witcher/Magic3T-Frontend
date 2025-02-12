@@ -36,9 +36,11 @@ export function Navbar() {
         <ProfileButton />
       </Skeleton> */}
       <div className="flex items-center h-full">
-        <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">
-          <IoBag /> Store
-        </NavbarButton>
+        {authState === AuthState.SignedIn && (
+          <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">
+            <IoBag /> Store
+          </NavbarButton>
+        )}
         <NavbarButton href="/ranking" className="hidden xs:flex">
           <FaRankingStar /> Top players
         </NavbarButton>
