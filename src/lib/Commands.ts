@@ -1,10 +1,12 @@
 const cmdlist: Record<string, () => void> = {}
 
 export function setCommand(command: string, func: () => void): () => void {
-  cmdlist[command] = func
-  return () => delete cmdlist[command]
+  const uniqueCommand = command.toLowerCase()
+  cmdlist[uniqueCommand] = func
+  return () => delete cmdlist[uniqueCommand]
 }
 
 export function runCommand(command: string) {
-  cmdlist[command]?.()
+  const uniqueCommand = command.toLowerCase()
+  cmdlist[uniqueCommand]?.()
 }

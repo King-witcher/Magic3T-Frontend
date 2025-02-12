@@ -2,15 +2,14 @@ import { acrylicClasses } from '@/styles/tailwind'
 import { Link } from '@tanstack/react-router'
 import { FaPlay, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
 import { BiSolidInvader } from 'react-icons/bi'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useOutsideClick } from '@/hooks'
 import { UserAvatar } from '@/components/molecules'
 import { AuthState, useAuth } from '@/contexts/auth.context'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { MenuOption } from './menu-option'
-import SecretCodeModal from '../../modals/SecretCodeModal'
 import { useModalStore } from '@/contexts/modal.store'
-import { LogoutModal } from '../../modals'
+import { CheatsModal, LogoutModal } from '../../modals'
 
 interface NavbarMenuProps {
   isOpen: boolean
@@ -27,6 +26,13 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
   function openLogoutModal() {
     onClose()
     openModal(<LogoutModal />, {
+      closeOnOutsideClick: true,
+    })
+  }
+
+  function openCheatsModal() {
+    onClose()
+    openModal(<CheatsModal />, {
       closeOnOutsideClick: true,
     })
   }
@@ -81,7 +87,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
             {/* <MenuOption>
                   <FaUser /> Profile
                 </MenuOption> */}
-            <MenuOption onClick={openLogoutModal}>
+            <MenuOption onClick={openCheatsModal}>
               <BiSolidInvader /> Cheats
             </MenuOption>
             <hr className="!my-2 !border-[#ffffff60]" />
