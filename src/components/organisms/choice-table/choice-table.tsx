@@ -1,6 +1,6 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
-import { setCommand } from '@/lib/Commands'
+import { setCommand } from '@/lib/commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
 import { getAcrylicProps } from '@/utils/style-helpers'
