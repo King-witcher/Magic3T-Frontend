@@ -8,7 +8,8 @@ interface Props extends BoxProps {
   size: number
   icon: number
   league: League
-  division: Division | null
+  division?: Division | null
+  type?: 'wing' | 'plate'
   showPencil?: boolean
 }
 
@@ -20,9 +21,10 @@ export function UserAvatar({
   league,
   division,
   showPencil,
+  type = 'plate',
   ...rest
 }: Props) {
-  const tierInfo = leaguesMap[league]
+  const leagueInfo = leaguesMap[league]
 
   return (
     <Center
@@ -53,9 +55,9 @@ export function UserAvatar({
           rounded="999"
         />
         <Box pos="absolute" w="290%" bottom="-100%" pointerEvents="none">
-          <Image src={tierInfo.wing} />
+          <Image src={type === 'plate' ? leagueInfo.plate : leagueInfo.wing} />
         </Box>
-        {division && (
+        {division && type === 'wing' && (
           <Text
             pos="absolute"
             fontSize={`${size * 0.16}px`}

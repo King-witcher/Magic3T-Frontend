@@ -93,7 +93,7 @@ export function PlayerCard({ team, ...rest }: Props) {
               </Text>
             </Flex>
             <Flex alignItems="center" gap="5px">
-              <Image src={tierInfo?.emblem} w="34px" />
+              <Image src={tierInfo?.icon} w="25px" />
               <Text textTransform="capitalize" fontSize="0.875rem">
                 {profile.rating.league}{' '}
                 {divisionMap[profile.rating.division || 0]}

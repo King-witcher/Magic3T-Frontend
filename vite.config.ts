@@ -7,11 +7,7 @@ import tailwindcss from "@tailwindcss/vite"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: ['styled-jsx/babel']
-      }
-    }),
+    react(),
     TanStackRouterVite(),
     tailwindcss()
   ],

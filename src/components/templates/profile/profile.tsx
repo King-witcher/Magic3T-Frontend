@@ -58,6 +58,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           icon={user.summonerIcon}
           league={user.rating.league}
           division={user.rating.division}
+          type="wing"
           size={140}
           m="180px 40px 30px 40px"
           onClick={editable ? changeIconModalDisclosure.onOpen : undefined}

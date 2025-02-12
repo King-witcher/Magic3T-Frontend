@@ -2,6 +2,7 @@ import { PageWidthLimiter } from '@/components/atoms'
 import { Navbar } from '@/components/organisms'
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
+import { ModalLayout } from './modal-layout'
 
 interface Props {
   children: ReactNode
@@ -42,6 +43,7 @@ export function RootLayout({ children }: Props) {
           <PageWidthLimiter>{children}</PageWidthLimiter>
         </Flex>
       </Stack>
+      <ModalLayout />
     </>
   )
 }

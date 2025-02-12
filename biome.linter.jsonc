@@ -15,6 +15,9 @@
       "correctness": {
         "useExhaustiveDependencies": "info",
         "noUnusedImports": "warn"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "info"
       }
     }
   },

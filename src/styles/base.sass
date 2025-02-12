@@ -1,0 +1,27 @@
+$acrylic-background: #ffffff30
+$acrylic-background-hover: #ffffff60
+$acrylic-border: #ffffff80
+  
+@mixin acrylic()
+
+.acrylic
+  border: 1px solid $acrylic-border
+  background: padding-box $acrylic-background
+  border-radius: 10px
+
+.hover-acrylic
+  @extend .acrylic
+  cursor: pointer
+  transition: all 100ms
+  &:hover
+    background: $acrylic-background-hover
+
+.translucent
+  -webkit-backdrop-filter: blur(10px)
+  backdrop-filter: blur(10px)
+
+.soft-shadow
+  box-shadow: 0 0 10px 0 #00000040
+
+.heavy-shadow
+  box-shadow: 0 0 40px 0 #00000060

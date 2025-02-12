@@ -1,0 +1,17 @@
+@use '../base'
+
+%base
+  @extend .hover-acrylic
+  padding: 5px 20px
+  min-width: 120px
+
+.secondary
+  @extend %base
+
+.danger
+  @extend %base
+  background-color: #ff200060
+  border-color: #ff2000c0
+
+  &:hover
+    background-color: #ff200090
