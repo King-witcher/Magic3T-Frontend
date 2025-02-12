@@ -28,21 +28,18 @@ export function Navbar() {
           <span className="font-medium">Play</span>
           <span className="font-bold">Magic3T</span>
         </Link>
-        {Object.entries(activities).map(([key, activity]) => (
+        {/* {Object.entries(activities).map(([key, activity]) => (
           <ActivityBadge key={key} liveActivity={activity} />
-        ))}
+        ))} */}
       </div>
       {/* <Skeleton isLoaded={authState !== AuthState.Loading} borderRadius="999px">
         <ProfileButton />
       </Skeleton> */}
       <div className="flex items-center h-full">
-        <button
-          type="button"
-          className="flex items-center w-fit duration-200 !cursor-default !h-full gap-[10px] !px-[10px] opacity-50"
-        >
+        <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">
           <IoBag /> Store
-        </button>
-        <NavbarButton href="/ranking">
+        </NavbarButton>
+        <NavbarButton href="/ranking" className="hidden xs:flex">
           <FaRankingStar /> Top players
         </NavbarButton>
         <div id="profile-button-container" className="relative h-full">

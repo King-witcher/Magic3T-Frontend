@@ -1,7 +1,8 @@
 import { useModalStore } from '@/contexts/modal.store'
-import { runCommand } from '@/lib/Commands'
+import { runCommand } from '@/lib/commands'
 import { type FormEvent, useCallback, useState } from 'react'
 import buttonStyles from '@/styles/components/button.module.sass'
+import inputStyles from '@/styles/components/input.module.sass'
 
 export function CheatsModal() {
   const [input, setInput] = useState('')
@@ -18,20 +19,18 @@ export function CheatsModal() {
   )
 
   return (
-    <div className="p-[20px] w-[448px]">
+    <form onSubmit={handleSubmit} className="p-[20px] w-[448px]">
       <div className="p-[10px]">
         <h2 className="!text-2xl !font-bold">Insert a cheat</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value)
-            }}
-            className="acrylic !h-[35px] w-full text-center !my-[20px] uppercase placeholder:!text-[#ffffff80]"
-            maxLength={16}
-            placeholder="Cheat"
-          />
-        </form>
+        <input
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value)
+          }}
+          className={`acrylic ${inputStyles.text_field} w-full !my-[20px] uppercase`}
+          maxLength={16}
+          placeholder="Cheat"
+        />
       </div>
       <div className="flex items-center justify-end gap-[10px]">
         <button
@@ -42,6 +41,6 @@ export function CheatsModal() {
           Use
         </button>
       </div>
-    </div>
+    </form>
   )
 }

@@ -10,6 +10,8 @@ import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { MenuOption } from './menu-option'
 import { useModalStore } from '@/contexts/modal.store'
 import { CheatsModal, LogoutModal } from '../../modals'
+import { FaRankingStar } from 'react-icons/fa6'
+import { IoBag } from 'react-icons/io5'
 
 interface NavbarMenuProps {
   isOpen: boolean
@@ -41,6 +43,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
 
   return (
     <div
+      tabIndex={-1}
       ref={ref}
       className={`absolute bottom-[10px] right-0 translate-y-full duration-150 ${isOpen ? 'opacity-100' : 'opacity-0 transform-[translateY(-20px)] pointer-events-none'} !p-[10px] bg-[#ffffff30] text-white ${acrylicClasses}  text-black rounded-[10px] w-[330px] backdrop-blur-sm`}
     >
@@ -84,26 +87,30 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
                 Play
               </MenuOption>
             </Link>
-            {/* <MenuOption>
-                  <FaUser /> Profile
-                </MenuOption> */}
-            <MenuOption onClick={openCheatsModal}>
+            <MenuOption className="opacity-50 cursor-default xs:hidden">
+              <IoBag /> Store
+            </MenuOption>
+            <Link to="/ranking" onClick={onClose}>
+              <MenuOption className="xs:hidden">
+                <FaRankingStar /> Top players
+              </MenuOption>
+            </Link>
+            <MenuOption tabIndex={0} onClick={openCheatsModal}>
               <BiSolidInvader /> Cheats
             </MenuOption>
             <hr className="!my-2 !border-[#ffffff60]" />
-            <MenuOption onClick={openLogoutModal} danger>
+            <MenuOption tabIndex={0} onClick={openLogoutModal} danger>
               <FaSignOutAlt />
               Sign out
             </MenuOption>
           </>
         )}
-        {/* <MenuOption>
-              <FaRankingStar /> Top players
-            </MenuOption> */}
         {auth.authState === AuthState.NotSignedIn && (
-          <MenuOption>
-            <FaSignInAlt /> Sign in
-          </MenuOption>
+          <>
+            <MenuOption>
+              <FaSignInAlt /> Sign in
+            </MenuOption>
+          </>
         )}
         {/* <LogoutModal
           isOpen={logoutModalOpen}
