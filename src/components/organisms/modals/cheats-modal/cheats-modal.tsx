@@ -57,28 +57,4 @@ export function CheatsModal() {
       </div>
     </div>
   )
-
-  return (
-    <Modal isCentered>
-      <ModalOverlay />
-      <ModalContent as="form" onSubmit={handleSubmit}>
-        <ModalHeader>Cheats</ModalHeader>
-        <ModalBody>
-          <Stack>
-            <Text>Enter a cheat code to enable a secret funcionality.</Text>
-            <Input
-              value={input}
-              onChange={(e) => {
-                setInput(e.target.value)
-              }}
-            />
-          </Stack>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={handleSubmit}>Use</Button>
-        </ModalFooter>
-        <ModalCloseButton />
-      </ModalContent>
-    </Modal>
-  )
 }
