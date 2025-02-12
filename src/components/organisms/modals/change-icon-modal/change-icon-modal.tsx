@@ -1,4 +1,5 @@
 import { UserAvatar } from '@/components/molecules'
+import { useAuth } from '@/contexts/auth.context'
 import { NestApi, UserDto } from '@/services/nest-api'
 import { getAcrylicProps } from '@/utils/style-helpers'
 import {
@@ -22,7 +23,6 @@ import { useQuery } from '@tanstack/react-query'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
-import { useAuth } from '@/contexts/auth.context'
 
 const iconIds = [..._.range(0, 30), ..._.range(3455, 3464)]
 

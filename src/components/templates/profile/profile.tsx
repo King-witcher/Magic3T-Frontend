@@ -6,8 +6,8 @@ import { League, MatchDto, UserDto } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
 import { useDisclosure } from '@chakra-ui/react'
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
-import { MatchRow } from './match-row'
 import { DesktopRankContainer } from './desktop-rank-container'
+import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
 
 interface Props {

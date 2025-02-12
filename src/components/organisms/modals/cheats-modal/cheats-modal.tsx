@@ -1,8 +1,8 @@
 import { useModalStore } from '@/contexts/modal.store'
 import { runCommand } from '@/lib/commands'
-import { type FormEvent, useCallback, useState } from 'react'
 import buttonStyles from '@/styles/components/button.module.sass'
 import inputStyles from '@/styles/components/input.module.sass'
+import { type FormEvent, useCallback, useState } from 'react'
 
 export function CheatsModal() {
   const [input, setInput] = useState('')
