@@ -1,7 +1,6 @@
 import { MatchDto, MatchEventType, Team } from '@/services/nest-api'
+import { acrylicClasses } from '@/styles/tailwind'
 import { MatchResult } from '@/types'
-import { getAcrylicProps } from '@/utils/style-helpers'
-import { Center, Flex, Stack, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { FaClock } from 'react-icons/fa'
@@ -13,9 +12,9 @@ interface Props {
 }
 
 const resultColorMap: Record<MatchResult, string> = {
-  [MatchResult.Defeat]: '#c02040',
-  [MatchResult.Draw]: '#b0b0c0',
-  [MatchResult.Victory]: '#00c020',
+  [MatchResult.Defeat]: 'bg-[#c02040]',
+  [MatchResult.Draw]: 'bg-[#b0b0c0]',
+  [MatchResult.Victory]: 'bg-[#00c020]',
 }
 
 const dateTimeFormat = Intl.DateTimeFormat()
@@ -28,6 +27,10 @@ export function MatchRow({ match, viewAs }: Props) {
       : match.winner === team
         ? MatchResult.Victory
         : MatchResult.Defeat
+
+  const isDefeat = result === MatchResult.Defeat
+  const isDraw = result === MatchResult.Draw
+  const isVictory = result === MatchResult.Victory
 
   const player =
     match.teams[Team.Order].id === viewAs
@@ -51,76 +54,52 @@ export function MatchRow({ match, viewAs }: Props) {
 
   return (
     <Link to="/users/id/$userId" params={{ userId: opponent.id }}>
-      <Stack
-        gap="10px"
-        p="20px"
-        transition="all 100ms"
-        cursor="pointer"
-        {...getAcrylicProps()}
-        _hover={{
-          bgColor: '#ffffff40',
-        }}
+      <div
+        className={`flex flex-col gap-[10px] p-[20px] transition-all duration-100 cursor-pointer ${acrylicClasses} hover:bg-[#ffffff40]`}
       >
-        <Flex>
-          <Stack spacing={0}>
-            <Flex align="center" gap="10px">
-              <Text fontWeight={700}>{opponent.nickname}</Text>
+        <div className="flex">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-[10px]">
+              <p className="font-bold">{opponent.nickname}</p>
               {!!player.ratingGain && (
-                <Text
-                  fontSize="0.875rem"
-                  fontWeight={700}
-                  lineHeight="normal"
-                  color={player.ratingGain > 0 ? '#00c020' : '#ff4000'}
+                <p
+                  className={`text-sm/normal font-bold ${player.ratingGain > 0 ? 'text-[#00c020]' : 'text-[#ff4000]'}`}
                 >
                   {player.ratingGain > 0 ? '+' : '-'}
                   {Math.abs(player.ratingGain)}
-                </Text>
+                </p>
               )}
-            </Flex>
-            <Text fontSize="0.75rem" opacity={0.7}>
+            </div>
+            <p className="text-xs/normal opacity-70">
               {dateTimeFormat.format(match.time)} - {durationString}
-            </Text>
-          </Stack>
-          <Center
-            ml="auto"
-            rounded="9990"
-            textTransform="capitalize"
-            color={result === MatchResult.Defeat ? 'light' : '#000000'}
-            fontWeight={700}
-            fontSize="0.875rem"
-            w="80px"
-            h="25px"
-            bgColor={resultColorMap[result]}
+            </p>
+          </div>
+          <div
+            className={`flex items-center justify-center ml-auto rounded-[9999px] capitalize font-bold text-sm w-[80px] h-[25px] ${resultColorMap[result]} ${isDefeat ? 'text-white' : 'text-black'}`}
           >
             {result}
-          </Center>
-        </Flex>
-        <Flex gap={{ base: '8px', sm: '10px' }}>
+          </div>
+        </div>
+        <div className="flex gap-2 sm:gap-2.5">
           {match.events.map((event) => {
-            const bgColor = event.side === Team.Order ? 'blue.400' : 'red.400'
+            const borderColor =
+              event.side === Team.Order ? '!border-blue-400' : '!border-red-400'
 
             if (event.event === MatchEventType.Message) return null
 
             return (
-              <Center
-                h={{ base: '22px', sm: '25px' }}
-                w={{ base: '22px', sm: '25px' }}
-                {...getAcrylicProps()}
-                borderWidth="2px"
-                borderColor={bgColor}
-                lineHeight="normal"
-                rounded="8px"
-                fontSize="0.875rem"
+              <div
+                className={`flex items-center text-sm leading-normal justify-center h-[22px] sm:h-[25px] w-[22px] sm:w-[25px] !border-2 rounded-lg ${borderColor} ${acrylicClasses}`}
                 key={event.time}
               >
                 {event.event === MatchEventType.Choice && event.choice}
                 {event.event === MatchEventType.Forfeit && <RiFlagFill />}
                 {event.event === MatchEventType.Timeout && <FaClock />}
-              </Center>
+              </div>
             )
           })}
-        </Flex>
-      </Stack>
+        </div>
+      </div>
     </Link>
   )
 }

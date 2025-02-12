@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string
+  readonly VITE_CDN_URL: string
+}
+
 declare global {
   type Result<T, E> = ResultClass<T, E>
   interface Window {
@@ -10,12 +15,6 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       API: string
-    }
-  }
-
-  interface ImportMeta {
-    env: {
-      VITE_API_URL: string
     }
   }
 }

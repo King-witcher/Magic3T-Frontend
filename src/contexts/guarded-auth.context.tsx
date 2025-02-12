@@ -1,4 +1,4 @@
-import { setCommand } from '@/lib/Commands.ts'
+import { setCommand } from '@/lib/commands.ts'
 import { UserDto } from '@/services/nest-api/dtos.ts'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
 import { AuthState } from './auth.context.tsx'

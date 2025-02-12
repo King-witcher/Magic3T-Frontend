@@ -26,7 +26,15 @@ export function ChatBox({ inputRef, ...props }: Props) {
   } = useChatHandler()
 
   return (
-    <Center flexShrink={0} position="relative" w={{ sm: '400px' }} {...props}>
+    <Center
+      flexShrink={0}
+      position="relative"
+      w={{ sm: '400px' }}
+      pointerEvents="none"
+      userSelect="none"
+      opacity={0.5}
+      {...props}
+    >
       <VStack
         {...getAcrylicProps()}
         inset={0}

@@ -1,59 +1,61 @@
-import BronzeEmblem from '@/assets/tiers/emblems/Bronze.png'
-import ChallengerEmblem from '@/assets/tiers/emblems/Challenger.png'
-import DiamondEmblem from '@/assets/tiers/emblems/Diamond.png'
-import GoldEmblem from '@/assets/tiers/emblems/Gold.png'
-import MasterEmblem from '@/assets/tiers/emblems/Master.png'
-import SilverEmblem from '@/assets/tiers/emblems/Silver.png'
-import ProvisionalEmblem from '@/assets/tiers/emblems/provisional.png'
-
-import BronzeWing from '@/assets/tiers/wings/Bronze.png'
-import ChallengerWing from '@/assets/tiers/wings/Challenger.png'
-import DiamondWing from '@/assets/tiers/wings/Diamond.png'
-import GoldWing from '@/assets/tiers/wings/Gold.png'
-import MasterWing from '@/assets/tiers/wings/Master.png'
-import SilverWing from '@/assets/tiers/wings/Silver.png'
 import { League } from '@/services/nest-api'
 
-export type TierInfo = {
+export type LeagueInfo = {
   emblem: string
   wing: string
+  icon: string
+  plate: string
   name: string
 }
 
-export const leaguesMap: Record<League, TierInfo> = {
+export const leaguesMap: Record<League, LeagueInfo> = {
   [League.Provisional]: {
-    emblem: ProvisionalEmblem,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/unranked.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/unranked.svg`,
     wing: '',
+    plate: '',
     name: 'Unranked',
   },
   [League.Bronze]: {
-    emblem: BronzeEmblem,
-    wing: BronzeWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/bronze.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/bronze.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/bronze.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/bronze.png`,
     name: 'Bronze',
   },
   [League.Silver]: {
-    emblem: SilverEmblem,
-    wing: SilverWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/silver.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/silver.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/silver.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/silver.png`,
     name: 'Silver',
   },
   [League.Gold]: {
-    emblem: GoldEmblem,
-    wing: GoldWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/gold.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/gold.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/gold.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/gold.png`,
     name: 'Gold',
   },
   [League.Diamond]: {
-    emblem: DiamondEmblem,
-    wing: DiamondWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/diamond.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/diamond.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/diamond.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/diamond.png`,
     name: 'Diamond',
   },
   [League.Master]: {
-    emblem: MasterEmblem,
-    wing: MasterWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/master.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/master.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/master.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/master.png`,
     name: 'Master',
   },
   [League.Challenger]: {
-    emblem: ChallengerEmblem,
-    wing: ChallengerWing,
+    emblem: `${import.meta.env.VITE_CDN_URL}/leagues/emblems/challenger.png`,
+    wing: `${import.meta.env.VITE_CDN_URL}/leagues/wings/challenger.png`,
+    icon: `${import.meta.env.VITE_CDN_URL}/leagues/icons/challenger.svg`,
+    plate: `${import.meta.env.VITE_CDN_URL}/leagues/plates/challenger.png`,
     name: 'Challenger',
   },
 }
