@@ -12,7 +12,7 @@ export function LogoutModal() {
   }
 
   return (
-    <div className="p-[20px] w-[448px]">
+    <div className="p-[20px] w-[448px] max-w-full">
       <div className="p-[10px]">
         <h2 className="!text-2xl !font-bold">Log out</h2>
         <p className="!my-6">You are about to log out from your account.</p>

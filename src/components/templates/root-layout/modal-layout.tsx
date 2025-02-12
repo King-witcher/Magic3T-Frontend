@@ -21,12 +21,12 @@ export function ModalLayout() {
           }`}
       />
       <div
-        className={`fixed inset-0 flex items-center justify-center z-10 
+        className={`fixed inset-0 flex items-center justify-center z-10 p-[20px] 
           ${isOpen ? '' : 'pointer-events-none'}`}
       >
         <section
           ref={modalRef}
-          className={`acrylic translucent heavy-shadow relative duration-150
+          className={`acrylic translucent heavy-shadow relative duration-150 max-w-full
           ${isOpen ? '' : 'pointer-events-none opacity-0 scale-95'}`}
         >
           {content}

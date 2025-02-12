@@ -19,8 +19,8 @@ export function CheatsModal() {
   )
 
   return (
-    <form onSubmit={handleSubmit} className="p-[20px] w-[448px]">
-      <div className="p-[10px]">
+    <form onSubmit={handleSubmit} className="p-[30px] w-[448px] max-w-full">
+      <div>
         <h2 className="!text-2xl !font-bold">Insert a cheat</h2>
         <input
           value={input}
