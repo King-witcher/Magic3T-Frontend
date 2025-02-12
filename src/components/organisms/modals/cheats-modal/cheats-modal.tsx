@@ -1,18 +1,5 @@
 import { useModalStore } from '@/contexts/modal.store'
 import { runCommand } from '@/lib/Commands'
-import {
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
 import { type FormEvent, useCallback, useState } from 'react'
 import buttonStyles from '@/styles/components/button.module.sass'
 
