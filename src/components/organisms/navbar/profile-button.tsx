@@ -1,5 +1,3 @@
-import LogoutModal from '@/components/organisms/modals/LogoutModal'
-import SecretCodeModal from '@/components/organisms/modals/SecretCodeModal'
 import { useAuth } from '@/contexts/auth.context.tsx'
 import { getIconUrl } from '@/utils/utils'
 import {
@@ -92,11 +90,6 @@ export function ProfileButton() {
             Sign in
           </MenuItem>
         )}
-        <LogoutModal isOpen={logoutModalOpen} onClose={closeLogout} />
-        <SecretCodeModal
-          isOpen={secretCodeModalOpen}
-          onClose={closeSecretCode}
-        />
       </MenuList>
     </Menu>
   )
