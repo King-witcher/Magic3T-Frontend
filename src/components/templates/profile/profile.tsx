@@ -9,6 +9,7 @@ import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import { DesktopRankContainer } from './desktop-rank-container'
 import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
+import { Spinner } from '@/components/atoms'
 
 interface Props {
   user: UserDto
@@ -77,7 +78,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
       <div className="ranks hidden md:flex items-center w-full justify-evenly">
         <DesktopRankContainer
           title="Rating"
-          content={`${leagueInfo.name} ${user.rating.division && divisionMap[user.rating.division]} - ${
+          rankName={`${leagueInfo.name} ${user.rating.division ? divisionMap[user.rating.division] : ''} - ${
             user.rating.league === League.Provisional
               ? `${progress}%`
               : `${user.rating.points} LP`
@@ -89,7 +90,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         />
         <DesktopRankContainer
           title="Experience"
-          content="Coming soon"
+          rankName="Coming soon"
           extra="0 xp"
           league={League.Provisional}
           progress={0}
@@ -127,15 +128,31 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         onClose={changeIconModalDisclosure.onClose}
       />
 
-      <section className="flex flex-col gap-[10px]">
-        {matchesQuery.data && matchesQuery.data.length >= 20 && (
-          <p className="text-xl">Last 20 matches</p>
+      <section className="flex flex-col gap-[10px] mt-[20px]">
+        <h2 className="!text-4xl font-serif text-gold-3 uppercase">
+          {matchesQuery.data &&
+            matchesQuery.data.length >= 20 &&
+            'Last 20 matches'}
+
+          {matchesQuery.data &&
+            matchesQuery.data.length < 20 &&
+            `${matchesQuery.data.length} recent match${matchesQuery.data.length > 1 ? 'es' : ''}`}
+
+          {matchesQuery.isPending &&
+            matchesQuery.isFetching &&
+            'Recent matches'}
+        </h2>
+
+        {matchesQuery.isPending && matchesQuery.isFetching && (
+          <div className="center my-[25px] flex-col gap-[5px]">
+            <div className="size-[50px]">
+              <Spinner />
+            </div>
+          </div>
         )}
-        {matchesQuery.data && matchesQuery.data.length < 20 && (
-          <p className="text-xl">{matchesQuery.data.length} recent matches</p>
-        )}
+
         {matchesQuery.isSuccess && (
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] mt-[20px]">
             {matchesQuery.data.map((match) => (
               <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}

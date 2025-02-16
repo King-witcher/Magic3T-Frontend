@@ -4,7 +4,7 @@ import { leaguesMap } from '@/utils/ranks'
 interface Props {
   title: string
   league: League
-  content: string
+  rankName: string
   extra: string
   progress: number
 }
@@ -14,14 +14,14 @@ export function DesktopRankContainer({
   league,
   extra,
   progress,
-  content: rankName,
+  rankName,
 }: Props) {
   const leagueInfo = leaguesMap[league]
 
   return (
     <div className="rank-container flex flex-col items-center select-none">
       <img
-        className={`ml-[3px] w-[250px]${league === League.Provisional ? ' opacity-50' : ''}`}
+        className="ml-[3px] w-[250px]"
         src={leagueInfo.emblem}
         alt={league}
         draggable={false}
