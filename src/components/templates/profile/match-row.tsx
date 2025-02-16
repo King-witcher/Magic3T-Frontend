@@ -58,7 +58,7 @@ export function MatchRow({ match, viewAs }: Props) {
         <div className="flex">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <h3 className="font-serif tracking-wide !text-lg">
+              <h3 className="font-serif tracking-wider !text-lg">
                 {opponent.nickname}
               </h3>
               {!!player.ratingGain && (
