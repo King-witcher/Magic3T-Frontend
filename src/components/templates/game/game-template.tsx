@@ -8,6 +8,8 @@ import { useDisclosure } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
+import { useStore } from 'zustand'
+import { useModalStore } from '@/contexts/modal.store'
 
 const statusText: Record<GameStatus, string> = {
   defeat: 'You lost',
@@ -19,6 +21,7 @@ const statusText: Record<GameStatus, string> = {
 
 export function GameTemplate() {
   const gameCtx = useGame()
+  const openModal = useModalStore((state) => state.openModal)
   const {
     isOpen: forfeitModaOpen,
     onClose: closeForfeitModal,
@@ -36,7 +39,7 @@ export function GameTemplate() {
   useEffect(() => {
     return gameCtx.onMatchReport((report) => {
       setTimeout(() => {
-        resultModalDisclosure.onOpen()
+        openModal(<ResultModal />, { closeOnOutsideClick: true })
       }, 500)
     })
   }, [])
@@ -116,10 +119,6 @@ export function GameTemplate() {
         </ButtonsContainer>
       </div>
       <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />
-      <ResultModal
-        onClose={resultModalDisclosure.onClose}
-        isOpen={resultModalDisclosure.isOpen}
-      />
     </div>
   )
 }
