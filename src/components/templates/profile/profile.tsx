@@ -61,7 +61,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           division={user.rating.division}
           type="wing"
           size={140}
-          m="180px 40px 30px 40px"
+          m="150px 40px 40px 40px"
           onClick={editable ? changeIconModalDisclosure.onOpen : undefined}
           showPencil={editable}
           cursor={editable ? 'pointer' : 'auto'}
@@ -77,7 +77,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
       {/* Desktop ranks */}
       <div className="ranks hidden md:flex items-center w-full justify-evenly">
         <DesktopRankContainer
-          title="Rating"
+          title="League"
           rankName={`${leagueInfo.name} ${user.rating.division ? divisionMap[user.rating.division] : ''} - ${
             user.rating.league === League.Provisional
               ? `${progress}%`
