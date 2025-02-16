@@ -12,9 +12,9 @@ interface Props {
 }
 
 const resultColorMap: Record<MatchResult, string> = {
-  [MatchResult.Defeat]: 'bg-[#c02040]',
-  [MatchResult.Draw]: 'bg-[#b0b0c0]',
-  [MatchResult.Victory]: 'bg-[#00c020]',
+  [MatchResult.Defeat]: 'bg-red-700',
+  [MatchResult.Draw]: 'bg-gray-400',
+  [MatchResult.Victory]: 'bg-green-500',
 }
 
 const dateTimeFormat = Intl.DateTimeFormat()
@@ -54,31 +54,31 @@ export function MatchRow({ match, viewAs }: Props) {
 
   return (
     <Link to="/users/id/$userId" params={{ userId: opponent.id }}>
-      <div
-        className={`flex flex-col gap-[10px] p-[20px] transition-all duration-100 cursor-pointer ${acrylicClasses} hover:bg-[#ffffff40]`}
-      >
+      <div className="flex flex-col gap-[10px] p-[20px] transition-all duration-100 cursor-pointer hover-acrylic hover:bg-[#ffffff40]">
         <div className="flex">
           <div className="flex flex-col">
-            <div className="flex items-center gap-[10px]">
-              <p className="font-bold">{opponent.nickname}</p>
+            <div className="flex items-center gap-2">
+              <h3 className="font-serif tracking-wider !text-lg">
+                {opponent.nickname}
+              </h3>
               {!!player.ratingGain && (
                 <p
-                  className={`text-sm/normal font-bold ${player.ratingGain > 0 ? 'text-[#00c020]' : 'text-[#ff4000]'}`}
+                  className={`text-sm/normal !font-serif font-bold ${player.ratingGain > 0 ? 'text-green-500' : 'text-red-500'}`}
                 >
                   {player.ratingGain > 0 ? '+' : '-'}
                   {Math.abs(player.ratingGain)}
                 </p>
               )}
             </div>
-            <p className="text-xs/normal opacity-70">
+            <p className="text-xs/normal text-grey-1">
               {dateTimeFormat.format(match.time)} - {durationString}
             </p>
           </div>
-          <div
-            className={`flex items-center justify-center ml-auto rounded-[9999px] capitalize font-bold text-sm w-[80px] h-[25px] ${resultColorMap[result]} ${isDefeat ? 'text-white' : 'text-black'}`}
+          <span
+            className={`flex items-center justify-center ml-auto rounded-[9999px] capitalize font-bold text w-[80px] h-[25px] ${resultColorMap[result]} ${isDefeat ? 'text-white' : 'text-black'}`}
           >
             {result}
-          </div>
+          </span>
         </div>
         <div className="flex gap-2 sm:gap-2.5">
           {match.events.map((event) => {

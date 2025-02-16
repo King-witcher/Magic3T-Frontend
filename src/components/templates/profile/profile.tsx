@@ -1,3 +1,4 @@
+import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
@@ -60,28 +61,24 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           division={user.rating.division}
           type="wing"
           size={140}
-          m="180px 40px 30px 40px"
+          m="150px 40px 40px 40px"
           onClick={editable ? changeIconModalDisclosure.onOpen : undefined}
           showPencil={editable}
           cursor={editable ? 'pointer' : 'auto'}
         />
-        <div className="nickname-box flex items-center gap-[8px]">
+        <h1 className="!text-4xl/[39px] flex items-center gap-[8px] text-center font-serif p-[5px] !font-bold rounded-[10px]">
           {(user.role === 'bot' || user.role === 'creator') && (
-            <span className="badge rounded-[5px] text-sm bg-[#ffffff40] text-white uppercase font-bold px-[4px] py-[1px]">
-              {user.role}
-            </span>
+            <span className="uppercase text-gold-4">{user.role}</span>
           )}
-          <p className="text-4xl/[39px] text-center p-[5px] font-medium rounded-[10px]">
-            {user.nickname}
-          </p>
-        </div>
+          <span>{user.nickname}</span>
+        </h1>
       </section>
 
       {/* Desktop ranks */}
       <div className="ranks hidden md:flex items-center w-full justify-evenly">
         <DesktopRankContainer
-          title="Rating"
-          content={`${leagueInfo.name} ${user.rating.division && divisionMap[user.rating.division]} - ${
+          title="League"
+          rankName={`${leagueInfo.name} ${user.rating.division ? divisionMap[user.rating.division] : ''} - ${
             user.rating.league === League.Provisional
               ? `${progress}%`
               : `${user.rating.points} LP`
@@ -93,7 +90,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         />
         <DesktopRankContainer
           title="Experience"
-          content="Coming soon"
+          rankName="Coming soon"
           extra="0 xp"
           league={League.Provisional}
           progress={0}
@@ -131,15 +128,31 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         onClose={changeIconModalDisclosure.onClose}
       />
 
-      <section className="flex flex-col gap-[10px]">
-        {matchesQuery.data && matchesQuery.data.length >= 20 && (
-          <p className="text-xl">Last 20 matches</p>
+      <section className="flex flex-col gap-[10px] mt-[20px]">
+        <h2 className="!text-4xl font-serif text-gold-3 uppercase">
+          {matchesQuery.data &&
+            matchesQuery.data.length >= 20 &&
+            'Last 20 matches'}
+
+          {matchesQuery.data &&
+            matchesQuery.data.length < 20 &&
+            `${matchesQuery.data.length} recent match${matchesQuery.data.length > 1 ? 'es' : ''}`}
+
+          {matchesQuery.isPending &&
+            matchesQuery.isFetching &&
+            'Recent matches'}
+        </h2>
+
+        {matchesQuery.isPending && matchesQuery.isFetching && (
+          <div className="center my-[25px] flex-col gap-[5px]">
+            <div className="size-[50px]">
+              <Spinner />
+            </div>
+          </div>
         )}
-        {matchesQuery.data && matchesQuery.data.length < 20 && (
-          <p className="text-xl">{matchesQuery.data.length} recent matches</p>
-        )}
+
         {matchesQuery.isSuccess && (
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] mt-[20px]">
             {matchesQuery.data.map((match) => (
               <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}

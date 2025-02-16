@@ -16,19 +16,14 @@ export function Navbar() {
   }, [])
 
   return (
-    <nav className="w-full h-[65px] flex gap-[10px] px-[10px] !border-b-1 !border-b-[#ffffff80] items-center justify-between flex-[0_0_65px] bg-clip-padding text-white z-1 shadow-[0_0_12px_0_#00000040] bg-[linear-gradient(90deg,_#ffffff30,_#ffffff40,_#ffffff30)]">
-      <div className="flex items-center gap-[5px]">
-        <Link
-          className="flex p-[10px] rounded-[10px] select-none cursor-pointer gap-[3px] hover:!bg-[#ffffff20] duration-200"
-          to="/"
-        >
-          <span className="font-medium">Play</span>
-          <span className="font-bold">Magic3T</span>
-        </Link>
-        {/* {Object.entries(activities).map(([key, activity]) => (
-          <ActivityBadge key={key} liveActivity={activity} />
-        ))} */}
-      </div>
+    <nav className="w-full h-[65px] flex gap-[10px] px-[10px] !border-b-1 !border-b-grey-1 items-center justify-between flex-[0_0_65px] bg-clip-padding z-1 shadow-[0_0_12px_0_#00000040] bg-[linear-gradient(90deg,_#ffffff20,_#ffffff30,_#ffffff20)]">
+      <Link
+        className="center p-[10px] font-serif uppercase !h-full select-none cursor-pointer gap-[3px] duration-200"
+        to="/"
+      >
+        <span className="font-medium">Play</span>
+        <span className="font-bold">Magic3T</span>
+      </Link>
       <div className="flex items-center h-full">
         {authState === AuthState.SignedIn && (
           <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">

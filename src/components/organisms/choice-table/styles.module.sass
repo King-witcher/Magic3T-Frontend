@@ -1,0 +1,18 @@
+@use '@/styles/base.sass'
+  
+.container
+  @extend .acrylic
+
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  padding: 20px
+  width: 100%
+  height: fit-content
+  gap: 10px
+  transition: box-shadow 1s
+
+  @media screen and (min-width: 30rem)
+    width: 300px
+
+  &.selectable
+    box-shadow: 0 0 10px 0 color-mix(in srgb, var(--color-blue-2),transparent), inset 0 0 40px var(--color-blue-2)

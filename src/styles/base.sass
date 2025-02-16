@@ -1,6 +1,14 @@
-$acrylic-background: #ffffff30
-$acrylic-background-hover: #ffffff60
-$acrylic-border: #ffffff80 
+$acrylic-background: #ffffff28
+$acrylic-background-hover: #ffffff40
+$acrylic-border: #A09B8C
+
+p
+  font-family: spiegel !important
+
+@mixin center
+  display: flex
+  align-items: center
+  justify-content: center
 
 .acrylic
   border: 1px solid $acrylic-border
@@ -23,3 +31,13 @@ $acrylic-border: #ffffff80
 
 .heavy-shadow
   box-shadow: 0 0 40px 0 #00000060
+
+.center
+  display: flex
+  align-items: center
+  justify-content: center
+
+.one-line
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap

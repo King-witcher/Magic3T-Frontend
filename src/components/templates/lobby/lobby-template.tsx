@@ -5,7 +5,6 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import { GameMode } from '@/types/queue'
-import { Center, Heading, Stack, Text } from '@chakra-ui/react'
 import { QueueModeButton } from './queue-mode-button'
 
 export function LobbyTemplate() {
@@ -13,23 +12,20 @@ export function LobbyTemplate() {
   const { serverStatus } = useServiceStatus()
 
   return (
-    <Center className="lobby" h="full">
-      <Stack spacing={0} w="full" maxW="800px">
-        <Heading textAlign="center" color="light">
-          Play Magic3T
-        </Heading>
-        <Text
-          textAlign="center"
-          fontSize={{ base: '0.8rem', sm: '0.9rem' }}
-          color="#ffffffc0"
-          mt="10px"
-        >
+    <div className="flex items-center justify-center h-full">
+      <div className="flex flex-col w-full max-w-[800px]">
+        <h1 className="text-center !text-5xl font-serif text-gold-4 !font-bold">
+          <span className="text-2xl xs:text-5xl">PLAY</span>{' '}
+          <br className="xs:hidden" />
+          <span>MAGIC3T</span>
+        </h1>
+        <p className="text-center text-[0.8rem] xs:text-[0.9rem] text-grey-1 !mt-[10px]">
           Be the first to select three numbers that add up to exactly 15.
-        </Text>
+        </p>
 
         <ButtonsContainer
-          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
-          mt="20px"
+          className="mt-[20px]"
+          disabled={serverStatus !== ServerStatus.On}
         >
           <QueueModeButton
             name="Easy"
@@ -53,8 +49,8 @@ export function LobbyTemplate() {
           />
         </ButtonsContainer>
         <ButtonsContainer
-          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
-          my="20px"
+          className="my-[20px]"
+          disabled={serverStatus !== ServerStatus.On}
         >
           <QueueModeButton
             name="Human"
@@ -65,26 +61,21 @@ export function LobbyTemplate() {
         </ButtonsContainer>
         {serverStatus === ServerStatus.On &&
           (queueUserCount.connected > 1 ? (
-            <Text textAlign="center" color="green.400">
+            <p className="text-center text-green-400">
               {queueUserCount.connected} players online
-            </Text>
+            </p>
           ) : (
-            <Text textAlign="center" color="gray.400">
-              Only you are online. <br />
-              Invite your friends to play Magic3T!
-            </Text>
+            <p className="text-center text-grey-1">
+              Only you are online. Invite a friends to play Magic3T!
+            </p>
           ))}
         {serverStatus === ServerStatus.Loading && (
-          <Text textAlign="center" color="blue.500">
-            The server is rebooting...
-          </Text>
+          <p className="text-center text-grey1">The server is rebooting...</p>
         )}
         {serverStatus === ServerStatus.Off && (
-          <Text textAlign="center" color="red.600">
-            The server is offline.
-          </Text>
+          <p className="text-center text-red-600">The server is offline.</p>
         )}
-      </Stack>
-    </Center>
+      </div>
+    </div>
   )
 }

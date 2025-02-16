@@ -12,8 +12,10 @@ export function MobileRankContainer({ title, content: rank, league }: Props) {
 
   return (
     <div className="flex items-center justify-between relative h-[70px]">
-      <span className="text-xs absolute top-0 left-0">{title}</span>
-      <span className="font-bold">{rank}</span>
+      <h2 className="!text-sm absolute top-0 left-0 text-gold-4 !font-bold font-serif">
+        {title}
+      </h2>
+      <span className="font-serif">{rank}</span>
       {league && (
         <img
           className="w-[50px] aspect-square absolute right-0 top-1/2 -translate-y-7/10"

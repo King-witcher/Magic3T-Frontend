@@ -2,7 +2,6 @@ import { UserAvatar } from '@/components/molecules'
 import { AuthState, useAuth } from '@/contexts/auth.context'
 import { useModalStore } from '@/contexts/modal.store'
 import { useOutsideClick } from '@/hooks'
-import { acrylicClasses } from '@/styles/tailwind'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { Link } from '@tanstack/react-router'
 import { useRef } from 'react'
@@ -45,7 +44,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
     <div
       tabIndex={-1}
       ref={ref}
-      className={`absolute bottom-[10px] right-0 translate-y-full duration-150 ${isOpen ? 'opacity-100' : 'opacity-0 transform-[translateY(-20px)] pointer-events-none'} !p-[10px] bg-[#ffffff30] text-white ${acrylicClasses}  text-black rounded-[10px] w-[330px] backdrop-blur-sm`}
+      className={`absolute bottom-[10px] right-0 translate-y-full duration-150 ${isOpen ? 'opacity-100' : 'opacity-0 transform-[translateY(-20px)] pointer-events-none'} !p-[10px] bg-[#ffffff30] acrylic rounded-[10px] w-[330px] backdrop-blur-sm`}
     >
       {auth.authState === AuthState.SignedIn && auth.user.nickname && (
         <>
@@ -64,11 +63,11 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
                 size={60}
               />
             </div>
-            <div className="flex flex-col gap-[5px] ml-[16px]">
-              <span className="font-bold text-xl">{auth.user.nickname}</span>
+            <div className="flex flex-col gap-[5px] ml-[16px] font-serif">
+              <span className="text-xl">{auth.user.nickname}</span>
               <div className="flex items-center gap-1">
                 <img className="size-6" src={league?.icon} alt={league?.name} />
-                <span className="text-sm text-[#ffffffc0] capitalize">
+                <span className="text-sm text-grey-1 capitalize">
                   {league?.name} {divisionMap[auth.user.rating.division || 0]} -{' '}
                   {auth.user.rating.points}LP
                 </span>

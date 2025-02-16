@@ -34,9 +34,9 @@ export const chakraTheme = extendTheme({
         },
       },
       body: {
-        bg: '#281e55',
-        color: 'light',
-        fontFamily: 'Nunito Variable',
+        bgColor: '#0A1428',
+        color: 'var(--color-gold-1)',
+        fontFamily: 'spiegel',
         '::-webkit-scrollbar': {
           w: '5px',
           animation: `${scrollbarAnimation} 500ms linear`,
