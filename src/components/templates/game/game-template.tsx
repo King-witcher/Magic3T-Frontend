@@ -4,15 +4,7 @@ import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
 import { Team } from '@/types/game-socket'
 import { GameStatus } from '@/types/game.ts'
-import { getAcrylicProps } from '@/utils/style-helpers'
-import {
-  Center,
-  Flex,
-  Stack,
-  Text,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
@@ -52,38 +44,26 @@ export function GameTemplate() {
   if (!gameCtx.isActive) return null // Improve
   return (
     <div className="w-full">
-      <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
+      <div className="flex flex-col gap-[20px] lg:gap-[40px] w-full">
         <p className="text-center hidden xs:block text-grey-1">
           Be the first to select three numbers that add up to exactly 15.
         </p>
-        <Flex
-          h="min-content"
-          gap="20px"
-          align="stretch"
-          justify="center"
-          flexDir={{ base: 'column', sm: 'row' }}
-          w="full"
-        >
-          <Stack
-            spacing="20px"
-            align="center"
-            justify="space-between"
-            hideBelow="sm"
-          >
+        <div className="flex flex-col h-min gap-[20px] items-stretch justify-center lg:flex-row w-full">
+          <div className="lg:flex hidden flex-col gap-[20px] items-center justify-between">
             <PlayerCard team={upTeam} />
-            <Text color="light">vs</Text>
+            <span>vs</span>
             <PlayerCard team={downTeam} />
-          </Stack>
-          <VStack gap="20px" justify="center">
-            <VStack gap="20px" w="full">
+          </div>
+          <div className="flex flex-col gap-[20px] justify-center">
+            <div className="flex flex-col gap-[20px] w-full items-center">
               <PlayerCard team={upTeam} w="full" hideFrom="sm" />
-              <Center {...getAcrylicProps()} h="50px" w="full">
+              <div className="acrylic center h-[50px] w-full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
                   timer={upPlayer.timer}
                 />
-              </Center>
+              </div>
               <ChoiceTable
                 redMoves={upPlayer.choices}
                 blueMoves={downPlayer.choices}
@@ -97,17 +77,17 @@ export function GameTemplate() {
                 }
                 onSelect={gameCtx.pick}
               />
-              <Center {...getAcrylicProps()} h="50px" w="full">
+              <div className="acrylic center h-[50px] w-full">
                 <TimeCounter
                   color="light"
                   fontSize="18px"
                   timer={downPlayer.timer}
                 />
-              </Center>
-            </VStack>
-          </VStack>
+              </div>
+            </div>
+          </div>
           <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
-        </Flex>
+        </div>
         <ButtonsContainer disabled={false}>
           {!gameCtx.finished && (
             <InnerButton
@@ -134,7 +114,7 @@ export function GameTemplate() {
             // </Link>,
           ]}
         </ButtonsContainer>
-      </VStack>
+      </div>
       <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />
       <ResultModal
         onClose={resultModalDisclosure.onClose}
