@@ -11,13 +11,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          bun-version: latest
+          node-version: 20.10.0
 
       - name: Install packages
-        run: bun install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Check code quality
-        run: bun lint & bun tsc
+        run: yarn lint & yarn tsc
