@@ -19,7 +19,7 @@ export function RankingTemplate() {
         Top Magic3T players
       </h1>
       {rankingQuery.isSuccess && (
-        <div className="flex flex-col gap-[10px] my-[20px] overflow-hidden">
+        <div className="flex flex-col gap-[10px] mt-[20px] overflow-hidden">
           {rankingQuery.data.map((user, index) => {
             const isProvisional = user.rating.league === League.Provisional
             const isApex = user.rating.league === League.Master
@@ -51,14 +51,14 @@ export function RankingTemplate() {
                   </span>
                 </div>
                 {/* Rank Icon Box */}
-                <div className="flex items-center ml-auto">
+                <div className="flex items-center ml-auto gap-[5px] whitespace-nowrap">
                   <img
                     className="w-[30px]"
                     alt={leagueInfo.name}
                     title={leagueInfo.name}
                     src={leagueInfo.icon}
                   />
-                  <span className="text-center h-[1fr] w-[20px]">
+                  <span className="text-center h-[1fr] min-w-[20px]">
                     {!isProvisional &&
                       !isApex &&
                       divisionMap[user.rating.division || 1]}

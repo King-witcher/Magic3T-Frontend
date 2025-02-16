@@ -1,6 +1,6 @@
 import { PageWidthLimiter } from '@/components/atoms'
 import { Navbar } from '@/components/organisms'
-import { Box, Flex, Stack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import { ModalLayout } from './modal-layout'
 
@@ -24,25 +24,12 @@ export function RootLayout({ children }: Props) {
         top="50%"
         transform="translate(-50%, -50%)"
       />
-      <Stack
-        className="root-layout"
-        alignItems="center"
-        h="100dvh"
-        gap="0"
-        pos="relative"
-      >
+      <div className="root-layout flex flex-col items-center h-dvh relative">
         <Navbar />
-        <Flex
-          flex="1"
-          w="full"
-          justify="center"
-          h="fit-content"
-          overflowX="hidden"
-          overflowY="scroll"
-        >
+        <div className="flex flex-[1] w-full justify-center h-fit overflow-x-hidden overflow-y-scroll">
           <PageWidthLimiter>{children}</PageWidthLimiter>
-        </Flex>
-      </Stack>
+        </div>
+      </div>
       <ModalLayout />
     </>
   )
