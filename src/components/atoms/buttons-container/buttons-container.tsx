@@ -1,29 +1,17 @@
-import { getAcrylicProps } from '@/utils/style-helpers'
-import { Box, Stack, type StackProps } from '@chakra-ui/react'
 import type { ReactNode } from '@tanstack/react-router'
 
-interface Props extends StackProps {
+interface Props {
   children: ReactNode
+  disabled: boolean
+  className?: string
 }
 
-export function ButtonsContainer({ children, ...rest }: Props) {
+export function ButtonsContainer({ children, className, disabled }: Props) {
   return (
-    <Stack
-      gap="0"
-      {...getAcrylicProps()}
-      background="unset"
-      rounded="16px"
-      overflow="hidden"
-      flexDirection={{ base: 'column', sm: 'row' }}
-      w="full"
-      direction={{ base: 'column', sm: 'row' }}
-      spacing={0}
-      divider={
-        <Box bg="#ffffff80" alignSelf="stretch" border="none" flex="0 0 1px" />
-      }
-      {...rest}
+    <div
+      className={`acrylic flex flex-col xs:flex-row !rounded-[16px] border-none overflow-hidden w-full ${className} ${disabled ? 'opacity-50' : ''}`}
     >
       {children}
-    </Stack>
+    </div>
   )
 }

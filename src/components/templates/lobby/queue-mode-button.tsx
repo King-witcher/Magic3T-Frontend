@@ -4,9 +4,9 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { GameMode } from '@/types/queue'
-import { Spinner } from '@chakra-ui/react'
 import styles from './styles.module.sass'
 import { ReactNode } from '@tanstack/react-router'
+import { Spinner } from '@/components/atoms'
 
 interface Props {
   gameMode: GameMode
@@ -14,7 +14,6 @@ interface Props {
   name: string
   playersInQueue?: number
   isLoading: boolean
-  onClick: () => void
 }
 
 export function QueueModeButton({
@@ -43,14 +42,14 @@ export function QueueModeButton({
       className={`${styles.queue_mode_button} ${isLoading ? styles.loading : ''} ${isDisabled ? styles.disabled : ''}`}
     >
       <div className={styles.spinner_container}>
-        <Spinner size="sm" speed="1s" />
+        <Spinner className="size-[30px]" />
       </div>
 
       <div className="flex flex-col">
-        <span className="text-center text-lg">{name}</span>
+        <span className="text-center text-xl font-serif">{name}</span>
         {playersInQueue !== undefined && (
           <span
-            className={`text-xs font-medium text-center ${playersInQueue ? 'text-green-400' : 'text-[#ffffff60]'}`}
+            className={`text-sm font-medium text-center ${playersInQueue ? 'text-green-400' : 'text-grey-1'}`}
             color={playersInQueue ? 'green.400' : '#ffffff60'}
           >
             {playersInQueue} player

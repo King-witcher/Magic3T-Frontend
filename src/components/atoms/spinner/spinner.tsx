@@ -1,11 +1,15 @@
-interface Props {}
+interface Props {
+  className?: string
+}
 
-export function Spinner() {
+export function Spinner({ className }: Props) {
   return (
-    <img
-      className="size-[80px] animate-spin duration-100"
-      src={`${import.meta.env.VITE_CDN_URL}/ui/spinner.png`}
-      alt="spinner"
-    />
+    <div className={className}>
+      <img
+        className="size-full animate-spin duration-100 mix-blend-lighten"
+        src={`${import.meta.env.VITE_CDN_URL}/ui/spinner.png`}
+        alt="spinner"
+      />
+    </div>
   )
 }

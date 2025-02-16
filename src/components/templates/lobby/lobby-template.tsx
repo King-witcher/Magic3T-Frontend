@@ -14,14 +14,16 @@ export function LobbyTemplate() {
   return (
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col w-full max-w-[800px]">
-        <h1 className="text-center !text-4xl">Play Magic3T</h1>
-        <p className="text-center text-[0.8rem] xs:text-[0.9rem] text-[#ffffffc0] !mt-[10px]">
+        <h1 className="text-center !text-5xl font-serif text-gold-4 !font-bold">
+          PLAY MAGIC3T
+        </h1>
+        <p className="text-center text-[0.8rem] xs:text-[0.9rem] text-grey-1 !mt-[10px]">
           Be the first to select three numbers that add up to exactly 15.
         </p>
 
         <ButtonsContainer
-          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
-          mt="20px"
+          className="mt-[20px]"
+          disabled={serverStatus !== ServerStatus.On}
         >
           <QueueModeButton
             name="Easy"
@@ -45,8 +47,8 @@ export function LobbyTemplate() {
           />
         </ButtonsContainer>
         <ButtonsContainer
-          opacity={serverStatus !== ServerStatus.On ? 0.5 : 1}
-          my="20px"
+          className="my-[20px]"
+          disabled={serverStatus !== ServerStatus.On}
         >
           <QueueModeButton
             name="Human"
@@ -61,15 +63,12 @@ export function LobbyTemplate() {
               {queueUserCount.connected} players online
             </p>
           ) : (
-            <p className="text-center text-gray-400">
-              Only you are online. <br />
-              Invite your friends to play Magic3T!
+            <p className="text-center text-grey-1">
+              Only you are online. Invite a friends to play Magic3T!
             </p>
           ))}
         {serverStatus === ServerStatus.Loading && (
-          <p className="text-center text-blue-400">
-            The server is rebooting...
-          </p>
+          <p className="text-center text-grey1">The server is rebooting...</p>
         )}
         {serverStatus === ServerStatus.Off && (
           <p className="text-center text-red-600">The server is offline.</p>

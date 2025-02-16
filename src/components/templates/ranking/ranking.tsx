@@ -7,7 +7,7 @@ import { Link } from '@tanstack/react-router'
 export function RankingTemplate() {
   const rankingQuery = useSuspenseQuery({
     queryKey: ['ranking'],
-    staleTime: 30 * 1000,
+    staleTime: 120 * 1000,
     async queryFn() {
       return await NestApi.User.getRanking()
     },
