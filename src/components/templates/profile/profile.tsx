@@ -65,16 +65,12 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           showPencil={editable}
           cursor={editable ? 'pointer' : 'auto'}
         />
-        <div className="nickname-box flex items-center gap-[8px]">
+        <h1 className="!text-4xl/[39px] flex items-center gap-[8px] text-center font-serif p-[5px] !font-bold rounded-[10px]">
           {(user.role === 'bot' || user.role === 'creator') && (
-            <span className="badge rounded-[5px] text-sm bg-[#ffffff40] text-white uppercase font-bold px-[4px] py-[1px]">
-              {user.role}
-            </span>
+            <span className="uppercase text-gold-4">{user.role}</span>
           )}
-          <h2 className="!text-4xl/[39px] text-center font-[beaufort] text-[#F0E6D2] p-[5px] !font-bold rounded-[10px]">
-            {user.nickname}
-          </h2>
-        </div>
+          <span>{user.nickname}</span>
+        </h1>
       </section>
 
       {/* Desktop ranks */}
