@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './prelude'
 import { routeTree } from './route-tree.gen'
 import './main.css'
+import '@/styles/fonts.sass'
 import '@/styles/base.sass'
 
 const router = createRouter({ routeTree })

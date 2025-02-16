@@ -71,9 +71,9 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
               {user.role}
             </span>
           )}
-          <p className="text-4xl/[39px] text-center p-[5px] font-medium rounded-[10px]">
+          <h2 className="!text-4xl/[39px] text-center font-[beaufort] text-[#F0E6D2] p-[5px] !font-bold rounded-[10px]">
             {user.nickname}
-          </p>
+          </h2>
         </div>
       </section>
 

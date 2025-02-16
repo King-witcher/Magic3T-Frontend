@@ -1,8 +1,6 @@
 import { League, NestApi } from '@/services/nest-api'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
-import { getAcrylicProps } from '@/utils/style-helpers'
 import { getIconUrl } from '@/utils/utils'
-import { Center, Flex, Heading, Image, Spinner, Stack } from '@chakra-ui/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
@@ -17,87 +15,61 @@ export function RankingTemplate() {
 
   return (
     <>
-      <Heading>Top Magic3T players</Heading>
+      <h1 className="!text-[6vw] sm:!text-4xl font-serif !font-semibold text-gold-1 uppercase text-tred">
+        Top Magic3T players
+      </h1>
       {rankingQuery.isSuccess && (
-        <Stack spacing="10px" mt="40px" pb="40px">
+        <div className="flex flex-col gap-[10px] my-[20px] overflow-hidden">
           {rankingQuery.data.map((user, index) => {
             const isProvisional = user.rating.league === League.Provisional
             const isApex = user.rating.league === League.Master
             const leagueInfo = leaguesMap[user.rating.league]
             return (
-              <Flex
-                as={Link}
+              <Link
+                className={`hover-acrylic flex tracking-wide font-serif gap-[5px] items-center p-[20px_15px] sm:p-[18px_20px] sm:gap-[10px] duration-200] ${isProvisional ? 'opacity-50' : ''}`}
                 from="/ranking"
                 to={`/users/${user.nickname?.replaceAll(' ', '')}`}
                 key={user.id}
-                align="center"
-                p={{ base: '20px 15px', sm: '20px' }}
-                gap={{ base: '5px', sm: '10px' }}
-                opacity={isProvisional ? 0.5 : 1}
-                {...getAcrylicProps()}
-                transition="background-color 200ms"
-                _hover={{
-                  bgColor: '#ffffff40',
-                }}
               >
-                <Center fontWeight={700} flex="0 0 25px">
-                  {isProvisional ? '-' : `#${index + 1}`}
-                </Center>{' '}
-                <Flex
-                  align={'center'}
-                  gap="5px"
-                  fontSize={{ base: '0.875rem', sm: '1rem' }}
-                >
-                  <Image
+                <span className="font-bold text-lg flex-[0_0_25px] text-grey-1">
+                  {isProvisional ? '' : `#${index + 1}`}
+                </span>{' '}
+                {/* <Box noOfLines={1}>aaaaaaaaa asdfa sdfas dfasdfasd</Box> */}
+                <div className="flex items-center gap-[8px] text-sm xs:text-[1rem] overflow-hidden">
+                  <img
+                    className="size-[30px] rounded-[999px] !border-2 !border-[#ffffff80]"
+                    alt="icon"
                     src={getIconUrl(user.summonerIcon)}
-                    boxSize="30px"
-                    rounded="999"
-                    border="2px solid #ffffff80"
                   />
                   {(user.role === 'bot' || user.role === 'creator') && (
-                    <Center
-                      fontSize={{ base: '8px', sm: '10px' }}
-                      lineHeight="normal"
-                      p="2px 3px"
-                      backgroundColor="#ffffff40"
-                      rounded="5px"
-                      textTransform="uppercase"
-                    >
+                    <span className="text-gold-4 letter uppercase">
                       {user.role}
-                    </Center>
+                    </span>
                   )}
-                  {user?.nickname ?? '?'}
-                </Flex>
-                <Flex
-                  ml="auto"
-                  align="center"
-                  fontSize={{ base: '0.75rem', sm: '0.875rem' }}
-                  minW="50px"
-                  gap="5px"
-                >
+                  <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {user?.nickname ?? '?'}
+                  </span>
+                </div>
+                {/* Rank Icon Box */}
+                <div className="flex items-center ml-auto">
                   <img
-                    className="size-[30px] drop-shadow-[0_0px_2px_#00000080]"
+                    className="w-[30px]"
                     alt={leagueInfo.name}
                     title={leagueInfo.name}
                     src={leagueInfo.icon}
                   />
+                  <span className="text-center h-[1fr] w-[20px]">
+                    {!isProvisional &&
+                      !isApex &&
+                      divisionMap[user.rating.division || 1]}
 
-                  {!isProvisional &&
-                    !isApex &&
-                    divisionMap[user.rating.division || 1]}
-
-                  {isApex && `${user.rating.points} LP`}
-                  {/* {rinfo.precise && '!'} */}
-                </Flex>
-              </Flex>
+                    {isApex && `${user.rating.points} LP`}
+                  </span>
+                </div>
+              </Link>
             )
           })}
-        </Stack>
-      )}
-      {rankingQuery.isPending && (
-        <Center p="30px" h="1fr">
-          <Spinner size="md" thickness="4px" color="light" speed="666ms" />
-        </Center>
+        </div>
       )}
     </>
   )

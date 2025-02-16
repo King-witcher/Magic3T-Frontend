@@ -1,9 +1,10 @@
-import { Spinner, Stack, Text } from '@chakra-ui/react'
+import { Spinner } from '@/components/atoms/spinner/spinner'
+import { Stack, Text } from '@chakra-ui/react'
 
 export function Loading() {
   return (
     <Stack h="full" w="full" align="center" justify="center">
-      <Spinner size="xl" thickness="5px" color="light" speed="666ms" />
+      <Spinner />
       <Text>Loading...</Text>
     </Stack>
   )

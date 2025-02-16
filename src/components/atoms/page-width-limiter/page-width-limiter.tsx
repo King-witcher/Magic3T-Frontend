@@ -1,4 +1,3 @@
-import { Box, Flex } from '@chakra-ui/react'
 import type { ReactNode } from '@tanstack/react-router'
 
 interface Props {
@@ -7,10 +6,8 @@ interface Props {
 
 export function PageWidthLimiter({ children }: Props) {
   return (
-    <Flex p={{ base: '30px', sm: '40px 100px' }} w="full" justify="center">
-      <Box w="full" maxW="1400px">
-        {children}
-      </Box>
-    </Flex>
+    <div className="flex p-[30px] sm:p-[40px_100px] w-full justify-center">
+      <div className="w-full max-w-[1400px]">{children}</div>
+    </div>
   )
 }
