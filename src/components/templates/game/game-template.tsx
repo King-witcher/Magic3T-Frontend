@@ -51,11 +51,11 @@ export function GameTemplate() {
 
   if (!gameCtx.isActive) return null // Improve
   return (
-    <Center w="full">
+    <div className="w-full">
       <VStack spacing={{ base: '20px', sm: '40px' }} w="full">
-        <Text textAlign="center" fontSize="1rem" color="#ffffff" hideBelow="sm">
+        <p className="text-center hidden xs:block text-grey-1">
           Be the first to select three numbers that add up to exactly 15.
-        </Text>
+        </p>
         <Flex
           h="min-content"
           gap="20px"
@@ -85,7 +85,6 @@ export function GameTemplate() {
                 />
               </Center>
               <ChoiceTable
-                w={{ base: 'full', sm: '300px' }}
                 redMoves={upPlayer.choices}
                 blueMoves={downPlayer.choices}
                 state={
@@ -109,7 +108,7 @@ export function GameTemplate() {
           </VStack>
           <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
         </Flex>
-        <ButtonsContainer w={{ base: 'full', sm: 'fit-content' }}>
+        <ButtonsContainer disabled={false}>
           {!gameCtx.finished && (
             <InnerButton
               h="60px"
@@ -141,6 +140,6 @@ export function GameTemplate() {
         onClose={resultModalDisclosure.onClose}
         isOpen={resultModalDisclosure.isOpen}
       />
-    </Center>
+    </div>
   )
 }

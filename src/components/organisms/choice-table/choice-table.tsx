@@ -3,11 +3,10 @@ import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/commands'
 import type { Choice } from '@/types/game.ts'
 import { getTriple } from '@/utils/getTriple'
-import { getAcrylicProps } from '@/utils/style-helpers'
-import { type ChakraProps, Grid, Image, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import styles from './styles.module.sass'
 
-interface Props extends ChakraProps {
+interface Props {
   redMoves: Choice[]
   blueMoves: Choice[]
   state: 'selectable' | 'static' | 'disabled'
@@ -107,41 +106,21 @@ export function ChoiceTable({
 
   if (pugDance) {
     return (
-      <VStack pos="relative" onClick={() => pugDanceCheat()}>
-        <Image src={PugDanceGif} w="180px" h="180px" />
-        <Text
-          pos="absolute"
-          bottom="7px"
-          left="50%"
-          fontSize="16px"
-          textAlign="center"
-          w="300px"
-          transform="translate(-50%, 100%)"
-          fontWeight={700}
-        >
+      <div
+        className="flex flex-col justify-center relative"
+        onClick={() => pugDanceCheat()}
+      >
+        <img className="w-[300px]" alt="Pug dancing" src={PugDanceGif} />
+        <p className="absolute bottom-[7px] w-full text-center translate-y-[100%]">
           Ó vc colocando hack no jogo
-        </Text>
-      </VStack>
+        </p>
+      </div>
     )
   }
 
   return (
-    <Grid
-      gridTemplateColumns="repeat(3, 1fr)"
-      {...getAcrylicProps()}
-      p="20px"
-      rounded="10px"
-      overflow="hidden"
-      w="full"
-      h="fit-content"
-      transition="box-shadow 1s"
-      boxShadow={
-        state === 'selectable'
-          ? '0 0 10px 0 #00ff0080, inset 0 0 40px #40ff40ff'
-          : '0 0 10px 0 #00000040'
-      }
-      gap="10px"
-      {...rest}
+    <div
+      className={`${styles.container} ${state === 'selectable' ? 'selectable' : ''}`}
     >
       {allChoices.map((number) => {
         const blueChoice = blueMoves.includes(number)
@@ -168,6 +147,6 @@ export function ChoiceTable({
           />
         )
       })}
-    </Grid>
+    </div>
   )
 }

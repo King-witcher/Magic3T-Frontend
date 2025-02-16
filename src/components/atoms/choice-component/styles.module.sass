@@ -1,0 +1,63 @@
+@use '@/styles/base.sass'
+  
+.container
+  display: flex
+  aspect-ratio: 1
+  align-items: center
+  justify-content: center
+  background-size: 200%
+  box-sizing: border-box
+  font-size: 1.875rem
+  font-family: var(--font-serif)
+  cursor: default
+
+  @media screen and (min-width: 30rem)
+    font-size: 1.75rem
+  
+  font-weight: 300
+  border-radius: 10px
+  overflow: hidden
+  // animation: none
+
+  -webkit-user-select: none
+  user-select: none
+  transition: opacity 300ms linear, background-color 80ms linear
+  position: relative
+  color: var(--color-gold-1)
+
+  &.selectable
+    cursor: pointer
+    &:hover
+      @extend .acrylic
+  
+  &.red_selected
+    background: #ff3737c0
+    border: 1px solid #ff3737
+    box-shadow: 0 0 10px 0 #ff373780
+  
+  &.blue_selected
+    background: #3787ffc0
+    border: 1px solid #3787ff
+    box-shadow: 0 0 10px 0 #3787ff80
+  
+  &.disabled
+    opacity: 0.5
+
+  &.highlight::after
+    // transition: opacity 1s linear
+    content: ""
+    inset: 0
+    position: absolute
+    width: 100%
+    height: 100%
+    background: linear-gradient(45deg, transparent, #ffffff40, transparent, #ffffff40)
+    background-size: 200%
+    animation: highlight_animation infinite 700ms linear
+    
+    
+
+@keyframes highlight_animation
+  0%
+    background-position: -100% -100%
+  100%
+    background-position: 100% 100%
