@@ -1,14 +1,14 @@
-import { ButtonsContainer, TimerValue } from '@/components/atoms'
+import { ButtonsContainer } from '@/components/atoms'
 import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
+import { useModalStore } from '@/contexts/modal.store'
 import { Team } from '@/types/game-socket'
 import { GameStatus } from '@/types/game.ts'
 import { useDisclosure } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
-import { useModalStore } from '@/contexts/modal.store'
 
 const statusText: Record<GameStatus, string> = {
   defeat: 'You lost',

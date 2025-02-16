@@ -1,3 +1,4 @@
+import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
@@ -9,7 +10,6 @@ import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import { DesktopRankContainer } from './desktop-rank-container'
 import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
-import { Spinner } from '@/components/atoms'
 
 interface Props {
   user: UserDto

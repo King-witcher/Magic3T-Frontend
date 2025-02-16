@@ -1,12 +1,12 @@
+import { Spinner } from '@/components/atoms'
 import { useQueue } from '@/contexts/queue.context'
 import {
   ServerStatus,
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { GameMode } from '@/types/queue'
-import styles from './styles.module.sass'
 import { ReactNode } from '@tanstack/react-router'
-import { Spinner } from '@/components/atoms'
+import styles from './styles.module.sass'
 
 interface Props {
   gameMode: GameMode
