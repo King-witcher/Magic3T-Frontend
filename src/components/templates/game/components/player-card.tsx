@@ -4,22 +4,13 @@ import { useGame } from '@/contexts/game.context.tsx'
 import { League } from '@/services/nest-api'
 import { Team } from '@/types/game-socket'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
-import { getAcrylicProps } from '@/utils/style-helpers'
 import { block } from '@/utils/utils'
-import {
-  Badge,
-  Center,
-  type CenterProps,
-  Flex,
-  Image,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
 import { keyframes } from '@emotion/react'
 import { Link } from '@tanstack/react-router'
 
-interface Props extends CenterProps {
+interface Props {
   team: Team
+  className?: string
 }
 
 const appear = keyframes`
@@ -30,7 +21,7 @@ const appear = keyframes`
   }
 `
 
-export function PlayerCard({ team, ...rest }: Props) {
+export function PlayerCard({ team, className }: Props) {
   const game = useGame()
   const teamInfo = game.teams[team]
   const profile = teamInfo.profile
@@ -46,82 +37,56 @@ export function PlayerCard({ team, ...rest }: Props) {
   if (!game.isActive) return null
 
   return (
-    <Center
-      as={Link}
-      to={`/users/${profile?.nickname?.replaceAll(' ', '')}`}
-      className="playerCard"
-      alignItems="center"
-      justifyContent="left"
-      gap="20px"
-      p="20px"
-      w="400px"
-      transition="background-color 200ms"
-      _hover={{
-        backgroundColor: '#ffffff40',
-      }}
-      {...getAcrylicProps()}
-      {...rest}
+    <Link
+      to="/users/id/$userId"
+      params={{ userId: profile?.id || '' }}
+      className={`flex hover-acrylic items-center justify-start gap-[20px] p-[20px] w-[400px] duration-200 overflow-hidden ${className}`}
     >
       <UserAvatar
         icon={profile?.summonerIcon || 0}
         league={profile?.rating.league || League.Provisional}
         division={profile?.rating.division || null}
-        m="10px 30px"
+        m="10px 25px"
         size={70}
       />
-      <Stack gap="0">
+      <div className="flex flex-col gap-[5px]">
         {profile && (
           <>
-            <Flex alignItems="center" gap="5px">
-              {profile.role === 'bot' && (
-                <Badge
-                  rounded="5px"
-                  fontSize="12px"
-                  bg="#ffffff20"
-                  color="light"
-                >
-                  Bot
-                </Badge>
-              )}
-              <Text
-                fontSize="20px"
-                fontWeight={400}
-                noOfLines={1}
-                color="light"
-              >
-                {profile.nickname}
-              </Text>
-            </Flex>
-            <Flex alignItems="center" gap="5px">
-              <Image src={tierInfo?.icon} w="25px" />
-              <Text textTransform="capitalize" fontSize="0.875rem">
+            <div className="flex items-center gap-[5px]">
+              <h2 className="one-line flex gap-2 !text-xl font-serif tracking-wide">
+                {profile.role === 'bot' && (
+                  <span className="text-gold-4 uppercase">Bot</span>
+                )}
+                <span>{profile.nickname}</span>
+              </h2>
+            </div>
+            <div className="flex items-center text-xs xs:text-sm gap-[5px] font-serif tracking-wide whitespace-nowrap">
+              <img alt="rank" className="w-[25px]" src={tierInfo?.icon} />
+              <span className="capitalize">
                 {profile.rating.league}{' '}
                 {divisionMap[profile.rating.division || 0]}
-              </Text>
-              {profile.rating.league !== League.Provisional && (
-                <Text fontWeight={300} fontSize="0.875rem">
+              </span>
+              {profile.rating.points !== null && (
+                <span className="text-grey-1">
                   - <SmoothNumber value={profile.rating.points || 0} /> LP
-                  {/* {rinfo!.precise && '!'} */}
-                </Text>
+                </span>
               )}
 
               {gain !== null && (
-                <Text
-                  animation={`${appear} linear 300ms`}
-                  fontWeight={800}
-                  fontSize="14px"
+                <span
+                  className={`font-bold ${gain < 0 ? 'text-red-600' : gain > 0 ? 'text-green-600' : 'text-grey-1'}`}
                   color={
                     gain < 0 ? 'red.500' : gain > 0 ? 'green.500' : 'gray.500'
                   }
                 >
                   {gain >= 0 && '+'}
                   {gain}
-                </Text>
+                </span>
               )}
-            </Flex>
+            </div>
           </>
         )}
-      </Stack>
-    </Center>
+      </div>
+    </Link>
   )
 }

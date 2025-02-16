@@ -42,9 +42,7 @@ export function RankingTemplate() {
                     src={getIconUrl(user.summonerIcon)}
                   />
                   {(user.role === 'bot' || user.role === 'creator') && (
-                    <span className="text-gold-4 letter uppercase">
-                      {user.role}
-                    </span>
+                    <span className="text-gold-4 uppercase">{user.role}</span>
                   )}
                   <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {user?.nickname ?? '?'}

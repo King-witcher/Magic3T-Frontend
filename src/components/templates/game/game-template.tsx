@@ -1,4 +1,4 @@
-import { ButtonsContainer } from '@/components/atoms'
+import { ButtonsContainer, TimerValue } from '@/components/atoms'
 import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
@@ -8,7 +8,6 @@ import { useDisclosure } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
-import { useStore } from 'zustand'
 import { useModalStore } from '@/contexts/modal.store'
 
 const statusText: Record<GameStatus, string> = {
@@ -34,8 +33,6 @@ export function GameTemplate() {
   const chatInputRef = useRef<HTMLInputElement>(null)
   // parei aqui
 
-  const resultModalDisclosure = useDisclosure()
-
   useEffect(() => {
     return gameCtx.onMatchReport((report) => {
       setTimeout(() => {
@@ -59,14 +56,11 @@ export function GameTemplate() {
           </div>
           <div className="flex flex-col gap-[20px] justify-center">
             <div className="flex flex-col gap-[20px] w-full items-center">
-              <PlayerCard team={upTeam} w="full" hideFrom="sm" />
-              <div className="acrylic center h-[50px] w-full">
-                <TimeCounter
-                  color="light"
-                  fontSize="18px"
-                  timer={upPlayer.timer}
-                />
-              </div>
+              <PlayerCard team={upTeam} className="w-full lg:hidden" />
+              <TimeCounter
+                timer={upPlayer.timer}
+                pause={gameCtx.turn === null}
+              />
               <ChoiceTable
                 redMoves={upPlayer.choices}
                 blueMoves={downPlayer.choices}
@@ -80,16 +74,13 @@ export function GameTemplate() {
                 }
                 onSelect={gameCtx.pick}
               />
-              <div className="acrylic center h-[50px] w-full">
-                <TimeCounter
-                  color="light"
-                  fontSize="18px"
-                  timer={downPlayer.timer}
-                />
-              </div>
+              <TimeCounter
+                timer={downPlayer.timer}
+                pause={gameCtx.turn === null}
+              />
             </div>
           </div>
-          <ChatBox inputRef={chatInputRef} h={{ base: '400px', sm: 'unset' }} />
+          <ChatBox inputRef={chatInputRef} className="h-[400px] lg:h-[unset]" />
         </div>
         <ButtonsContainer disabled={false}>
           {!gameCtx.finished && (

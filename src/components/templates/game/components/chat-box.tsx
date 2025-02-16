@@ -1,22 +1,13 @@
-import { getAcrylicProps } from '@/utils/style-helpers'
 import { formatMinutes } from '@/utils/timeFormat'
-import {
-  Box,
-  Center,
-  Input,
-  Stack,
-  type StackProps,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
 import type { RefObject } from 'react'
 import { useChatHandler } from '../hooks/useChatHandler'
 
-interface Props extends StackProps {
+interface Props {
   inputRef: RefObject<HTMLInputElement | null>
+  className?: string
 }
 
-export function ChatBox({ inputRef, ...props }: Props) {
+export function ChatBox({ inputRef, className }: Props) {
   const {
     messages,
     scrollRef,
@@ -26,76 +17,36 @@ export function ChatBox({ inputRef, ...props }: Props) {
   } = useChatHandler()
 
   return (
-    <Center
-      flexShrink={0}
-      position="relative"
-      w={{ sm: '400px' }}
-      pointerEvents="none"
-      userSelect="none"
-      opacity={0.5}
-      {...props}
+    <div
+      className={`center relative lg:w-[400px] pointer-events-none select-none opacity-50 ${className}`}
     >
-      <VStack
-        {...getAcrylicProps()}
-        inset={0}
-        gap="0"
-        pos="absolute"
-        overflow="hidden"
-      >
-        <Box w="full" h="full" flex="1" overflowY="auto" ref={scrollRef}>
-          <VStack
-            justifyContent="flex-end"
-            w="full"
-            gap="8px"
-            minH="full"
-            p="25px 20px"
-          >
+      <div className="acrylic flex flex-col inset-0 absolute overflow-hidden">
+        <div className="w-full h-full flex-[1] overflow-auto" ref={scrollRef}>
+          <div className="flex flex-col justify-end w-full gap-[8px] min-h-full p-[25px_20px]">
             {messages.map((message) => (
-              <Stack
-                maxW="300px"
-                p="8px 13px"
-                gap="3px"
-                color="light"
+              <div
                 key={message.time}
-                alignSelf={message.sender === 'you' ? 'flex-end' : 'flex-start'}
-                {...getAcrylicProps()}
-                boxShadow="none"
-                rounded="6px"
+                className={`max-w-[300px] p-[8px_13px] gap-[3px] text-gold-1 ${message.sender === 'you' ? 'self-end' : 'self-start'} rounded-[6px]`}
               >
-                <Text fontSize="16px" lineHeight="18px">
-                  {message.message}
-                </Text>
-                <Text
-                  fontSize="10px"
-                  lineHeight="12px"
-                  fontWeight={600}
-                  opacity={0.8}
-                  alignSelf="flex-end"
-                >
+                <p className="leading-5">{message.message}</p>
+                <span className="text-[0.625rem] leading-3 font-bold opacity-80 self-end">
                   {formatMinutes(message.time)}
-                </Text>
-              </Stack>
+                </span>
+              </div>
             ))}
-          </VStack>
-        </Box>
-        <Box as="form" onSubmit={handleSubmitMessage} w="full">
-          <Input
+          </div>
+        </div>
+        <form className="w-full" onSubmit={handleSubmitMessage}>
+          <input
             ref={inputRef}
-            variant="unstyled"
-            boxShadow="none"
-            borderTop="solid 1px #ffffff60"
-            color="light"
-            rounded="0"
+            className="!border-t-grey-1 !border-t-1 w-full text-gold-1 placeholder:text-grey-1 !p-[10px_15px]"
             value={currentMessage}
             onChange={handleChangeMessageField}
             placeholder="Write a message"
-            _placeholder={{
-              color: '#ffffff80',
-            }}
             maxLength={1024}
           />
-        </Box>
-      </VStack>
-    </Center>
+        </form>
+      </div>
+    </div>
   )
 }
