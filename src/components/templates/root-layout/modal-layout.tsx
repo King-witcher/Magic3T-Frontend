@@ -13,20 +13,20 @@ export function ModalLayout() {
   return (
     <>
       <div
-        className={`fixed inset-0 flex items-center justify-center z-10 transition-all !duration-800
+        className={`fixed inset-0 z-10 transition-all !duration-800
           ${
             isOpen
-              ? 'bg-[#00000080] backdrop-blur-[1px]'
+              ? 'bg-[#00000080] backdrop-blur-[2px]'
               : 'bg-transparent to-[#00000000] pointer-events-none'
           }`}
       />
       <div
-        className={`fixed inset-0 flex items-center justify-center z-10 p-[20px] 
+        className={`fixed inset-[20px] center z-10
           ${isOpen ? '' : 'pointer-events-none'}`}
       >
         <section
           ref={modalRef}
-          className={`acrylic translucent heavy-shadow relative duration-150 max-w-full
+          className={`acrylic translucent heavy-shadow duration-150 w-fit h-fit max-w-full max-h-full
           ${isOpen ? '' : 'pointer-events-none opacity-0 scale-95'}`}
         >
           {content}

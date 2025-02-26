@@ -1,9 +1,15 @@
 @use '../base'
 
 %base
-  @extend .hover-acrylic
+  @extend .acrylic
   padding: 5px 20px
   min-width: 120px
+  &:not(&:disabled)
+    @extend .hover-acrylic
+
+  &:disabled
+    cursor: default
+      
 
 .primary
   @extend %base

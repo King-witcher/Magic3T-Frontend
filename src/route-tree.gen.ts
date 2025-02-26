@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as TutorialImport } from './routes/tutorial'
 import { Route as RankingImport } from './routes/ranking'
+import { Route as BiancaImport } from './routes/bianca'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
 import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
@@ -32,6 +33,12 @@ const TutorialRoute = TutorialImport.update({
 const RankingRoute = RankingImport.update({
   id: '/ranking',
   path: '/ranking',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BiancaRoute = BiancaImport.update({
+  id: '/bianca',
+  path: '/bianca',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -85,6 +92,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthGuardedImport
+      parentRoute: typeof rootRoute
+    }
+    '/bianca': {
+      id: '/bianca'
+      path: '/bianca'
+      fullPath: '/bianca'
+      preLoaderRoute: typeof BiancaImport
       parentRoute: typeof rootRoute
     }
     '/ranking': {
@@ -164,6 +178,7 @@ const AuthGuardedRouteWithChildren = AuthGuardedRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof AuthGuardedRouteWithChildren
+  '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
@@ -175,6 +190,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
@@ -188,6 +204,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth-guarded': typeof AuthGuardedRouteWithChildren
+  '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
   '/tutorial': typeof TutorialRoute
   '/_auth-guarded/me': typeof AuthGuardedMeRouteRoute
@@ -202,6 +219,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/bianca'
     | '/ranking'
     | '/tutorial'
     | '/me'
@@ -212,6 +230,7 @@ export interface FileRouteTypes {
     | '/users/id/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/bianca'
     | '/ranking'
     | '/tutorial'
     | '/me'
@@ -223,6 +242,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth-guarded'
+    | '/bianca'
     | '/ranking'
     | '/tutorial'
     | '/_auth-guarded/me'
@@ -236,6 +256,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AuthGuardedRoute: typeof AuthGuardedRouteWithChildren
+  BiancaRoute: typeof BiancaRoute
   RankingRoute: typeof RankingRoute
   TutorialRoute: typeof TutorialRoute
   UsersNicknameRoute: typeof UsersNicknameRoute
@@ -246,6 +267,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   AuthGuardedRoute: AuthGuardedRouteWithChildren,
+  BiancaRoute: BiancaRoute,
   RankingRoute: RankingRoute,
   TutorialRoute: TutorialRoute,
   UsersNicknameRoute: UsersNicknameRoute,
@@ -265,6 +287,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_auth-guarded",
+        "/bianca",
         "/ranking",
         "/tutorial",
         "/users/$nickname",
@@ -279,6 +302,9 @@ export const routeTree = rootRoute
         "/_auth-guarded/me",
         "/_auth-guarded/"
       ]
+    },
+    "/bianca": {
+      "filePath": "bianca.tsx"
     },
     "/ranking": {
       "filePath": "ranking.tsx"

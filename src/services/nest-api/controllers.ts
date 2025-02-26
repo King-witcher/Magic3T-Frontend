@@ -37,6 +37,26 @@ export namespace NestApi {
       const data: number[] = await response.json()
       return data
     }
+
+    export async function updateIcon(
+      token: string,
+      icon: number
+    ): Promise<void> {
+      const response = await fetch(`${API_URL}/users/me/icon`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+        body: JSON.stringify({
+          iconId: icon,
+        }),
+      })
+
+      if (response.status !== 200) {
+        throw new Error('Failed to update icon.')
+      }
+    }
   }
 
   export namespace Match {
