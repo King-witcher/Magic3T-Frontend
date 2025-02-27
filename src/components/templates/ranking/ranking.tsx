@@ -37,7 +37,7 @@ export function RankingTemplate() {
                 {/* <Box noOfLines={1}>aaaaaaaaa asdfa sdfas dfasdfasd</Box> */}
                 <div className="flex items-center gap-[8px] text-sm xs:text-[1rem] overflow-hidden">
                   <img
-                    className="size-[30px] rounded-[999px] !border-2 !border-[#ffffff80]"
+                    className="size-[30px] rounded-[999px] !border-2 !border-grey-1"
                     alt="icon"
                     src={getIconUrl(user.summonerIcon)}
                   />

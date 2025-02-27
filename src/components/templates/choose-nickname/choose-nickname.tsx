@@ -1,9 +1,9 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context'
 import { Api } from '@/services/api'
-import { getAcrylicProps } from '@/utils/style-helpers'
-import { Button, Center, Heading, Input, Text, VStack } from '@chakra-ui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, FormEvent, useState } from 'react'
+import inputStyles from '@/styles/components/input.module.sass'
+import buttonStyles from '@/styles/components/button.module.sass'
 
 export function ChooseNicknameTemplate() {
   const [nickname, setNickname] = useState('')
@@ -66,64 +66,44 @@ export function ChooseNicknameTemplate() {
     setNickname(value)
   }
 
-  function handleSubmit(e: FormEvent<HTMLDivElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     changeNickMutation.mutate()
   }
 
   return (
-    <Center h="full">
-      <VStack
-        as="form"
+    <div className="center h-full">
+      <form
+        className="acrylic flex flex-col p-[30px] md:p-[40px] w-[600px]"
         onSubmit={handleSubmit}
-        spacing={0}
-        {...getAcrylicProps()}
-        boxShadow="0 0 80px 0 #00000040"
-        maxW="full"
-        w="600px"
-        p={{ base: '30px', sm: '40px' }}
       >
-        <Heading textAlign="center">Choose your unique nickname</Heading>
-        <Text
-          fontSize="0.875rem"
-          color="#ffffffc0"
-          textAlign="center"
-          mt="20px"
-        >
+        <h1 className="text-center !text-2xl font-serif !text-gold-4 uppercase">
+          Choose your unique nickname
+        </h1>
+        <p className="text-sm text-grey-1 text-center !mt-[20px]">
           You will only be allowed to change your nickname again in{' '}
           <b>30 days</b>.
-        </Text>
-        <Input
-          mt="20px"
-          variant="form"
-          h="55px"
-          textAlign="center"
-          fontSize="24px"
+        </p>
+        <input
+          className={`${inputStyles.text_field} text-center !font-serif !h-[55px] !text-2xl !mt-[20px] tracking-wide`}
+          placeholder="Nickname"
           value={nickname}
           onChange={handleChageNickname}
-          fontWeight={300}
           onPaste={(e) => e.preventDefault()}
-          isDisabled={changeNickMutation.isPending}
+          disabled={changeNickMutation.isPending}
           spellCheck={false}
         />
         {error && (
-          <Text color="#ff4040" mt="10px" textAlign="center">
-            {error}
-          </Text>
+          <p className="!mt-[10px] text-red-500 text-center">{error}</p>
         )}
-        <Button
-          {...getAcrylicProps()}
-          h="50px"
-          mt="20px"
-          boxShadow="none"
-          color="light"
+        <button
+          className={`${buttonStyles.primary} h-[50px] !mt-[20px] w-full md:w-[200px] self-center`}
           type="submit"
-          w={{ base: 'full', md: '200px' }}
-          isDisabled={changeNickMutation.isPending}
+          disabled={changeNickMutation.isPending}
         >
           Save
-        </Button>
-      </VStack>
-    </Center>
+        </button>
+      </form>
+    </div>
   )
 }

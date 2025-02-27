@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TutorialImport } from './routes/tutorial'
 import { Route as RankingImport } from './routes/ranking'
 import { Route as BiancaImport } from './routes/bianca'
 import { Route as AuthGuardedImport } from './routes/_auth-guarded'
@@ -23,12 +22,6 @@ import { Route as AuthGuardedMeRouteImport } from './routes/_auth-guarded/me/rou
 import { Route as UsersIdUserIdImport } from './routes/users/id/$userId'
 
 // Create/Update Routes
-
-const TutorialRoute = TutorialImport.update({
-  id: '/tutorial',
-  path: '/tutorial',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const RankingRoute = RankingImport.update({
   id: '/ranking',
@@ -108,13 +101,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RankingImport
       parentRoute: typeof rootRoute
     }
-    '/tutorial': {
-      id: '/tutorial'
-      path: '/tutorial'
-      fullPath: '/tutorial'
-      preLoaderRoute: typeof TutorialImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth-guarded/me': {
       id: '/_auth-guarded/me'
       path: '/me'
@@ -180,7 +166,6 @@ export interface FileRoutesByFullPath {
   '': typeof AuthGuardedRouteWithChildren
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
-  '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
@@ -192,7 +177,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
-  '/tutorial': typeof TutorialRoute
   '/me': typeof AuthGuardedMeRouteRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/': typeof AuthGuardedIndexRoute
@@ -206,7 +190,6 @@ export interface FileRoutesById {
   '/_auth-guarded': typeof AuthGuardedRouteWithChildren
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
-  '/tutorial': typeof TutorialRoute
   '/_auth-guarded/me': typeof AuthGuardedMeRouteRoute
   '/users/$nickname': typeof UsersNicknameRoute
   '/_auth-guarded/': typeof AuthGuardedIndexRoute
@@ -221,7 +204,6 @@ export interface FileRouteTypes {
     | ''
     | '/bianca'
     | '/ranking'
-    | '/tutorial'
     | '/me'
     | '/users/$nickname'
     | '/'
@@ -232,7 +214,6 @@ export interface FileRouteTypes {
   to:
     | '/bianca'
     | '/ranking'
-    | '/tutorial'
     | '/me'
     | '/users/$nickname'
     | '/'
@@ -244,7 +225,6 @@ export interface FileRouteTypes {
     | '/_auth-guarded'
     | '/bianca'
     | '/ranking'
-    | '/tutorial'
     | '/_auth-guarded/me'
     | '/users/$nickname'
     | '/_auth-guarded/'
@@ -258,7 +238,6 @@ export interface RootRouteChildren {
   AuthGuardedRoute: typeof AuthGuardedRouteWithChildren
   BiancaRoute: typeof BiancaRoute
   RankingRoute: typeof RankingRoute
-  TutorialRoute: typeof TutorialRoute
   UsersNicknameRoute: typeof UsersNicknameRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
   SignInIndexRoute: typeof SignInIndexRoute
@@ -269,7 +248,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthGuardedRoute: AuthGuardedRouteWithChildren,
   BiancaRoute: BiancaRoute,
   RankingRoute: RankingRoute,
-  TutorialRoute: TutorialRoute,
   UsersNicknameRoute: UsersNicknameRoute,
   RegisterIndexRoute: RegisterIndexRoute,
   SignInIndexRoute: SignInIndexRoute,
@@ -289,7 +267,6 @@ export const routeTree = rootRoute
         "/_auth-guarded",
         "/bianca",
         "/ranking",
-        "/tutorial",
         "/users/$nickname",
         "/register/",
         "/sign-in/",
@@ -308,9 +285,6 @@ export const routeTree = rootRoute
     },
     "/ranking": {
       "filePath": "ranking.tsx"
-    },
-    "/tutorial": {
-      "filePath": "tutorial.tsx"
     },
     "/_auth-guarded/me": {
       "filePath": "_auth-guarded/me/route.tsx",

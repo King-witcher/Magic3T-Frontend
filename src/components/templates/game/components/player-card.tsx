@@ -46,8 +46,7 @@ export function PlayerCard({ team, className }: Props) {
         icon={profile?.summonerIcon || 0}
         league={profile?.rating.league || League.Provisional}
         division={profile?.rating.division || null}
-        m="10px 25px"
-        size={70}
+        className="text-[70px] m-[10px_20px]"
       />
       <div className="flex flex-col gap-[5px]">
         {profile && (

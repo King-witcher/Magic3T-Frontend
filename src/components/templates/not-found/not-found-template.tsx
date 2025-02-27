@@ -1,11 +1,10 @@
-import { Text, VStack } from '@chakra-ui/react'
 import { GiBrokenArrow } from 'react-icons/gi'
 
 export function NotFoundTemplate() {
   return (
-    <VStack h="100%" justifyContent="center">
+    <div className="center flex-col h-full">
       <GiBrokenArrow size="48px" />
-      <Text fontSize="1.25rem">Not found</Text>
-    </VStack>
+      <p className="text-lg">Not found</p>
+    </div>
   )
 }
