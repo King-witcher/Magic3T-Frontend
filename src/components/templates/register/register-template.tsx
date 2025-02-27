@@ -106,7 +106,7 @@ export function RegisterTemplate({ referrer = '/' }: Props) {
         />
         <div className="flex flex-col w-full items-center">
           <button
-            className={`${buttonStyles.primary} center w-full h-[50px] !text-xl`}
+            className={`${buttonStyles.primary} center w-full h-[40px] !text-lg`}
             type="submit"
             disabled={waiting}
             onClick={handleSubmit(handleRegister)}

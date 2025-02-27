@@ -109,7 +109,7 @@ export function SignInTemplate({ referrer = '/' }: Props) {
         <div className="flex flex-col w-full items-center">
           <button
             type="submit"
-            className={`${buttonStyles.primary} center w-full h-[50px] !text-xl`}
+            className={`${buttonStyles.primary} center w-full h-[40px] !text-lg`}
             disabled={waiting}
           >
             {waiting ? <Spinner className="size-6" /> : 'Sign-in'}
