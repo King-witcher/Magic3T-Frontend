@@ -65,11 +65,9 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           league={user.rating.league}
           division={user.rating.division}
           type="wing"
-          size={140}
-          m="150px 40px 40px 40px"
+          className={`text-[140px] m-[40px] mt-[150px] ${editable ? 'cursor-pointer' : ''}`}
           onClick={editable ? changeIcon : undefined}
           showPencil={editable}
-          cursor={editable ? 'pointer' : 'auto'}
         />
         <h1 className="!text-4xl/[39px] flex items-center gap-[8px] text-center font-serif p-[5px] !font-bold rounded-[10px]">
           {(user.role === 'bot' || user.role === 'creator') && (

@@ -1,88 +1,63 @@
 import { Division, League } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
 import { getIconUrl } from '@/utils/utils'
-import { Box, type BoxProps, Center, Image, Text } from '@chakra-ui/react'
 import { RiEdit2Fill } from 'react-icons/ri'
+import { twMerge } from 'tailwind-merge'
+import styles from './styles.module.sass'
+import { ComponentProps } from 'react'
 
-interface Props extends BoxProps {
-  size: number
+interface Props extends ComponentProps<'div'> {
   icon: number
   league: League
   division?: Division | null
   type?: 'wing' | 'plate'
   showPencil?: boolean
+  className?: string
 }
 
 const numbers = ['', 'I', 'II', 'III', 'IV', 'V']
 
 export function UserAvatar({
   icon,
-  size,
   league,
   division,
   showPencil,
   type = 'plate',
+  className,
   ...rest
 }: Props) {
   const leagueInfo = leaguesMap[league]
 
   return (
-    <Center
-    // p={`${(1.4 * size) / 2}px ${(1.4 * size) / 2}px ${(0.6 * size) / 2}px ${(1.4 * size) / 2}px`}
+    <div
+      className={twMerge(
+        `${styles.container} relative center size-[1em] text-[30px]`,
+        className
+      )}
+      {...rest}
     >
-      <Center
-        pos="relative"
-        {...rest}
-        boxSize={`${size}px`}
-        _hover={{
-          '& > .edit-button': {
-            bg: 'white',
-            color: 'black',
-          },
-        }}
-      >
-        <Image
-          src={getIconUrl(icon)}
-          boxShadow={
-            league === League.Provisional
-              ? '0 0 0 6px #bbb, 0 5px 15px 5px #00000080'
-              : undefined
-          }
-          boxSizing="content-box"
-          pos="absolute"
-          boxSize="100%"
-          top="0"
-          rounded="999"
+      <img
+        alt="icon"
+        className={`${styles.icon} ${league === League.Provisional ? styles.provisional : ''}`}
+        src={getIconUrl(icon)}
+      />
+      {league !== League.Provisional && (
+        <img
+          alt="wing"
+          className={styles.wing}
+          src={type === 'plate' ? leagueInfo.plate : leagueInfo.wing}
         />
-        <Box pos="absolute" w="290%" bottom="-100%" pointerEvents="none">
-          <Image src={type === 'plate' ? leagueInfo.plate : leagueInfo.wing} />
-        </Box>
-        {division && type === 'wing' && (
-          <Text
-            pos="absolute"
-            fontSize={`${size * 0.16}px`}
-            lineHeight={`${size * 0.16}px`}
-            top="-10%"
-          >
-            {numbers[division]}
-          </Text>
-        )}
-        {showPencil && (
-          <Center
-            className="edit-button"
-            pos="absolute"
-            bg="#ffffff40"
-            p="4px"
-            rounded="999"
-            color="white"
-            right="15%"
-            top="15%"
-            transition="200ms all"
-          >
-            <RiEdit2Fill />
-          </Center>
-        )}
-      </Center>
-    </Center>
+      )}
+      {division && type === 'wing' && (
+        <p className="absolute !text-[0.16em] !font-serif top-[-0.95em]">
+          {numbers[division]}
+        </p>
+      )}
+      {showPencil && (
+        <div className={styles.edit_button}>
+          <RiEdit2Fill size="0.15em" />
+        </div>
+      )}
+    </div>
   )
 }

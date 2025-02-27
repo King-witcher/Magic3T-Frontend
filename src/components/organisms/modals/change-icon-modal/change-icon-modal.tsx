@@ -1,6 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context'
-import { NestApi, UserDto } from '@/services/nest-api'
+import { League, NestApi, UserDto } from '@/services/nest-api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
@@ -70,10 +70,9 @@ export function ChangeIconModal({ user, onSave }: Props) {
         <div className="flex flex-col gap-[30px] items-center pt-[25px] px-[20px] md:px-[40px]">
           <UserAvatar
             icon={selectedIcon}
-            size={120}
+            className="text-[120px]"
             league={user.rating.league}
             division={user.rating.division}
-            m={{ base: '0' }}
           />
           <h3 className="!text-2xl font-serif">{user.nickname}</h3>
         </div>

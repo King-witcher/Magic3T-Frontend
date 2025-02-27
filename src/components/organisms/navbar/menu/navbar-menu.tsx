@@ -60,7 +60,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
               <UserAvatar
                 icon={auth.user.summonerIcon}
                 league={auth.user.rating.league}
-                size={60}
+                className="text-[60px]"
               />
             </div>
             <div className="flex flex-col gap-[5px] ml-[16px] font-serif">
