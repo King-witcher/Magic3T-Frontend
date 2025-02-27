@@ -1,6 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context'
-import { League, NestApi, UserDto } from '@/services/nest-api'
+import { NestApi, UserDto } from '@/services/nest-api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
@@ -94,7 +94,7 @@ export function ChangeIconModal({ user, onSave }: Props) {
       <footer className="flex justify-end gap-[10px]">
         <button
           type="button"
-          className={`${styles.primary} flex-1 md:flex-[0_0_200px]`}
+          className={`${styles.secondary} flex-1 md:flex-[0_0_200px]`}
           onClick={closeModal}
           disabled={updateIconMutation.isPending}
         >
