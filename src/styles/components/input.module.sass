@@ -2,10 +2,17 @@
   
 .text_field
   @extend .acrylic
-  height: 35px
-  padding: 0 10px
+  height: 40px
+  padding: 0 20px
   // text-align: center
   transition: outline 150ms
   
   &::placeholder
     color: #ffffff80
+
+  &:focus-visible
+    background-color: #ffffff40
+
+  &.error
+    border-color: var(--color-red-500)
+    box-shadow: inset 0 0 5px 0 var(--color-red-500)

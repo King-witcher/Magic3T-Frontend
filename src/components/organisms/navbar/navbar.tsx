@@ -26,7 +26,7 @@ export function Navbar() {
       </Link>
       <div className="flex items-center h-full">
         {authState === AuthState.SignedIn && (
-          <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">
+          <NavbarButton className="hidden xs:flex opacity-50" href=".">
             <IoBag /> Store
           </NavbarButton>
         )}
@@ -41,7 +41,7 @@ export function Navbar() {
           >
             <div
               id="profile-icon-container"
-              className="rounded-[999px] !border-2 !border-[#ffffff80] bg-[#00000020] size-[40px] overflow-hidden"
+              className="rounded-[999px] !border-2 !border-grey-1 bg-[#00000020] size-[40px] overflow-hidden"
             >
               {authState === AuthState.Loading && (
                 <div className="animate-pulse ease duration-1000 bg-[#ffffffa0] w-full h-full" />

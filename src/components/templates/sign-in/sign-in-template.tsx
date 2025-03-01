@@ -1,23 +1,15 @@
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { auth } from '@/services/firebase'
 import { isValidEmail } from '@/utils/isValidEmail'
-import {
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Input,
-  Spinner,
-  Text,
-  VStack,
-  chakra,
-} from '@chakra-ui/react'
 import { Link, Navigate } from '@tanstack/react-router'
 import { AuthErrorCodes, sendPasswordResetEmail } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { RiGoogleFill } from 'react-icons/ri'
 import { LoadingSessionTemplate } from '../loading-session'
+import buttonStyles from '@/styles/components/button.module.sass'
+import inputStyles from '@/styles/components/input.module.sass'
+import { Spinner } from '@/components/atoms'
 
 interface Props {
   referrer?: string
@@ -82,85 +74,69 @@ export function SignInTemplate({ referrer = '/' }: Props) {
   }
 
   return (
-    <Center flex="1" boxSizing="border-box" w="full" h="full">
-      <VStack
-        as="form"
-        p="40px"
-        justifyContent="center"
-        alignItems="center"
+    <div className="center h-full">
+      <form
+        className="acrylic p-[40px] flex flex-col gap-[10px] items-center w-full max-w-auto md:max-w-[400px]"
         onSubmit={handleSubmit(handleSignIn)}
-        w="full"
-        bg="#ffffff30"
-        rounded="10px"
-        spacing="10px"
-        border="solid 1px #ffffff40"
-        boxShadow="0 0 40px 0 #00000040"
-        maxW={{ base: 'auto', sm: '400px' }}
       >
-        <Heading lineHeight="3.125rem">Sign-in</Heading>
-        <Text textAlign="center">
+        <h1 className="!text-5xl font-serif !font-bold text-gold-4 uppercase">
+          Sign-in
+        </h1>
+        <p className="text-center">
           Don&apos;t have an account yet?{' '}
-          <Link to="/register" search={(prev) => ({ referrer: prev.referrer })}>
-            <chakra.span color="#9cabff">Create one</chakra.span>
+          <Link
+            to="/register"
+            className="!text-blue-2 hover:!text-blue-1"
+            search={(prev) => ({ referrer: prev.referrer })}
+          >
+            Create one
           </Link>
-        </Text>{' '}
-        <Input
-          variant="form"
+        </p>{' '}
+        <input
+          className={`${inputStyles.text_field} w-full ${errors.email ? inputStyles.error : ''}`}
           placeholder="Email"
           {...register('email', { required: true })}
           type="email"
-          isDisabled={waiting}
-          {...(errors.email
-            ? {
-                borderColor: '#ff4040',
-                boxShadow: 'inset 0 0 5px 0 #ff4040',
-              }
-            : {})}
+          disabled={waiting}
         />
-        <Input
-          variant="form"
+        <input
+          className={`${inputStyles.text_field} w-full ${errors.password ? inputStyles.error : ''}`}
           placeholder="Password"
           {...register('password', { required: true })}
           type="password"
-          isDisabled={waiting}
-          {...(errors.password
-            ? {
-                borderColor: '#ff4040',
-                boxShadow: 'inset 0 0 5px 0 #ff4040',
-              }
-            : {})}
+          disabled={waiting}
         />
-        <VStack w="full" gap="0">
-          <Button
-            variant="submitForm"
+        <div className="flex flex-col w-full items-center">
+          <button
             type="submit"
-            w="full"
-            isDisabled={waiting}
+            className={`${buttonStyles.primary} center w-full h-[40px] !text-lg`}
+            disabled={waiting}
           >
-            {waiting ? (
-              <Spinner size="sm" speed="1s" thickness="3px" />
-            ) : (
-              'Submit'
-            )}
-          </Button>
+            {waiting ? <Spinner className="size-6" /> : 'Sign-in'}
+          </button>
 
-          {error && <Text color="#ff4000">{error}</Text>}
-        </VStack>
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
         {hideResetPassword ? (
-          <Text color="#9cabff">Recovery email sent</Text>
+          <p className="text-blue-2">Recovery email sent</p>
         ) : (
-          <Text color="#9cabff" onClick={handleRecover} cursor="pointer">
+          <p
+            className="text-blue-2 cursor-pointer hover:text-blue-1"
+            onClick={handleRecover}
+          >
             Forgot password?
-          </Text>
+          </p>
         )}
-        <Text>or</Text>
-        <Button size="lg" w="full" variant="submitForm" onClick={signInGoogle}>
-          <Flex gap="10px" alignItems="center">
-            <RiGoogleFill size="24px" />
-            Sign-in with Gogle
-          </Flex>
-        </Button>
-      </VStack>
-    </Center>
+        <p>or</p>
+        <button
+          type="button"
+          className={`${buttonStyles.primary} center gap-[10px] w-full h-[50px] !text-xl`}
+          onClick={signInGoogle}
+        >
+          <RiGoogleFill size="24px" />
+          Sign-in with Gogle
+        </button>
+      </form>
+    </div>
   )
 }

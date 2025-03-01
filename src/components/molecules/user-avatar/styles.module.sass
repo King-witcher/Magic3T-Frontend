@@ -1,0 +1,43 @@
+.container
+  img.icon
+    box-sizing: content-box
+    position: absolute
+    width: 1em
+    height: 1em
+    top: 0
+    border-radius: 0.5em
+
+    &.provisional
+      box-shadow: 0 0 0 0.06em var(--color-grey-2), 0 5px 15px 5px #00000080
+
+  img.wing
+    position: absolute
+    width: 2.9em
+    bottom: -1em
+    max-width: none // TODO: remove later
+    pointer-events: none
+
+  &:hover .edit_button
+    background-color: var(--color-gold-4)
+    color: black
+
+  .edit_button
+    position: absolute
+    background-color: #ffffff40
+    padding: 0.02em
+    border-radius: 1em
+    color: var(--color-gold-1)
+    right: 0.15em
+    top: 0.15em
+    transition: 200ms all
+  
+  &.full_container
+    $pt: 1.25em
+    $pb: 0.25em
+    $px: 1.04em
+    padding: $pt $px $pb $px
+
+    img.icon
+      top: $pt - 1
+    img.wing
+      bottom: $pb - 1
