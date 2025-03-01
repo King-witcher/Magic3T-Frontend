@@ -26,7 +26,7 @@ export function Navbar() {
       </Link>
       <div className="flex items-center h-full">
         {authState === AuthState.SignedIn && (
-          <NavbarButton className="hidden xs:flex opacity-50" href="/ranking">
+          <NavbarButton className="hidden xs:flex opacity-50" href=".">
             <IoBag /> Store
           </NavbarButton>
         )}
