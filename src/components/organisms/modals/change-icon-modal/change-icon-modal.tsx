@@ -67,11 +67,12 @@ export function ChangeIconModal({ user, onSave }: Props) {
         CHANGE ICON
       </h2>
       <div className="w-full h-full flex flex-col md:flex-row gap-[10px] items-center">
-        <div className="flex flex-col gap-[30px] items-center pt-[25px] px-[20px] md:px-[40px]">
+        <div className="flex flex-col gap-[5px] items-center pt-[25px]">
           <UserAvatar
             icon={selectedIcon}
             className="text-[120px]"
             league={user.rating.league}
+            fullPlate
             division={user.rating.division}
           />
           <h3 className="!text-2xl font-serif">{user.nickname}</h3>

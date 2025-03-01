@@ -13,6 +13,8 @@ interface Props extends ComponentProps<'div'> {
   type?: 'wing' | 'plate'
   showPencil?: boolean
   className?: string
+  /** Uses the space of the full plate container instead of only the central picture. */
+  fullPlate?: boolean
 }
 
 const numbers = ['', 'I', 'II', 'III', 'IV', 'V']
@@ -24,6 +26,7 @@ export function UserAvatar({
   showPencil,
   type = 'plate',
   className,
+  fullPlate,
   ...rest
 }: Props) {
   const leagueInfo = leaguesMap[league]
@@ -31,7 +34,7 @@ export function UserAvatar({
   return (
     <div
       className={twMerge(
-        `${styles.container} relative center size-[1em] text-[30px]`,
+        `${styles.container} ${fullPlate ? styles.full_container : ''} relative center size-[1em] text-[30px]`,
         className
       )}
       {...rest}
