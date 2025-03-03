@@ -4,12 +4,12 @@ import {
   ServerStatus,
   useServiceStatus,
 } from '@/contexts/service-status.context'
-import type { GameMode } from '@/types/queue'
+import type { QueueMode } from '@/types/queue'
 import { ReactNode } from '@tanstack/react-router'
 import styles from './styles.module.sass'
 
 interface Props {
-  gameMode: GameMode
+  gameMode: QueueMode
   children?: ReactNode
   name: string
   playersInQueue?: number

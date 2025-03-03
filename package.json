@@ -22,7 +22,7 @@
     "@types/lodash": "^4.17.14",
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
-    "axios": "1.6.8",
+    "axios": "1.8.1",
     "firebase": "^10.14.1",
     "framer-motion": "^10.18.0",
     "jotai": "^2.12.0",

@@ -4,7 +4,7 @@ import {
   ServerStatus,
   useServiceStatus,
 } from '@/contexts/service-status.context'
-import { GameMode } from '@/types/queue'
+import { QueueMode } from '@/types/queue'
 import { QueueModeButton } from './queue-mode-button'
 
 export function LobbyTemplate() {
@@ -30,22 +30,22 @@ export function LobbyTemplate() {
           <QueueModeButton
             name="Easy"
             isLoading={!!queueModes['bot-0']}
-            gameMode={GameMode.Bot0}
+            gameMode={QueueMode.Bot0}
           />
           <QueueModeButton
             name="Medium"
             isLoading={!!queueModes['bot-1']}
-            gameMode={GameMode.Bot1}
+            gameMode={QueueMode.Bot1}
           />
           <QueueModeButton
             name="Hard"
             isLoading={!!queueModes['bot-2']}
-            gameMode={GameMode.Bot2}
+            gameMode={QueueMode.Bot2}
           />
           <QueueModeButton
             name="Invincible"
             isLoading={!!queueModes['bot-3']}
-            gameMode={GameMode.Bot3}
+            gameMode={QueueMode.Bot3}
           />
         </ButtonsContainer>
         <ButtonsContainer
@@ -56,7 +56,7 @@ export function LobbyTemplate() {
             name="Human"
             isLoading={!!queueModes.ranked}
             playersInQueue={queueUserCount.ranked.queue}
-            gameMode={GameMode.Ranked}
+            gameMode={QueueMode.Ranked}
           />
         </ButtonsContainer>
         {serverStatus === ServerStatus.On &&

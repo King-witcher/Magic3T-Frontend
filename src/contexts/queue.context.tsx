@@ -4,7 +4,7 @@ import type {
   QueueClientEventsMap,
   QueueServerEventsMap,
 } from '@/types/QueueSocket.ts'
-import type { GameMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
+import { QueueMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
 import {
   type ReactNode,
   createContext,
@@ -13,14 +13,14 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { IoSearch } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { NestApi } from '@/services/nest-api/controllers.ts'
 
 interface QueueContextData {
-  enqueue(mode: GameMode): void
-  dequeue(mode: GameMode): void
+  enqueue(mode: QueueMode): void
+  dequeue(mode: QueueMode): void
   queueModes: QueueModesType
   queueUserCount: QueueUserCount
 }
@@ -46,7 +46,7 @@ export function QueueProvider({ children }: QueueContextProps) {
       queue: 0,
     },
   })
-  const { user, authState } = useAuth()
+  const { user, authState, getToken } = useAuth()
   const gameCtx = useGame()
 
   const gateway = useGateway<QueueServerEventsMap, QueueClientEventsMap>(
@@ -87,37 +87,29 @@ export function QueueProvider({ children }: QueueContextProps) {
   }, [gateway])
 
   const enqueue = useCallback(
-    async (mode: GameMode) => {
+    async (mode: QueueMode) => {
       setQueueModes((current) => ({
         ...current,
         [mode]: true,
       }))
 
-      gateway.emit(mode)
+      const token = await getToken()
+      await NestApi.Queue.enqueue(token, mode)
     },
-    [gateway, user, setQueueModes]
+    [gateway, user, setQueueModes, getToken]
   )
 
   const dequeue = useCallback(
-    (mode: GameMode) => {
-      gateway.emit('dequeue', mode)
+    async (mode: QueueMode) => {
+      const token = await getToken()
+      await NestApi.Queue.dequeue(token)
       setQueueModes((current) => ({
         ...current,
         [mode]: false,
       }))
     },
-    [gateway]
+    [gateway, getToken]
   )
-
-  useEffect(() => {
-    if (queueModes.casual || queueModes.ranked) {
-      return push({
-        content: <IoSearch size="16px" />,
-        tooltip: 'Procurando partida',
-        url: '/',
-      })
-    }
-  }, [queueModes.ranked, queueModes.casual])
 
   return (
     <QueueContext.Provider
