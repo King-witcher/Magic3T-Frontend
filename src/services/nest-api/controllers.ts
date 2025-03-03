@@ -1,5 +1,6 @@
 import { API_URL } from '../api'
 import { MatchDto, UserDto } from './dtos'
+import * as QueueController from './queue'
 
 export namespace NestApi {
   export namespace User {
@@ -71,5 +72,10 @@ export namespace NestApi {
       const body: MatchDto[] = await response.json()
       return body
     }
+  }
+
+  export namespace Queue {
+    export const enqueue = QueueController.enqueue
+    export const dequeue = QueueController.dequeue
   }
 }
