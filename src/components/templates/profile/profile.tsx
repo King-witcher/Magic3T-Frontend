@@ -124,13 +124,6 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
         />
       </section>
 
-      {/* <ChangeIconModal
-        user={user}
-        onSave={saveIconChange}
-        isOpen={changeIconModalDisclosure.isOpen}
-        onClose={changeIconModalDisclosure.onClose}
-      /> */}
-
       <section className="flex flex-col gap-[10px] mt-[20px]">
         <h2 className="!text-4xl font-serif text-gold-3 uppercase">
           {matchesQuery.data &&

@@ -35,8 +35,9 @@ export type UserDto = {
 export interface MatchDtoTeam {
   id: string
   nickname: string
-  ratingScore: number
-  ratingGain: number
+  league: League
+  division: number | null
+  lpGain: number
   matchScore: number
 }
 

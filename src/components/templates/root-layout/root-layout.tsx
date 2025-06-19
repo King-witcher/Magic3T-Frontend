@@ -14,7 +14,7 @@ export function RootLayout({ children }: Props) {
       <div className={styles.brightness_container} />
       <div className="root-layout flex flex-col items-center h-dvh relative">
         <Navbar />
-        <div className="flex flex-[1] w-full justify-center h-fit overflow-x-hidden overflow-y-scroll">
+        <div className="flex flex-1 w-full justify-center h-fit overflow-x-hidden overflow-y-scroll">
           <PageWidthLimiter>{children}</PageWidthLimiter>
         </div>
       </div>

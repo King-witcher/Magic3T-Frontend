@@ -61,12 +61,12 @@ export function MatchRow({ match, viewAs }: Props) {
               <h3 className="font-serif tracking-wider !text-lg">
                 {opponent.nickname}
               </h3>
-              {!!player.ratingGain && (
+              {!!player.lpGain && (
                 <p
-                  className={`text-sm/normal !font-serif font-bold ${player.ratingGain > 0 ? 'text-green-500' : 'text-red-500'}`}
+                  className={`text-sm/normal !font-serif font-bold ${player.lpGain > 0 ? 'text-green-500' : 'text-red-500'}`}
                 >
-                  {player.ratingGain > 0 ? '+' : '-'}
-                  {Math.abs(player.ratingGain)}
+                  {player.lpGain > 0 && '+'}
+                  {player.lpGain}
                 </p>
               )}
             </div>
