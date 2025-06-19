@@ -14,7 +14,8 @@ export function StoreTemplate() {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {icons.map((icon) => (
           <div key={icon} className="acrylic overflow-hidden shadow-md">
-            <img alt="img" src={getIconUrl(icon)} />
+            <img alt={`Icon ${icon}`} src={getIconUrl(icon)} />
+
             <h2 className="text-xl font-semibold">Item {icon}</h2>
             <p className="text-sm text-gray-600">Description of item {icon}</p>
             <button
