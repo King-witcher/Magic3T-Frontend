@@ -1,0 +1,24 @@
+name: Audit
+
+on:
+  push:
+  schedule:
+    - cron: 0 12 * * *
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Audit
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Audit to Check for Vulnerabilities
+        run: yarn audit --groups dependencies

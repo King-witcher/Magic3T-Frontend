@@ -15,7 +15,7 @@ export function RankingTemplate() {
 
   return (
     <>
-      <h1 className="!text-[6vw] sm:!text-4xl font-serif !font-semibold text-gold-1 uppercase text-tred">
+      <h1 className="!text-[6vw] sm:!text-4xl font-serif !font-semibold text-gold-4 uppercase text-tred">
         Top Magic3T players
       </h1>
       {rankingQuery.isSuccess && (

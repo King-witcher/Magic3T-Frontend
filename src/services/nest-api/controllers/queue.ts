@@ -1,6 +1,6 @@
 import { QueueMode } from '@/types/queue'
-import { NEST_API_URL } from '../api'
 import axios from 'axios'
+import { NEST_API_URL } from '../api'
 
 const controller = axios.create({
   baseURL: `${NEST_API_URL}/queue`,

@@ -2,15 +2,15 @@ import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
+import { useModalStore } from '@/contexts/modal.store'
 import { Api } from '@/services/api'
 import { League, MatchDto, UserDto } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
 import { DesktopRankContainer } from './desktop-rank-container'
 import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
-import { useModalStore } from '@/contexts/modal.store'
-import { useCallback } from 'react'
 
 interface Props {
   user: UserDto
@@ -123,13 +123,6 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
           league={League.Provisional}
         />
       </section>
-
-      {/* <ChangeIconModal
-        user={user}
-        onSave={saveIconChange}
-        isOpen={changeIconModalDisclosure.isOpen}
-        onClose={changeIconModalDisclosure.onClose}
-      /> */}
 
       <section className="flex flex-col gap-[10px] mt-[20px]">
         <h2 className="!text-4xl font-serif text-gold-3 uppercase">

@@ -1,9 +1,9 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context'
 import { Api } from '@/services/api'
+import buttonStyles from '@/styles/components/button.module.sass'
+import inputStyles from '@/styles/components/input.module.sass'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import inputStyles from '@/styles/components/input.module.sass'
-import buttonStyles from '@/styles/components/button.module.sass'
 
 export function ChooseNicknameTemplate() {
   const [nickname, setNickname] = useState('')

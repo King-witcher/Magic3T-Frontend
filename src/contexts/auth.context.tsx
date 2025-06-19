@@ -55,7 +55,6 @@ const AuthContext = createContext<AuthData>({} as AuthData)
 export function AuthProvider({ children }: Props) {
   const [authData, setAuthData] = useState<User | null>(null)
   const [authState, setAuthState] = useState(AuthState.Loading)
-  // const [user, setUser] = useState<UserData | null>(null)
 
   const userQuery = useQuery({
     queryKey: ['myself', authData?.uid],

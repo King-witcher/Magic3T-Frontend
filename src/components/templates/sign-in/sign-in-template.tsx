@@ -1,5 +1,8 @@
+import { Spinner } from '@/components/atoms'
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
 import { auth } from '@/services/firebase'
+import buttonStyles from '@/styles/components/button.module.sass'
+import inputStyles from '@/styles/components/input.module.sass'
 import { isValidEmail } from '@/utils/isValidEmail'
 import { Link, Navigate } from '@tanstack/react-router'
 import { AuthErrorCodes, sendPasswordResetEmail } from 'firebase/auth'
@@ -7,9 +10,6 @@ import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { RiGoogleFill } from 'react-icons/ri'
 import { LoadingSessionTemplate } from '../loading-session'
-import buttonStyles from '@/styles/components/button.module.sass'
-import inputStyles from '@/styles/components/input.module.sass'
-import { Spinner } from '@/components/atoms'
 
 interface Props {
   referrer?: string
