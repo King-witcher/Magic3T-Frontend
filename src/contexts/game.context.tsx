@@ -161,8 +161,9 @@ export function GameProvider({ children }: Props) {
       })
       setFinalReport(report)
       emitFinishMatch(report)
+      auth.refreshUser()
     },
-    [gateway.socket]
+    [gateway.socket, auth.refreshUser]
   )
 
   // Refactor with keys

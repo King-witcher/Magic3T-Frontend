@@ -19,7 +19,6 @@ function Page() {
 
   const matchesQuery = useQuery({
     queryKey: ['matches', userId],
-    staleTime: Number.POSITIVE_INFINITY,
     async queryFn() {
       return await NestApi.Match.getMatchesByUser(userId, 20)
     },

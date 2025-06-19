@@ -21,7 +21,6 @@ function RouteComponent() {
 
   const userQuery = useSuspenseQuery({
     queryKey: ['user-by-nickname', uniqueId],
-    staleTime: Number.POSITIVE_INFINITY,
     async queryFn() {
       return await NestApi.User.getByNickname(nickname)
     },

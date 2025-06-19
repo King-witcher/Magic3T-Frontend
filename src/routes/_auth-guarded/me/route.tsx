@@ -10,7 +10,6 @@ export const Route = createFileRoute('/_auth-guarded/me')({
 
     const matchesQuery = useQuery({
       queryKey: ['matches', user.id],
-      staleTime: Number.POSITIVE_INFINITY,
       async queryFn() {
         return await NestApi.Match.getMatchesByUser(user.id, 20)
       },

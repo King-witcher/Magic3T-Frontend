@@ -16,6 +16,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 
@@ -28,7 +29,8 @@ export enum AuthState {
 type AuthData = {
   signInGoogle(): Promise<void>
   signInEmail(email: string, password: string): Promise<string | null>
-  registerEmail(email: string, password: string): Promise<string | null>
+  registerEmail(email: string, password: string): Promise<void>
+  refreshUser(): Promise<void>
   getToken(): Promise<string>
   signOut(): Promise<void>
 } & (
@@ -126,22 +128,34 @@ export function AuthProvider({ children }: Props) {
     })
   }, [])
 
+  const contextValue = useMemo(
+    () =>
+      ({
+        authState,
+        user: userQuery.data!,
+        getToken,
+        signInGoogle,
+        signInEmail,
+        refreshUser: async () => {
+          await userQuery.refetch()
+        },
+        registerEmail,
+        signOut,
+      }) as unknown as AuthData,
+    [
+      authState,
+      userQuery.data,
+      getToken,
+      signInGoogle,
+      signInEmail,
+      registerEmail,
+      userQuery.refetch,
+      signOut,
+    ]
+  )
+
   return (
-    <AuthContext.Provider
-      value={
-        {
-          authState,
-          user: userQuery.data,
-          getToken,
-          signInGoogle,
-          signInEmail,
-          registerEmail,
-          signOut,
-        } as unknown as AuthData
-      }
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   )
 }
 
