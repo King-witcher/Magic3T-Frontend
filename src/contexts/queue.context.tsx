@@ -1,5 +1,6 @@
 import { useGateway } from '@/hooks/use-gateway.ts'
 import { useListener } from '@/hooks/use-listener.ts'
+import { NestApi } from '@/services'
 import type {
   QueueClientEventsMap,
   QueueServerEventsMap,
@@ -16,7 +17,6 @@ import {
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { NestApi } from '@/services'
 
 interface QueueContextData {
   enqueue(mode: QueueMode): void

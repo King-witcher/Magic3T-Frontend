@@ -1,12 +1,12 @@
+import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context'
+import { useModalStore } from '@/contexts/modal.store'
 import { NestApi, UserDto } from '@/services/nest-api'
+import styles from '@/styles/components/button.module.sass'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
-import { useModalStore } from '@/contexts/modal.store'
-import styles from '@/styles/components/button.module.sass'
-import { Spinner } from '@/components/atoms'
 
 interface Props {
   user: UserDto

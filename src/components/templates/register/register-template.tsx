@@ -1,12 +1,12 @@
+import { Spinner } from '@/components/atoms'
 import { AuthState, useAuth } from '@/contexts/auth.context.tsx'
+import buttonStyles from '@/styles/components/button.module.sass'
+import inputStyles from '@/styles/components/input.module.sass'
 import { Link, Navigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { RiGoogleFill } from 'react-icons/ri'
 import { LoadingSessionTemplate } from '../loading-session'
-import inputStyles from '@/styles/components/input.module.sass'
-import buttonStyles from '@/styles/components/button.module.sass'
-import { Spinner } from '@/components/atoms'
 
 interface FormData {
   email: string

@@ -1,7 +1,7 @@
 import { API_URL } from '@/services/api'
+import { MatchDto } from '../dtos'
 import * as QueueController from './queue'
 import * as UserController from './user'
-import { MatchDto } from '../dtos'
 
 export namespace NestApi {
   export namespace User {
