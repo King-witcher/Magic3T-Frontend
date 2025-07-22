@@ -5,8 +5,8 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { QueueMode } from '@/types/queue'
-import styles from './styles.module.sass'
 import { ReactNode } from 'react'
+import styles from './styles.module.sass'
 
 interface Props {
   gameMode: QueueMode
