@@ -3,6 +3,13 @@ import { useListener } from '@/hooks/use-listener.ts'
 import { NestApi } from '@/services'
 import { QueueMode } from '@/types/queue.ts'
 import {
+  QueueClientEvents,
+  QueueClientEventsMap,
+  QueueServerEvents,
+  QueueServerEventsMap,
+  UserCountData,
+} from '@magic3t/types'
+import {
   type ReactNode,
   createContext,
   useCallback,
@@ -13,13 +20,6 @@ import {
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import {
-  QueueClientEvents,
-  QueueClientEventsMap,
-  QueueServerEvents,
-  QueueServerEventsMap,
-  UserCountData,
-} from '@magic3t/types'
 
 export type QueueModesType = {
   'bot-0'?: boolean

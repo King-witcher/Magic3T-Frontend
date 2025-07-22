@@ -4,10 +4,10 @@ import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useModalStore } from '@/contexts/modal.store'
 import { useDisclosure } from '@chakra-ui/react'
+import { Team } from '@magic3t/types'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
-import { Team } from '@magic3t/types'
 
 export function GameTemplate() {
   const gameCtx = useGame()

@@ -4,6 +4,16 @@ import { useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
 import { Api } from '@/services/api.ts'
 import {
+  Choice,
+  GameClientEventsMap,
+  GameServerEventsMap,
+  MatchClientEvents,
+  MatchResults,
+  MatchServerEvents,
+  Profile,
+  Team,
+} from '@magic3t/types'
+import {
   type ReactNode,
   createContext,
   useCallback,
@@ -16,16 +26,6 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
-import {
-  Choice,
-  GameClientEventsMap,
-  GameServerEventsMap,
-  MatchClientEvents,
-  MatchResults,
-  MatchServerEvents,
-  Profile,
-  Team,
-} from '@magic3t/types'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 

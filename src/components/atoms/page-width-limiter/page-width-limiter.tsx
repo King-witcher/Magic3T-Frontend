@@ -1,4 +1,4 @@
-import type { ReactNode } from '@tanstack/react-router'
+import { ReactNode } from 'react'
 
 interface Props {
   children: ReactNode

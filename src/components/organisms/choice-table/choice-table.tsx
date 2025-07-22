@@ -2,9 +2,9 @@ import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
 import { setCommand } from '@/lib/commands'
 import { getTriple } from '@/utils/getTriple'
+import { Choice } from '@magic3t/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styles from './styles.module.sass'
-import { Choice } from '@magic3t/types'
 
 interface Props {
   redMoves: Choice[]
