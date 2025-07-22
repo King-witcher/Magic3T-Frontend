@@ -1117,6 +1117,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@magic3t/types@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@magic3t/types/-/types-3.3.1.tgz#842f6ede04c2cd1b8c39fd0ff50fe330dbcaaf87"
+  integrity sha512-F9HQEh1mUHH5g1gtkXbp13fh0hmrf5vcL7wTE4ExsNKEyZ5g5ro62wPahl8D5r+c5dXesGjTFnb1vouLctgZjw==
+
 "@parcel/watcher-android-arm64@2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@parcel/watcher-android-arm64/-/watcher-android-arm64-2.5.1.tgz#507f836d7e2042f798c7d07ad19c3546f9848ac1"

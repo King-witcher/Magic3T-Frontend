@@ -1,11 +1,7 @@
 import { useGateway } from '@/hooks/use-gateway.ts'
 import { useListener } from '@/hooks/use-listener.ts'
 import { NestApi } from '@/services'
-import type {
-  QueueClientEventsMap,
-  QueueServerEventsMap,
-} from '@/types/QueueSocket.ts'
-import { QueueMode, QueueModesType, QueueUserCount } from '@/types/queue.ts'
+import { QueueMode } from '@/types/queue.ts'
 import {
   type ReactNode,
   createContext,
@@ -17,12 +13,28 @@ import {
 import { AuthState, useAuth } from './auth.context.tsx'
 import { useGame } from './game.context.tsx'
 import { useLiveActivity } from './live-activity.context.tsx'
+import {
+  QueueClientEvents,
+  QueueClientEventsMap,
+  QueueServerEvents,
+  QueueServerEventsMap,
+  UserCountData,
+} from '@magic3t/types'
+
+export type QueueModesType = {
+  'bot-0'?: boolean
+  'bot-1'?: boolean
+  'bot-2'?: boolean
+  'bot-3'?: boolean
+  casual?: boolean
+  ranked?: boolean
+}
 
 interface QueueContextData {
   enqueue(mode: QueueMode): void
   dequeue(mode: QueueMode): void
   queueModes: QueueModesType
-  queueUserCount: QueueUserCount
+  queueUserCount: UserCountData
 }
 
 interface QueueContextProps {
@@ -35,7 +47,7 @@ export function QueueProvider({ children }: QueueContextProps) {
   const { push } = useLiveActivity()
   // const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
-  const [queueUserCount, setQueueUserCount] = useState<QueueUserCount>({
+  const [queueUserCount, setQueueUserCount] = useState<UserCountData>({
     casual: {
       inGame: Number.NaN,
       queue: 0,
@@ -54,16 +66,16 @@ export function QueueProvider({ children }: QueueContextProps) {
     authState === AuthState.SignedIn
   )
 
-  useListener(gateway, 'matchFound', (data) => {
+  useListener(gateway, QueueServerEvents.MatchFound, (data) => {
     setQueueModes({})
     gameCtx.connect(data.matchId)
   })
 
-  useListener(gateway, 'updateUserCount', (data) => {
+  useListener(gateway, QueueServerEvents.UpdateUserCount, (data) => {
     setQueueUserCount(data)
   })
 
-  useListener(gateway, 'queueModes', (data) => {
+  useListener(gateway, QueueServerEvents.QueueModes, (data) => {
     setQueueModes(data)
   })
 
@@ -83,7 +95,7 @@ export function QueueProvider({ children }: QueueContextProps) {
   })
 
   useEffect(() => {
-    gateway.emit('interact')
+    gateway.emit(QueueClientEvents.Interact)
   }, [gateway])
 
   const enqueue = useCallback(

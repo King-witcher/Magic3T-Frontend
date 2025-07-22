@@ -1,11 +1,10 @@
 import { SmoothNumber } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
-import { League } from '@/services/nest-api'
-import { Team } from '@/types/game-socket'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { block } from '@/utils/utils'
 import { keyframes } from '@emotion/react'
+import { League, Team } from '@magic3t/types'
 import { Link } from '@tanstack/react-router'
 
 interface Props {

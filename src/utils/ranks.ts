@@ -1,4 +1,4 @@
-import { League } from '@/services/nest-api'
+import { League } from '@magic3t/types'
 
 export type LeagueInfo = {
   emblem: string

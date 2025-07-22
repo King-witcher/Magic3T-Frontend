@@ -8,69 +8,178 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as RankingRouteImport } from './routes/ranking'
-import { Route as BiancaRouteImport } from './routes/bianca'
-import { Route as AuthGuardedRouteImport } from './routes/_auth-guarded'
-import { Route as SignInIndexRouteImport } from './routes/sign-in/index'
-import { Route as RegisterIndexRouteImport } from './routes/register/index'
-import { Route as AuthGuardedIndexRouteImport } from './routes/_auth-guarded/index'
-import { Route as UsersNicknameRouteImport } from './routes/users/$nickname'
-import { Route as AuthGuardedStoreRouteImport } from './routes/_auth-guarded/store'
-import { Route as AuthGuardedMeRouteRouteImport } from './routes/_auth-guarded/me/route'
-import { Route as UsersIdUserIdRouteImport } from './routes/users/id/$userId'
+// Import Routes
 
-const RankingRoute = RankingRouteImport.update({
+import { Route as rootRoute } from './routes/__root'
+import { Route as RankingImport } from './routes/ranking'
+import { Route as BiancaImport } from './routes/bianca'
+import { Route as AuthGuardedImport } from './routes/_auth-guarded'
+import { Route as SignInIndexImport } from './routes/sign-in/index'
+import { Route as RegisterIndexImport } from './routes/register/index'
+import { Route as AuthGuardedIndexImport } from './routes/_auth-guarded/index'
+import { Route as UsersNicknameImport } from './routes/users/$nickname'
+import { Route as AuthGuardedStoreImport } from './routes/_auth-guarded/store'
+import { Route as AuthGuardedMeRouteImport } from './routes/_auth-guarded/me/route'
+import { Route as UsersIdUserIdImport } from './routes/users/id/$userId'
+
+// Create/Update Routes
+
+const RankingRoute = RankingImport.update({
   id: '/ranking',
   path: '/ranking',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const BiancaRoute = BiancaRouteImport.update({
+
+const BiancaRoute = BiancaImport.update({
   id: '/bianca',
   path: '/bianca',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const AuthGuardedRoute = AuthGuardedRouteImport.update({
+
+const AuthGuardedRoute = AuthGuardedImport.update({
   id: '/_auth-guarded',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const SignInIndexRoute = SignInIndexRouteImport.update({
+
+const SignInIndexRoute = SignInIndexImport.update({
   id: '/sign-in/',
   path: '/sign-in/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const RegisterIndexRoute = RegisterIndexRouteImport.update({
+
+const RegisterIndexRoute = RegisterIndexImport.update({
   id: '/register/',
   path: '/register/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const AuthGuardedIndexRoute = AuthGuardedIndexRouteImport.update({
+
+const AuthGuardedIndexRoute = AuthGuardedIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthGuardedRoute,
 } as any)
-const UsersNicknameRoute = UsersNicknameRouteImport.update({
+
+const UsersNicknameRoute = UsersNicknameImport.update({
   id: '/users/$nickname',
   path: '/users/$nickname',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const AuthGuardedStoreRoute = AuthGuardedStoreRouteImport.update({
+
+const AuthGuardedStoreRoute = AuthGuardedStoreImport.update({
   id: '/store',
   path: '/store',
   getParentRoute: () => AuthGuardedRoute,
 } as any)
-const AuthGuardedMeRouteRoute = AuthGuardedMeRouteRouteImport.update({
+
+const AuthGuardedMeRouteRoute = AuthGuardedMeRouteImport.update({
   id: '/me',
   path: '/me',
   getParentRoute: () => AuthGuardedRoute,
 } as any)
-const UsersIdUserIdRoute = UsersIdUserIdRouteImport.update({
+
+const UsersIdUserIdRoute = UsersIdUserIdImport.update({
   id: '/users/id/$userId',
   path: '/users/id/$userId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
 
+// Populate the FileRoutesByPath interface
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_auth-guarded': {
+      id: '/_auth-guarded'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthGuardedImport
+      parentRoute: typeof rootRoute
+    }
+    '/bianca': {
+      id: '/bianca'
+      path: '/bianca'
+      fullPath: '/bianca'
+      preLoaderRoute: typeof BiancaImport
+      parentRoute: typeof rootRoute
+    }
+    '/ranking': {
+      id: '/ranking'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth-guarded/me': {
+      id: '/_auth-guarded/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof AuthGuardedMeRouteImport
+      parentRoute: typeof AuthGuardedImport
+    }
+    '/_auth-guarded/store': {
+      id: '/_auth-guarded/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof AuthGuardedStoreImport
+      parentRoute: typeof AuthGuardedImport
+    }
+    '/users/$nickname': {
+      id: '/users/$nickname'
+      path: '/users/$nickname'
+      fullPath: '/users/$nickname'
+      preLoaderRoute: typeof UsersNicknameImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth-guarded/': {
+      id: '/_auth-guarded/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthGuardedIndexImport
+      parentRoute: typeof AuthGuardedImport
+    }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/users/id/$userId': {
+      id: '/users/id/$userId'
+      path: '/users/id/$userId'
+      fullPath: '/users/id/$userId'
+      preLoaderRoute: typeof UsersIdUserIdImport
+      parentRoute: typeof rootRoute
+    }
+  }
+}
+
+// Create and export the route tree
+
+interface AuthGuardedRouteChildren {
+  AuthGuardedMeRouteRoute: typeof AuthGuardedMeRouteRoute
+  AuthGuardedStoreRoute: typeof AuthGuardedStoreRoute
+  AuthGuardedIndexRoute: typeof AuthGuardedIndexRoute
+}
+
+const AuthGuardedRouteChildren: AuthGuardedRouteChildren = {
+  AuthGuardedMeRouteRoute: AuthGuardedMeRouteRoute,
+  AuthGuardedStoreRoute: AuthGuardedStoreRoute,
+  AuthGuardedIndexRoute: AuthGuardedIndexRoute,
+}
+
+const AuthGuardedRouteWithChildren = AuthGuardedRoute._addFileChildren(
+  AuthGuardedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
+  '': typeof AuthGuardedRouteWithChildren
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
   '/me': typeof AuthGuardedMeRouteRoute
@@ -81,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInIndexRoute
   '/users/id/$userId': typeof UsersIdUserIdRoute
 }
+
 export interface FileRoutesByTo {
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
@@ -92,8 +202,9 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInIndexRoute
   '/users/id/$userId': typeof UsersIdUserIdRoute
 }
+
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
+  __root__: typeof rootRoute
   '/_auth-guarded': typeof AuthGuardedRouteWithChildren
   '/bianca': typeof BiancaRoute
   '/ranking': typeof RankingRoute
@@ -105,9 +216,11 @@ export interface FileRoutesById {
   '/sign-in/': typeof SignInIndexRoute
   '/users/id/$userId': typeof UsersIdUserIdRoute
 }
+
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | ''
     | '/bianca'
     | '/ranking'
     | '/me'
@@ -142,6 +255,7 @@ export interface FileRouteTypes {
     | '/users/id/$userId'
   fileRoutesById: FileRoutesById
 }
+
 export interface RootRouteChildren {
   AuthGuardedRoute: typeof AuthGuardedRouteWithChildren
   BiancaRoute: typeof BiancaRoute
@@ -152,97 +266,6 @@ export interface RootRouteChildren {
   UsersIdUserIdRoute: typeof UsersIdUserIdRoute
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/ranking': {
-      id: '/ranking'
-      path: '/ranking'
-      fullPath: '/ranking'
-      preLoaderRoute: typeof RankingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bianca': {
-      id: '/bianca'
-      path: '/bianca'
-      fullPath: '/bianca'
-      preLoaderRoute: typeof BiancaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth-guarded': {
-      id: '/_auth-guarded'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthGuardedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-in/': {
-      id: '/sign-in/'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register/': {
-      id: '/register/'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth-guarded/': {
-      id: '/_auth-guarded/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthGuardedIndexRouteImport
-      parentRoute: typeof AuthGuardedRoute
-    }
-    '/users/$nickname': {
-      id: '/users/$nickname'
-      path: '/users/$nickname'
-      fullPath: '/users/$nickname'
-      preLoaderRoute: typeof UsersNicknameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth-guarded/store': {
-      id: '/_auth-guarded/store'
-      path: '/store'
-      fullPath: '/store'
-      preLoaderRoute: typeof AuthGuardedStoreRouteImport
-      parentRoute: typeof AuthGuardedRoute
-    }
-    '/_auth-guarded/me': {
-      id: '/_auth-guarded/me'
-      path: '/me'
-      fullPath: '/me'
-      preLoaderRoute: typeof AuthGuardedMeRouteRouteImport
-      parentRoute: typeof AuthGuardedRoute
-    }
-    '/users/id/$userId': {
-      id: '/users/id/$userId'
-      path: '/users/id/$userId'
-      fullPath: '/users/id/$userId'
-      preLoaderRoute: typeof UsersIdUserIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
-}
-
-interface AuthGuardedRouteChildren {
-  AuthGuardedMeRouteRoute: typeof AuthGuardedMeRouteRoute
-  AuthGuardedStoreRoute: typeof AuthGuardedStoreRoute
-  AuthGuardedIndexRoute: typeof AuthGuardedIndexRoute
-}
-
-const AuthGuardedRouteChildren: AuthGuardedRouteChildren = {
-  AuthGuardedMeRouteRoute: AuthGuardedMeRouteRoute,
-  AuthGuardedStoreRoute: AuthGuardedStoreRoute,
-  AuthGuardedIndexRoute: AuthGuardedIndexRoute,
-}
-
-const AuthGuardedRouteWithChildren = AuthGuardedRoute._addFileChildren(
-  AuthGuardedRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AuthGuardedRoute: AuthGuardedRouteWithChildren,
   BiancaRoute: BiancaRoute,
@@ -252,6 +275,64 @@ const rootRouteChildren: RootRouteChildren = {
   SignInIndexRoute: SignInIndexRoute,
   UsersIdUserIdRoute: UsersIdUserIdRoute,
 }
-export const routeTree = rootRouteImport
+
+export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/_auth-guarded",
+        "/bianca",
+        "/ranking",
+        "/users/$nickname",
+        "/register/",
+        "/sign-in/",
+        "/users/id/$userId"
+      ]
+    },
+    "/_auth-guarded": {
+      "filePath": "_auth-guarded.tsx",
+      "children": [
+        "/_auth-guarded/me",
+        "/_auth-guarded/store",
+        "/_auth-guarded/"
+      ]
+    },
+    "/bianca": {
+      "filePath": "bianca.tsx"
+    },
+    "/ranking": {
+      "filePath": "ranking.tsx"
+    },
+    "/_auth-guarded/me": {
+      "filePath": "_auth-guarded/me/route.tsx",
+      "parent": "/_auth-guarded"
+    },
+    "/_auth-guarded/store": {
+      "filePath": "_auth-guarded/store.tsx",
+      "parent": "/_auth-guarded"
+    },
+    "/users/$nickname": {
+      "filePath": "users/$nickname.tsx"
+    },
+    "/_auth-guarded/": {
+      "filePath": "_auth-guarded/index.tsx",
+      "parent": "/_auth-guarded"
+    },
+    "/register/": {
+      "filePath": "register/index.tsx"
+    },
+    "/sign-in/": {
+      "filePath": "sign-in/index.tsx"
+    },
+    "/users/id/$userId": {
+      "filePath": "users/id/$userId.tsx"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

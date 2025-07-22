@@ -1,24 +1,24 @@
+import { Profile } from '@magic3t/types'
 import { NEST_API_URL } from '../api'
-import { UserDto } from '../dtos'
 
-export async function getById(id: string): Promise<UserDto | null> {
+export async function getById(id: string): Promise<Profile | null> {
   const response = await fetch(`${NEST_API_URL}/users/id/${id}`)
   if (response.status !== 200) return null
-  const data: UserDto = await response.json()
+  const data: Profile = await response.json()
   return data
 }
 
-export async function getByNickname(nickname: string): Promise<UserDto | null> {
+export async function getByNickname(nickname: string): Promise<Profile | null> {
   const response = await fetch(`${NEST_API_URL}/users/nickname/${nickname}`)
   if (response.status !== 200) return null
-  const data: UserDto = await response.json()
+  const data: Profile = await response.json()
   return data
 }
 
-export async function getRanking(): Promise<UserDto[]> {
+export async function getRanking(): Promise<Profile[]> {
   const response = await fetch(`${NEST_API_URL}/users/ranking`)
   if (response.status !== 200) return []
-  const data: UserDto[] = await response.json()
+  const data: Profile[] = await response.json()
   return data
 }
 

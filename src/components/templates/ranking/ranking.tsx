@@ -1,6 +1,7 @@
-import { League, NestApi } from '@/services/nest-api'
+import { NestApi } from '@/services/nest-api'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { getIconUrl } from '@/utils/utils'
+import { League } from '@magic3t/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 

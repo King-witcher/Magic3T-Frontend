@@ -1,6 +1,5 @@
-import { MatchDto, MatchEventType, Team } from '@/services/nest-api'
 import { acrylicClasses } from '@/styles/tailwind'
-import { MatchResult } from '@/types'
+import { MatchDto, MatchEventType, Team } from '@magic3t/types'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { FaClock } from 'react-icons/fa'
@@ -9,6 +8,12 @@ import { RiFlagFill } from 'react-icons/ri'
 interface Props {
   match: MatchDto
   viewAs: string
+}
+
+export enum MatchResult {
+  Defeat = 'defeat',
+  Draw = 'draw',
+  Victory = 'victory',
 }
 
 const resultColorMap: Record<MatchResult, string> = {

@@ -1,5 +1,6 @@
 import { auth, provider } from '@/services/firebase'
-import { NestApi, UserDto } from '@/services/nest-api'
+import { NestApi } from '@/services/nest-api'
+import { Profile } from '@magic3t/types'
 import { useQuery } from '@tanstack/react-query'
 import {
   type User,
@@ -29,7 +30,7 @@ export enum AuthState {
 type AuthData = {
   signInGoogle(): Promise<void>
   signInEmail(email: string, password: string): Promise<string | null>
-  registerEmail(email: string, password: string): Promise<void>
+  registerEmail(email: string, password: string): Promise<string | null>
   refreshUser(): Promise<void>
   getToken(): Promise<string>
   signOut(): Promise<void>
@@ -43,7 +44,7 @@ type AuthData = {
       authState: AuthState.Loading
     }
   | {
-      user: UserDto
+      user: Profile
       authState: AuthState.SignedIn
     }
 )

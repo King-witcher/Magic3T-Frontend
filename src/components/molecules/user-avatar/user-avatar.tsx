@@ -1,10 +1,10 @@
-import { Division, League } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
 import { getIconUrl } from '@/utils/utils'
 import { ComponentProps } from 'react'
 import { RiEdit2Fill } from 'react-icons/ri'
 import { twMerge } from 'tailwind-merge'
 import styles from './styles.module.sass'
+import { Division, League } from '@magic3t/types'
 
 interface Props extends ComponentProps<'div'> {
   icon: number
