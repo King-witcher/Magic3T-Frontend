@@ -1,3 +1,4 @@
+import { getDateFromId } from '@/lib/utils'
 import { acrylicClasses } from '@/styles/tailwind'
 import { MatchDto, MatchEventType, Team } from '@magic3t/types'
 import { Link } from '@tanstack/react-router'
@@ -32,6 +33,7 @@ export function MatchRow({ match, viewAs }: Props) {
       : match.winner === team
         ? MatchResult.Victory
         : MatchResult.Defeat
+  const date = getDateFromId(match.id)
 
   const isDefeat = result === MatchResult.Defeat
   const isDraw = result === MatchResult.Draw
@@ -76,7 +78,7 @@ export function MatchRow({ match, viewAs }: Props) {
               )}
             </div>
             <p className="text-xs/normal text-grey-1">
-              {dateTimeFormat.format(match.time)} - {durationString}
+              {dateTimeFormat.format(date)} - {durationString}
             </p>
           </div>
           <span
