@@ -1,5 +1,5 @@
 import { Center, type CenterProps } from '@chakra-ui/react'
-import type { ReactNode } from '@tanstack/react-router'
+import { ReactNode } from 'react'
 
 interface Props extends CenterProps {
   children: ReactNode

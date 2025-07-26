@@ -1,12 +1,12 @@
 import { setCommand } from '@/lib/commands.ts'
-import { UserDto } from '@/services/nest-api/dtos.ts'
+import { Profile } from '@magic3t/types'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
 import { AuthState } from './auth.context.tsx'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 
 interface GuardedAuthData {
-  user: UserDto
+  user: Profile
   authState: AuthState.SignedIn
   signOut(): Promise<void>
   getToken(): Promise<string>
@@ -14,7 +14,7 @@ interface GuardedAuthData {
 
 interface Props {
   children?: ReactNode
-  user: UserDto
+  user: Profile
   signOut(): Promise<void>
   getToken(): Promise<string>
 }

@@ -1,4 +1,4 @@
-import type { Choice } from '@/types/game.ts'
+import { Choice } from '@magic3t/types'
 import styles from './styles.module.sass'
 
 export type ChoiceStyle =

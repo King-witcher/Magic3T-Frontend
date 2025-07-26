@@ -1,5 +1,5 @@
 import { useGame } from '@/contexts/game.context.tsx'
-import { MessageData } from '@/types/game-socket'
+import { MessageData } from '@magic3t/types'
 import {
   type ChangeEvent,
   type FormEvent,

@@ -1,4 +1,4 @@
-import type { Choice } from '@/types/game.ts'
+import { Choice } from '@magic3t/types'
 
 export function getTriple(numbers: Choice[]): [Choice, Choice, Choice] | null {
   for (let i = 0; i < numbers.length - 2; i++)

@@ -1,5 +1,5 @@
 import { API_URL } from '@/services/api'
-import { MatchDto } from '../dtos'
+import { MatchDto } from '@magic3t/types'
 import * as QueueController from './queue'
 import * as UserController from './user'
 

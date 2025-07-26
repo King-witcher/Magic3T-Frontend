@@ -5,7 +5,7 @@ import {
   useServiceStatus,
 } from '@/contexts/service-status.context'
 import type { QueueMode } from '@/types/queue'
-import { ReactNode } from '@tanstack/react-router'
+import { ReactNode } from 'react'
 import styles from './styles.module.sass'
 
 interface Props {

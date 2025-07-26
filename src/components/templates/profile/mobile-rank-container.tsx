@@ -1,5 +1,5 @@
-import { League } from '@/services/nest-api'
 import { leaguesMap } from '@/utils/ranks'
+import { League } from '@magic3t/types'
 
 interface Props {
   title: string

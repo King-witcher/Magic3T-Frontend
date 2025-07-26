@@ -3,16 +3,16 @@ import { useListener } from '@/hooks/use-listener.ts'
 import { useObservable } from '@/hooks/use-observable.ts'
 import { Timer } from '@/lib/Timer'
 import { Api } from '@/services/api.ts'
-import { UserDto } from '@/services/nest-api'
 import {
-  ClientMatchEvents,
+  Choice,
   GameClientEventsMap,
   GameServerEventsMap,
-  MatchReportData,
-  ServerMatchEvents,
+  MatchClientEvents,
+  MatchResults,
+  MatchServerEvents,
+  Profile,
   Team,
-} from '@/types/game-socket.ts'
-import { type Choice } from '@/types/game.ts'
+} from '@magic3t/types'
 import {
   type ReactNode,
   createContext,
@@ -36,12 +36,12 @@ type GameData2 = {
   currentTeam: Team | null
   availableChoices: Choice[]
   finished: boolean
-  finalReport: MatchReportData | null
+  finalReport: MatchResults | null
   teams: Record<
     Team,
     {
       timer: Timer
-      profile: UserDto | null
+      profile: Profile | null
       choices: Choice[]
       gain: number | null
       score: number | null
@@ -55,7 +55,7 @@ type GameData2 = {
   sendMessage(message: string): void
   forfeit(): void
 
-  onMatchReport(callback: (report: MatchReportData) => void): void
+  onMatchReport(callback: (report: MatchResults) => void): void
 }
 
 interface Props {
@@ -69,16 +69,15 @@ export function GameProvider({ children }: Props) {
   const auth = useAuth()
   const [matchId, setMatchId] = useState<string | null>(null)
   const isActive = !!matchId
-  const [orderProfile, setOrderProfile] = useState<UserDto | null>(null)
-  const [chaosProfile, setChaosProfile] = useState<UserDto | null>(null)
+  const [orderProfile, setOrderProfile] = useState<Profile | null>(null)
+  const [chaosProfile, setChaosProfile] = useState<Profile | null>(null)
   const [orderChoices, setOrderChoices] = useState<Choice[]>([])
   const [chaosChoices, setChaosChoices] = useState<Choice[]>([])
   const [turn, setTurn] = useState<Team | null>(null)
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [finalReport, setFinalReport] = useState<MatchReportData | null>(null)
-  const [subscribeFinishMatch, emitFinishMatch] =
-    useObservable<MatchReportData>()
+  const [finalReport, setFinalReport] = useState<MatchResults | null>(null)
+  const [subscribeFinishMatch, emitFinishMatch] = useObservable<MatchResults>()
 
   const orderTimer = useRef(new Timer(0))
   const chaosTimer = useRef(new Timer(0))
@@ -91,7 +90,7 @@ export function GameProvider({ children }: Props) {
   const { push } = useLiveActivity()
 
   // Handles text messages from the server. To be done.
-  useListener(gateway, ServerMatchEvents.Message, (message) => {
+  useListener(gateway, MatchServerEvents.Message, (message) => {
     setMessages((current) => [
       ...current,
       {
@@ -105,7 +104,7 @@ export function GameProvider({ children }: Props) {
   // Handles team assignments messages from the server.
   useListener(
     gateway,
-    ServerMatchEvents.Assignments,
+    MatchServerEvents.Assignments,
     (assignments) => {
       setOrderProfile(assignments[Team.Order].profile)
       setChaosProfile(assignments[Team.Chaos].profile)
@@ -122,7 +121,7 @@ export function GameProvider({ children }: Props) {
   )
 
   // Handles state updates from the server.
-  useListener(gateway, ServerMatchEvents.StateReport, (report) => {
+  useListener(gateway, MatchServerEvents.StateReport, (report) => {
     setTurn(report.turn)
     setOrderChoices(report[Team.Order].choices)
     setChaosChoices(report[Team.Chaos].choices)
@@ -141,7 +140,7 @@ export function GameProvider({ children }: Props) {
   // Handles final match reports from the server.
   useListener(
     gateway,
-    ServerMatchEvents.MatchReport,
+    MatchServerEvents.MatchReport,
     (report) => {
       setOrderProfile((old) => {
         return (
@@ -188,8 +187,8 @@ export function GameProvider({ children }: Props) {
     if (!matchId) return
     if (!gateway.socket) return
 
-    gateway.emit(ClientMatchEvents.GetState)
-    gateway.emit(ClientMatchEvents.GetAssignments)
+    gateway.emit(MatchClientEvents.GetState)
+    gateway.emit(MatchClientEvents.GetAssignments)
   }, [matchId, gateway])
 
   useListener(gateway, 'disconnect', (reason) => {
@@ -200,7 +199,7 @@ export function GameProvider({ children }: Props) {
     (choice: Choice) => {
       if (currentTeam === null) return
       if (currentTeam !== turn) return
-      gateway.emit(ClientMatchEvents.Pick, choice)
+      gateway.emit(MatchClientEvents.Pick, choice)
       switch (currentTeam) {
         case Team.Order: {
           setOrderChoices((old) => [...old, choice])
@@ -233,7 +232,7 @@ export function GameProvider({ children }: Props) {
           },
         ])
 
-        gateway.emit(ClientMatchEvents.Message, message)
+        gateway.emit(MatchClientEvents.Message, message)
       }
     },
     [gateway]
@@ -242,7 +241,7 @@ export function GameProvider({ children }: Props) {
   const forfeit = useCallback(async () => {
     if (currentTeam === null) return
     if (finalReport) return
-    gateway.emit(ClientMatchEvents.Surrender)
+    gateway.emit(MatchClientEvents.Surrender)
     setTurn(null)
     orderTimer.current.pause()
     chaosTimer.current.pause()

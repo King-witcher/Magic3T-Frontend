@@ -3,20 +3,11 @@ import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useModalStore } from '@/contexts/modal.store'
-import { Team } from '@/types/game-socket'
-import { GameStatus } from '@/types/game.ts'
 import { useDisclosure } from '@chakra-ui/react'
+import { Team } from '@magic3t/types'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
-
-const statusText: Record<GameStatus, string> = {
-  defeat: 'You lost',
-  victory: 'You won',
-  draw: 'Match draw',
-  playing: 'Match in progress',
-  waiting: '',
-}
 
 export function GameTemplate() {
   const gameCtx = useGame()
