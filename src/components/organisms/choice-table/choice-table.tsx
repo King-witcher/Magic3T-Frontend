@@ -1,9 +1,9 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
-import { setCommand } from '@/lib/commands'
 import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useConsole } from '../console-tab'
 import styles from './styles.module.sass'
 
 interface Props {
@@ -13,9 +13,8 @@ interface Props {
   onSelect?(choice: Choice): void
 }
 
-let initialAllChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const initialAllChoices: Choice[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const cheatAllChoices: Choice[] = [2, 9, 4, 7, 5, 3, 6, 1, 8]
-let initialPugDance = false
 
 function randomizeCheatTable() {
   if (Math.random() >= 0.5) mirror()
@@ -52,27 +51,11 @@ function randomizeCheatTable() {
   }
 }
 
-function initialTicTacToeCheat() {
-  randomizeCheatTable()
-  initialAllChoices = cheatAllChoices
-}
-
-function initialSetPugDanceCheat() {
-  initialPugDance = !initialPugDance
-}
-
-setCommand('3tmode', initialSetPugDanceCheat)
-setCommand('ttt', initialTicTacToeCheat)
-
-export function ChoiceTable({
-  redMoves,
-  blueMoves,
-  state,
-  onSelect,
-  ...rest
-}: Props) {
-  const [allChoices, setAllChoices] = useState<Choice[]>(initialAllChoices)
-  const [pugDance, setPugDance] = useState(initialPugDance)
+export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
+  const { cvars, set } = useConsole()
+  const pugDance = cvars.pugmode !== '0'
+  const tttmode = cvars['3tmode'] !== '0'
+  const allChoices = tttmode ? cheatAllChoices : initialAllChoices
 
   const triple = useMemo(() => {
     if (redMoves.length >= 3) {
@@ -85,30 +68,11 @@ export function ChoiceTable({
     }
   }, [redMoves, blueMoves])
 
-  const ticTacToeCheat = useCallback(() => {
-    initialTicTacToeCheat()
-    setAllChoices([...cheatAllChoices])
-  }, [])
-
-  const pugDanceCheat = useCallback(() => {
-    initialSetPugDanceCheat()
-    setPugDance((current) => !current)
-  }, [])
-
-  useEffect(() => {
-    setCommand('3tmode', pugDanceCheat)
-    setCommand('ttt', ticTacToeCheat)
-    return () => {
-      setCommand('3tmode', initialSetPugDanceCheat)
-      setCommand('ttt', initialTicTacToeCheat)
-    }
-  }, [])
-
   if (pugDance) {
     return (
       <div
         className="flex flex-col justify-center relative"
-        onClick={() => pugDanceCheat()}
+        onClick={() => set('pugmode', '0')}
       >
         <img className="w-[300px]" alt="Pug dancing" src={PugDanceGif} />
         <p className="absolute bottom-[7px] w-full text-center translate-y-[100%]">
@@ -117,6 +81,10 @@ export function ChoiceTable({
       </div>
     )
   }
+
+  useEffect(() => {
+    randomizeCheatTable()
+  }, [])
 
   return (
     <div

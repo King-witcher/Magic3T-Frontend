@@ -3,7 +3,6 @@ import { UserAvatar } from '@/components/molecules'
 import { useGame } from '@/contexts/game.context.tsx'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { block } from '@/utils/utils'
-import { keyframes } from '@emotion/react'
 import { League, Team } from '@magic3t/types'
 import { Link } from '@tanstack/react-router'
 
@@ -11,14 +10,6 @@ interface Props {
   team: Team
   className?: string
 }
-
-const appear = keyframes`
-  from {
-    opacity: 0;
-  } to {
-    opacity: 1;
-  }
-`
 
 export function PlayerCard({ team, className }: Props) {
   const game = useGame()

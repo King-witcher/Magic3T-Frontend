@@ -1,3 +1,4 @@
+import { ConsoleTab } from '@/components/organisms'
 import {
   ErrorTemplate,
   NotFoundTemplate,
@@ -27,6 +28,7 @@ export const Route = createRootRoute({
     <Providers>
       <RootLayout>
         <Outlet />
+        <ConsoleTab />
       </RootLayout>
       <VercelAnalytics />
       <VercelSpeedInsights />

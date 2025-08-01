@@ -1,7 +1,7 @@
-import { setCommand } from '@/lib/commands.ts'
+import { addCommand } from '@/components/organisms'
 import { Profile } from '@magic3t/types'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
-import { AuthState } from './auth.context.tsx'
+import { AuthState } from './auth.context'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 
@@ -23,9 +23,10 @@ const GuardedAuthContext = createContext<GuardedAuthData>({} as GuardedAuthData)
 
 export function GuardedAuthProvider({ children, ...rest }: Props) {
   useEffect(() => {
-    return setCommand('get-token', async () => {
+    return addCommand('gettoken', async (args, ctx) => {
+      ctx.log('Fetching token...')
       const token = await rest.getToken()
-      console.log(token)
+      ctx.log(token)
     })
   }, [rest.getToken])
 

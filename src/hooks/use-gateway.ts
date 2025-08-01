@@ -1,3 +1,4 @@
+import { useConsole } from '@/components/organisms'
 import { useAuth } from '@/contexts/auth.context'
 import {
   EventNames,
@@ -28,6 +29,7 @@ export function useGateway<
     ClientEvents
   > | null>(null)
   const auth = useAuth()
+  const { log } = useConsole()
 
   useEffect(() => {
     if (!enabled) {
@@ -36,7 +38,7 @@ export function useGateway<
 
     let cancel = false
     let socket: Socket | null = null
-    console.log(`Connecting to gateway ${gateway}...`)
+    log(`Connecting to gateway ${gateway}...`)
     auth.getToken().then((token) => {
       if (cancel) return
       socket = io(`${import.meta.env.VITE_API_URL}/${gateway}`, {
@@ -44,7 +46,7 @@ export function useGateway<
           token,
         },
       })
-      console.log(`Connected to gateway ${gateway}.`)
+      log(`Connected to gateway ${gateway}.`)
 
       setSocket(socket)
     })
@@ -65,9 +67,13 @@ export function useGateway<
         console.warn(
           `Socket for "${gateway}" gateway is disabled and event "${event.toString()}" will not be sent.`
         )
-      } else {
-        socket.emit(event, ...data)
+        log(
+          `Socket for "${gateway}" gateway is disabled and event "${event.toString()}" will not be sent.`
+        )
+        return
       }
+
+      socket.emit(event, ...data)
     },
     [socket]
   )

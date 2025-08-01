@@ -1,55 +1,37 @@
 import { useGame } from '@/contexts/game.context.tsx'
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  type ModalProps,
-} from '@chakra-ui/react'
 
-export function ForfeitModal(props: Omit<ModalProps, 'children'>) {
+interface Props {
+  onClose: () => void
+}
+
+export function ForfeitModal(props: Props) {
   const { forfeit } = useGame()
 
   return (
-    <Modal isCentered {...props}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Surrender</ModalHeader>
-        <ModalBody>Are you sure you want to surrender?</ModalBody>
-        <ModalFooter>
-          <Button
-            onClick={props.onClose}
-            color="light"
-            bg="#ffffff40"
-            border="1px solid #ffffff40"
-            _hover={{
-              bg: '#ffffff80',
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            colorScheme="red"
-            onClick={async () => {
-              forfeit()
-              props.onClose()
-            }}
-            color="#ff4040"
-            bg="#ff404040"
-            border="1px solid #ff404040"
-            _hover={{
-              bg: '#ff404080',
-            }}
-          >
-            Surrender
-          </Button>
-        </ModalFooter>
-        <ModalCloseButton />
-      </ModalContent>
-    </Modal>
+    <div className="px-6 py-4 flex flex-col gap-4 w-100">
+      <h2 className="text-3xl font-semibold text-gold-4 font-serif">
+        SURRENDER
+      </h2>
+      <p className="text-gold-1">You are about to surrender.</p>
+      <div className="flex gap-2 justify-end mt-2">
+        <button
+          type="button"
+          className="text-gold-1 hover-acrylic px-4 py-2"
+          onClick={props.onClose}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="px-4 py-2 text-red-100 border-1 border-red-500 rounded-lg bg-[#ff000040] hover:bg-[#ff000080] transition-all cursor-pointer"
+          onClick={async () => {
+            forfeit()
+            props.onClose()
+          }}
+        >
+          Surrender
+        </button>
+      </div>
+    </div>
   )
 }

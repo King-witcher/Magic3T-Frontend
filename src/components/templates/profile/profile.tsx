@@ -2,7 +2,7 @@ import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import { Api } from '@/services/api'
 import { leaguesMap } from '@/utils/ranks'
 import { League, MatchDto, Profile } from '@magic3t/types'
@@ -30,7 +30,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   const leagueInfo = leaguesMap[user.rating.league]
   const client = useQueryClient()
 
-  const openChangeIconModal = useModalStore((state) => state.openModal)
+  const openModal = useDialogStore((state) => state.showDialog)
 
   const progress = user.rating.points ?? (user.rating.progress || 0)
 
@@ -49,12 +49,10 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
     await client.refetchQueries({
       queryKey: ['myself', authenticatedUser?.id],
     })
-
-    console.log('refetched')
   }
 
   const changeIcon = useCallback(() => {
-    openChangeIconModal(<ChangeIconModal user={user} onSave={saveIconChange} />)
+    openModal(<ChangeIconModal user={user} onSave={saveIconChange} />)
   }, [user, saveIconChange])
 
   return (
@@ -86,7 +84,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
               ? `${progress}%`
               : `${user.rating.points} LP`
           }`}
-          extra={`${user.stats.wins} wins - ${user.stats.draws} draws - 
+          extra={`${user.stats.wins} wins - ${user.stats.draws} draws -
               ${user.stats.defeats} defeats`}
           league={user.rating.league}
           progress={progress}

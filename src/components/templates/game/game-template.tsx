@@ -1,9 +1,7 @@
-import { ButtonsContainer } from '@/components/atoms'
-import { InnerButton } from '@/components/atoms/buttons-container/inner-button'
+import * as ButtonGroup from '@/components/atoms/button-group'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
-import { useModalStore } from '@/contexts/modal.store'
-import { useDisclosure } from '@chakra-ui/react'
+import { useDialogStore } from '@/contexts/modal.store'
 import { Team } from '@magic3t/types'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
@@ -11,12 +9,7 @@ import { ResultModal } from './components/result-modal'
 
 export function GameTemplate() {
   const gameCtx = useGame()
-  const openModal = useModalStore((state) => state.openModal)
-  const {
-    isOpen: forfeitModaOpen,
-    onClose: closeForfeitModal,
-    onOpen: openForfeitModal,
-  } = useDisclosure()
+  const showDialog = useDialogStore((state) => state.showDialog)
   const downTeam = gameCtx.currentTeam || Team.Order
   const upTeam = (1 - downTeam) as Team
   const downPlayer = gameCtx.teams[downTeam]
@@ -27,10 +20,16 @@ export function GameTemplate() {
   useEffect(() => {
     return gameCtx.onMatchReport((report) => {
       setTimeout(() => {
-        openModal(<ResultModal />, { closeOnOutsideClick: true })
+        showDialog(<ResultModal />, { closeOnOutsideClick: true })
       }, 500)
     })
   }, [])
+
+  function showForfeitModal() {
+    showDialog(<ForfeitModal onClose={() => {}} />, {
+      closeOnOutsideClick: true,
+    })
+  }
 
   if (!gameCtx.isActive) return null // Improve
   return (
@@ -68,39 +67,21 @@ export function GameTemplate() {
               <TimeCounter
                 timer={downPlayer.timer}
                 pause={gameCtx.turn === null}
+                showSurrender={!gameCtx.finished}
+                onClickSurrender={showForfeitModal}
               />
             </div>
           </div>
           <ChatBox inputRef={chatInputRef} className="h-[400px] lg:h-[unset]" />
         </div>
-        <ButtonsContainer disabled={false}>
-          {!gameCtx.finished && (
-            <InnerButton
-              h="60px"
-              w={{ base: 'full', sm: '200px' }}
-              onClick={openForfeitModal}
-            >
-              Surrender
-            </InnerButton>
-          )}
-          {gameCtx.finished && [
-            <InnerButton
-              key="leave"
-              h="60px"
-              w={{ base: 'full', sm: '200px' }}
-              onClick={gameCtx.disconnect}
-            >
-              Leave room
-            </InnerButton>,
-            // <Link to={`/match/${matchId}`} key="view">
-            //   <InnerButton h="60px" w={{ base: 'full', sm: '200px' }}>
-            //     View match
-            //   </InnerButton>
-            // </Link>,
-          ]}
-        </ButtonsContainer>
+        {gameCtx.finished && (
+          <ButtonGroup.Root>
+            <ButtonGroup.Button onClick={gameCtx.disconnect}>
+              Leave Room
+            </ButtonGroup.Button>
+          </ButtonGroup.Root>
+        )}
       </div>
-      <ForfeitModal onClose={closeForfeitModal} isOpen={forfeitModaOpen} />
     </div>
   )
 }

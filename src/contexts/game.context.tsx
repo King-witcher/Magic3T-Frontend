@@ -1,8 +1,9 @@
-import { useGateway } from '@/hooks/use-gateway.ts'
-import { useListener } from '@/hooks/use-listener.ts'
-import { useObservable } from '@/hooks/use-observable.ts'
+import { useConsole } from '@/components/organisms'
+import { useGateway } from '@/hooks/use-gateway'
+import { useListener } from '@/hooks/use-listener'
+import { useObservable } from '@/hooks/use-observable'
 import { Timer } from '@/lib/Timer'
-import { Api } from '@/services/api.ts'
+import { Api } from '@/services/api'
 import {
   Choice,
   GameClientEventsMap,
@@ -24,9 +25,8 @@ import {
   useState,
 } from 'react'
 import { IoGameController } from 'react-icons/io5'
-import { AuthState, useAuth } from './auth.context.tsx'
-import { useLiveActivity } from './live-activity.context.tsx'
-
+import { AuthState, useAuth } from './auth.context'
+import { useLiveActivity } from './live-activity.context'
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 type GameData2 = {
@@ -78,6 +78,7 @@ export function GameProvider({ children }: Props) {
   const [messages, setMessages] = useState<Message[]>([])
   const [finalReport, setFinalReport] = useState<MatchResults | null>(null)
   const [subscribeFinishMatch, emitFinishMatch] = useObservable<MatchResults>()
+  const { log } = useConsole()
 
   const orderTimer = useRef(new Timer(0))
   const chaosTimer = useRef(new Timer(0))
@@ -193,6 +194,7 @@ export function GameProvider({ children }: Props) {
 
   useListener(gateway, 'disconnect', (reason) => {
     console.error('Socket disconnected because of', `${reason}.`)
+    log(`Socket disconnected because of ${reason}.`)
   })
 
   const pick = useCallback(
@@ -292,6 +294,7 @@ export function GameProvider({ children }: Props) {
         }
       } catch (e) {
         console.error(e)
+        log((e as unknown as Error).message)
       }
     }
 
