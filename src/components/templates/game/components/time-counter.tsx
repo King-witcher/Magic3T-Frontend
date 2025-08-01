@@ -19,7 +19,7 @@ export function TimeCounter({
     <div className="acrylic center h-[50px] w-full text-lg tracking-wider relative">
       <TimerValue timer={timer} pause={pause} />
       {showSurrender && (
-        <Tooltip label='Surrender'>
+        <Tooltip label="Surrender">
           <Flag
             className="absolute right-3 cursor-pointer text-gold-4"
             onClick={onClickSurrender}

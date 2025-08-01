@@ -3,8 +3,8 @@ import { ChoiceComponent } from '@/components/atoms'
 import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
 import { useEffect, useMemo } from 'react'
-import styles from './styles.module.sass'
 import { useConsole } from '../console-tab'
+import styles from './styles.module.sass'
 
 interface Props {
   redMoves: Choice[]

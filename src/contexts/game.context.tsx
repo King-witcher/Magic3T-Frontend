@@ -1,3 +1,4 @@
+import { useConsole } from '@/components/organisms'
 import { useGateway } from '@/hooks/use-gateway'
 import { useListener } from '@/hooks/use-listener'
 import { useObservable } from '@/hooks/use-observable'
@@ -26,7 +27,6 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context'
 import { useLiveActivity } from './live-activity.context'
-import { useConsole } from '@/components/organisms'
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 type GameData2 = {

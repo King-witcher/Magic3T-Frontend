@@ -1,3 +1,4 @@
+import { ConsoleTab } from '@/components/organisms'
 import {
   ErrorTemplate,
   NotFoundTemplate,
@@ -9,7 +10,6 @@ import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { SpeedInsights as VercelSpeedInsights } from '@vercel/speed-insights/react'
 import React from 'react'
 import { Providers } from './-providers'
-import { ConsoleTab } from '@/components/organisms'
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'

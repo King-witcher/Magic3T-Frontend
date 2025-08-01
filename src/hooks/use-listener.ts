@@ -1,3 +1,4 @@
+import { useConsole } from '@/components/organisms'
 import {
   EventsMap,
   ReservedOrUserEventNames,
@@ -6,7 +7,6 @@ import {
 import { DependencyList, useEffect } from 'react'
 import { Socket } from 'socket.io-client'
 import { Gateway } from './use-gateway'
-import { useConsole } from '@/components/organisms'
 
 export type DisconnectDescription =
   | Error

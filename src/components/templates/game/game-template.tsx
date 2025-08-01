@@ -1,3 +1,4 @@
+import * as ButtonGroup from '@/components/atoms/button-group'
 import { ChoiceTable } from '@/components/organisms'
 import { useGame } from '@/contexts/game.context.tsx'
 import { useDialogStore } from '@/contexts/modal.store'
@@ -5,7 +6,6 @@ import { Team } from '@magic3t/types'
 import { useEffect, useRef } from 'react'
 import { ChatBox, ForfeitModal, PlayerCard, TimeCounter } from './components'
 import { ResultModal } from './components/result-modal'
-import * as ButtonGroup from '@/components/atoms/button-group'
 
 export function GameTemplate() {
   const gameCtx = useGame()
@@ -26,7 +26,9 @@ export function GameTemplate() {
   }, [])
 
   function showForfeitModal() {
-    showDialog(<ForfeitModal onClose={() => {}} />, { closeOnOutsideClick: true })
+    showDialog(<ForfeitModal onClose={() => {}} />, {
+      closeOnOutsideClick: true,
+    })
   }
 
   if (!gameCtx.isActive) return null // Improve
