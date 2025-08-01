@@ -1,10 +1,10 @@
 import { useAuth } from '@/contexts/auth.context.tsx'
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import buttonStyles from '@/styles/components/button.module.sass'
 
 export function LogoutModal() {
   const { signOut } = useAuth()
-  const closeModal = useModalStore((state) => state.closeModal)
+  const closeModal = useDialogStore((state) => state.closeModal)
 
   function handleSignOut() {
     closeModal()

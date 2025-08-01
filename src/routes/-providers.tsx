@@ -3,8 +3,6 @@ import { GameProvider } from '@/contexts/game.context'
 import { LiveActivityProvider } from '@/contexts/live-activity.context.tsx'
 import { QueueProvider } from '@/contexts/queue.context'
 import { ServiceStatusProvider } from '@/contexts/service-status.context.tsx'
-import { chakraTheme } from '@/styles/chakraTheme'
-import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 
@@ -21,9 +19,7 @@ export function Providers({ children }: Props) {
         <ServiceStatusProvider>
           <AuthProvider>
             <GameProvider>
-              <QueueProvider>
-                <ChakraProvider theme={chakraTheme}>{children}</ChakraProvider>
-              </QueueProvider>
+              <QueueProvider>{children}</QueueProvider>
             </GameProvider>
           </AuthProvider>
         </ServiceStatusProvider>

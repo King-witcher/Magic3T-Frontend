@@ -1,7 +1,7 @@
 import { Spinner } from '@/components/atoms'
 import { UserAvatar } from '@/components/molecules'
 import { useAuth } from '@/contexts/auth.context'
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import { NestApi } from '@/services/nest-api'
 import styles from '@/styles/components/button.module.sass'
 import { Profile } from '@magic3t/types'
@@ -17,7 +17,7 @@ interface Props {
 export function ChangeIconModal({ user, onSave }: Props) {
   const [selectedIcon, setSelectedIcon] = useState(user.summonerIcon)
   const auth = useAuth()
-  const closeModal = useModalStore((state) => state.closeModal)
+  const closeModal = useDialogStore((state) => state.closeModal)
 
   const client = useQueryClient()
 

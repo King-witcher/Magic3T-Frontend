@@ -9,18 +9,18 @@ interface ModalStore {
   content: ReactNode
   isOpen: boolean
   closeOnOutsideClick: boolean
-  openModal: (modal: ReactNode, props?: OpenModalProps) => void
+  showDialog: (modal: ReactNode, props?: OpenModalProps) => void
   closeModal: () => void
 }
 
-export const useModalStore = create<ModalStore>((set) => ({
+export const useDialogStore = create<ModalStore>((set) => ({
   content: null,
   isOpen: false,
   closeOnOutsideClick: false,
-  openModal: (modal, props) =>
+  showDialog: (dialog, props) =>
     set(() => ({
       closeOnOutsideClick: props?.closeOnOutsideClick ?? false,
-      content: modal,
+      content: dialog,
       isOpen: true,
     })),
   closeModal: () => set(() => ({ isOpen: false })),

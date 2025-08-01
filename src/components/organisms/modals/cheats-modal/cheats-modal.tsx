@@ -1,4 +1,4 @@
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import { runCommand } from '@/lib/commands'
 import buttonStyles from '@/styles/components/button.module.sass'
 import inputStyles from '@/styles/components/input.module.sass'
@@ -6,7 +6,7 @@ import { type FormEvent, useCallback, useState } from 'react'
 
 export function CheatsModal() {
   const [input, setInput] = useState('')
-  const closeModal = useModalStore((state) => state.closeModal)
+  const closeModal = useDialogStore((state) => state.closeModal)
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {

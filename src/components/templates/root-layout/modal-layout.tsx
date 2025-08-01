@@ -1,11 +1,11 @@
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import { useOutsideClick } from '@/hooks'
 import { useRef } from 'react'
 
 export function ModalLayout() {
-  const content = useModalStore((state) => state.content)
-  const isOpen = useModalStore((state) => state.isOpen)
-  const closeModal = useModalStore((state) => state.closeModal)
+  const content = useDialogStore((state) => state.content)
+  const isOpen = useDialogStore((state) => state.isOpen)
+  const closeModal = useDialogStore((state) => state.closeModal)
 
   const modalRef = useRef<HTMLDivElement>(null)
   useOutsideClick(modalRef, closeModal)

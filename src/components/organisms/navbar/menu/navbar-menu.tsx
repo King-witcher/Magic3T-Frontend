@@ -1,6 +1,6 @@
 import { UserAvatar } from '@/components/molecules'
 import { AuthState, useAuth } from '@/contexts/auth.context'
-import { useModalStore } from '@/contexts/modal.store'
+import { useDialogStore } from '@/contexts/modal.store'
 import { useOutsideClick } from '@/hooks'
 import { divisionMap, leaguesMap } from '@/utils/ranks'
 import { Link } from '@tanstack/react-router'
@@ -22,7 +22,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
   const auth = useAuth()
   const league = auth.user && leaguesMap[auth.user.rating.league]
 
-  const openModal = useModalStore((state) => state.openModal)
+  const openModal = useDialogStore((state) => state.showDialog)
 
   function openLogoutModal() {
     onClose()
