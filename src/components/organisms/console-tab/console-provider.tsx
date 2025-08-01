@@ -75,10 +75,12 @@ interface Props {
 }
 
 function parse(line: string): [command: string, args: string] {
-  const preprocessed = line.toLowerCase().replace(/\s\s+/, ' ')
-  const [command, ...argsList] = preprocessed.split(' ')
+  const trimmed = line.toLowerCase().trimStart()
+  const command = trimmed.split(' ')[0]
+  let args = trimmed.replace(command, '')
+  if (args.startsWith(' ')) args = args.slice(1)
 
-  return [command, argsList.join(' ')]
+  return [command, args]
 }
 
 function logReducer(buffer: Buffer, message: string | undefined): Buffer {
@@ -109,7 +111,7 @@ export function ConsoleProvider({ children }: Props) {
     return [
       ...buffer.lines.slice(buffer.head, buffer.lines.length),
       ...buffer.lines.slice(0, buffer.head),
-    ]
+    ].filter((line) => line !== null)
   }, [buffer])
 
   const get = useCallback(

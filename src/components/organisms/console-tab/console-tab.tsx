@@ -84,13 +84,13 @@ export function ConsoleTab() {
               {lines.map(
                 (line, index) =>
                   line !== null && (
-                    <span
+                    <pre
                       // biome-ignore lint/suspicious/noArrayIndexKey: does not change
                       key={index}
                       className="min-h-[1em] leading-4 break-all"
                     >
                       {line}
-                    </span>
+                    </pre>
                   )
               )}
             </div>
