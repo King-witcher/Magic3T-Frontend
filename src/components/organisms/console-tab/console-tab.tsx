@@ -1,6 +1,7 @@
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useConsole } from './console-provider'
+import { ConsoleInput } from './console-input'
 
 export function ConsoleTab() {
   const { lines, run, log } = useConsole()
@@ -8,18 +9,14 @@ export function ConsoleTab() {
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollableRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [currentLine, setCurrentLine] = useState('')
 
   function focusInput() {
     inputRef.current?.focus()
   }
 
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-
-    log(`]${currentLine}`)
-    run(currentLine)
-    setCurrentLine('')
+  function handleSubmit(value: string) {
+    log(`]${value}`)
+    run(value)
   }
 
   useEffect(function listenOpen() {
@@ -98,17 +95,7 @@ export function ConsoleTab() {
         </div>
 
         <div className="w-full flex h-[1em] mt-[1em] items-center">
-          ]
-          <form onSubmit={handleSubmit}>
-            <input
-              ref={inputRef}
-              value={currentLine}
-              onChange={(e) => setCurrentLine(e.target.value)}
-              type="text"
-              autoCorrect="off"
-              className="flex-1 focus:outline-none leading-4"
-            />
-          </form>
+          <ConsoleInput focused={isOpen} onSubmit={handleSubmit} />
         </div>
       </div>
     </div>
