@@ -14,8 +14,8 @@ export function LogoutModal() {
   return (
     <div className="p-[20px] w-[448px] max-w-full">
       <div className="p-[10px]">
-        <h2 className="!text-2xl !font-bold">Log out</h2>
-        <p className="!my-6">You are about to log out from your account.</p>
+        <h2 className="text-3xl font-bold font-serif text-gold-4">Log out</h2>
+        <p className="my-6">You are about to log out from your account.</p>
       </div>
       <div className="flex items-center justify-end gap-[10px]">
         <button
