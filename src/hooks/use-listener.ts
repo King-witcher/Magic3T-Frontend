@@ -6,6 +6,7 @@ import {
 import { DependencyList, useEffect } from 'react'
 import { Socket } from 'socket.io-client'
 import { Gateway } from './use-gateway'
+import { useConsole } from '@/components/organisms'
 
 export type DisconnectDescription =
   | Error
@@ -33,15 +34,17 @@ export function useListener<
   listener: ReservedOrUserListener<SocketReservedEvents, ServerEventsMap, Ev>,
   deps: DependencyList = []
 ) {
+  const { log } = useConsole()
+
   // Listener is purposely not a dependency of this useEffect since it provides a dependency list.
   useEffect(() => {
     if (!gateway.socket) return
-    console.log(`subscribe to ${gateway.name}/${event.toString()}`)
+    log(`Subscribe to ${gateway.name}/${event.toString()}`)
     const socket = gateway.socket
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     socket.on(event, <any>listener)
     return () => {
-      console.log(`unsubscribe from ${gateway.name}/${event.toString()}`)
+      log(`Snsubscribe from ${gateway.name}/${event.toString()}`)
       // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       socket.off(event, <any>listener)
     }

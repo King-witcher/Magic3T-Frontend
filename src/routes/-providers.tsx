@@ -1,3 +1,4 @@
+import { ConsoleProvider } from '@/components/organisms/console-tab/console-provider'
 import { AuthProvider } from '@/contexts/auth.context.tsx'
 import { GameProvider } from '@/contexts/game.context'
 import { LiveActivityProvider } from '@/contexts/live-activity.context.tsx'
@@ -16,13 +17,15 @@ export function Providers({ children }: Props) {
   return (
     <QueryClientProvider client={queryClient}>
       <LiveActivityProvider>
-        <ServiceStatusProvider>
-          <AuthProvider>
-            <GameProvider>
-              <QueueProvider>{children}</QueueProvider>
-            </GameProvider>
-          </AuthProvider>
-        </ServiceStatusProvider>
+        <ConsoleProvider>
+          <ServiceStatusProvider>
+            <AuthProvider>
+              <GameProvider>
+                <QueueProvider>{children}</QueueProvider>
+              </GameProvider>
+            </AuthProvider>
+          </ServiceStatusProvider>
+        </ConsoleProvider>
       </LiveActivityProvider>
     </QueryClientProvider>
   )

@@ -49,8 +49,6 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
     await client.refetchQueries({
       queryKey: ['myself', authenticatedUser?.id],
     })
-
-    console.log('refetched')
   }
 
   const changeIcon = useCallback(() => {
@@ -86,7 +84,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
               ? `${progress}%`
               : `${user.rating.points} LP`
           }`}
-          extra={`${user.stats.wins} wins - ${user.stats.draws} draws - 
+          extra={`${user.stats.wins} wins - ${user.stats.draws} draws -
               ${user.stats.defeats} defeats`}
           league={user.rating.league}
           progress={progress}

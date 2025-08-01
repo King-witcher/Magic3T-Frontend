@@ -22,7 +22,7 @@ export function ChatBox({ inputRef, className }: Props) {
     >
       <div className="acrylic flex flex-col inset-0 absolute overflow-hidden">
         <div className="w-full h-full flex-[1] overflow-auto" ref={scrollRef}>
-          <div className="flex flex-col justify-end w-full gap-[8px] min-h-full p-[25px_20px]">
+          <div className="flex flex-col-reverse justify-end w-full gap-[8px] min-h-full p-[25px_20px]">
             {messages.map((message) => (
               <div
                 key={message.time}
