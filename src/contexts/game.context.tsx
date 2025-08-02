@@ -3,7 +3,6 @@ import { useListener } from '@/hooks/use-listener'
 import { useObservable } from '@/hooks/use-observable'
 import { Timer } from '@/lib/Timer'
 import { Console } from '@/lib/console'
-import { Api } from '@/services/api'
 import {
   Choice,
   GameClientEventsMap,
@@ -27,6 +26,7 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context'
 import { useLiveActivity } from './live-activity.context'
+import { NestApi } from '@/services'
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 type GameData2 = {
@@ -330,15 +330,8 @@ export function GameProvider({ children }: Props) {
         if (authState !== AuthState.SignedIn) return
         const token = await getToken()
         if (!token) return
-        const response = await Api.get('/match/current', {
-          headers: {
-            Authorization: `${token}`,
-          },
-        })
-
-        if (response.status === 200) {
-          await connectGame(response.data.id)
-        }
+        const { id } = await NestApi.Match.getCurrentMatch(token)
+        await connectGame(id)
       } catch (e) {
         console.error(e)
         Console.log((e as unknown as Error).message)

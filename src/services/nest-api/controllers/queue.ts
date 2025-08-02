@@ -1,13 +1,15 @@
 import { QueueMode } from '@/types/queue'
 import axios from 'axios'
-import { NEST_API_URL } from '../api'
+import { Console } from '@/lib/console'
 
-const controller = axios.create({
-  baseURL: `${NEST_API_URL}/queue`,
-})
+const controller = () => {
+  return axios.create({
+    baseURL: `${Console.cvars.apiurl}/queue`,
+  })
+}
 
 export async function enqueue(token: string, queueMode: QueueMode) {
-  const response = await controller.post(
+  const response = await controller().post(
     '/',
     { queueMode },
     {
@@ -20,7 +22,7 @@ export async function enqueue(token: string, queueMode: QueueMode) {
 }
 
 export async function dequeue(token: string) {
-  const response = await controller.delete('/', {
+  const response = await controller().delete('/', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -1,14 +1,16 @@
-import axios from 'axios'
 import {
   type ReactNode,
   createContext,
   useContext,
   useEffect,
-  useRef,
-  useState,
+  useMemo,
 } from 'react'
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
 import { useLiveActivity } from './live-activity.context.tsx'
+import { useQuery } from '@tanstack/react-query'
+import { NestApi } from '@/services/index.ts'
+import { useCvar } from '@/lib/console/use-cvar.ts'
+import { InitialCvars } from '@/lib/console/initials.ts'
 
 export enum ServerStatus {
   Off = 0,
@@ -29,24 +31,22 @@ const ServiceStatusContext = createContext<ServiceStatusData>({
 })
 
 export function ServiceStatusProvider({ children }: Props) {
-  const [serverStatus, setServerStatus] = useState<ServerStatus>(
-    ServerStatus.Loading
-  )
   const { push } = useLiveActivity()
-  const timeoutRef = useRef<NodeJS.Timeout>(null)
 
-  async function fetchStatus() {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/status`)
-      if (response.data.status === 'available') {
-        setServerStatus(ServerStatus.On)
-        timeoutRef.current = setTimeout(fetchStatus, 5000)
-      }
-    } catch {
-      setServerStatus(ServerStatus.Off)
-      timeoutRef.current = setTimeout(fetchStatus, 2000)
-    }
-  }
+  const pollRate = Number(useCvar(InitialCvars.StatusPoll)) ?? 5000
+
+  const statusQuery = useQuery({
+    queryKey: ['server-status'],
+    queryFn: NestApi.getStatus,
+    refetchInterval: pollRate,
+  })
+
+  const serverStatus =
+    statusQuery.data?.status === 'available'
+      ? ServerStatus.On
+      : statusQuery.isFetching
+        ? ServerStatus.Loading
+        : ServerStatus.Off
 
   useEffect(() => {
     switch (serverStatus) {
@@ -69,19 +69,14 @@ export function ServiceStatusProvider({ children }: Props) {
     }
   }, [serverStatus])
 
-  useEffect(() => {
-    fetchStatus()
-    return () => {
-      clearTimeout(timeoutRef.current || undefined)
+  const value = useMemo(() => {
+    return {
+      serverStatus,
     }
-  }, [])
+  }, [serverStatus])
 
   return (
-    <ServiceStatusContext.Provider
-      value={{
-        serverStatus: serverStatus,
-      }}
-    >
+    <ServiceStatusContext.Provider value={value}>
       {children}
     </ServiceStatusContext.Provider>
   )

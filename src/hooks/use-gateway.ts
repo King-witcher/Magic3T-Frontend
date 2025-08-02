@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/auth.context'
 import { Console } from '@/lib/console'
+import { useCvar } from '@/lib/console/use-cvar'
 import {
   EventNames,
   EventParams,
@@ -29,6 +30,7 @@ export function useGateway<
     ClientEvents
   > | null>(null)
   const auth = useAuth()
+  const apiurl = useCvar('apiurl')
 
   useEffect(() => {
     if (!enabled) {
@@ -40,7 +42,7 @@ export function useGateway<
     Console.log(`Connecting to gateway ${gateway}...`)
     auth.getToken().then((token) => {
       if (cancel) return
-      socket = io(`${import.meta.env.VITE_API_URL}/${gateway}`, {
+      socket = io(`${apiurl}/${gateway}`, {
         auth: {
           token,
         },
@@ -55,7 +57,7 @@ export function useGateway<
       socket?.disconnect()
       setSocket(null)
     }
-  }, [gateway, enabled, auth.user?.id, auth.getToken])
+  }, [gateway, enabled, auth.user?.id, auth.getToken, apiurl])
 
   const emit = useCallback(
     <Ev extends EventNames<ClientEvents>>(

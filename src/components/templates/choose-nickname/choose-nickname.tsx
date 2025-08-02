@@ -1,5 +1,5 @@
 import { useGuardedAuth } from '@/contexts/guarded-auth.context'
-import { Api } from '@/services/api'
+import { NestApi } from '@/services'
 import buttonStyles from '@/styles/components/button.module.sass'
 import inputStyles from '@/styles/components/input.module.sass'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -17,26 +17,7 @@ export function ChooseNicknameTemplate() {
       if (nickname.length < 3)
         throw new Error('nickname must contain at least 3 characters')
 
-      const response = await Api.patch(
-        '/users/me/nickname',
-        {
-          nickname,
-        },
-        {
-          headers: {
-            Authorization: await getToken(),
-          },
-        }
-      )
-
-      if (response.status === 400) {
-        const message = response.data.message
-        throw new Error(message)
-      }
-
-      if (response.status !== 200) {
-        throw new Error(`unknown error from server: ${response.data.message}`)
-      }
+      await NestApi.User.updateNickname(await getToken(), nickname)
     },
     onMutate() {
       setError('')

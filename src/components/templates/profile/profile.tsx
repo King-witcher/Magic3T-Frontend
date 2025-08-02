@@ -3,7 +3,6 @@ import { UserAvatar } from '@/components/molecules'
 import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal'
 import { useAuth } from '@/contexts/auth.context'
 import { useDialogStore } from '@/contexts/modal.store'
-import { Api } from '@/services/api'
 import { leaguesMap } from '@/utils/ranks'
 import { League, MatchDto, Profile } from '@magic3t/types'
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
@@ -11,6 +10,7 @@ import { useCallback } from 'react'
 import { DesktopRankContainer } from './desktop-rank-container'
 import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
+import { NestApi } from '@/services'
 
 interface Props {
   user: Profile
@@ -35,17 +35,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   const progress = user.rating.points ?? (user.rating.progress || 0)
 
   async function saveIconChange(iconId: number) {
-    await Api.patch(
-      'users/me/icon',
-      {
-        iconId,
-      },
-      {
-        headers: {
-          Authorization: `${await getToken()}`,
-        },
-      }
-    )
+    await NestApi.User.updateIcon(await getToken(), iconId)
     await client.refetchQueries({
       queryKey: ['myself', authenticatedUser?.id],
     })
