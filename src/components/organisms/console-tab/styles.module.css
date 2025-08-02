@@ -1,0 +1,35 @@
+.console1 {
+  position: absolute;
+  inset: 0;
+  background-size: 50dvw 50dvh;
+  background-attachment: fixed;
+  animation: move-console-1 3s linear infinite;
+  filter: brightness(20);
+}
+
+.console2 {
+  position: absolute;
+  inset: 0;
+  background-size: 50dvw 50dvh;
+  background-attachment: fixed;
+  animation: move-console-2 20s linear infinite;
+  filter: brightness(1.5);
+}
+
+@keyframes move-console-1 {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% -100%;
+  }
+}
+
+@keyframes move-console-2 {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

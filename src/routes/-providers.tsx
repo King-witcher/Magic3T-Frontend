@@ -1,4 +1,3 @@
-import { ConsoleProvider } from '@/lib/console'
 import { AuthProvider } from '@/contexts/auth.context'
 import { GameProvider } from '@/contexts/game.context'
 import { LiveActivityProvider } from '@/contexts/live-activity.context'
@@ -17,15 +16,13 @@ export function Providers({ children }: Props) {
   return (
     <QueryClientProvider client={queryClient}>
       <LiveActivityProvider>
-        <ConsoleProvider>
-          <ServiceStatusProvider>
-            <AuthProvider>
-              <GameProvider>
-                <QueueProvider>{children}</QueueProvider>
-              </GameProvider>
-            </AuthProvider>
-          </ServiceStatusProvider>
-        </ConsoleProvider>
+        <ServiceStatusProvider>
+          <AuthProvider>
+            <GameProvider>
+              <QueueProvider>{children}</QueueProvider>
+            </GameProvider>
+          </AuthProvider>
+        </ServiceStatusProvider>
       </LiveActivityProvider>
     </QueryClientProvider>
   )

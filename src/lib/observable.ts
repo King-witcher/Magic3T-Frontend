@@ -8,7 +8,7 @@ type EventParams<
   Event extends EventNames<Map>,
 > = Parameters<Map[Event]>
 
-type Observer<Map extends EventsMap, Event extends EventNames<Map>> = (
+export type Observer<Map extends EventsMap, Event extends EventNames<Map>> = (
   ...data: EventParams<Map, Event>
 ) => void
 

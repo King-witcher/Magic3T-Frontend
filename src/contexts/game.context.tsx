@@ -1,4 +1,3 @@
-import { useConsole } from '@/components/organisms'
 import { useGateway } from '@/hooks/use-gateway'
 import { useListener } from '@/hooks/use-listener'
 import { useObservable } from '@/hooks/use-observable'
@@ -27,6 +26,7 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context'
 import { useLiveActivity } from './live-activity.context'
+import { Console } from '@/lib/console'
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 type GameData2 = {
@@ -78,7 +78,6 @@ export function GameProvider({ children }: Props) {
   const [messages, setMessages] = useState<Message[]>([])
   const [finalReport, setFinalReport] = useState<MatchResults | null>(null)
   const [subscribeFinishMatch, emitFinishMatch] = useObservable<MatchResults>()
-  const { log } = useConsole()
 
   const orderTimer = useRef(new Timer(0))
   const chaosTimer = useRef(new Timer(0))
@@ -107,11 +106,13 @@ export function GameProvider({ children }: Props) {
     gateway,
     MatchServerEvents.Assignments,
     (assignments) => {
-      log('Assignments received:')
-      log(`    order: ${assignments[Team.Order].profile.nickname}`)
-      log(`    chaos: ${assignments[Team.Chaos].profile.nickname}`)
-      log(`You are playing as: ${assignments[Team.Chaos].profile.id === auth.user?.id ? 'chaos' : 'order'}.`)
-      log()
+      Console.log('Assignments received:')
+      Console.log(`    order: ${assignments[Team.Order].profile.nickname}`)
+      Console.log(`    chaos: ${assignments[Team.Chaos].profile.nickname}`)
+      Console.log(
+        `You are playing as: ${assignments[Team.Chaos].profile.id === auth.user?.id ? 'chaos' : 'order'}.`
+      )
+      Console.log()
 
       setOrderProfile(assignments[Team.Order].profile)
       setChaosProfile(assignments[Team.Chaos].profile)
@@ -129,18 +130,20 @@ export function GameProvider({ children }: Props) {
 
   // Handles state updates from the server.
   useListener(gateway, MatchServerEvents.StateReport, (report) => {
-    log('New state received:')
-    log(`    turn:     ${report.turn === Team.Order ? 'order' : 'chaos'}`)
-    log(`    finished: ${report.finished}`)
-    log('    order:')
-    log(`        time left: ${report[Team.Order].timeLeft / 1000}`)
-    log(`        choices:   ${report[Team.Order].choices.join(', ')}`)
-    log(`        surrender: ${report[Team.Order].surrender}`)
-    log('    chaos:')
-    log(`        time left: ${report[Team.Chaos].timeLeft / 1000}`)
-    log(`        choices:   ${report[Team.Chaos].choices.join(', ')}`)
-    log(`        surrender: ${report[Team.Chaos].surrender}`)
-    log()
+    Console.log('New state received:')
+    Console.log(
+      `    turn:     ${report.turn === Team.Order ? 'order' : 'chaos'}`
+    )
+    Console.log(`    finished: ${report.finished}`)
+    Console.log('    order:')
+    Console.log(`        time left: ${report[Team.Order].timeLeft / 1000}`)
+    Console.log(`        choices:   ${report[Team.Order].choices.join(', ')}`)
+    Console.log(`        surrender: ${report[Team.Order].surrender}`)
+    Console.log('    chaos:')
+    Console.log(`        time left: ${report[Team.Chaos].timeLeft / 1000}`)
+    Console.log(`        choices:   ${report[Team.Chaos].choices.join(', ')}`)
+    Console.log(`        surrender: ${report[Team.Chaos].surrender}`)
+    Console.log()
 
     setTurn(report.turn)
     setOrderChoices(report[Team.Order].choices)
@@ -162,18 +165,24 @@ export function GameProvider({ children }: Props) {
     gateway,
     MatchServerEvents.MatchReport,
     (report) => {
-      log('Match finished:')
-      log(`    id: ${report.matchId}`)
-      log('    order:')
-      log(`        score: ${report[Team.Order].score}`)
-      log(`        lp_gain: ${report[Team.Order].lpGain}`)
-      log(`        rating: ${report[Team.Order].newRating.league} ${report[Team.Order].newRating.division} - ${report[Team.Order].newRating.points} LP`)
-      log('    chaos:')
-      log(`        score: ${report[Team.Chaos].score}`)
-      log(`        lp_gain: ${report[Team.Chaos].lpGain}`)
-      log(`        rating: ${report[Team.Chaos].newRating.league} ${report[Team.Chaos].newRating.division} - ${report[Team.Chaos].newRating.points} LP`)
-      log(`    winner: ${report.winner === Team.Order ? 'order' : report.winner === Team.Chaos ? 'chaos' : 'draw'}`)
-      log()
+      Console.log('Match finished:')
+      Console.log(`    id: ${report.matchId}`)
+      Console.log('    order:')
+      Console.log(`        score: ${report[Team.Order].score}`)
+      Console.log(`        lp_gain: ${report[Team.Order].lpGain}`)
+      Console.log(
+        `        rating: ${report[Team.Order].newRating.league} ${report[Team.Order].newRating.division} - ${report[Team.Order].newRating.points} LP`
+      )
+      Console.log('    chaos:')
+      Console.log(`        score: ${report[Team.Chaos].score}`)
+      Console.log(`        lp_gain: ${report[Team.Chaos].lpGain}`)
+      Console.log(
+        `        rating: ${report[Team.Chaos].newRating.league} ${report[Team.Chaos].newRating.division} - ${report[Team.Chaos].newRating.points} LP`
+      )
+      Console.log(
+        `    winner: ${report.winner === Team.Order ? 'order' : report.winner === Team.Chaos ? 'chaos' : 'draw'}`
+      )
+      Console.log()
 
       setOrderProfile((old) => {
         return (
@@ -226,7 +235,7 @@ export function GameProvider({ children }: Props) {
 
   useListener(gateway, 'disconnect', (reason) => {
     console.error('Socket disconnected because of', `${reason}.`)
-    log(`Socket disconnected because of ${reason}.`)
+    Console.log(`Socket disconnected because of ${reason}.`)
   })
 
   const pick = useCallback(
@@ -276,8 +285,8 @@ export function GameProvider({ children }: Props) {
     if (currentTeam === null) return
     if (finalReport) return
 
-    log('You surrendered the match.')
-    log()
+    Console.log('You surrendered the match.')
+    Console.log()
 
     gateway.emit(MatchClientEvents.Surrender)
     setTurn(null)
@@ -288,12 +297,12 @@ export function GameProvider({ children }: Props) {
   // Sets the state as connected to a game by just setting a matchId different from null.
   const connectGame = useCallback(
     (matchId: string) => {
-      log(`Connected to match ${matchId}.`)
-      log()
+      Console.log(`Connected to match ${matchId}.`)
+      Console.log()
       resetState()
       setMatchId(matchId)
     },
-    [resetState, log]
+    [resetState]
   )
 
   function disconnect() {
@@ -332,7 +341,7 @@ export function GameProvider({ children }: Props) {
         }
       } catch (e) {
         console.error(e)
-        log((e as unknown as Error).message)
+        Console.log((e as unknown as Error).message)
       }
     }
 
