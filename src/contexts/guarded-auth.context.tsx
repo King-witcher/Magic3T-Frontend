@@ -13,8 +13,8 @@ interface GuardedAuthData {
 }
 
 interface Props {
-  children?: ReactNode
   user: Profile
+  children?: ReactNode
   signOut(): Promise<void>
   getToken(): Promise<string>
 }
@@ -23,8 +23,8 @@ const GuardedAuthContext = createContext<GuardedAuthData>({} as GuardedAuthData)
 
 export function GuardedAuthProvider({ children, ...rest }: Props) {
   useEffect(() => {
-    return addCommand('gettoken', async (args, ctx) => {
-      ctx.log('Fetching token...')
+    return addCommand('gentoken', async (args, ctx) => {
+      ctx.log('Generating token...')
       const token = await rest.getToken()
       ctx.log(token)
     })

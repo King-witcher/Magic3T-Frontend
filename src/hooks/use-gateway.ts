@@ -46,7 +46,7 @@ export function useGateway<
           token,
         },
       })
-      log(`Connected to gateway ${gateway}.`)
+      log(`Connected to gateway '${gateway}'`)
 
       setSocket(socket)
     })

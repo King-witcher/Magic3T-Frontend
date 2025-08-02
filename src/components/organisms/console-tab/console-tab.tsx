@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useConsole } from './console-provider'
 import { ConsoleInput } from './console-input'
+import { useConsole } from '@/lib/console'
 
 export function ConsoleTab() {
-  const { lines, run, log } = useConsole()
+  const { console } = useConsole()
 
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollableRef = useRef<HTMLDivElement>(null)
@@ -15,8 +15,8 @@ export function ConsoleTab() {
   }
 
   function handleSubmit(value: string) {
-    log(`]${value}`)
-    run(value)
+    console.log(`]${value}`)
+    console.run(value)
   }
 
   useEffect(function listenOpen() {
@@ -50,14 +50,13 @@ export function ConsoleTab() {
   )
 
   // biome-ignore lint/correctness/useExhaustiveDependencies:
-  useEffect(
-    function keepScrollbarOnBottom() {
+  useEffect(function keepScrollbarOnBottom() {
+    return console.on('changeBuffer', () => {
       if (scrollableRef.current) {
         scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight
       }
-    },
-    [lines]
-  )
+    })
+  }, [])
 
   return (
     <div
@@ -78,7 +77,7 @@ export function ConsoleTab() {
             className="absolute inset-0 overflow-y-auto overflow-x-hidden"
           >
             <div className="flex flex-col justify-end min-h-full">
-              {lines.map(
+              {console.lines.map(
                 (line, index) =>
                   line !== null && (
                     <pre
