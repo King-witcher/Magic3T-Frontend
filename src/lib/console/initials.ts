@@ -1,4 +1,6 @@
+import { NestApi } from '@/services'
 import { CommandHandler, Console } from './console'
+import { io } from 'socket.io-client'
 
 export enum InitialCvars {
   ThreeTMode = '3tmode',
@@ -15,22 +17,16 @@ export const initialCvars: Record<string, string> = {
 }
 
 export const initialCmds: Record<string, CommandHandler> = {
-  echo(args) {
-    Console.log(args)
-  },
-
-  set(args) {
-    const [cvar, value] = args.split(' ')
-    if (!cvar || !value) {
-      Console.log('Usage: set <cvar> <value>')
-      return
-    }
-    Console.set(cvar, value)
-    Console.log(`Set ${cvar} to ${value}`)
-  },
-
   clear() {
     Console.clear()
+  },
+
+  cmdlist() {
+    const commandsList = Object.keys(initialCmds).sort()
+    for (const command of commandsList) {
+      Console.log(command)
+    }
+    Console.log(`Listed ${commandsList.length} commands`)
   },
 
   cvarlist() {
@@ -45,15 +41,56 @@ export const initialCmds: Record<string, CommandHandler> = {
     Console.log(`Listed ${cvars.length} cvars`)
   },
 
+  echo(args) {
+    Console.log(args)
+  },
+
+  async httpping() {
+    Console.log('Pinging...')
+    const now = Date.now()
+
+    await NestApi.getStatus()
+
+    const elapsed = Date.now() - now
+    Console.log(`HTTP ping: ${elapsed}ms`)
+  },
+
   resetcvars() {
     Console.resetCvars()
   },
 
-  cmdlist() {
-    const commandsList = Object.keys(initialCmds).sort()
-    for (const command of commandsList) {
-      Console.log(command)
+  set(args) {
+    const [cvar, value] = args.split(' ')
+    if (!cvar || !value) {
+      Console.log('Usage: set <cvar> <value>')
+      return
     }
-    Console.log(`Listed ${commandsList.length} commands`)
+    Console.set(cvar, value)
+    Console.log(`Set ${cvar} to ${value}`)
+  },
+
+  async wsping() {
+    Console.log('Pinging...')
+    const socket = io(`${Console.cvars.apiurl}`)
+
+    socket.on('connect', () => {
+      const timeout = setTimeout(() => {
+        socket.disconnect()
+      }, 5000)
+
+      const rng = Math.floor(Math.random() * 1000000)
+
+      socket.on('pong', (arg: unknown) => {
+        if (arg !== rng) return
+        const elapsed = Date.now() - now
+        socket.disconnect()
+        clearTimeout(timeout)
+        Console.log(`WS ping: ${elapsed}ms`)
+      })
+
+      const now = Date.now()
+
+      socket.emit('ping', rng)
+    })
   },
 }
