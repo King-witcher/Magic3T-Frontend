@@ -1,11 +1,11 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
+import { Console } from '@/lib/console'
+import { useCvar } from '@/lib/console/use-cvar'
 import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
 import { useEffect, useMemo } from 'react'
 import styles from './styles.module.sass'
-import { useCvar } from '@/lib/console/use-cvar'
-import { Console } from '@/lib/console'
 
 interface Props {
   redMoves: Choice[]

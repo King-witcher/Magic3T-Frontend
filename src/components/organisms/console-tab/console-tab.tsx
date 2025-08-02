@@ -1,9 +1,9 @@
+import Console1 from '@/assets/textures/console1.png'
+import Console2 from '@/assets/textures/console2.jpg'
+import { Console } from '@/lib/console'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
-import { Console } from '@/lib/console'
-import Console1 from '@/assets/textures/console1.png'
-import Console2 from '@/assets/textures/console2.jpg'
 import styles from './styles.module.css'
 
 function subscribeToConsoleChanges(callback: () => void): () => void {
