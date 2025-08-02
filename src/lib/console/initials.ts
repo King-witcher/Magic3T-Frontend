@@ -22,11 +22,7 @@ export const initialCmds: Record<string, CommandHandler> = {
   },
 
   cmdlist() {
-    const commandsList = Object.keys(initialCmds).sort()
-    for (const command of commandsList) {
-      Console.log(command)
-    }
-    Console.log(`Listed ${commandsList.length} commands`)
+    Console.cmdlist()
   },
 
   cvarlist() {
@@ -75,6 +71,7 @@ export const initialCmds: Record<string, CommandHandler> = {
 
     socket.on('connect', () => {
       const timeout = setTimeout(() => {
+        Console.log('WS ping timed out')
         socket.disconnect()
       }, 5000)
 

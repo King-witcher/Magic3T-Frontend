@@ -73,6 +73,14 @@ export class Console {
     return Console.emitter.onMany(events, observer)
   }
 
+  public static cmdlist() {
+    const commandsList = Object.keys(Console.cmds).sort()
+    for (const command of commandsList) {
+      Console.log(command)
+    }
+    Console.log(`Listed ${commandsList.length} commands`)
+  }
+
   public static addCommand(cmd: string, handler: CommandHandler) {
     const slug = cmd.toLowerCase()
     Console.cmds[slug] = handler
