@@ -1,4 +1,4 @@
-import { useConsole } from '@/components/organisms'
+import { Console } from '@/lib/console'
 import { auth, provider } from '@/services/firebase'
 import { NestApi } from '@/services/nest-api'
 import { Profile } from '@magic3t/types'
@@ -57,7 +57,6 @@ interface Props {
 const AuthContext = createContext<AuthData>({} as AuthData)
 
 export function AuthProvider({ children }: Props) {
-  const { log } = useConsole()
   const [authData, setAuthData] = useState<User | null>(null)
   const [authState, setAuthState] = useState(AuthState.Loading)
 
@@ -79,7 +78,7 @@ export function AuthProvider({ children }: Props) {
       setAuthState(AuthState.Loading)
     } catch (e) {
       console.error(e)
-      log((e as unknown as Error).message)
+      Console.log((e as unknown as Error).message)
       setAuthState(AuthState.NotSignedIn)
       if (import.meta.env.DEV) alert(e)
     }
@@ -123,7 +122,7 @@ export function AuthProvider({ children }: Props) {
   // Syncs authData with firebase
   useEffect(() => {
     return onAuthStateChanged(auth, async (authData) => {
-      import.meta.env.DEV && log(`Detected auth state '${authState}'`)
+      import.meta.env.DEV && Console.log(`Detected auth state '${authState}'`)
       setAuthData(authData)
       if (!authData) {
         // setUser(null)

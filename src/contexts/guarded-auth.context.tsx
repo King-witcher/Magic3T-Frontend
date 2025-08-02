@@ -1,4 +1,4 @@
-import { addCommand } from '@/components/organisms'
+import { Console } from '@/lib/console'
 import { Profile } from '@magic3t/types'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
 import { AuthState } from './auth.context'
@@ -13,8 +13,8 @@ interface GuardedAuthData {
 }
 
 interface Props {
-  children?: ReactNode
   user: Profile
+  children?: ReactNode
   signOut(): Promise<void>
   getToken(): Promise<string>
 }
@@ -23,10 +23,10 @@ const GuardedAuthContext = createContext<GuardedAuthData>({} as GuardedAuthData)
 
 export function GuardedAuthProvider({ children, ...rest }: Props) {
   useEffect(() => {
-    return addCommand('gettoken', async (args, ctx) => {
-      ctx.log('Fetching token...')
+    return Console.addCommand('gentoken', async () => {
+      Console.log('Generating token...')
       const token = await rest.getToken()
-      ctx.log(token)
+      Console.log(token)
     })
   }, [rest.getToken])
 

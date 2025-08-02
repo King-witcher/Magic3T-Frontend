@@ -1,22 +1,32 @@
-import { useEffect, useRef, useState } from 'react'
+import Console1 from '@/assets/textures/console1.png'
+import Console2 from '@/assets/textures/console2.jpg'
+import { Console } from '@/lib/console'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useConsole } from './console-provider'
 import { ConsoleInput } from './console-input'
+import styles from './styles.module.css'
+
+function subscribeToConsoleChanges(callback: () => void): () => void {
+  return Console.on('changeBuffer', callback)
+}
 
 export function ConsoleTab() {
-  const { lines, run, log } = useConsole()
-
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollableRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  const lines = useSyncExternalStore(
+    subscribeToConsoleChanges,
+    () => Console.lines
+  )
 
   function focusInput() {
     inputRef.current?.focus()
   }
 
   function handleSubmit(value: string) {
-    log(`]${value}`)
-    run(value)
+    Console.log(`]${value}`)
+    Console.run(value)
   }
 
   useEffect(function listenOpen() {
@@ -64,14 +74,29 @@ export function ConsoleTab() {
       data-open={isOpen}
       className={twMerge(
         'fixed w-dvw h-dvh left-0 top-0 z-10',
-        'font-mono font-semibold text-[#ccc]',
+        'font-mono text-sm font-semibold text-white',
         'transition-all duration-200 data-[open=false]:top-[-50dvh] data-[open=false]:pointer-events-none'
       )}
     >
       <div
-        className="absolute top-0 w-full h-1/2 border-b-3 border-red-700 bg-[#000000c0] flex flex-col py-[1em] px-[1ch]"
+        className={
+          'absolute top-0 w-full h-1/2 border-b-3 border-[red] flex flex-col py-[1em] px-[1ch]'
+        }
         onClick={focusInput}
       >
+        <div
+          className={styles.console1}
+          style={{
+            backgroundImage: `url(${Console2})`,
+          }}
+        />
+        <div
+          className={styles.console2}
+          style={{
+            backgroundImage: `url(${Console1})`,
+          }}
+        />
+
         <div className="flex flex-1 relative">
           <div
             ref={scrollableRef}
@@ -84,7 +109,7 @@ export function ConsoleTab() {
                     <pre
                       // biome-ignore lint/suspicious/noArrayIndexKey: does not change
                       key={index}
-                      className="min-h-[1em] leading-4 break-all"
+                      className="min-h-[1em] overflow-hidden break-all whitespace-pre-wrap"
                     >
                       {line}
                     </pre>
