@@ -18,7 +18,6 @@ const printableChars = new Set([
   '8',
   '9',
 
-  '`',
   '~',
   '!',
   '@',
