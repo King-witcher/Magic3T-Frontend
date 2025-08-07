@@ -27,6 +27,7 @@ import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context'
 import { useLiveActivity } from './live-activity.context'
 import { NestApi } from '@/services'
+
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 
 type GameData2 = {
@@ -60,6 +61,17 @@ type GameData2 = {
 
 interface Props {
   children?: ReactNode
+}
+
+function teamName(team: Team | null): string {
+  switch (team) {
+    case Team.Order:
+      return 'Order'
+    case Team.Chaos:
+      return 'Chaos'
+    default:
+      return 'null'
+  }
 }
 
 const GameContext = createContext<GameData2>({} as GameData2)
@@ -131,9 +143,7 @@ export function GameProvider({ children }: Props) {
   // Handles state updates from the server.
   useListener(gateway, MatchServerEvents.StateReport, (report) => {
     Console.log('New state received:')
-    Console.log(
-      `    turn:     ${report.turn === Team.Order ? 'order' : 'chaos'}`
-    )
+    Console.log(`    turn:     ${teamName(report.turn)}`)
     Console.log(`    finished: ${report.finished}`)
     Console.log('    order:')
     Console.log(`        time left: ${report[Team.Order].timeLeft / 1000}`)
@@ -179,9 +189,7 @@ export function GameProvider({ children }: Props) {
       Console.log(
         `        rating: ${report[Team.Chaos].newRating.league} ${report[Team.Chaos].newRating.division} - ${report[Team.Chaos].newRating.points} LP`
       )
-      Console.log(
-        `    winner: ${report.winner === Team.Order ? 'order' : report.winner === Team.Chaos ? 'chaos' : 'draw'}`
-      )
+      Console.log(`    winner: ${teamName(report.winner)}`)
       Console.log()
 
       setOrderProfile((old) => {
