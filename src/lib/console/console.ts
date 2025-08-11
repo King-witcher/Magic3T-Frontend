@@ -20,22 +20,22 @@ export class Console {
   public static lines: string[] = []
   public static cvars: Record<string, string> = { ...initialCvars }
   private static cmds: Record<string, CommandHandler> = { ...initialCmds }
-  private static queue: Channel<Operation> = new Channel()
+  private static channel: Channel<Operation> = new Channel()
   private static emitter = new PublicEmitter()
 
   static {
-    async function loop() {
+    async function operationLoop() {
       while (true) {
-        const operation = await Console.queue.receive()
+        const operation = await Console.channel.receive()
         await operation()
       }
     }
 
-    loop()
+    operationLoop()
   }
 
   public static log(message?: string) {
-    Console.queue.send(() => {
+    Console.channel.send(() => {
       Console.lines = [...Console.lines, message ?? '']
       if (Console.lines.length > BUFFER_SIZE) Console.lines.shift()
       Console.emitter.publicEmit('changeBuffer')
@@ -43,14 +43,14 @@ export class Console {
   }
 
   public static set(cvar: string, value: string) {
-    Console.queue.send(() => {
+    Console.channel.send(() => {
       Console.cvars[cvar] = value
       Console.emitter.publicEmit('changeCvar', cvar)
     })
   }
 
   public static clear() {
-    Console.queue.send(() => {
+    Console.channel.send(() => {
       Console.lines = []
       Console.emitter.publicEmit('changeBuffer')
     })
@@ -60,7 +60,7 @@ export class Console {
     const [command, args] = Console.parse(line)
     if (!command) return
 
-    Console.queue.send(async () => {
+    Console.channel.send(async () => {
       if (!Console.cmds[command] && !Console.cvars[command]) {
         Console.log(`Unknown command '${command}'`)
         return
@@ -86,14 +86,14 @@ export class Console {
 
   public static cmdlist() {
     const commandsList = Object.keys(Console.cmds).sort()
-    Console.queue.send(() => {
+    Console.channel.send(() => {
       for (const command of commandsList) Console.log(command)
       Console.log(`Listed ${commandsList.length} commands`)
     })
   }
 
   public static resetCvars() {
-    Console.queue.send(() => {
+    Console.channel.send(() => {
       Console.cvars = { ...initialCvars }
       for (const cvar in initialCvars) {
         Console.emitter.publicEmit('changeCvar', cvar)
@@ -104,7 +104,7 @@ export class Console {
   }
 
   public static wait(ms: number) {
-    Console.queue.send(async () => {
+    Console.channel.send(async () => {
       await delay(ms)
     })
   }
