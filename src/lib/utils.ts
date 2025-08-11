@@ -38,3 +38,7 @@ export function getDateFromId(id: string): Date {
 
   return new Date(epoch + lannaDate * 1000)
 }
+
+export function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

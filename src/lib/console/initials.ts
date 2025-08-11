@@ -37,6 +37,15 @@ export const initialCmds: Record<string, CommandHandler> = {
     Console.log(`Listed ${cvars.length} cvars`)
   },
 
+  delay(args) {
+    const ms = Number(args.split(' ')[0])
+    if (Number.isNaN(ms) || ms < 0) {
+      Console.log('Usage: delay <ms>')
+      return
+    }
+    Console.wait(ms)
+  },
+
   echo(args) {
     Console.log(args)
   },
