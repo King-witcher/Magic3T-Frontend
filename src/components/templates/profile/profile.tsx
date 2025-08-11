@@ -11,6 +11,8 @@ import { DesktopRankContainer } from './desktop-rank-container'
 import { MatchRow } from './match-row'
 import { MobileRankContainer } from './mobile-rank-container'
 import { NestApi } from '@/services'
+import { useRegisterCommand } from '@/hooks/use-register-command'
+import { Console } from '@/lib/console'
 
 interface Props {
   user: Profile
@@ -31,6 +33,14 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   const client = useQueryClient()
 
   const openModal = useDialogStore((state) => state.showDialog)
+
+  useRegisterCommand(
+    'userid',
+    () => {
+      Console.log(user.id)
+    },
+    [user.id]
+  )
 
   const progress = user.rating.points ?? (user.rating.progress || 0)
 

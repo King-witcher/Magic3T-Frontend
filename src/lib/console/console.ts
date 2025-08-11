@@ -35,11 +35,9 @@ export class Console {
   }
 
   public static log(message?: string) {
-    Console.channel.send(() => {
-      Console.lines = [...Console.lines, message ?? '']
-      if (Console.lines.length > BUFFER_SIZE) Console.lines.shift()
-      Console.emitter.publicEmit('changeBuffer')
-    })
+    Console.lines = [...Console.lines, message ?? '']
+    if (Console.lines.length > BUFFER_SIZE) Console.lines.shift()
+    Console.emitter.publicEmit('changeBuffer')
   }
 
   public static set(cvar: string, value: string) {
