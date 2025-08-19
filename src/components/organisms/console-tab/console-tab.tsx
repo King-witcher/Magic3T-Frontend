@@ -5,10 +5,14 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
 import styles from './styles.module.css'
+import { useCvar } from '@/lib/console/use-cvar'
+import { ConStyle, InitialCvars as Cvars } from '@/lib/console/initials'
 
 function subscribeToConsoleChanges(callback: () => void): () => void {
   return Console.on('changeBuffer', callback)
 }
+
+const consoleStyles = new Set<string>([ConStyle.Default, ConStyle.Q3])
 
 export function ConsoleTab() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -19,6 +23,9 @@ export function ConsoleTab() {
     subscribeToConsoleChanges,
     () => Console.lines
   )
+
+  let con_style = useCvar(Cvars.ConStyle)
+  if (!consoleStyles.has(con_style)) con_style = ConStyle.Default
 
   function focusInput() {
     inputRef.current?.focus()
@@ -74,28 +81,34 @@ export function ConsoleTab() {
       data-open={isOpen}
       className={twMerge(
         'fixed w-dvw h-dvh left-0 top-0 z-10',
-        'font-mono text-sm font-semibold text-white',
-        'transition-all duration-200 data-[open=false]:top-[-50dvh] data-[open=false]:pointer-events-none'
+        'font-mono text-sm font-semibold text-gold-2',
+        'transition-all duration-200 data-[open=false]:top-[-50dvh] data-[open=false]:pointer-events-none',
+        con_style === ConStyle.Q3 && 'text-white'
       )}
     >
       <div
-        className={
-          'absolute top-0 w-full h-1/2 border-b-3 border-[red] flex flex-col py-[1em] px-[1ch]'
-        }
+        className={twMerge(
+          'absolute top-0 w-full h-1/2 border-gold-4 bg-[#000000c0] border-b-3 flex flex-col py-[1em] px-[1ch]',
+          con_style === ConStyle.Q3 && 'border-[red]'
+        )}
         onClick={focusInput}
       >
-        <div
-          className={styles.console1}
-          style={{
-            backgroundImage: `url(${Console2})`,
-          }}
-        />
-        <div
-          className={styles.console2}
-          style={{
-            backgroundImage: `url(${Console1})`,
-          }}
-        />
+        {con_style === ConStyle.Q3 && (
+          <>
+            <div
+              className={styles.console1}
+              style={{
+                backgroundImage: `url(${Console2})`,
+              }}
+            />
+            <div
+              className={styles.console2}
+              style={{
+                backgroundImage: `url(${Console1})`,
+              }}
+            />
+          </>
+        )}
 
         <div className="flex flex-1 relative">
           <div

@@ -12,7 +12,7 @@ import React from 'react'
 import { Providers } from './-providers'
 
 const TanStackRouterDevtools =
-  process.env.NODE_ENV === 'production'
+  import.meta.env.NODE_ENV === 'production'
     ? () => null // Render nothing in production
     : React.lazy(() =>
         // Lazy load in development

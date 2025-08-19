@@ -3,17 +3,24 @@ import { CommandHandler, Console } from './console'
 import { io } from 'socket.io-client'
 
 export enum InitialCvars {
-  ThreeTMode = '3tmode',
   ApiUrl = 'apiurl',
+  ConStyle = 'con_style',
   PugMode = 'pugmode',
   StatusPoll = 'statuspoll',
+  ThreeTMode = '3tmode',
+}
+
+export enum ConStyle {
+  Default = '0',
+  Q3 = '1',
 }
 
 export const initialCvars: Record<string, string> = {
-  [InitialCvars.ThreeTMode]: '0',
   [InitialCvars.ApiUrl]: import.meta.env.VITE_API_URL,
+  [InitialCvars.ConStyle]: ConStyle.Default,
   [InitialCvars.PugMode]: '0',
   [InitialCvars.StatusPoll]: '5000',
+  [InitialCvars.ThreeTMode]: '0',
 }
 
 export const initialCmds: Record<string, CommandHandler> = {
