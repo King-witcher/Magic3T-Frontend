@@ -10,7 +10,7 @@ import { useLiveActivity } from './live-activity.context.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { NestApi } from '@/services/index.ts'
 import { useCvar } from '@/lib/console/use-cvar.ts'
-import { InitialCvars } from '@/lib/console/initials.ts'
+import { Cvars } from '@/lib/console/initials.ts'
 
 export enum ServerStatus {
   Off = 0,
@@ -33,7 +33,7 @@ const ServiceStatusContext = createContext<ServiceStatusData>({
 export function ServiceStatusProvider({ children }: Props) {
   const { push } = useLiveActivity()
 
-  const pollRate = Number(useCvar(InitialCvars.StatusPoll)) ?? 5000
+  const pollRate = Number(useCvar(Cvars.ClStatusPoll)) ?? 5000
 
   const statusQuery = useQuery({
     queryKey: ['server-status'],

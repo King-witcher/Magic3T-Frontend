@@ -6,6 +6,7 @@ import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
 import { useEffect, useMemo } from 'react'
 import styles from './styles.module.sass'
+import { Cvars } from '@/lib/console/initials'
 
 interface Props {
   redMoves: Choice[]
@@ -53,8 +54,8 @@ function randomizeCheatTable() {
 }
 
 export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
-  const pugDance = useCvar('pugmode') !== '0'
-  const tttmode = useCvar('3tmode') !== '0'
+  const pugDance = useCvar(Cvars.UiPugMode) !== '0'
+  const tttmode = useCvar(Cvars.Ui3TMode) !== '0'
 
   const allChoices = tttmode ? cheatAllChoices : initialAllChoices
 

@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
 import styles from './styles.module.css'
 import { useCvar } from '@/lib/console/use-cvar'
-import { ConStyle, InitialCvars as Cvars } from '@/lib/console/initials'
+import { ConStyle, Cvars } from '@/lib/console/initials'
 
 function subscribeToConsoleChanges(callback: () => void): () => void {
   return Console.on('changeBuffer', callback)

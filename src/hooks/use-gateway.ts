@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/auth.context'
 import { Console } from '@/lib/console'
+import { Cvars } from '@/lib/console/initials'
 import { useCvar } from '@/lib/console/use-cvar'
 import {
   EventNames,
@@ -30,7 +31,7 @@ export function useGateway<
     ClientEvents
   > | null>(null)
   const auth = useAuth()
-  const apiurl = useCvar('apiurl')
+  const apiurl = useCvar(Cvars.SvApiUrl)
 
   useEffect(() => {
     if (!enabled) {

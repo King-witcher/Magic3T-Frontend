@@ -2,12 +2,12 @@ import { NestApi } from '@/services'
 import { CommandHandler, Console } from './console'
 import { io } from 'socket.io-client'
 
-export enum InitialCvars {
-  ApiUrl = 'apiurl',
+export enum Cvars {
+  ClStatusPoll = 'cl_statuspoll',
   ConStyle = 'con_style',
-  PugMode = 'pugmode',
-  StatusPoll = 'statuspoll',
-  ThreeTMode = '3tmode',
+  SvApiUrl = 'sv_apiurl',
+  Ui3TMode = 'ui_3tmode',
+  UiPugMode = 'ui_pugmode',
 }
 
 export enum ConStyle {
@@ -16,11 +16,11 @@ export enum ConStyle {
 }
 
 export const initialCvars: Record<string, string> = {
-  [InitialCvars.ApiUrl]: import.meta.env.VITE_API_URL,
-  [InitialCvars.ConStyle]: ConStyle.Default,
-  [InitialCvars.PugMode]: '0',
-  [InitialCvars.StatusPoll]: '5000',
-  [InitialCvars.ThreeTMode]: '0',
+  [Cvars.SvApiUrl]: import.meta.env.VITE_API_URL,
+  [Cvars.ConStyle]: ConStyle.Default,
+  [Cvars.UiPugMode]: '0',
+  [Cvars.ClStatusPoll]: '5000',
+  [Cvars.Ui3TMode]: '0',
 }
 
 export const initialCmds: Record<string, CommandHandler> = {
