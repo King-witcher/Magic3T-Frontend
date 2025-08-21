@@ -57,14 +57,11 @@ export const initialCmds: Record<string, CommandHandler> = {
     Console.log(args)
   },
 
-  async httpping() {
-    Console.log('Pinging...')
-    const now = Date.now()
-
-    await NestApi.getStatus()
-
-    const elapsed = Date.now() - now
-    Console.log(`HTTP ping: ${elapsed}ms`)
+  async ping() {
+    const http = await pingHttp()
+    Console.log(`HTTP: ${http}ms`)
+    const ws = await pingWs()
+    Console.log(`WS: ${ws}ms`)
   },
 
   resetcvars() {
@@ -80,15 +77,22 @@ export const initialCmds: Record<string, CommandHandler> = {
     Console.set(cvar, value)
     Console.log(`Set ${cvar} to ${value}`)
   },
+}
 
-  async wsping() {
-    Console.log('Pinging...')
+async function pingHttp(): Promise<number> {
+  const now = Date.now()
+  await NestApi.getStatus()
+  return Date.now() - now
+}
+
+async function pingWs(): Promise<number> {
+  return new Promise((resolve, reject) => {
     const socket = io(`${Console.cvars.apiurl}`)
 
     socket.on('connect', () => {
       const timeout = setTimeout(() => {
-        Console.log('WS ping timed out')
         socket.disconnect()
+        reject('WS ping timed out')
       }, 5000)
 
       const rng = Math.floor(Math.random() * 1000000)
@@ -98,12 +102,11 @@ export const initialCmds: Record<string, CommandHandler> = {
         const elapsed = Date.now() - now
         socket.disconnect()
         clearTimeout(timeout)
-        Console.log(`WS ping: ${elapsed}ms`)
+        resolve(elapsed)
       })
 
       const now = Date.now()
-
       socket.emit('ping', rng)
     })
-  },
+  })
 }
