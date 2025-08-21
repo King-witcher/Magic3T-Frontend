@@ -1,4 +1,4 @@
-import { Profile } from '@magic3t/types'
+import { UserPayload } from '@magic3t/types'
 import { Console } from '@/lib/console'
 import axios from 'axios'
 
@@ -7,26 +7,28 @@ const controller = async () =>
     baseURL: Console.cvars.apiurl,
   })
 
-export async function getById(id: string): Promise<Profile | null> {
+export async function getById(id: string): Promise<UserPayload | null> {
   const response = await fetch(`${Console.cvars.apiurl}/users/id/${id}`)
   if (response.status !== 200) return null
-  const data: Profile = await response.json()
+  const data: UserPayload = await response.json()
   return data
 }
 
-export async function getByNickname(nickname: string): Promise<Profile | null> {
+export async function getByNickname(
+  nickname: string
+): Promise<UserPayload | null> {
   const response = await fetch(
     `${Console.cvars.apiurl}/users/nickname/${nickname}`
   )
   if (response.status !== 200) return null
-  const data: Profile = await response.json()
+  const data: UserPayload = await response.json()
   return data
 }
 
-export async function getRanking(): Promise<Profile[]> {
+export async function getRanking(): Promise<UserPayload[]> {
   const response = await fetch(`${Console.cvars.apiurl}/users/ranking`)
   if (response.status !== 200) return []
-  const data: Profile[] = await response.json()
+  const data: UserPayload[] = await response.json()
   return data
 }
 

@@ -7,7 +7,7 @@ import {
   QueueClientEventsMap,
   QueueServerEvents,
   QueueServerEventsMap,
-  UserCountData,
+  UpdateUserCountPayload,
 } from '@magic3t/types'
 import {
   type ReactNode,
@@ -34,7 +34,7 @@ interface QueueContextData {
   enqueue(mode: QueueMode): void
   dequeue(mode: QueueMode): void
   queueModes: QueueModesType
-  queueUserCount: UserCountData
+  queueUserCount: UpdateUserCountPayload
 }
 
 interface QueueContextProps {
@@ -47,7 +47,7 @@ export function QueueProvider({ children }: QueueContextProps) {
   const { push } = useLiveActivity()
   // const [socket, setSocket] = useState<ReturnType<typeof io>>()
   const [queueModes, setQueueModes] = useState<QueueModesType>({})
-  const [queueUserCount, setQueueUserCount] = useState<UserCountData>({
+  const [queueUserCount, setQueueUserCount] = useState<UpdateUserCountPayload>({
     casual: {
       inGame: Number.NaN,
       queue: 0,
@@ -71,7 +71,7 @@ export function QueueProvider({ children }: QueueContextProps) {
     gameCtx.connect(data.matchId)
   })
 
-  useListener(gateway, QueueServerEvents.UpdateUserCount, (data) => {
+  useListener(gateway, QueueServerEvents.UserCount, (data) => {
     setQueueUserCount(data)
   })
 

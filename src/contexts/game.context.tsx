@@ -8,10 +8,10 @@ import {
   GameClientEventsMap,
   GameServerEventsMap,
   MatchClientEvents,
-  MatchResults,
+  MatchReportPayload,
   MatchServerEvents,
-  Profile,
   Team,
+  UserPayload,
 } from '@magic3t/types'
 import {
   type ReactNode,
@@ -37,12 +37,12 @@ type GameData2 = {
   currentTeam: Team | null
   availableChoices: Choice[]
   finished: boolean
-  finalReport: MatchResults | null
+  finalReport: MatchReportPayload | null
   teams: Record<
     Team,
     {
       timer: Timer
-      profile: Profile | null
+      profile: UserPayload | null
       choices: Choice[]
       gain: number | null
       score: number | null
@@ -56,7 +56,7 @@ type GameData2 = {
   sendMessage(message: string): void
   forfeit(): void
 
-  onMatchReport(callback: (report: MatchResults) => void): void
+  onMatchReport(callback: (report: MatchReportPayload) => void): void
 }
 
 interface Props {
@@ -81,15 +81,18 @@ export function GameProvider({ children }: Props) {
   const auth = useAuth()
   const [matchId, setMatchId] = useState<string | null>(null)
   const isActive = !!matchId
-  const [orderProfile, setOrderProfile] = useState<Profile | null>(null)
-  const [chaosProfile, setChaosProfile] = useState<Profile | null>(null)
+  const [orderProfile, setOrderProfile] = useState<UserPayload | null>(null)
+  const [chaosProfile, setChaosProfile] = useState<UserPayload | null>(null)
   const [orderChoices, setOrderChoices] = useState<Choice[]>([])
   const [chaosChoices, setChaosChoices] = useState<Choice[]>([])
   const [turn, setTurn] = useState<Team | null>(null)
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [finalReport, setFinalReport] = useState<MatchResults | null>(null)
-  const [subscribeFinishMatch, emitFinishMatch] = useObservable<MatchResults>()
+  const [finalReport, setFinalReport] = useState<MatchReportPayload | null>(
+    null
+  )
+  const [subscribeFinishMatch, emitFinishMatch] =
+    useObservable<MatchReportPayload>()
 
   const orderTimer = useRef(new Timer(0))
   const chaosTimer = useRef(new Timer(0))

@@ -4,7 +4,7 @@ import { ChangeIconModal } from '@/components/organisms/modals/change-icon-modal
 import { useAuth } from '@/contexts/auth.context'
 import { useDialogStore } from '@/contexts/modal.store'
 import { leaguesMap } from '@/utils/ranks'
-import { League, MatchDto, Profile } from '@magic3t/types'
+import { GetMatchesResult, League, UserPayload } from '@magic3t/types'
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { DesktopRankContainer } from './desktop-rank-container'
@@ -15,8 +15,8 @@ import { useRegisterCommand } from '@/hooks/use-register-command'
 import { Console } from '@/lib/console'
 
 interface Props {
-  user: Profile
-  matchesQuery: UseQueryResult<MatchDto[], Error>
+  user: UserPayload
+  matchesQuery: UseQueryResult<GetMatchesResult, Error>
   editable?: boolean
 }
 
@@ -125,12 +125,12 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
       <section className="flex flex-col gap-[10px] mt-[20px]">
         <h2 className="!text-4xl font-serif text-gold-3 uppercase">
           {matchesQuery.data &&
-            matchesQuery.data.length >= 20 &&
+            matchesQuery.data.matches.length >= 20 &&
             'Last 20 matches'}
 
           {matchesQuery.data &&
-            matchesQuery.data.length < 20 &&
-            `${matchesQuery.data.length} recent match${matchesQuery.data.length > 1 ? 'es' : ''}`}
+            matchesQuery.data.matches.length < 20 &&
+            `${matchesQuery.data.matches.length} recent match${matchesQuery.data.matches.length > 1 ? 'es' : ''}`}
 
           {matchesQuery.isPending &&
             matchesQuery.isFetching &&
@@ -147,7 +147,7 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
 
         {matchesQuery.isSuccess && (
           <div className="flex flex-col gap-[10px] mt-[20px]">
-            {matchesQuery.data.map((match) => (
+            {matchesQuery.data.matches.map((match) => (
               <MatchRow key={match.id} match={match} viewAs={user.id} />
             ))}
           </div>

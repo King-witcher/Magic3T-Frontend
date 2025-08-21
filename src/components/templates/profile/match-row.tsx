@@ -1,13 +1,13 @@
 import { getDateFromId } from '@/lib/utils'
 import { acrylicClasses } from '@/styles/tailwind'
-import { MatchDto, MatchEventType, Team } from '@magic3t/types'
+import { MatchPayload, MatchPayloadEvents, Team } from '@magic3t/types'
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { FaClock } from 'react-icons/fa'
 import { RiFlagFill } from 'react-icons/ri'
 
 interface Props {
-  match: MatchDto
+  match: MatchPayload
   viewAs: string
 }
 
@@ -92,16 +92,16 @@ export function MatchRow({ match, viewAs }: Props) {
             const borderColor =
               event.side === Team.Order ? '!border-blue-400' : '!border-red-400'
 
-            if (event.event === MatchEventType.Message) return null
+            if (event.event === MatchPayloadEvents.Message) return null
 
             return (
               <div
                 className={`flex items-center text-sm leading-normal justify-center h-[22px] sm:h-[25px] w-[22px] sm:w-[25px] !border-2 rounded-lg ${borderColor} ${acrylicClasses}`}
                 key={event.time}
               >
-                {event.event === MatchEventType.Choice && event.choice}
-                {event.event === MatchEventType.Forfeit && <RiFlagFill />}
-                {event.event === MatchEventType.Timeout && <FaClock />}
+                {event.event === MatchPayloadEvents.Choice && event.choice}
+                {event.event === MatchPayloadEvents.Forfeit && <RiFlagFill />}
+                {event.event === MatchPayloadEvents.Timeout && <FaClock />}
               </div>
             )
           })}

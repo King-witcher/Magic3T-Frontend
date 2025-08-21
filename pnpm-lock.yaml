@@ -79,8 +79,8 @@ importers:
         specifier: 1.8.3
         version: 1.8.3
       '@magic3t/types':
-        specifier: ^3.3.1
-        version: 3.3.1(typescript@5.9.2)
+        specifier: ^4.0.1
+        version: 4.0.1
       '@socket.io/component-emitter':
         specifier: ^3.1.2
         version: 3.1.2
@@ -728,10 +728,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.30':
     resolution: {integrity: sha512-GQ7Nw5G2lTu/BtHTKfXhKHok2WGetd4XYcVKGx00SjAk8GMwgJM3zr6zORiPGuOE+/vkc90KtTosSSvaCjKb2Q==}
 
-  '@magic3t/types@3.3.1':
-    resolution: {integrity: sha512-F9HQEh1mUHH5g1gtkXbp13fh0hmrf5vcL7wTE4ExsNKEyZ5g5ro62wPahl8D5r+c5dXesGjTFnb1vouLctgZjw==}
-    peerDependencies:
-      typescript: ^5.0.0
+  '@magic3t/types@4.0.1':
+    resolution: {integrity: sha512-Tfwzl34hTOaoZl6kIa3M+uD822tq75YIncl6RZmAa8pEcNYuuM9wGwlYpG26ogtEpuUwhMneyPvoOumdnQBpnQ==}
 
   '@parcel/watcher-android-arm64@2.5.1':
     resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
@@ -3487,9 +3485,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@magic3t/types@3.3.1(typescript@5.9.2)':
-    dependencies:
-      typescript: 5.9.2
+  '@magic3t/types@4.0.1': {}
 
   '@parcel/watcher-android-arm64@2.5.1':
     optional: true

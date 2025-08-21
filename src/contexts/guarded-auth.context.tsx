@@ -1,19 +1,19 @@
 import { Console } from '@/lib/console'
-import { Profile } from '@magic3t/types'
 import { type ReactNode, createContext, useContext, useEffect } from 'react'
 import { AuthState } from './auth.context'
+import { UserPayload } from '@magic3t/types'
 
 // GuardedAuth Context - Provided by auth guard and guarantees that the user is not null and the state is signed in
 
 interface GuardedAuthData {
-  user: Profile
+  user: UserPayload
   authState: AuthState.SignedIn
   signOut(): Promise<void>
   getToken(): Promise<string>
 }
 
 interface Props {
-  user: Profile
+  user: UserPayload
   children?: ReactNode
   signOut(): Promise<void>
   getToken(): Promise<string>

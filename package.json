@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
-    "@magic3t/types": "^3.3.1",
+    "@magic3t/types": "^4.0.1",
     "@socket.io/component-emitter": "^3.1.2",
     "@tanstack/react-query-devtools": "^5.65.0",
     "@tanstack/router-devtools": "^1.97.24",

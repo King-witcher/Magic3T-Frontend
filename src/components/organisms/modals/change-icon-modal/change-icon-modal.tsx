@@ -4,13 +4,13 @@ import { useAuth } from '@/contexts/auth.context'
 import { useDialogStore } from '@/contexts/modal.store'
 import { NestApi } from '@/services/nest-api'
 import styles from '@/styles/components/button.module.sass'
-import { Profile } from '@magic3t/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
+import { UserPayload } from '@magic3t/types'
 
 interface Props {
-  user: Profile
+  user: UserPayload
   onSave: (iconId: number) => void
 }
 
@@ -40,7 +40,7 @@ export function ChangeIconModal({ user, onSave }: Props) {
     onSuccess() {
       client.setQueryData(
         ['myself', user.id],
-        (previous: Profile): Profile => ({
+        (previous: UserPayload): UserPayload => ({
           ...previous,
           summonerIcon: selectedIcon,
         })

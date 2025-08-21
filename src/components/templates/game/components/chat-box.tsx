@@ -1,6 +1,7 @@
 import { formatMinutes } from '@/utils/timeFormat'
 import type { RefObject } from 'react'
 import { useChatHandler } from '../hooks/useChatHandler'
+import { twMerge } from 'tailwind-merge'
 
 interface Props {
   inputRef: RefObject<HTMLInputElement | null>
@@ -18,7 +19,10 @@ export function ChatBox({ inputRef, className }: Props) {
 
   return (
     <div
-      className={`center relative lg:w-[400px] pointer-events-none select-none opacity-50 ${className}`}
+      className={twMerge(
+        'center relative lg:w-[400px] pointer-events-none select-none opacity-50',
+        className
+      )}
     >
       <div className="acrylic flex flex-col inset-0 absolute overflow-hidden">
         <div className="w-full h-full flex-[1] overflow-auto" ref={scrollRef}>

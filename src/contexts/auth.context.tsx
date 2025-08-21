@@ -1,7 +1,7 @@
 import { Console } from '@/lib/console'
 import { auth, provider } from '@/services/firebase'
 import { NestApi } from '@/services/nest-api'
-import { Profile } from '@magic3t/types'
+import { UserPayload } from '@magic3t/types'
 import { useQuery } from '@tanstack/react-query'
 import {
   type User,
@@ -45,7 +45,7 @@ type AuthData = {
       authState: AuthState.Loading
     }
   | {
-      user: Profile
+      user: UserPayload
       authState: AuthState.SignedIn
     }
 )

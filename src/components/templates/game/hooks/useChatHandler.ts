@@ -1,5 +1,5 @@
 import { useGame } from '@/contexts/game.context.tsx'
-import { MessageData } from '@magic3t/types'
+import { MessagePayload } from '@magic3t/types'
 import {
   type ChangeEvent,
   type FormEvent,
@@ -47,7 +47,7 @@ export function useChatHandler() {
   useEffect(smoothScroll, [])
 
   return {
-    messages: [] as MessageData[],
+    messages: [] as MessagePayload[],
     currentMessage,
     handleSubmitMessage,
     handleChangeMessageField,
