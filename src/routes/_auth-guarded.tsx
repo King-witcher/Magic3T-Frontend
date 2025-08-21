@@ -3,13 +3,12 @@ import {
   LoadingSessionTemplate,
 } from '@/components/templates'
 import { AuthState, useAuth } from '@/contexts/auth.context'
-import { GuardedAuthProvider } from '@/contexts/guarded-auth.context'
 import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 export const Route = createFileRoute('/_auth-guarded')({
   component: () => {
-    const { user, authState, getToken, signOut } = useAuth()
+    const { user, authState } = useAuth()
 
     const navigate = useNavigate()
 
@@ -34,10 +33,6 @@ export const Route = createFileRoute('/_auth-guarded')({
       return <LoadingSessionTemplate />
     }
 
-    return (
-      <GuardedAuthProvider user={user} getToken={getToken} signOut={signOut}>
-        {user.nickname ? <Outlet /> : <ChooseNicknameTemplate />}
-      </GuardedAuthProvider>
-    )
+    return user ? <Outlet /> : <ChooseNicknameTemplate />
   },
 })

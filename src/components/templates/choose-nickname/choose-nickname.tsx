@@ -1,4 +1,4 @@
-import { useGuardedAuth } from '@/contexts/guarded-auth.context'
+import { useAuth } from '@/contexts/auth.context'
 import { NestApi } from '@/services'
 import buttonStyles from '@/styles/components/button.module.sass'
 import inputStyles from '@/styles/components/input.module.sass'
@@ -7,7 +7,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 
 export function ChooseNicknameTemplate() {
   const [nickname, setNickname] = useState('')
-  const { getToken, user } = useGuardedAuth()
+  const { getToken, userId } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const client = useQueryClient()
 
@@ -17,14 +17,14 @@ export function ChooseNicknameTemplate() {
       if (nickname.length < 3)
         throw new Error('nickname must contain at least 3 characters')
 
-      await NestApi.User.updateNickname(await getToken(), nickname)
+      await NestApi.User.register(await getToken(), { nickname })
     },
     onMutate() {
       setError('')
     },
     onSuccess() {
       client.refetchQueries({
-        queryKey: ['myself', user.id],
+        queryKey: ['myself', userId],
       })
     },
     onError(e) {

@@ -47,10 +47,9 @@ export function Navbar() {
                 <div className="animate-pulse ease duration-1000 bg-[#ffffffa0] w-full h-full" />
               )}
               {authState === AuthState.SignedIn && (
-                <img alt="" src={getIconUrl(user.summonerIcon)} />
+                <img alt="" src={getIconUrl(user?.summonerIcon ?? 29)} />
               )}
             </div>
-            {/* <span className="font-bold">{user?.nickname}</span> */}
           </button>
           <NavbarMenu isOpen={isOpen} onClose={handleClickOutsideMenu} />
         </div>

@@ -9,6 +9,7 @@ export namespace NestApi {
     export const getByNickname = UserController.getByNickname
     export const getIcons = UserController.getIcons
     export const getRanking = UserController.getRanking
+    export const register = UserController.register
     export const updateIcon = UserController.updateIcon
     export const updateNickname = UserController.updateNickname
   }

@@ -4,7 +4,7 @@ import { NestApi } from '@/services/nest-api'
 import { UserPayload } from '@magic3t/types'
 import { useQuery } from '@tanstack/react-query'
 import {
-  type User,
+  type User as FirebaseUser,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   getIdToken,
@@ -15,8 +15,8 @@ import {
 import {
   type ReactNode,
   createContext,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -28,36 +28,41 @@ export enum AuthState {
   SignedIn = 'signed-in',
 }
 
-type AuthData = {
-  signInGoogle(): Promise<void>
-  signInEmail(email: string, password: string): Promise<string | null>
-  registerEmail(email: string, password: string): Promise<string | null>
-  refreshUser(): Promise<void>
-  getToken(): Promise<string>
-  signOut(): Promise<void>
-} & (
-  | {
-      user: null
-      authState: AuthState.NotSignedIn
-    }
-  | {
-      user: null
-      authState: AuthState.Loading
-    }
-  | {
-      user: UserPayload
-      authState: AuthState.SignedIn
-    }
-)
+type AuthData =
+  | null
+  | ({
+      signInGoogle(): Promise<void>
+      signInEmail(email: string, password: string): Promise<string | null>
+      registerEmail(email: string, password: string): Promise<string | null>
+      refreshUser(): Promise<void>
+      getToken(): Promise<string>
+      signOut(): Promise<void>
+    } & (
+      | {
+          user: null
+          userId: null
+          authState: AuthState.NotSignedIn
+        }
+      | {
+          user: null
+          userId: null
+          authState: AuthState.Loading
+        }
+      | {
+          user: UserPayload | null
+          userId: string
+          authState: AuthState.SignedIn
+        }
+    ))
 
 interface Props {
   children?: ReactNode
 }
 
-const AuthContext = createContext<AuthData>({} as AuthData)
+const AuthContext = createContext<AuthData>(null)
 
 export function AuthProvider({ children }: Props) {
-  const [authData, setAuthData] = useState<User | null>(null)
+  const [authData, setAuthData] = useState<FirebaseUser | null>(null)
   const [authState, setAuthState] = useState(AuthState.Loading)
 
   const userQuery = useQuery({
@@ -131,11 +136,24 @@ export function AuthProvider({ children }: Props) {
     })
   }, [])
 
+  useEffect(
+    function declareGentoken() {
+      if (authState !== AuthState.SignedIn) return
+      return Console.addCommand('gentoken', async () => {
+        Console.log('Generating token...')
+        const token = await getToken()
+        Console.log(token)
+      })
+    },
+    [getToken, authState]
+  )
+
   const contextValue = useMemo(
     () =>
       ({
         authState,
-        user: userQuery.data!,
+        user: userQuery.data,
+        userId: authData?.uid,
         getToken,
         signInGoogle,
         signInEmail,
@@ -157,9 +175,19 @@ export function AuthProvider({ children }: Props) {
     ]
   )
 
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  )
+  return <AuthContext value={contextValue}>{children}</AuthContext>
 }
 
-export const useAuth = () => useContext(AuthContext)
+export function useAuth() {
+  const authData = use(AuthContext)
+  if (authData === null)
+    throw new Error('Used auth context outside <AuthProvider>')
+  return authData
+}
+
+export function useUser() {
+  const auth = useAuth()
+  if (auth.user === null)
+    throw new Error('Used useUser while user is not defined')
+  return auth.user
+}

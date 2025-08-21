@@ -1,10 +1,10 @@
-import { UserPayload } from '@magic3t/types'
+import { RegisterUserCommand, UserPayload } from '@magic3t/types'
 import { Console } from '@/lib/console'
 import axios from 'axios'
 
-const controller = async () =>
+const controller = () =>
   axios.create({
-    baseURL: Console.cvars.apiurl,
+    baseURL: new URL('users', Console.cvars.apiurl).toString(),
   })
 
 export async function getById(id: string): Promise<UserPayload | null> {
@@ -42,6 +42,18 @@ export async function getIcons(token: string): Promise<number[]> {
 
   const data: number[] = await response.json()
   return data
+}
+
+export async function register(token: string, data: RegisterUserCommand) {
+  const response = await controller().post('/register', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  if (response.status !== 201) {
+    throw new Error('Failed to register user.')
+  }
 }
 
 export async function updateIcon(token: string, icon: number): Promise<void> {

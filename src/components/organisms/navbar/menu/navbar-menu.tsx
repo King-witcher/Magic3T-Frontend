@@ -46,7 +46,7 @@ export function NavbarMenu({ isOpen, onClose }: NavbarMenuProps) {
       ref={ref}
       className={`absolute bottom-[10px] right-0 translate-y-full duration-150 ${isOpen ? 'opacity-100' : 'opacity-0 transform-[translateY(-20px)] pointer-events-none'} !p-[10px] bg-[#ffffff30] acrylic rounded-[10px] w-[330px] backdrop-blur-sm`}
     >
-      {auth.authState === AuthState.SignedIn && auth.user.nickname && (
+      {auth.authState === AuthState.SignedIn && auth.user?.nickname && (
         <>
           <Link
             to="/me"
