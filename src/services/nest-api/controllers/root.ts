@@ -1,9 +1,10 @@
 import { Console } from '@/lib/console'
+import { Cvars } from '@/lib/console/initials'
 import axios from 'axios'
 
 const controller = () => {
   return axios.create({
-    baseURL: `${Console.cvars.apiurl}`,
+    baseURL: Console.cvars[Cvars.SvApiUrl],
   })
 }
 

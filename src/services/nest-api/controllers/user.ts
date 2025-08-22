@@ -1,14 +1,17 @@
 import { RegisterUserCommand, UserPayload } from '@magic3t/types'
 import { Console } from '@/lib/console'
 import axios from 'axios'
+import { Cvars } from '@/lib/console/initials'
 
 const controller = () =>
   axios.create({
-    baseURL: new URL('users', Console.cvars.apiurl).toString(),
+    baseURL: new URL('users', Console.cvars[Cvars.SvApiUrl]).toString(),
   })
 
 export async function getById(id: string): Promise<UserPayload | null> {
-  const response = await fetch(`${Console.cvars.apiurl}/users/id/${id}`)
+  const response = await fetch(
+    `${Console.cvars[Cvars.SvApiUrl]}/users/id/${id}`
+  )
   if (response.status !== 200) return null
   const data: UserPayload = await response.json()
   return data
@@ -18,7 +21,7 @@ export async function getByNickname(
   nickname: string
 ): Promise<UserPayload | null> {
   const response = await fetch(
-    `${Console.cvars.apiurl}/users/nickname/${nickname}`
+    `${Console.cvars[Cvars.SvApiUrl]}/users/nickname/${nickname}`
   )
   if (response.status !== 200) return null
   const data: UserPayload = await response.json()
@@ -26,18 +29,21 @@ export async function getByNickname(
 }
 
 export async function getRanking(): Promise<UserPayload[]> {
-  const response = await fetch(`${Console.cvars.apiurl}/users/ranking`)
+  const response = await fetch(`${Console.cvars[Cvars.SvApiUrl]}/users/ranking`)
   if (response.status !== 200) return []
   const data: UserPayload[] = await response.json()
   return data
 }
 
 export async function getIcons(token: string): Promise<number[]> {
-  const response = await fetch(`${Console.cvars.apiurl}/users/me/icons`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  const response = await fetch(
+    `${Console.cvars[Cvars.SvApiUrl]}/users/me/icons`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
   if (response.status !== 200) return []
 
   const data: number[] = await response.json()
@@ -57,16 +63,19 @@ export async function register(token: string, data: RegisterUserCommand) {
 }
 
 export async function updateIcon(token: string, icon: number): Promise<void> {
-  const response = await fetch(`${Console.cvars.apiurl}/users/me/icon`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'PATCH',
-    body: JSON.stringify({
-      iconId: icon,
-    }),
-  })
+  const response = await fetch(
+    `${Console.cvars[Cvars.SvApiUrl]}/users/me/icon`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        iconId: icon,
+      }),
+    }
+  )
 
   if (response.status !== 200) {
     throw new Error('Failed to update icon.')
@@ -77,16 +86,19 @@ export async function updateNickname(
   token: string,
   nickname: string
 ): Promise<void> {
-  const response = await fetch(`${Console.cvars.apiurl}/users/me/nickname`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'PATCH',
-    body: JSON.stringify({
-      nickname,
-    }),
-  })
+  const response = await fetch(
+    `${Console.cvars[Cvars.SvApiUrl]}/users/me/nickname`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        nickname,
+      }),
+    }
+  )
 
   if (response.status !== 200) {
     throw new Error('Failed to update nickname.')

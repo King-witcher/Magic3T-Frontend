@@ -1,10 +1,11 @@
 import { QueueMode } from '@/types/queue'
 import axios from 'axios'
 import { Console } from '@/lib/console'
+import { Cvars } from '@/lib/console/initials'
 
 const controller = () => {
   return axios.create({
-    baseURL: `${Console.cvars.apiurl}/queue`,
+    baseURL: `${Console.cvars[Cvars.SvApiUrl]}/queue`,
   })
 }
 

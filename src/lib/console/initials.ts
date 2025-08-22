@@ -87,7 +87,7 @@ async function pingHttp(): Promise<number> {
 
 async function pingWs(): Promise<number> {
   return new Promise((resolve, reject) => {
-    const socket = io(`${Console.cvars.apiurl}`)
+    const socket = io(`${Console.cvars[Cvars.SvApiUrl]}`)
 
     socket.on('connect', () => {
       const timeout = setTimeout(() => {

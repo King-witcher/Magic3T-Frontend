@@ -1,10 +1,11 @@
 import { Console } from '@/lib/console'
+import { Cvars } from '@/lib/console/initials'
 import { GetMatchesResult } from '@magic3t/types'
 import axios from 'axios'
 
 const controller = () => {
   return axios.create({
-    baseURL: `${Console.cvars.apiurl}/matches`,
+    baseURL: `${Console.cvars[Cvars.SvApiUrl]}/matches`,
   })
 }
 
