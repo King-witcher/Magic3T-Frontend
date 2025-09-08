@@ -3,6 +3,7 @@ import { useListener } from '@/hooks/use-listener'
 import { useObservable } from '@/hooks/use-observable'
 import { Timer } from '@/lib/Timer'
 import { Console } from '@/lib/console'
+import { NestApi } from '@/services'
 import {
   Choice,
   GameClientEventsMap,
@@ -26,7 +27,6 @@ import {
 import { IoGameController } from 'react-icons/io5'
 import { AuthState, useAuth } from './auth.context'
 import { useLiveActivity } from './live-activity.context'
-import { NestApi } from '@/services'
 
 type Message = { sender: 'you' | 'him'; content: string; timestamp: number }
 

@@ -4,10 +4,10 @@ import { useAuth } from '@/contexts/auth.context'
 import { useDialogStore } from '@/contexts/modal.store'
 import { NestApi } from '@/services/nest-api'
 import styles from '@/styles/components/button.module.sass'
+import { UserPayload } from '@magic3t/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { SummonerIcon } from './summoner-icon'
-import { UserPayload } from '@magic3t/types'
 
 interface Props {
   user: UserPayload

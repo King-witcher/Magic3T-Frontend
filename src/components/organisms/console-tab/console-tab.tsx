@@ -1,12 +1,12 @@
 import Console1 from '@/assets/textures/console1.png'
 import Console2 from '@/assets/textures/console2.jpg'
 import { Console } from '@/lib/console'
+import { ConStyle, Cvars } from '@/lib/console/initials'
+import { useCvar } from '@/lib/console/use-cvar'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
 import styles from './styles.module.css'
-import { useCvar } from '@/lib/console/use-cvar'
-import { ConStyle, Cvars } from '@/lib/console/initials'
 
 function subscribeToConsoleChanges(callback: () => void): () => void {
   return Console.on('changeBuffer', callback)

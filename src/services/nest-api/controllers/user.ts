@@ -1,7 +1,7 @@
-import { RegisterUserCommand, UserPayload } from '@magic3t/types'
 import { Console } from '@/lib/console'
-import axios from 'axios'
 import { Cvars } from '@/lib/console/initials'
+import { RegisterUserCommand, UserPayload } from '@magic3t/types'
+import axios from 'axios'
 
 const controller = () =>
   axios.create({

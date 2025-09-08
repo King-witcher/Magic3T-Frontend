@@ -1,3 +1,7 @@
+import { Cvars } from '@/lib/console/initials.ts'
+import { useCvar } from '@/lib/console/use-cvar.ts'
+import { NestApi } from '@/services/index.ts'
+import { useQuery } from '@tanstack/react-query'
 import {
   type ReactNode,
   createContext,
@@ -7,10 +11,6 @@ import {
 } from 'react'
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
 import { useLiveActivity } from './live-activity.context.tsx'
-import { useQuery } from '@tanstack/react-query'
-import { NestApi } from '@/services/index.ts'
-import { useCvar } from '@/lib/console/use-cvar.ts'
-import { Cvars } from '@/lib/console/initials.ts'
 
 export enum ServerStatus {
   Off = 0,

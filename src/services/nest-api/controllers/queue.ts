@@ -1,7 +1,7 @@
-import { QueueMode } from '@/types/queue'
-import axios from 'axios'
 import { Console } from '@/lib/console'
 import { Cvars } from '@/lib/console/initials'
+import { QueueMode } from '@/types/queue'
+import axios from 'axios'
 
 const controller = () => {
   return axios.create({

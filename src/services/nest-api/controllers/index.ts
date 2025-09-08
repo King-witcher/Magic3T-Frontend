@@ -1,7 +1,7 @@
-import * as QueueController from './queue'
-import * as UserController from './user'
-import * as RootController from './root'
 import * as MatchController from './match'
+import * as QueueController from './queue'
+import * as RootController from './root'
+import * as UserController from './user'
 
 export namespace NestApi {
   export namespace User {

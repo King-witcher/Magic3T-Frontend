@@ -1,7 +1,7 @@
 import { formatMinutes } from '@/utils/timeFormat'
 import type { RefObject } from 'react'
-import { useChatHandler } from '../hooks/useChatHandler'
 import { twMerge } from 'tailwind-merge'
+import { useChatHandler } from '../hooks/useChatHandler'
 
 interface Props {
   inputRef: RefObject<HTMLInputElement | null>

@@ -1,6 +1,6 @@
 import { NestApi } from '@/services'
-import { CommandHandler, Console } from './console'
 import { io } from 'socket.io-client'
+import { CommandHandler, Console } from './console'
 
 export enum Cvars {
   ClStatusPoll = 'cl_statuspoll',
