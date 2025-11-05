@@ -1,8 +1,7 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
 import { Console } from '@/lib/console'
-import { Cvars } from '@/lib/console/initials'
-import { useCvar } from '@/lib/console/use-cvar'
+import { SystemCvars } from '@/lib/console/initials'
 import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
 import { useEffect, useMemo } from 'react'
@@ -54,8 +53,8 @@ function randomizeCheatTable() {
 }
 
 export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
-  const pugDance = useCvar(Cvars.UiPugMode) !== '0'
-  const tttmode = useCvar(Cvars.Ui3TMode) !== '0'
+  const pugDance = Console.useCvar(SystemCvars.UiPugMode) as boolean
+  const tttmode = Console.useCvar(SystemCvars.Ui3TMode) as boolean
 
   const allChoices = tttmode ? cheatAllChoices : initialAllChoices
 
@@ -70,11 +69,15 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
     }
   }, [redMoves, blueMoves])
 
+  useEffect(() => {
+    randomizeCheatTable()
+  }, [])
+
   if (pugDance) {
     return (
       <div
         className="flex flex-col justify-center relative"
-        onClick={() => Console.set('pugmode', '0')}
+        onClick={() => Console.set(SystemCvars.UiPugMode, 'false')}
       >
         <img className="w-[300px]" alt="Pug dancing" src={PugDanceGif} />
         <p className="absolute bottom-[7px] w-full text-center translate-y-[100%]">
@@ -83,10 +86,6 @@ export function ChoiceTable({ redMoves, blueMoves, state, onSelect }: Props) {
       </div>
     )
   }
-
-  useEffect(() => {
-    randomizeCheatTable()
-  }, [])
 
   return (
     <div

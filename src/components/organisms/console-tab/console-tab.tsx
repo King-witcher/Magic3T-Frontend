@@ -1,8 +1,7 @@
 import Console1 from '@/assets/textures/console1.png'
 import Console2 from '@/assets/textures/console2.jpg'
 import { Console } from '@/lib/console'
-import { ConStyle, Cvars } from '@/lib/console/initials'
-import { useCvar } from '@/lib/console/use-cvar'
+import { ConStyle, SystemCvars } from '@/lib/console/initials'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
@@ -12,7 +11,7 @@ function subscribeToConsoleChanges(callback: () => void): () => void {
   return Console.on('changeBuffer', callback)
 }
 
-const consoleStyles = new Set<string>([ConStyle.Default, ConStyle.Q3])
+const consoleStyles = new Set<number>([ConStyle.Default, ConStyle.Q3])
 
 export function ConsoleTab() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -24,7 +23,7 @@ export function ConsoleTab() {
     () => Console.lines
   )
 
-  let con_style = useCvar(Cvars.ConStyle)
+  let con_style = Console.useCvar(SystemCvars.ConStyle) as number
   if (!consoleStyles.has(con_style)) con_style = ConStyle.Default
 
   function focusInput() {

@@ -1,6 +1,5 @@
-import { Cvars } from '@/lib/console/initials.ts'
-import { useCvar } from '@/lib/console/use-cvar.ts'
-import { NestApi } from '@/services/index.ts'
+import { SystemCvars } from '@/lib/console/initials'
+import { NestApi } from '@/services/index'
 import { useQuery } from '@tanstack/react-query'
 import {
   type ReactNode,
@@ -10,7 +9,8 @@ import {
   useMemo,
 } from 'react'
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
-import { useLiveActivity } from './live-activity.context.tsx'
+import { useLiveActivity } from './live-activity.context'
+import { Console } from '@/lib/console/console'
 
 export enum ServerStatus {
   Off = 0,
@@ -33,7 +33,7 @@ const ServiceStatusContext = createContext<ServiceStatusData>({
 export function ServiceStatusProvider({ children }: Props) {
   const { push } = useLiveActivity()
 
-  const pollRate = Number(useCvar(Cvars.ClStatusPoll)) ?? 5000
+  const pollRate = Number(Console.useCvar(SystemCvars.ClStatusPoll)) ?? 5000
 
   const statusQuery = useQuery({
     queryKey: ['server-status'],

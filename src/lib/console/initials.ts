@@ -1,8 +1,9 @@
 import { NestApi } from '@/services'
 import { io } from 'socket.io-client'
 import { CommandHandler, Console } from './console'
+import { CVar } from './cvar'
 
-export enum Cvars {
+export enum SystemCvars {
   ClStatusPoll = 'cl_statuspoll',
   ConStyle = 'con_style',
   SvApiUrl = 'sv_apiurl',
@@ -11,17 +12,58 @@ export enum Cvars {
 }
 
 export enum ConStyle {
-  Default = '0',
-  Q3 = '1',
+  Default = 0,
+  Q3 = 1,
 }
 
-export const initialCvars: Record<string, string> = {
-  [Cvars.SvApiUrl]: import.meta.env.VITE_API_URL,
-  [Cvars.ConStyle]: ConStyle.Default,
-  [Cvars.UiPugMode]: '0',
-  [Cvars.ClStatusPoll]: '5000',
-  [Cvars.Ui3TMode]: '0',
-}
+export const INITIAL_CVARS: CVar[] = [
+  {
+    name: SystemCvars.ClStatusPoll,
+    type: 'number',
+    default: 5000,
+    value: 5000,
+    readonly: false,
+    description: 'Interval for status polling',
+    min: 50,
+    max: Number.POSITIVE_INFINITY,
+    integer: true,
+  },
+  {
+    name: SystemCvars.ConStyle,
+    type: 'number',
+    default: ConStyle.Default,
+    value: ConStyle.Default,
+    min: ConStyle.Default,
+    max: ConStyle.Q3,
+    integer: true,
+    readonly: false,
+    description: 'Console style',
+  },
+  {
+    name: SystemCvars.SvApiUrl,
+    type: 'string',
+    default: import.meta.env.VITE_API_URL,
+    value: import.meta.env.VITE_API_URL,
+    readonly: false,
+    description: 'URL of the backend API',
+  },
+  {
+    name: SystemCvars.Ui3TMode,
+    type: 'boolean',
+    value: false,
+    default: false,
+    readonly: false,
+    description: 'Enable 3T mode cheat in the UI',
+  },
+  {
+    name: SystemCvars.UiPugMode,
+    type: 'boolean',
+    value: false,
+    default: false,
+    readonly: false,
+    description: 'Enable PUG mode in the UI',
+  },
+]
 
 export const initialCmds: Record<string, CommandHandler> = {
   clear() {
@@ -33,13 +75,15 @@ export const initialCmds: Record<string, CommandHandler> = {
   },
 
   cvarlist() {
-    const cvars = Object.entries(Console.cvars).sort((a, b) =>
-      a[0].localeCompare(b[0])
-    )
-    for (const [key, value] of cvars) {
-      const nameLength = key.length
-      const padding = ' '.repeat(Math.max(0, 20 - nameLength))
-      Console.log(`${key} ${padding}= '${value}'`)
+    const cvars = Console.getCvars()
+    for (const cvar of cvars) {
+      let line = cvar.name
+      line += ' '.repeat(Math.max(0, 20 - line.length))
+      line += '= '
+      line += JSON.stringify(cvar.value)
+      line += ' '.repeat(Math.max(0, 60 - line.length))
+      line += `// ${cvar.description ?? 'No description'}`
+      Console.log(line)
     }
     Console.log(`Listed ${cvars.length} cvars`)
   },
@@ -75,7 +119,6 @@ export const initialCmds: Record<string, CommandHandler> = {
       return
     }
     Console.set(cvar, value)
-    Console.log(`Set ${cvar} to ${value}`)
   },
 }
 
@@ -87,7 +130,8 @@ async function pingHttp(): Promise<number> {
 
 async function pingWs(): Promise<number> {
   return new Promise((resolve, reject) => {
-    const socket = io(`${Console.cvars[Cvars.SvApiUrl]}`)
+    const apiUrl = Console.getCvarValue(SystemCvars.SvApiUrl)
+    const socket = io(`${apiUrl}`)
 
     socket.on('connect', () => {
       const timeout = setTimeout(() => {

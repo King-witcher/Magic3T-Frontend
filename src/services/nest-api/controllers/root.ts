@@ -1,18 +1,19 @@
 import { Console } from '@/lib/console'
-import { Cvars } from '@/lib/console/initials'
+import { SystemCvars } from '@/lib/console/initials'
 import axios from 'axios'
 
 const controller = () => {
+  const apiUrl = Console.getCvarValue(SystemCvars.SvApiUrl) as string
   return axios.create({
-    baseURL: Console.cvars[Cvars.SvApiUrl],
+    baseURL: apiUrl,
   })
 }
 
-type GetStatusResopnse = {
+type GetStatusResponse = {
   status: 'available'
 }
 
-export async function getStatus(): Promise<GetStatusResopnse> {
+export async function getStatus(): Promise<GetStatusResponse> {
   const response = await controller().get('/status')
   return response.data
 }
