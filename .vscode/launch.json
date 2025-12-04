@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "preLaunchTask": "vite: dev",
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js"
+      ]
+    },
+  ]
+}

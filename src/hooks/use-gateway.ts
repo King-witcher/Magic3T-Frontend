@@ -1,6 +1,5 @@
 import { useAuth } from '@/contexts/auth.context'
-import { Console } from '@/lib/console'
-import { SystemCvars } from '@/lib/console/initials'
+import { Console, SystemCvars } from '@/lib/console'
 import {
   EventNames,
   EventParams,

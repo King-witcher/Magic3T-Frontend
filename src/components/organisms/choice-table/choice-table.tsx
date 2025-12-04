@@ -1,7 +1,6 @@
 import PugDanceGif from '@/assets/pug-dance.gif'
 import { ChoiceComponent } from '@/components/atoms'
-import { Console } from '@/lib/console'
-import { SystemCvars } from '@/lib/console/initials'
+import { Console, SystemCvars } from '@/lib/console'
 import { getTriple } from '@/utils/getTriple'
 import { Choice } from '@magic3t/types'
 import { useEffect, useMemo } from 'react'

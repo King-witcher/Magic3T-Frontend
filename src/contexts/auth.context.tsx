@@ -139,10 +139,15 @@ export function AuthProvider({ children }: Props) {
   useEffect(
     function declareGentoken() {
       if (authState !== AuthState.SignedIn) return
-      return Console.addCommand('gentoken', async () => {
-        Console.log('Generating token...')
-        const token = await getToken()
-        Console.log(token)
+      return Console.addCommand({
+        name: 'gentoken',
+        description: 'Generates and prints your authentication token',
+        async handler(ctx) {
+          ctx.console.print('Generating token')
+          const token = await getToken()
+          ctx.console.print(token)
+          return 0
+        },
       })
     },
     [getToken, authState]

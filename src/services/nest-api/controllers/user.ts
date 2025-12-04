@@ -1,5 +1,4 @@
-import { Console } from '@/lib/console'
-import { SystemCvars } from '@/lib/console/initials'
+import { Console, SystemCvars } from '@/lib/console'
 import { RegisterUserCommand, UserPayload } from '@magic3t/types'
 import axios from 'axios'
 

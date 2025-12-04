@@ -35,9 +35,13 @@ export function ProfileTemplate({ user, matchesQuery, editable }: Props) {
   const openModal = useDialogStore((state) => state.showDialog)
 
   useRegisterCommand(
-    'userid',
-    () => {
-      Console.log(user.id)
+    {
+      name: 'userid',
+      description: 'Logs the user ID',
+      handler: async () => {
+        Console.log(user.id)
+        return 0
+      },
     },
     [user.id]
   )

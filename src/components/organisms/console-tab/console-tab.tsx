@@ -1,7 +1,6 @@
 import Console1 from '@/assets/textures/console1.png'
 import Console2 from '@/assets/textures/console2.jpg'
-import { Console } from '@/lib/console'
-import { ConStyle, SystemCvars } from '@/lib/console/initials'
+import { Console, ConStyle, SystemCvars } from '@/lib/console'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConsoleInput } from './console-input'
@@ -32,7 +31,7 @@ export function ConsoleTab() {
 
   function handleSubmit(value: string) {
     Console.log(`]${value}`)
-    Console.run(value)
+    Console.exec(value)
   }
 
   useEffect(function listenOpen() {

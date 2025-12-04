@@ -1,0 +1,60 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "label": "vite: dev",
+      "type": "shell",
+
+      "command": "npm run dev",
+      "isBackground": true,
+      "icon": {
+        "id": "run",
+        "color": "terminal.ansiGreen",
+      },
+      "problemMatcher": [{
+        "owner": "vite",
+        "pattern": {
+          "regexp": ".",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "."
+        }
+      }],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+    },
+    {
+      "label": "tsc: watch",
+      "detail": "Starts a background tsc --watch that reports all type errors in the VSCode Problems panel.",
+      "icon": {
+        "id": "eye-watch",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "tsc",
+        "--watch",
+        "--noEmit",
+      ],
+      "group": "test",
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch",
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+    },
+	]
+}

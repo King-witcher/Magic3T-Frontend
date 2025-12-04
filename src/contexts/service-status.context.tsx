@@ -1,4 +1,3 @@
-import { SystemCvars } from '@/lib/console/initials'
 import { NestApi } from '@/services/index'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -11,6 +10,7 @@ import {
 import { IoCloud, IoCloudOffline, IoMoon } from 'react-icons/io5'
 import { useLiveActivity } from './live-activity.context'
 import { Console } from '@/lib/console/console'
+import { SystemCvars } from '@/lib/console'
 
 export enum ServerStatus {
   Off = 0,

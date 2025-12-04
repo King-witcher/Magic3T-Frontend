@@ -1,5 +1,4 @@
-import { Console } from '@/lib/console'
-import { SystemCvars } from '@/lib/console/initials'
+import { Console, SystemCvars } from '@/lib/console'
 import { QueueMode } from '@/types/queue'
 import axios from 'axios'
 

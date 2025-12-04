@@ -1,10 +1,9 @@
 import { useSyncExternalStore } from 'react'
 import { Channel } from '../channel'
 import { Observer } from '../observable'
-import { delay } from '../utils'
 import { PublicEmitter } from './emitter'
-import { initialCmds, INITIAL_CVARS } from './initials'
-import { CVar, CVarValue } from './cvar'
+import { CVar, CVarValue, INITIAL_CVARS } from './cvars'
+import { Cmd, ConsoleContext, INITIAL_CMDS } from './commands'
 
 const BUFFER_SIZE = 128
 
@@ -15,23 +14,42 @@ interface ConsoleEventsMap {
 
 export type CommandHandler = (args: string) => void | Promise<void>
 
-type Operation = () => void | Promise<void>
+export type ConsoleResult<T> = Result<T, string>
 
+type Operation = () => ConsoleResult<[]> | Promise<ConsoleResult<[]>>
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class Console {
   public static lines: string[] = []
   private static cvarsMap: Map<string, CVar> = new Map(
     INITIAL_CVARS.map((cvar) => [cvar.name, cvar])
   )
-  private static cmds: Record<string, CommandHandler> = { ...initialCmds }
+  private static cmdsMap: Map<string, Cmd> = new Map(
+    INITIAL_CMDS.map((cmd) => [cmd.name, cmd])
+  )
+
+  // private static cmds: Record<string, CommandHandler> = { ...initialCmds }
   private static queue: Channel<Operation> = new Channel()
   private static emitter = new PublicEmitter()
 
+  private static context: ConsoleContext = {
+    print: Console.log,
+    clear: Console.clear,
+    execCmd: () => Promise.reject('Not implemented'),
+    getCvar: (name: string) => Console.cvarsMap.get(name) ?? null,
+    listCmds: () => Array.from(Console.cmdsMap.values()),
+    listCvars: () => Array.from(Console.cvarsMap.values()),
+    setCvar: Console.setInner,
+  }
+
   static {
     async function operationLoop() {
-      while (true) {
+      for (;;) {
         const operation = await Console.queue.receive()
-        await operation()
+        try {
+          const _result = await operation()
+        } catch (e) {
+          console.error(e)
+        }
       }
     }
 
@@ -63,139 +81,54 @@ export class Console {
   }
 
   public static set(cvar: string, valueString: string) {
-    Console.queue.send(() => {
-      const cvarObj = Console.cvarsMap.get(cvar)
-
-      if (!cvarObj) {
-        Console.log(`CVar '${cvar}' does not exist`)
-        return
-      }
-
-      if (cvarObj.readonly) {
-        Console.log(`CVar '${cvar}' is read-only`)
-        return
-      }
-
-      switch (cvarObj.type) {
-        case 'string': {
-          cvarObj.value = valueString
-          break
-        }
-
-        case 'number': {
-          const num = Number(valueString)
-          if (Number.isNaN(num)) {
-            Console.log(`CVar '${cvar}' requires a numeric value`)
-            return
-          }
-          if (cvarObj.integer && !Number.isInteger(num)) {
-            Console.log(`CVar '${cvar}' requires an integer value`)
-            return
-          }
-          if (num < cvarObj.min || num > cvarObj.max) {
-            Console.log(
-              `CVar '${cvar}' requires a value between ${cvarObj.min} and ${cvarObj.max}`
-            )
-            return
-          }
-
-          cvarObj.value = num
-          break
-        }
-
-        case 'boolean': {
-          if (valueString === '1' || valueString.toLowerCase() === 'true') {
-            cvarObj.value = true
-            break
-          }
-          if (valueString === '0' || valueString.toLowerCase() === 'false') {
-            cvarObj.value = false
-            break
-          }
-          Console.log(
-            `CVar '${cvar}' requires a boolean value (0/1 or true/false)`
-          )
-          return
-        }
-      }
-      Console.log(`CVar '${cvar}' set to ${JSON.stringify(cvarObj.value)}`)
-      Console.emitter.publicEmit('changeCvar', cvar)
-    })
+    Console.queue.send(() => Console.setInner(cvar, valueString))
   }
 
   public static clear() {
-    Console.queue.send(() => {
-      Console.lines = []
-      Console.emitter.publicEmit('changeBuffer')
-    })
+    Console.lines = []
+    Console.emitter.publicEmit('changeBuffer')
   }
 
-  public static run(line: string) {
-    const [command, args] = Console.parse(line)
-    if (!command) return
+  public static async exec(line: string) {
+    const { cmd: cmdName, args } = Console.parse(line)
+    if (!cmdName) return
+    const command = Console.cmdsMap.get(Console.slug(cmdName))
 
-    Console.queue.send(async () => {
-      if (!Console.cmds[command] && !Console.cvarsMap.get(command)) {
-        Console.log(`Unknown command '${command}'`)
-        return
+    await Console.queue.send(async () => {
+      // If the command is not a registered command, check if it's a cvar
+      if (!command) {
+        const cvar = Console.cvarsMap.get(cmdName)
+        if (!cvar) {
+          Console.log(`Unknown command '${cmdName}'`)
+          return Err(`Unknown command '${cmdName}'`)
+        }
+
+        if (args.length > 0) {
+          Console.set(cmdName, args[0])
+        } else {
+          Console.inspectCvar(cvar)
+        }
+
+        return Ok([])
       }
 
       // If the command is a registered command, execute it
-      const handler = Console.cmds[command]
-      if (handler) {
-        await handler(args)
-        return
-      }
+      const result = await command.handler({
+        args,
+        console: Console.context,
+      })
 
-      // If the command is a cvar, set or get its value
-      if (args) {
-        Console.set(command, args)
-        return
-      }
-
-      const cvar = Console.cvarsMap.get(command)!
-
-      Console.log(`${command} = '${cvar.value}'`)
+      return Ok([])
     })
   }
 
-  public static cmdlist() {
-    const commandsList = Object.keys(Console.cmds).sort()
-    Console.queue.send(() => {
-      for (const command of commandsList) Console.log(command)
-      Console.log(`Listed ${commandsList.length} commands`)
-    })
-  }
+  public static addCommand(cmd: Cmd): () => void {
+    const prev = Console.cmdsMap.get(cmd.name)
 
-  public static getCvars(): CVar[] {
-    return Array.from(Console.cvarsMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
-  }
-
-  public static resetCvars() {
-    Console.queue.send(() => {
-      for (const cvar of Console.cvarsMap.values()) {
-        if (cvar.readonly) continue
-        cvar.value = cvar.default
-        Console.emitter.publicEmit('changeCvar', cvar.name)
-      }
-
-      Console.log('Cvars reset to initial values')
-    })
-  }
-
-  public static wait(ms: number) {
-    Console.queue.send(async () => {
-      await delay(ms)
-    })
-  }
-
-  public static addCommand(cmd: string, handler: CommandHandler) {
-    const slug = cmd.toLowerCase()
-    Console.cmds[slug] = handler
+    Console.cmdsMap.set(Console.slug(cmd.name), cmd)
     return () => {
-      delete Console.cmds[slug]
+      if (prev) Console.cmdsMap.set(Console.slug(prev.name), prev)
+      else Console.cmdsMap.delete(Console.slug(cmd.name))
     }
   }
 
@@ -213,12 +146,143 @@ export class Console {
     return Console.emitter.onMany(events, observer)
   }
 
-  public static parse(line: string): [command: string, args: string] {
-    const trimmed = line.toLowerCase().trimStart()
-    const command = trimmed.split(' ')[0]
-    let args = trimmed.replace(command, '')
-    if (args.startsWith(' ')) args = args.slice(1)
+  private static inspectCvar(cvar: CVar) {
+    const str = `${cvar.name} = ${JSON.stringify(cvar.value)} (default: ${JSON.stringify(cvar.default)})`
+    Console.log(str)
+    Console.log(cvar.description)
+  }
 
-    return [command, args]
+  private static slug(name: string): string {
+    return name.toLowerCase()
+  }
+  private static setInner(
+    cvar: string,
+    valueString: string
+  ): ConsoleResult<[]> {
+    const cvarObj = Console.cvarsMap.get(cvar)
+
+    if (!cvarObj) {
+      return Err(`CVar '${cvar}' does not exist`)
+    }
+
+    if (cvarObj.readonly) {
+      return Err(`CVar '${cvar}' is read-only`)
+    }
+
+    switch (cvarObj.type) {
+      case 'string': {
+        cvarObj.value = valueString
+        break
+      }
+
+      case 'number': {
+        const num = Number(valueString)
+        if (Number.isNaN(num)) {
+          return Err(`CVar '${cvar}' requires a numeric value`)
+        }
+        if (cvarObj.integer && !Number.isInteger(num)) {
+          return Err(`CVar '${cvar}' requires an integer value`)
+        }
+        if (num < cvarObj.min || num > cvarObj.max) {
+          return Err(
+            `CVar '${cvar}' requires a value between ${cvarObj.min} and ${cvarObj.max}`
+          )
+        }
+
+        cvarObj.value = num
+        break
+      }
+
+      case 'boolean': {
+        if (valueString === '1' || valueString.toLowerCase() === 'true') {
+          cvarObj.value = true
+          break
+        }
+        if (valueString === '0' || valueString.toLowerCase() === 'false') {
+          cvarObj.value = false
+          break
+        }
+        return Err(
+          `CVar '${cvar}' requires a boolean value (0/1 or true/false)`
+        )
+      }
+    }
+    Console.emitter.publicEmit('changeCvar', cvar)
+    return Ok([])
+  }
+
+  private static parse(line: string): { cmd: string; args: string[] } {
+    const args: string[] = []
+    let doubleQuotes = false
+    let singleQuotes = false
+    let escaping = false
+    let currentArg = ''
+
+    function push() {
+      if (currentArg.length > 0) {
+        args.push(currentArg)
+        currentArg = ''
+      }
+    }
+
+    for (const char of line) {
+      if (escaping) {
+        currentArg += char
+        escaping = false
+        continue
+      }
+
+      if (char === '\\') {
+        escaping = true
+        continue
+      }
+
+      if (singleQuotes) {
+        if (char === "'") {
+          args.push(currentArg)
+          currentArg = ''
+          singleQuotes = false
+          continue
+        }
+        currentArg += char
+        continue
+      }
+
+      if (doubleQuotes) {
+        if (char === '"') {
+          args.push(currentArg)
+          currentArg = ''
+          doubleQuotes = false
+          continue
+        }
+        currentArg += char
+        continue
+      }
+
+      if (char === '"') {
+        push()
+        doubleQuotes = true
+        continue
+      }
+
+      if (char === "'") {
+        push()
+        singleQuotes = true
+        continue
+      }
+
+      if (char === ' ') {
+        push()
+        continue
+      }
+
+      currentArg += char
+    }
+    push()
+
+    return {
+      cmd: args.shift() ?? '',
+      args,
+    }
   }
 }
