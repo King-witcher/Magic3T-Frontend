@@ -3,6 +3,7 @@ enum ResultTag {
   Err = 1,
 }
 
+/** @deprecated */
 export class Result<T, E> {
   private constructor(
     private tag: ResultTag,
@@ -33,5 +34,7 @@ export class Result<T, E> {
   }
 }
 
+/** @deprecated */
 export const Ok = Result.Ok
+/** @deprecated */
 export const Err = Result.Err
